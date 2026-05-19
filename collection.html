@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Collection - Altara Seat Covers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 56px;
+      background: rgba(12,13,16,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    nav.scrolled {
+      border-bottom-color: var(--border);
+    }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img {
+      height: 140px;
+      transform: translateY(8px);
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:focus-visible { outline: 1px solid rgba(237,232,223,0.4); outline-offset: 6px; }
+    .nav-links a.active { color: var(--cream); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-icon-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn:focus-visible { outline: 1px solid rgba(237,232,223,0.4); outline-offset: 6px; }
+    .nav-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-icon-btn span {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+    .nav-cart-count { position: relative; }
+    .cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -10px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 8px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── COLLECTION HEADER ─── */
+    .collection-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 96px 72px 32px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .collection-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 80% at 10% 100%, rgba(196,169,122,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 80% 20%, rgba(77,98,114,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .collection-header-left {
+      flex: 1;
+    }
+    .collection-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .collection-eyebrow::before {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .collection-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 5.2vw, 68px);
+      font-weight: 300;
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+    }
+    .collection-heading em {
+      font-style: italic;
+      color: rgba(237,232,223,0.52);
+    }
+    .collection-header-right {
+      flex: 0 0 380px;
+      padding-left: 72px;
+      padding-bottom: 8px;
+    }
+    .collection-count {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .collection-desc {
+      font-size: 14px;
+      color: var(--cream-dim);
+      line-height: 1.85;
+      font-weight: 300;
+    }
+
+    /* ─── PRODUCT GRID ─── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .product-tile {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+    }
+    .product-tile:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .product-tile-img-wrap {
+      overflow: hidden;
+      background: var(--bg-2);
+      position: relative;
+    }
+    .product-tile-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: scale(1.04);
+      transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
+    }
+    .product-tile:hover .product-tile-img-wrap img {
+      transform: scale(1.0);
+    }
+    .product-tile-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(12,13,16,0.38) 0%, transparent 50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .product-tile:hover .product-tile-img-wrap::after {
+      opacity: 1;
+    }
+
+    .product-tile-info {
+      border-top: 1px solid var(--border);
+      padding: 20px 48px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-tile-left {
+      flex: 1;
+    }
+    .product-tile-cat {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .product-tile-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 300;
+      letter-spacing: -0.015em;
+      line-height: 1.05;
+      color: var(--cream);
+      display: inline;
+    }
+    .product-tile-name br { display: none; }
+    .product-tile-right {
+      padding-top: 0;
+      flex-shrink: 0;
+    }
+    .product-tile-explore {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      position: relative;
+      display: inline-block;
+      transition: color 0.25s ease;
+    }
+    .product-tile-explore::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .product-tile:hover .product-tile-explore {
+      color: var(--cream);
+    }
+    .product-tile:hover .product-tile-explore::after {
+      width: 100%;
+    }
+    .product-tile:focus-visible {
+      outline: 1px solid rgba(237,232,223,0.3);
+      outline-offset: -1px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      padding: 14px 72px;
+    }
+    .footer-top { display: none; }
+    .footer-brand {
+      grid-column: 1;
+    }
+    .footer-logo img {
+      height: 110px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+      display: block;
+      margin-bottom: 20px;
+    }
+    .footer-tagline {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      line-height: 1.7;
+    }
+    .footer-col h4 {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.5);
+      margin-bottom: 20px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col ul a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+    .footer-col ul a:hover { color: var(--cream-dim); }
+    .footer-col ul a:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 3px; }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0;
+    }
+    .footer-copy {
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .footer-bottom-tagline {
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: transparent; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 76px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.6); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="collection.html" class="active">Collection</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+  <!-- COLLECTION HEADER -->
+  <header class="collection-header">
+    <div class="collection-header-left">
+      <div class="collection-eyebrow">The Collection</div>
+      <h1 class="collection-heading">Seat<br><em>Covers</em></h1>
+    </div>
+    <div class="collection-header-right">
+      <p class="collection-count">2 Products</p>
+      <p class="collection-desc">Precision-crafted in premium microfibre. Available in two finishes - each built to the same uncompromising standard.</p>
+    </div>
+  </header>
+
+  <!-- PRODUCT GRID -->
+  <main class="product-grid">
+    <a href="product-contrast-white.html" class="product-tile">
+      <div class="product-tile-img-wrap">
+        <img src="Product Photos/Homepage image.png" alt="Contrast White Seat Cover">
+      </div>
+      <div class="product-tile-info">
+        <div class="product-tile-left">
+          <p class="product-tile-cat">Seat Cover</p>
+          <h2 class="product-tile-name">Contrast<br>White</h2>
+        </div>
+        <div class="product-tile-right">
+          <span class="product-tile-explore">Explore</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="product-midnight-black.html" class="product-tile">
+      <div class="product-tile-img-wrap">
+        <img src="Product Photos/Homepage image 2.png" alt="Midnight Black Seat Cover">
+      </div>
+      <div class="product-tile-info">
+        <div class="product-tile-left">
+          <p class="product-tile-cat">Seat Cover</p>
+          <h2 class="product-tile-name">Midnight<br>Black</h2>
+        </div>
+        <div class="product-tile-right">
+          <span class="product-tile-explore">Explore</span>
+        </div>
+      </div>
+    </a>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+        </div>
+        <p class="footer-tagline">Engineered comfort for modern movement.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="product-contrast-white.html">Contrast White</a></li>
+          <li><a href="product-midnight-black.html">Midnight Black</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="mailto:hello@altara.com.au">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Altara. All rights reserved.</p>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 50);
+    });
+
+    // Cart badge
+    (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
+      } catch(e) {}
+    })();
+
+    // Inline search
+    (function() {
+      const navEl = document.getElementById('nav');
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+      function openSearch() { navEl.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+      function closeSearch() { navEl.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('search-active')) closeSearch(); });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+  </script>
+</body>
+</html>

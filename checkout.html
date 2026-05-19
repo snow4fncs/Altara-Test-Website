@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav { position: fixed; inset: 0 0 auto 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 6px 56px; height: 64px; background: rgba(12,13,16,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); transition: background 0.4s ease; }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img { height: 140px; transform: translateY(8px); width: auto; filter: brightness(0) invert(1); opacity: 0.72; display: block; transition: opacity 0.3s ease; }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-icon-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s ease; padding: 0; }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-icon-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: inherit; }
+    .nav-cart-count { position: relative; }
+    .cart-badge { position: absolute; top: -7px; right: -10px; background: var(--gold); color: var(--bg); font-size: 8px; font-weight: 600; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 3px; line-height: 1; opacity: 0; transform: scale(0.6); transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 64px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.6); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    /* ─── CHECKOUT STEPS BAR ─── */
+    .steps-bar { margin-top: 64px; display: flex; align-items: center; justify-content: center; padding: 12px 56px; background: rgba(12,13,16,0.6); border-bottom: 1px solid var(--border); position: relative; }
+    .back-btn { position: absolute; left: 56px; display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: color 0.25s ease; padding: 0; }
+    .back-btn:hover { color: var(--cream); }
+    .back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; }
+    .step { display: flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .step.active { color: var(--cream); }
+    .step.done { color: var(--gold); }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 9px; flex-shrink: 0; font-family: 'Outfit', sans-serif; }
+    .step.active .step-num { background: var(--cream); border-color: var(--cream); color: var(--bg); }
+    .step.done .step-num { background: var(--gold); border-color: var(--gold); color: var(--bg); font-size: 10px; }
+    .step-line { width: 48px; height: 1px; background: var(--border); margin: 0 16px; }
+
+    /* ─── MAIN GRID ─── */
+    .checkout-main {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 72px 120px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.85s ease 0.2s forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── FORM SECTIONS ─── */
+    .form-section {
+      margin-bottom: 44px;
+    }
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .section-eyebrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── FORM FIELDS ─── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .field-group label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field-group input,
+    .field-group select {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      padding: 10px 0;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.25s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .field-group select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%2372787F' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      padding-right: 24px;
+    }
+    .field-group input::placeholder { color: rgba(237,232,223,0.2); }
+    .field-group input:focus,
+    .field-group select:focus {
+      border-bottom-color: var(--gold);
+    }
+    .field-group select option {
+      background: var(--bg-2);
+      color: var(--cream);
+    }
+
+    /* ─── PLACE ORDER BUTTON ─── */
+    .place-order-btn {
+      width: 100%;
+      padding: 18px 32px;
+      background: var(--cream);
+      color: var(--bg);
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), background 0.2s ease, color 0.2s ease;
+      margin-top: 8px;
+    }
+    .place-order-btn:hover {
+      transform: translateY(-2px);
+      background: var(--gold);
+    }
+    .place-order-btn:focus-visible {
+      outline: 1px solid var(--cream);
+      outline-offset: 3px;
+    }
+    .place-order-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ─── ORDER SUMMARY ─── */
+    .order-summary {
+      position: sticky;
+      top: 130px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 36px;
+    }
+    .summary-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .summary-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 28px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-item-img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      background: var(--bg-2);
+      flex-shrink: 0;
+      display: block;
+    }
+    .summary-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .summary-item-name {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .summary-item-variant {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .summary-item-price {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--cream);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .summary-empty {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ─── SUMMARY TOTALS ─── */
+    .summary-totals {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 20px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .summary-row span:last-child { color: var(--cream-dim); }
+    .summary-row.total {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--cream);
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .summary-row.total span:last-child {
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .summary-ssl {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .summary-ssl svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ─── GOOGLE PLACES AUTOCOMPLETE ─── */
+    .pac-container {
+      background: #111317;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: none;
+      border-radius: 0;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.7);
+      font-family: 'Outfit', sans-serif;
+      margin-top: 2px;
+    }
+    .pac-item {
+      padding: 11px 18px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      color: #9A9590;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .pac-item:hover, .pac-item-selected { background: rgba(255,255,255,0.04); }
+    .pac-item-query { color: #EDE8DF; font-size: 13px; font-weight: 400; }
+    .pac-matched { color: #C4A97A; font-weight: 500; }
+    .pac-icon, .pac-logo::after { display: none !important; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 56px 72px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.5;
+      display: block;
+    }
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+    .footer-bottom p {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo" aria-label="Altara Home">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+  <!-- CHECKOUT STEPS BAR -->
+  <div class="steps-bar">
+    <a href="cart.html" class="back-btn" aria-label="Back to cart">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="checkout-steps">
+      <div class="step done"><span class="step-num">✓</span>Cart</div>
+      <div class="step-line"></div>
+      <div class="step active"><span class="step-num">2</span>Checkout</div>
+      <div class="step-line"></div>
+      <div class="step"><span class="step-num">3</span>Confirmation</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="checkout-main">
+
+    <!-- LEFT: FORM -->
+    <div class="checkout-form">
+
+      <!-- Contact -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-eyebrow">01</span>
+          <h2 class="section-title">Contact</h2>
+        </div>
+        <div class="form-row full">
+          <div class="field-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email">
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-eyebrow">02</span>
+          <h2 class="section-title">Shipping Address</h2>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first-name" placeholder="First" autocomplete="given-name">
+          </div>
+          <div class="field-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last-name" placeholder="Last" autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="field-group">
+            <label for="address1">Address Line 1</label>
+            <input type="text" id="address1" name="address1" placeholder="Street address" autocomplete="address-line1">
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="field-group">
+            <label for="address2">Address Line 2 <span style="opacity:0.5;letter-spacing:0">(optional)</span></label>
+            <input type="text" id="address2" name="address2" placeholder="Apartment, suite, unit, etc." autocomplete="address-line2">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="City" autocomplete="address-level2">
+          </div>
+          <div class="field-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" placeholder="State" autocomplete="address-level1">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="postcode">Postcode</label>
+            <input type="text" id="postcode" name="postcode" placeholder="0000" autocomplete="postal-code">
+          </div>
+          <div class="field-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" autocomplete="country-name">
+              <option value="AU" selected>Australia</option>
+              <option value="NZ">New Zealand</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="CA">Canada</option>
+              <option value="SG">Singapore</option>
+              <option value="JP">Japan</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-eyebrow">03</span>
+          <h2 class="section-title">Payment</h2>
+        </div>
+
+        <div class="form-row full">
+          <div class="field-group">
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="field-group">
+            <label for="card-name">Name on Card</label>
+            <input type="text" id="card-name" name="card-name" placeholder="As it appears on card" autocomplete="cc-name">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="expiry">Expiry Date</label>
+            <input type="text" id="expiry" name="expiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp">
+          </div>
+          <div class="field-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" autocomplete="cc-csc">
+          </div>
+        </div>
+      </div>
+
+      <!-- Place Order -->
+      <button class="place-order-btn" id="place-order-btn" type="button">Place Order</button>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <aside class="order-summary">
+      <p class="summary-label">Order Summary</p>
+
+      <div class="summary-items" id="summary-items">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="summary-totals">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="summary-subtotal">—</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>Free</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="summary-total">—</span>
+        </div>
+      </div>
+
+      <div class="summary-ssl">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Secured by 128-bit SSL encryption
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <div class="footer-bottom">
+      <p>© 2026 Altara. All rights reserved.</p>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Cart badge
+    (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
+      } catch(e) {}
+    })();
+
+    // ─── NAV SCROLL ───
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ─── INLINE SEARCH ───
+    (function() {
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+      function openSearch() { nav.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+      function closeSearch() { nav.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('search-active')) closeSearch(); });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+
+    // ─── CART RENDERING ───
+    const CART_KEY = 'altara-cart';
+
+    function formatPrice(cents) {
+      return '$' + (cents / 100).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderSummary() {
+      const raw = localStorage.getItem(CART_KEY);
+      const items = raw ? JSON.parse(raw) : [];
+      const container = document.getElementById('summary-items');
+
+      if (!items || items.length === 0) {
+        container.innerHTML = '<p class="summary-empty">No items</p>';
+        document.getElementById('summary-subtotal').textContent = '$0.00';
+        document.getElementById('summary-total').textContent = '$0.00';
+        return;
+      }
+
+      let subtotal = 0;
+      let html = '';
+
+      items.forEach(item => {
+        const price = typeof item.price === 'number' ? item.price : 0;
+        const qty = typeof item.qty === 'number' ? item.qty : 1;
+        const lineTotal = price * qty;
+        subtotal += lineTotal;
+
+        const imgSrc = item.image || `https://placehold.co/48x48/111317/4D6272`;
+        const variant = [item.color, item.variant, item.vehicle].filter(Boolean).join(' · ');
+        const displayPrice = formatPrice(lineTotal);
+
+        html += `
+          <div class="summary-item">
+            <img class="summary-item-img" src="${imgSrc}" alt="${item.name || 'Product'}" onerror="this.src='https://placehold.co/48x48/111317/4D6272'">
+            <div class="summary-item-info">
+              <div class="summary-item-name">${item.name || 'Altara Cover'}</div>
+              ${variant ? `<div class="summary-item-variant">${variant}${qty > 1 ? ' × ' + qty : ''}</div>` : (qty > 1 ? `<div class="summary-item-variant">× ${qty}</div>` : '')}
+            </div>
+            <div class="summary-item-price">${displayPrice}</div>
+          </div>`;
+      });
+
+      container.innerHTML = html;
+      document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('summary-total').textContent = formatPrice(subtotal);
+    }
+
+    renderSummary();
+
+    // ─── CARD NUMBER FORMATTING ───
+    document.getElementById('card-number').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').substring(0, 16);
+      this.value = v.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    // ─── EXPIRY FORMATTING ───
+    document.getElementById('expiry').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').substring(0, 4);
+      if (v.length >= 3) v = v.substring(0, 2) + ' / ' + v.substring(2);
+      this.value = v;
+    });
+
+    // ─── PLACE ORDER ───
+    document.getElementById('place-order-btn').addEventListener('click', function() {
+      const raw = localStorage.getItem(CART_KEY);
+      const items = raw ? JSON.parse(raw) : [];
+
+      let subtotal = 0;
+      if (items && items.length > 0) {
+        items.forEach(item => {
+          const price = typeof item.price === 'number' ? item.price : 0;
+          const qty = typeof item.qty === 'number' ? item.qty : 1;
+          subtotal += price * qty;
+        });
+      }
+
+      const order = {
+        orderNumber: 'ALTARA-' + (Math.floor(Math.random() * 90000) + 10000),
+        timestamp: new Date().toISOString(),
+        items: items,
+        subtotal: subtotal,
+        shipping: 0,
+        total: subtotal,
+      };
+
+      localStorage.setItem('altara-order', JSON.stringify(order));
+      window.location.href = 'confirmation.html';
+    });
+  </script>
+
+  <!-- Google Places Autocomplete — replace YOUR_API_KEY with your key from console.cloud.google.com -->
+  <script>
+    function initAddressAutocomplete() {
+      const input = document.getElementById('address1');
+      if (!input || !window.google) return;
+
+      const autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['address'],
+        fields: ['address_components'],
+      });
+
+      // Bias results toward country selected in the form
+      const countrySel = document.getElementById('country');
+      if (countrySel) {
+        autocomplete.setComponentRestrictions({ country: countrySel.value.toLowerCase() });
+        countrySel.addEventListener('change', () => {
+          autocomplete.setComponentRestrictions({ country: countrySel.value.toLowerCase() });
+        });
+      }
+
+      autocomplete.addListener('place_changed', function () {
+        const place = autocomplete.getPlace();
+        if (!place.address_components) return;
+
+        let streetNum = '', route = '', city = '', state = '', postcode = '', country = '';
+        place.address_components.forEach(c => {
+          switch (c.types[0]) {
+            case 'street_number':               streetNum = c.long_name; break;
+            case 'route':                       route = c.long_name; break;
+            case 'locality':                    city = c.long_name; break;
+            case 'administrative_area_level_1': state = c.short_name; break;
+            case 'postal_code':                 postcode = c.long_name; break;
+            case 'country':                     country = c.short_name; break;
+          }
+        });
+
+        input.value = [streetNum, route].filter(Boolean).join(' ');
+        if (city)     document.getElementById('city').value = city;
+        if (state)    document.getElementById('state').value = state;
+        if (postcode) document.getElementById('postcode').value = postcode;
+        if (country && countrySel) {
+          [...countrySel.options].forEach(o => { o.selected = o.value === country; });
+        }
+
+        // Move focus to address line 2 after selection
+        document.getElementById('address2').focus();
+      });
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAddressAutocomplete" async defer></script>
+</body>
+</html>

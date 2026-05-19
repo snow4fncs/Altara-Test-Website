@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altara - Engineered Comfort for Modern Movement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 56px;
+      transition: background 0.6s ease, backdrop-filter 0.6s ease, border-color 0.6s ease, padding 0.4s ease;
+      border-bottom: 1px solid transparent;
+      background: transparent;
+    }
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      bottom: -80px;
+      background: linear-gradient(
+        to bottom,
+        rgba(12,13,16,0.72) 0%,
+        rgba(12,13,16,0.38) 50%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: -1;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    nav.scrolled::before {
+      opacity: 0;
+    }
+    nav.scrolled {
+      background: rgba(12, 13, 16, 0.28);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom-color: rgba(255,255,255,0.04);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img {
+      height: 140px;
+      transform: translateY(8px);
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      list-style: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .nav-links a {
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-icon-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn:focus-visible { outline: 1px solid rgba(237,232,223,0.4); outline-offset: 6px; }
+    .nav-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-icon-btn span {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+    .nav-cart-count { position: relative; }
+    .cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -10px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 8px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── HERO ─── */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      display: grid;
+      grid-template-columns: 52% 48%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-accent {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 75% 50%, rgba(77,98,114,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 40% at 20% 80%, rgba(196,169,122,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 72px 88px 72px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: up 0.7s ease 0.4s forwards;
+    }
+    .pill-line {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .hero-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(68px, 7.5vw, 116px);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+      opacity: 0;
+      transform: translateY(28px);
+      animation: up 0.9s ease 0.6s forwards;
+    }
+    .hero-h1 .italic {
+      font-style: italic;
+      color: rgba(237,232,223,0.58);
+    }
+
+    .hero-sub {
+      font-size: 14.5px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.8;
+      max-width: 360px;
+      margin-top: 36px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: up 0.7s ease 0.85s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      margin-top: 48px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: up 0.7s ease 1.05s forwards;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: var(--cream);
+      text-decoration: none;
+      padding: 14px 36px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: inline-block;
+      transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    }
+    .btn-primary:hover {
+      background: var(--brand-lt);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(77,98,114,0.4);
+    }
+    .btn-primary:active { transform: none; }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(237,232,223,0.7);
+      border: 1px solid rgba(255,255,255,0.18);
+      text-decoration: none;
+      padding: 14px 36px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: inline-block;
+      transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.42);
+      color: var(--cream);
+      background: rgba(255,255,255,0.04);
+      transform: translateY(-2px);
+    }
+    .btn-ghost:active { transform: none; }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0;
+      transform: scale(1.05);
+      animation: imgIn 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s forwards;
+    }
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, var(--bg) 0%, rgba(12,13,16,0.15) 40%, transparent 100%),
+        linear-gradient(to top, var(--bg) 0%, transparent 25%);
+      z-index: 1;
+    }
+
+    .hero-watermark {
+      position: absolute;
+      bottom: -20px;
+      left: 56px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(100px, 15vw, 200px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+      opacity: 0;
+      animation: up 1.2s ease 0.5s forwards;
+    }
+
+    @keyframes up {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes imgIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ─── TRUST BAR ─── */
+    .trust {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 36px 40px;
+      border-right: 1px solid var(--border);
+      transition: background 0.3s ease;
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-item:hover { background: var(--bg-3); }
+    .ti-icon {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      color: var(--brand-lt);
+    }
+    .ti-strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+      margin-bottom: 3px;
+    }
+    .ti-sub {
+      display: block;
+      font-size: 12px;
+      color: var(--cream-dim);
+      font-weight: 300;
+    }
+
+    /* ─── PRODUCT RANGE ─── */
+    .range {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .range-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 22px 64px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .range .sec-h2 { font-size: clamp(28px, 2.8vw, 44px); }
+    .range-header-left { max-width: 480px; }
+    .range-view-all {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.5);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 2px;
+      border-bottom: 1px solid rgba(237,232,223,0.15);
+      transition: color 0.25s ease, border-color 0.25s ease;
+      white-space: nowrap;
+      margin-bottom: 6px;
+    }
+    .range-view-all::after {
+      content: '';
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.3s ease;
+    }
+    .range-view-all:hover { color: var(--cream); border-color: rgba(237,232,223,0.4); }
+    .range-view-all:hover::after { width: 34px; }
+
+    .range-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .range-tile {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      border-right: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .range-tile:last-child { border-right: none; }
+
+    .range-tile-img-box {
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .range-tile-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .range-tile:hover .range-tile-img { transform: scale(1.055); }
+
+    .range-tile-overlay { display: none; }
+
+    .range-tile-body {
+      padding: 16px 48px 24px;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--border);
+    }
+    .range-tile-num {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      opacity: 0.85;
+    }
+    .range-tile-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 3.2vw, 52px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.015em;
+      color: var(--cream);
+      margin-bottom: 14px;
+    }
+    .range-tile-name em {
+      font-style: italic;
+      color: rgba(237,232,223,0.65);
+    }
+    .range-tile-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.75;
+      max-width: 300px;
+      margin-bottom: 28px;
+    }
+    .range-tile-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .range-tile-link::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--cream);
+      transition: width 0.3s ease;
+    }
+    .range-tile:hover .range-tile-link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .range-tile:hover .range-tile-link::after { width: 52px; }
+
+    /* ─── SECTION DEFAULTS ─── */
+    .sec-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .sec-label::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.55;
+    }
+    .sec-h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 5vw, 74px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+    }
+    .sec-h2 em {
+      font-style: italic;
+      color: rgba(237,232,223,0.55);
+    }
+
+    /* ─── SHOWCASE ─── */
+    .showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100vh;
+      background: var(--bg-3);
+    }
+    .showcase-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .showcase-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 1s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: block;
+    }
+    .showcase-img:hover img { transform: scale(1.035); }
+    .showcase-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, transparent 60%, var(--bg-3) 100%),
+        linear-gradient(to top, var(--bg-3) 0%, transparent 20%);
+      z-index: 1;
+    }
+    .showcase-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 56px 72px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .showcase-copy::-webkit-scrollbar { display: none; }
+    .stat-row {
+      display: flex;
+      gap: 0;
+      margin-top: 52px;
+    }
+    .stat {
+      flex: 1;
+      padding-right: 36px;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; padding-right: 0; padding-left: 36px; }
+    .stat:nth-child(2) { padding-left: 36px; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--cream);
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-top: 6px;
+    }
+
+    /* ─── FEATURES ─── */
+    .features-sec { padding: 128px 72px; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 72px;
+    }
+    .f-card {
+      background: var(--bg-3);
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+    .f-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-lt));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .f-card:hover { background: #21252B; }
+    .f-card:hover::before { transform: scaleX(1); }
+    .f-card:focus-visible { outline: 2px solid var(--brand-lt); outline-offset: -2px; }
+    .f-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 60px;
+      font-weight: 300;
+      color: var(--brand);
+      opacity: 0.22;
+      line-height: 1;
+      margin-bottom: 28px;
+    }
+    .f-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+    .f-desc {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.8;
+    }
+
+    /* ─── CRAFT ─── */
+    .craft {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-2);
+      height: 100vh;
+      overflow: hidden;
+    }
+    .craft-copy {
+      padding: 56px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .craft-copy::-webkit-scrollbar { display: none; }
+    .craft-list { list-style: none; margin-top: 44px; }
+    .craft-item {
+      display: flex;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .craft-item:first-child { border-top: 1px solid var(--border); }
+    .ci-key {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream);
+      opacity: 0.55;
+      min-width: 110px;
+      padding-top: 3px;
+      flex-shrink: 0;
+    }
+    .ci-val {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.75;
+    }
+    .craft-visual {
+      position: relative;
+      overflow: hidden;
+    }
+    .craft-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .craft-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 60% 40%, rgba(77,98,114,0.08) 0%, transparent 70%),
+        linear-gradient(to left, transparent 50%, var(--bg-2) 100%);
+    }
+
+    /* ─── CTA STRIP ─── */
+    .cta-strip {
+      background: var(--brand);
+      padding: 112px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-strip::before {
+      content: 'ALTARA';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 260px;
+      font-weight: 600;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.08);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+    .cta-strip .sec-h2 { position: relative; z-index: 1; color: #fff; margin-bottom: 20px; }
+    .cta-strip .sec-h2 em { color: rgba(255,255,255,0.6); }
+    .cta-strip p {
+      position: relative;
+      z-index: 1;
+      color: rgba(255,255,255,0.65);
+      font-size: 14.5px;
+      max-width: 440px;
+      margin: 0 auto 44px;
+    }
+    .btn-white {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      color: var(--brand);
+      text-decoration: none;
+      padding: 16px 52px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: inline-block;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.28);
+    }
+    .btn-white:active { transform: none; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 72px 72px 44px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 64px;
+    }
+    .footer-logo img {
+      height: 110px;
+      filter: brightness(0) invert(1);
+      opacity: 0.5;
+      display: block;
+      margin-bottom: 22px;
+    }
+    .footer-tagline {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.5);
+      margin-bottom: 22px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .footer-col ul a {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-col ul a:hover { color: var(--cream-dim); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p {
+      font-size: 11.5px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .footer-social {
+      border-top: 1px solid var(--border);
+      padding: 28px 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 0;
+    }
+    .footer-social h4 {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.5);
+      margin: 0;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .social-icon {
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .social-icon:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
+    .social-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ─── SCROLL REVEAL ─── */
+    .rev {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .rev.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+    .d5 { transition-delay: 0.5s; }
+    .d6 { transition-delay: 0.6s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .hero-right::after {
+        background: linear-gradient(to top, var(--bg) 35%, rgba(12,13,16,0.55) 100%);
+      }
+      .hero-left {
+        padding: 140px 40px 80px;
+        position: relative;
+        z-index: 2;
+        min-height: 100vh;
+        justify-content: flex-end;
+      }
+      .hero-watermark { left: 40px; }
+      .trust { grid-template-columns: repeat(2, 1fr); }
+      .trust-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .trust-item:nth-child(odd) { border-right: 1px solid var(--border); }
+      .trust-item:nth-last-child(-n+2) { border-bottom: none; }
+      .showcase, .craft { grid-template-columns: 1fr; }
+      .showcase-img { min-height: 70vw; }
+      .showcase-img::after { background: linear-gradient(to top, var(--bg-3) 0%, transparent 25%); }
+      .showcase-copy { padding: 64px 40px; }
+      .craft-visual { min-height: 70vw; order: -1; }
+      .craft-visual::after { background: linear-gradient(to top, var(--bg-2) 0%, transparent 25%); }
+      .craft-copy { padding: 64px 40px; }
+      .features-sec { padding: 80px 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      footer { padding: 64px 40px 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      nav { padding: 22px 40px; }
+      nav.scrolled { padding: 16px 40px; }
+      .nav-links { display: none; }
+      .cta-strip { padding: 80px 40px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-left { padding: 120px 24px 72px; }
+      .hero-watermark { display: none; }
+      .trust { grid-template-columns: 1fr; }
+      .trust-item { border-right: none !important; }
+      .trust-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border) !important; }
+      .trust-item:last-child { border-bottom: none !important; }
+      .stat-row { flex-direction: column; gap: 28px; }
+      .stat { border-right: none; padding: 0; border-bottom: 1px solid var(--border); padding-bottom: 28px; }
+      .stat:nth-child(2) { padding-left: 0; }
+      .stat:last-child { border-bottom: none; padding-bottom: 0; }
+      .footer-grid { grid-template-columns: 1fr; }
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .cta-strip::before { font-size: 120px; }
+      .hero-ctas { flex-direction: column; }
+    }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+
+    /* Nav search area (Hermès-style inline search — center zone) */
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area {
+      display: flex; align-items: center; gap: 12px;
+      position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      white-space: nowrap;
+    }
+    nav.search-active { background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: transparent; }
+    nav.search-active::before { opacity: 0; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input {
+      background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25);
+      color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300;
+      letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none;
+      transition: border-color 0.2s ease; caret-color: var(--gold);
+    }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close {
+      background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4);
+      font-size: 18px; line-height: 1; padding: 2px 4px;
+      transition: color 0.2s ease; display: flex; align-items: center;
+    }
+    .nav-search-close:hover { color: var(--cream); }
+
+    /* Search suggestions panel */
+    .search-panel {
+      position: fixed; top: 76px; left: 0; right: 0; z-index: 199;
+      background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.055);
+      padding: 26px 56px 30px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(237,232,223,0.35); margin-bottom: 14px;
+    }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a {
+      display: block; font-size: 13.5px; font-weight: 300;
+      color: rgba(237,232,223,0.6); text-decoration: none;
+      padding: 5px 0;
+      transition: color 0.18s ease, padding-left 0.2s ease;
+      letter-spacing: 0.025em;
+    }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo" aria-label="Altara Home">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="#collection">Collection</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="7" r="4"/>
+          <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH SUGGESTIONS PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-bg-accent" aria-hidden="true"></div>
+    <div class="hero-watermark" aria-hidden="true">Altara</div>
+
+    <div class="hero-left">
+      <span class="pill" aria-hidden="true">
+        <span class="pill-line"></span>
+        Premium Seat Covers
+      </span>
+      <h1 class="hero-h1">
+        Drive in<br>
+        <span class="italic">Complete</span><br>
+        Comfort.
+      </h1>
+      <p class="hero-sub">
+        Premium microfibre seat covers engineered for everyday movement. Protect what matters - without compromising style.
+      </p>
+      <div class="hero-ctas">
+        <a href="collection.html" class="btn-primary">Shop the Collection</a>
+        <a href="#showcase" class="btn-ghost">Learn More</a>
+      </div>
+    </div>
+
+    <div class="hero-right" aria-hidden="true">
+      <img src="Product Photos/Altara Product Image 2.png" alt="Altara seat cover, studio shot">
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust" role="list" aria-label="Key features">
+    <div class="trust-item" role="listitem">
+      <svg class="ti-icon" fill="none" viewBox="0 0 40 40" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+        <path d="M20 4L6 11v9c0 9 6.5 15.5 14 16 7.5-.5 14-7 14-16v-9L20 4z" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <span class="ti-strong">Premium Protection</span>
+        <span class="ti-sub">Premium microfibre shields against wear, moisture & daily damage</span>
+      </div>
+    </div>
+    <div class="trust-item" role="listitem">
+      <svg class="ti-icon" fill="none" viewBox="0 0 40 40" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+        <circle cx="20" cy="20" r="15"/>
+        <path d="M13 20l5 5 9-10" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <span class="ti-strong">Universal Fit</span>
+        <span class="ti-sub">Compatible with most car seats</span>
+      </div>
+    </div>
+    <div class="trust-item" role="listitem">
+      <svg class="ti-icon" fill="none" viewBox="0 0 40 40" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+        <path d="M8 28c3-8 5-12 12-12s9 4 12 12" stroke-linecap="round"/>
+        <path d="M14 20c1-4 3-6 6-6" stroke-linecap="round"/>
+        <circle cx="20" cy="32" r="3"/>
+      </svg>
+      <div>
+        <span class="ti-strong">Easy Care</span>
+        <span class="ti-sub">Machine washable & quick-dry</span>
+      </div>
+    </div>
+    <div class="trust-item" role="listitem">
+      <svg class="ti-icon" fill="none" viewBox="0 0 40 40" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13 30 L13 20 A7 7 0 0 1 27 20 L27 30"/>
+        <line x1="10" y1="30" x2="16" y2="30"/>
+        <line x1="24" y1="30" x2="30" y2="30"/>
+        <line x1="13" y1="14" x2="13" y2="11"/>
+        <line x1="27" y1="14" x2="27" y2="11"/>
+        <line x1="20" y1="12" x2="20" y2="9"/>
+      </svg>
+      <div>
+        <span class="ti-strong">Altara MagFit™ Technology</span>
+        <span class="ti-sub">Magnetic snap-on clips lock in place instantly</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT RANGE -->
+  <div class="range" id="collection">
+    <div class="range-header">
+      <div class="range-header-left">
+        <span class="sec-label rev">The Collection</span>
+        <h2 class="sec-h2 rev d1">Two finishes.<br><em>One standard.</em></h2>
+      </div>
+      <a href="collection.html" class="range-view-all rev d2">View All Products</a>
+    </div>
+    <div class="range-grid">
+      <a href="product-contrast-white.html" class="range-tile rev">
+        <div class="range-tile-img-box">
+          <img class="range-tile-img" src="Product Photos/Homepage image.png" alt="Altara Seat Cover - Contrast White">
+        </div>
+        <div class="range-tile-body">
+          <span class="range-tile-num">01 — Seat Cover</span>
+          <h3 class="range-tile-name">Contrast<br><em>White</em></h3>
+          <p class="range-tile-desc">White piping against black microfibre. A sharp, performance-inspired finish built for those who notice every detail.</p>
+          <span class="range-tile-link">Explore</span>
+        </div>
+      </a>
+      <a href="product-midnight-black.html" class="range-tile rev d1">
+        <div class="range-tile-img-box">
+          <img class="range-tile-img" src="Product Photos/Homepage image 2.png" alt="Altara Seat Cover - Midnight Black">
+        </div>
+        <div class="range-tile-body">
+          <span class="range-tile-num">02 — Seat Cover</span>
+          <h3 class="range-tile-name">Midnight<br><em>Black</em></h3>
+          <p class="range-tile-desc">Black-on-black piping. Discreet, seamless, and engineered to disappear into any premium interior.</p>
+          <span class="range-tile-link">Explore</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- PRODUCT SHOWCASE -->
+  <div class="showcase" id="showcase">
+    <div class="showcase-img">
+      <img src="Product Photos/Altara Product Image 5.png" alt="Altara seat cover installed in vehicle interior">
+    </div>
+    <div class="showcase-copy">
+      <span class="sec-label rev">The Product</span>
+      <h2 class="sec-h2 rev d1">Precision<br><em>engineered.</em><br>Made to last.</h2>
+      <p class="rev d2" style="font-size:14px;color:var(--cream-dim);line-height:1.85;margin-top:28px;max-width:400px;">
+        Crafted from premium microfibre - engineered to shield luxury interiors from sweat, moisture, and daily wear. Soft, durable, and built to keep your seats pristine through every journey.
+      </p>
+      <p class="rev d3" style="font-size:14px;color:var(--cream-dim);line-height:1.85;margin-top:18px;max-width:400px;">
+        The fitted contour design ensures a clean, tailored look - not the loose, slipping covers you've settled for before.
+      </p>
+      <div class="stat-row rev d4">
+        <div class="stat">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Size, All Seats</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">360°</div>
+          <div class="stat-label">Full Coverage</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Washes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features-sec" id="features">
+    <div style="max-width:580px;">
+      <span class="sec-label rev">Why Altara</span>
+      <h2 class="sec-h2 rev d1">Built for the way<br>you <em>actually</em> live.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="f-card rev">
+        <div class="f-num">01</div>
+        <div class="f-title">Protection That Stays</div>
+        <p class="f-desc">Covers that actually stay in place. Our tailored fit grips the seat without slipping, bunching, or shifting - even through daily use.</p>
+      </div>
+      <div class="f-card rev d1">
+        <div class="f-num">02</div>
+        <div class="f-title">Comfort You Feel</div>
+        <p class="f-desc">Premium microfibre delivers a soft, cushioned surface that makes long drives feel shorter. Breathable and temperature-regulating for year-round comfort.</p>
+      </div>
+      <div class="f-card rev d2">
+        <div class="f-num">03</div>
+        <div class="f-title">Effortless Maintenance</div>
+        <p class="f-desc">Toss it in the wash. Fully machine washable and quick-dry - maintaining a fresh, clean interior has never been simpler.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRAFT / MATERIALS -->
+  <div class="craft" id="craft">
+    <div class="craft-copy">
+      <span class="sec-label rev">Materials & Craft</span>
+      <h2 class="sec-h2 rev d1">Built with<br><em>intention.</em></h2>
+      <ul class="craft-list" role="list">
+        <li class="craft-item rev d2">
+          <span class="ci-key">Altara MagFit™<br>Technology</span>
+          <span class="ci-val">Magnetic snap-on clips lock the cover securely behind the seat - tool-free, rattle-free, and installed in under two minutes.</span>
+        </li>
+        <li class="craft-item rev d3">
+          <span class="ci-key">Material</span>
+          <span class="ci-val">Premium microfibre - soft, absorbent, and built to protect luxury interiors from sweat, moisture, and daily wear without compromise.</span>
+        </li>
+        <li class="craft-item rev d4">
+          <span class="ci-key">Edge Finish</span>
+          <span class="ci-val">Reinforced piping adds structure and a clean automotive silhouette. Contrast white for a sharper look, or black-on-black for a discreet OEM-style finish.</span>
+        </li>
+        <li class="craft-item rev d5">
+          <span class="ci-key">Anti-Slip Base</span>
+          <span class="ci-val">Integrated rubber dot backing grips the seat surface, eliminating shift and bunching for a clean, fitted result every time.</span>
+        </li>
+        <li class="craft-item rev d6">
+          <span class="ci-key">Embroidery</span>
+          <span class="ci-val">Signature Altara script precision-embroidered - a premium, lasting mark of quality on every cover.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="craft-visual">
+      <img src="Product Photos/Altara Product Image 6.png" alt="Altara seat cover detail">
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip" id="shop">
+    <h2 class="sec-h2 rev">Protect your seats.<br><em>Elevate your drive.</em></h2>
+    <p class="rev d1">The Altara seat cover - engineered for comfort, refined for everyday use.</p>
+    <a href="#" class="btn-white rev d2">Shop Now</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+        </div>
+        <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="collection.html">Seat Covers</a></li>
+          <li><a href="collection.html">Collections</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="mailto:hello@altara.com.au">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <div class="footer-social-icons">
+        <a href="https://instagram.com/altara" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://facebook.com/altara" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Altara. All rights reserved.</p>
+      <p>Engineered comfort for modern movement.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // Scroll reveal
+    const revEls = document.querySelectorAll('.rev');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+    revEls.forEach(el => io.observe(el));
+
+    // Cart badge
+    (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
+      } catch(e) {}
+    })();
+
+    // Porsche-style image parallax on range tiles
+    (function() {
+      const tiles = document.querySelectorAll('.range-tile');
+      tiles.forEach(tile => {
+        const img = tile.querySelector('.range-tile-img');
+        if (!img) return;
+        let raf = null;
+        tile.addEventListener('mousemove', e => {
+          const r = tile.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          if (raf) cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            img.style.transform = `scale(1.055) translate(${x * 18}px, ${y * 10}px)`;
+          });
+        });
+        tile.addEventListener('mouseleave', () => {
+          if (raf) cancelAnimationFrame(raf);
+          img.style.transform = '';
+        });
+      });
+    })();
+
+    // Hermès-style inline search
+    (function() {
+      const nav = document.getElementById('nav');
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+
+      function openSearch() {
+        nav.classList.add('search-active');
+        panel.classList.add('open');
+        searchArea.setAttribute('aria-hidden', 'false');
+        panel.setAttribute('aria-hidden', 'false');
+        setTimeout(() => inp.focus(), 120);
+      }
+      function closeSearch() {
+        nav.classList.remove('search-active');
+        panel.classList.remove('open');
+        searchArea.setAttribute('aria-hidden', 'true');
+        panel.setAttribute('aria-hidden', 'true');
+        inp.value = '';
+      }
+
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && nav.classList.contains('search-active')) closeSearch();
+      });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+  </script>
+</body>
+</html>

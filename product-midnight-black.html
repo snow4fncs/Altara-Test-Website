@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Midnight Black — Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:    #0B0C0F;
+      --bg-2:  #111316;
+      --bg-3:  #17191D;
+      --brand: #4D6272;
+      --blt:   #607D8F;
+      --cream: #EDE8DF;
+      --gold:  #C4A97A;
+      --muted: #6B7078;
+      --line:  rgba(255,255,255,0.07);
+      --nav-h: 64px;
+      --thumb-h: 100px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    nav.scrolled { border-bottom-color: var(--line); }
+    .nav-logo { display: flex; align-items: center; height: var(--nav-h); overflow: hidden; }
+    .nav-logo img { height: 120px; transform: translateY(7px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
+    nav:hover .nav-logo img { opacity: 0.88; }
+    .nav-links { display: flex; gap: 38px; list-style: none; }
+    .nav-links a { color: rgba(237,232,223,0.55); text-decoration: none; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 24px; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.55); text-decoration: none; transition: color 0.2s; padding: 0; }
+    .nav-btn:hover { color: var(--cream); }
+    .nav-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-btn span { font-size: 7.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+    .nav-cart { position: relative; }
+    .cart-badge { position: absolute; top: -4px; right: -7px; background: var(--gold); color: var(--bg); font-size: 7px; font-weight: 700; min-width: 14px; height: 14px; border-radius: 7px; display: flex; align-items: center; justify-content: center; padding: 0 2px; opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+    .cart-badge.show { opacity: 1; transform: scale(1); }
+
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.4); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.2); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.5); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.25); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.35); font-size: 17px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 64px; left: 0; right: 0; z-index: 199; background: rgba(11,12,15,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); padding: 22px 48px 26px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.3); margin-bottom: 12px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13px; font-weight: 300; color: rgba(237,232,223,0.55); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    .product-hero { margin-top: var(--nav-h); height: calc(100vh - var(--nav-h)); display: grid; grid-template-columns: 62% 38%; overflow: hidden; }
+    .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: hidden; }
+    .ph-image-area { overflow: hidden; position: relative; background: #131210; }
+    .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 16px 28px; transition: opacity 0.22s ease; }
+    .ph-main-img.fade { opacity: 0; }
+    .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
+    .ph-thumb { flex: 1; min-width: 0; background: #131210; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
+    .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
+    .ph-thumb.active { opacity: 1; }
+    .ph-thumb:hover:not(.active) { opacity: 0.68; }
+    .ph-thumb::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.2s; }
+    .ph-thumb.active::after { background: var(--gold); }
+    .ph-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 6px; }
+    .ph-info { overflow-y: auto; scrollbar-width: none; padding: 48px 48px 56px 52px; display: flex; flex-direction: column; }
+    .ph-info::-webkit-scrollbar { display: none; }
+
+    .pi-back { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.3); text-decoration: none; margin-bottom: 32px; transition: color 0.22s; align-self: flex-start; }
+    .pi-back svg { width: 9px; height: 9px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .pi-back:hover { color: rgba(237,232,223,0.6); }
+    .pi-cat { font-size: 10px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
+    .pi-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 3.2vw, 48px); font-weight: 300; line-height: 1.04; letter-spacing: -0.012em; color: var(--cream); margin-bottom: 16px; }
+    .pi-name em { font-style: italic; color: rgba(237,232,223,0.42); }
+    .pi-price { font-size: 16px; font-weight: 300; color: rgba(237,232,223,0.65); letter-spacing: 0.03em; }
+    .pi-sep { width: 100%; height: 1px; background: var(--line); margin: 24px 0; flex-shrink: 0; }
+    .pi-label { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.38); margin-bottom: 12px; }
+    .pi-variants { display: flex; gap: 10px; margin-bottom: 22px; }
+    .pi-var { width: 72px; height: 72px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; background: #131210; text-decoration: none; display: block; flex-shrink: 0; transition: border-color 0.22s; }
+    .pi-var img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 5px; }
+    .pi-var.active { border-color: var(--gold); outline: 1px solid rgba(196,169,122,0.2); outline-offset: 2px; }
+    .pi-var:hover:not(.active) { border-color: rgba(237,232,223,0.22); }
+    .pi-add { display: block; width: 100%; background: var(--brand); color: var(--cream); border: none; padding: 16px 16px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; margin-bottom: 12px; transition: background 0.24s; }
+    .pi-add:hover { background: var(--blt); }
+    .pi-add:focus-visible { outline: 1px solid var(--blt); outline-offset: 2px; }
+    .pi-perks { display: flex; gap: 18px; flex-wrap: wrap; }
+    .pi-perk { display: flex; align-items: center; gap: 6px; font-size: 10px; color: rgba(237,232,223,0.35); letter-spacing: 0.04em; }
+    .pi-perk svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .pi-desc { font-size: 14px; color: rgba(237,232,223,0.58); line-height: 1.85; font-weight: 300; }
+    .pi-acc { border-top: 1px solid var(--line); }
+    .pi-acc:last-child { border-bottom: 1px solid var(--line); }
+    .pi-acc-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; background: none; border: none; cursor: pointer; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.42); text-align: left; transition: color 0.2s; }
+    .pi-acc-btn:hover { color: rgba(237,232,223,0.72); }
+    .pi-ico { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .pi-acc.open .pi-ico { transform: rotate(45deg); }
+    .pi-acc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .pi-acc.open .pi-acc-body { max-height: 520px; }
+    .pi-acc-inner { padding: 4px 0 18px; font-size: 13.5px; color: rgba(237,232,223,0.52); line-height: 1.85; font-weight: 300; }
+    .pi-acc-inner p { margin: 0; }
+    .pi-acc-inner ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .pi-acc-inner ul li { display: flex; align-items: flex-start; gap: 12px; }
+    .pi-acc-inner ul li::before { content: '—'; color: var(--gold); opacity: 0.5; flex-shrink: 0; font-size: 11px; margin-top: 3px; }
+    .pi-spec { display: flex; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .pi-spec:first-child { border-top: 1px solid var(--line); margin-top: 4px; }
+    .pi-sk { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.32); min-width: 100px; flex-shrink: 0; padding-top: 1px; }
+    .pi-sv { font-size: 13.5px; color: rgba(237,232,223,0.6); font-weight: 300; }
+    .pi-ref { font-size: 10px; color: rgba(237,232,223,0.2); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 24px; }
+
+    .editorial { height: 46vh; overflow: hidden; position: relative; border-top: 1px solid var(--line); }
+    .editorial img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; }
+    .editorial::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(11,12,15,0.22) 100%); pointer-events: none; }
+
+    .complete { display: grid; grid-template-columns: 38% 62%; border-top: 1px solid var(--line); min-height: 58vh; }
+    .complete-copy { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); }
+    .complete-ey { font-size: 7.5px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.58; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .complete-ey::before { content: ''; width: 18px; height: 1px; background: var(--gold); opacity: 0.5; flex-shrink: 0; }
+    .complete-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 3.4vw, 48px); font-weight: 300; letter-spacing: -0.018em; line-height: 0.98; color: var(--cream); margin-bottom: 16px; }
+    .complete-h em { font-style: italic; color: rgba(237,232,223,0.32); }
+    .complete-p { font-size: 12px; color: rgba(237,232,223,0.36); line-height: 1.86; margin-bottom: 28px; max-width: 260px; font-weight: 300; }
+    .complete-a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: rgba(237,232,223,0.45); font-size: 8px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; transition: color 0.22s; }
+    .complete-a::after { content: ''; display: block; width: 20px; height: 1px; background: currentColor; transition: width 0.26s; }
+    .complete-a:hover { color: rgba(237,232,223,0.75); }
+    .complete-a:hover::after { width: 38px; }
+    .complete-img { overflow: hidden; background: #131210; display: flex; align-items: center; justify-content: center; }
+    .complete-img img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 32px 48px; transition: transform 1.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .complete-img:hover img { transform: scale(1.03); }
+
+    footer { background: var(--bg); border-top: 1px solid var(--line); padding: 64px 64px 36px; }
+    .ft { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
+    .ft-logo img { height: 80px; filter: brightness(0) invert(1); opacity: 0.32; display: block; margin-bottom: 12px; }
+    .ft-tag { font-size: 11px; color: rgba(237,232,223,0.22); line-height: 1.72; font-weight: 300; max-width: 192px; }
+    .ft-col h4 { font-size: 7.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.2); margin-bottom: 16px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .ft-col ul a { font-size: 11px; color: rgba(237,232,223,0.26); text-decoration: none; font-weight: 300; transition: color 0.2s; }
+    .ft-col ul a:hover { color: rgba(237,232,223,0.55); }
+    .ft-bot { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; }
+    .ft-copy { font-size: 9.5px; color: rgba(237,232,223,0.14); font-weight: 300; }
+    .ft-em { font-size: 9.5px; color: rgba(237,232,223,0.14); letter-spacing: 0.06em; font-style: italic; font-family: 'Cormorant Garamond', serif; }
+    .ft-social { border-top: 1px solid var(--line); padding: 24px 0 20px; display: flex; align-items: center; gap: 24px; }
+    .ft-social h4 { font-size: 7.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.2); margin: 0; }
+    .ft-social-icons { display: flex; gap: 12px; align-items: center; }
+    .ft-social-link { color: rgba(237,232,223,0.26); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; transition: color 0.2s ease, border-color 0.2s ease; }
+    .ft-social-link:hover { color: rgba(237,232,223,0.55); border-color: rgba(237,232,223,0.2); }
+    .ft-social-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .toast { position: fixed; bottom: 32px; right: 32px; z-index: 600; background: var(--bg-2); border: 1px solid var(--line); padding: 16px 20px; display: flex; align-items: center; gap: 16px; min-width: 276px; opacity: 0; transform: translateY(8px); transition: opacity 0.26s, transform 0.26s; pointer-events: none; }
+    .toast.show { opacity: 1; transform: none; pointer-events: all; }
+    .toast-ico { width: 28px; height: 28px; border-radius: 50%; background: rgba(196,169,122,0.07); border: 1px solid rgba(196,169,122,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .toast-ico svg { width: 11px; height: 11px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .toast-body { flex: 1; }
+    .toast-t { font-size: 8.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream); margin-bottom: 2px; }
+    .toast-s { font-size: 11px; font-weight: 300; color: var(--muted); }
+    .toast-lnk { font-size: 8px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.4); text-decoration: none; border-bottom: 1px solid rgba(237,232,223,0.14); padding-bottom: 1px; white-space: nowrap; transition: color 0.2s; }
+    .toast-lnk:hover { color: var(--cream); }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></a>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="collection.html">Collection</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#craft">Materials</a></li>
+    </ul>
+    <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+      <span class="nav-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+        <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+        <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+      </form>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" id="search-open-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span>
+    </button>
+    <a href="account.html" class="nav-btn" aria-label="Account">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span>
+    </a>
+    <a href="cart.html" class="nav-btn nav-cart" aria-label="Cart">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span>
+      <span class="cart-badge" id="cart-badge"></span>
+    </a>
+  </div>
+</nav>
+
+<div class="search-panel" id="search-panel" aria-hidden="true">
+  <p class="search-panel-label">Suggested Searches</p>
+  <ul class="search-suggestions-list" role="list">
+    <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+    <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+    <li><a href="collection.html">View All Products</a></li>
+  </ul>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <div class="toast-body"><p class="toast-t">Added to Cart</p><p class="toast-s">Midnight Black</p></div>
+  <a href="cart.html" class="toast-lnk">View Cart</a>
+</div>
+
+<div class="product-hero">
+  <div class="ph-left">
+    <div class="ph-image-area">
+      <img class="ph-main-img" id="ph-main-img" src="Product Photos/Altara Product Image 7.png" alt="Midnight Black — View 1">
+    </div>
+    <div class="ph-thumbs">
+      <button class="ph-thumb active" data-src="Product Photos/Altara Product Image 7.png"><img src="Product Photos/Altara Product Image 7.png" alt="View 1"></button>
+      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 4.png"><img src="Product Photos/Altara Product Image 4.png" alt="View 2"></button>
+      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 3.png"><img src="Product Photos/Altara Product Image 3.png" alt="View 3"></button>
+    </div>
+  </div>
+
+  <div class="ph-info">
+    <a href="collection.html" class="pi-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>All Products
+    </a>
+    <p class="pi-cat">Seat Cover &nbsp;·&nbsp; MagFit™</p>
+    <h1 class="pi-name">Midnight<br><em>Black</em></h1>
+    <p class="pi-price">$59 AUD</p>
+    <div class="pi-sep"></div>
+    <p class="pi-label">Colourway</p>
+    <div class="pi-variants">
+      <a href="product-contrast-white.html" class="pi-var" title="Contrast White"><img src="Product Photos/Altara Product Image 1.png" alt="Contrast White"></a>
+      <div class="pi-var active" title="Midnight Black"><img src="Product Photos/Altara Product Image 7.png" alt="Midnight Black"></div>
+    </div>
+    <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
+    <div class="pi-perks">
+      <span class="pi-perk"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Free Shipping</span>
+      <span class="pi-perk"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>30-Day Returns</span>
+      <span class="pi-perk"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure Checkout</span>
+    </div>
+    <div class="pi-sep"></div>
+    <p class="pi-desc">Black-on-black piping against premium black microfibre. Discreet, seamless, and built to disappear into any luxury interior without a trace. Secured by Altara MagFit™ magnetic snap-on clips — tool-free, rattle-free, refined.</p>
+    <div class="pi-sep"></div>
+    <div>
+      <div class="pi-acc open">
+        <button class="pi-acc-btn">Overview <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="pi-acc-body"><div class="pi-acc-inner"><p>The Midnight Black seat cover is Altara's most discreet offering — a tonal exercise in restraint. Black microfibre meets black piping in a cover engineered to integrate seamlessly. The Altara script embroidery reveals itself only up close. MagFit™ clips install in minutes and leave no trace when removed.</p></div></div>
+      </div>
+      <div class="pi-acc">
+        <button class="pi-acc-btn">Specifications <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="pi-acc-body"><div class="pi-acc-inner">
+          <div class="pi-spec"><span class="pi-sk">Fit</span><span class="pi-sv">Universal</span></div>
+          <div class="pi-spec"><span class="pi-sk">Closure</span><span class="pi-sv">MagFit™ Clips</span></div>
+          <div class="pi-spec"><span class="pi-sk">Piping</span><span class="pi-sv">Black Tonal</span></div>
+          <div class="pi-spec"><span class="pi-sk">Material</span><span class="pi-sv">Premium Microfibre</span></div>
+          <div class="pi-spec"><span class="pi-sk">Length</span><span class="pi-sv">145 cm</span></div>
+          <div class="pi-spec"><span class="pi-sk">Width</span><span class="pi-sv">70 cm</span></div>
+        </div></div>
+      </div>
+      <div class="pi-acc">
+        <button class="pi-acc-btn">Materials &amp; Craft <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="pi-acc-body"><div class="pi-acc-inner"><ul>
+          <li>Premium microfibre construction</li><li>Tonal black-on-black piping</li>
+          <li>Precision embroidered Altara script</li><li>Anti-slip rubber dot base</li>
+        </ul></div></div>
+      </div>
+      <div class="pi-acc">
+        <button class="pi-acc-btn">Care &amp; Washing <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="pi-acc-body"><div class="pi-acc-inner"><ul>
+          <li>Machine wash cold, gentle cycle</li><li>Do not tumble dry — hang dry only</li><li>Do not iron or bleach</li>
+        </ul></div></div>
+      </div>
+    </div>
+    <p class="pi-ref">Ref. ALT-MB-001 &nbsp;·&nbsp; MagFit™ Technology</p>
+  </div>
+</div>
+
+<div class="editorial">
+  <img src="Product Photos/Altara Product Image 6.png" alt="Altara in vehicle">
+</div>
+
+<section class="complete">
+  <div class="complete-copy">
+    <div class="complete-ey">Also Available</div>
+    <h2 class="complete-h">Contrast<br><em>White</em></h2>
+    <p class="complete-p">Sharp white contrast piping on premium black microfibre — the performance-inspired finish for drivers who notice every detail.</p>
+    <a href="product-contrast-white.html" class="complete-a">Discover Contrast White</a>
+  </div>
+  <div class="complete-img"><img src="Product Photos/Altara Product Image 1.png" alt="Contrast White"></div>
+</section>
+
+<footer>
+  <div class="ft">
+    <div><div class="ft-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div><p class="ft-tag">Engineered comfort for modern movement.</p></div>
+    <div class="ft-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li></ul></div>
+    <div class="ft-col"><h4>Support</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="mailto:hello@altara.com.au">Contact</a></li></ul></div>
+    <div class="ft-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Privacy</a></li></ul></div>
+  </div>
+  <div class="ft-social">
+    <h4>Follow Us</h4>
+    <div class="ft-social-icons">
+      <a href="https://instagram.com/altara" class="ft-social-link" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://facebook.com/altara" class="ft-social-link" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="ft-bot"><p class="ft-copy">© 2026 Altara. All rights reserved.</p><p class="ft-em">Engineered comfort for modern movement.</p></div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
+  const mainImg = document.getElementById('ph-main-img');
+  document.querySelectorAll('.ph-thumb').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      mainImg.classList.add('fade');
+      setTimeout(() => { mainImg.src = btn.dataset.src; mainImg.classList.remove('fade'); }, 180);
+    });
+  });
+  document.querySelectorAll('.pi-acc-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('.pi-acc').classList.toggle('open'));
+  });
+  const PROD = { id: 'midnight-black', name: 'Midnight Black', price: 59, image: 'Product Photos/Altara Product Image 7.png' };
+  const toast = document.getElementById('toast'); let tt;
+  document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+    const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+    const ex = c.items.find(i => i.id === PROD.id);
+    if (ex) ex.qty++; else c.items.push({ ...PROD, qty: 1 });
+    localStorage.setItem('altara-cart', JSON.stringify(c));
+    const n = c.items.reduce((s, i) => s + i.qty, 0);
+    const b = document.getElementById('cart-badge');
+    if (b) { b.textContent = n; b.classList.add('show'); }
+    clearTimeout(tt); toast.classList.add('show');
+    tt = setTimeout(() => toast.classList.remove('show'), 3500);
+  });
+  try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
+  (function(){
+    const navEl=document.getElementById('nav'),openBtn=document.getElementById('search-open-btn'),closeBtn=document.getElementById('nav-search-close'),searchArea=document.getElementById('nav-search-area'),panel=document.getElementById('search-panel'),inp=document.getElementById('nav-search-q');
+    function openSearch(){navEl.classList.add('search-active');panel.classList.add('open');searchArea.setAttribute('aria-hidden','false');panel.setAttribute('aria-hidden','false');setTimeout(()=>inp.focus(),120);}
+    function closeSearch(){navEl.classList.remove('search-active');panel.classList.remove('open');searchArea.setAttribute('aria-hidden','true');panel.setAttribute('aria-hidden','true');inp.value='';}
+    openBtn.addEventListener('click',openSearch);
+    closeBtn.addEventListener('click',closeSearch);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
+    panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
+  })();
+</script>
+</body>
+</html>

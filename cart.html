@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 56px; height: 64px;
+      background: rgba(12,13,16,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.4s ease;
+    }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img { height: 140px; transform: translateY(8px); width: auto; filter: brightness(0) invert(1); opacity: 0.72; display: block; transition: opacity 0.3s ease; }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-icon-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s ease; padding: 0; }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-icon-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: inherit; }
+    .nav-cart-count { position: relative; }
+    .cart-badge { position: absolute; top: -7px; right: -10px; background: var(--gold); color: var(--bg); font-size: 8px; font-weight: 600; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 3px; line-height: 1; opacity: 0; transform: scale(0.6); transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 64px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.6); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    /* ─── CHECKOUT STEPS BAR ─── */
+    .steps-bar { margin-top: 64px; display: flex; align-items: center; justify-content: center; padding: 12px 56px; background: rgba(12,13,16,0.6); border-bottom: 1px solid var(--border); position: relative; }
+    .back-btn { position: absolute; left: 56px; display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: color 0.25s ease; padding: 0; }
+    .back-btn:hover { color: var(--cream); }
+    .back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── CART MAIN GRID ─── */
+    .cart-main {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      padding: 48px 72px 120px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    /* ─── CART ITEMS ─── */
+    .cart-items {}
+
+    .col-headers {
+      display: grid;
+      grid-template-columns: 96px 1fr auto auto;
+      gap: 24px;
+      padding: 0 0 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .col-headers span {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .col-headers .col-qty { text-align: center; }
+    .col-headers .col-price { text-align: right; min-width: 96px; }
+
+    /* ─── CART ITEM ─── */
+    .cart-item {
+      display: grid;
+      grid-template-columns: 96px 1fr auto auto;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .cart-item-img {
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+      background: var(--bg-2);
+      display: block;
+    }
+    .cart-item-info {}
+    .cart-item-name {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .cart-item-meta {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .cart-item-feature {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ─── QUANTITY CONTROL ─── */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      color: var(--cream-dim);
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease, background 0.2s ease;
+      line-height: 1;
+    }
+    .qty-btn:hover { color: var(--cream); background: rgba(255,255,255,0.04); }
+    .qty-btn:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 2px; }
+    .qty-btn:active { background: rgba(255,255,255,0.08); }
+    .qty-value {
+      width: 36px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--cream);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      user-select: none;
+    }
+
+    /* ─── PRICE + REMOVE ─── */
+    .cart-item-price-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      min-width: 96px;
+    }
+    .cart-item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+    .remove-btn:hover { color: var(--cream); }
+    .remove-btn:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 4px; }
+    .remove-btn:active { opacity: 0.7; }
+    .remove-x {
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 300;
+    }
+    .remove-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 80px 0 40px;
+    }
+    .empty-state-icon {
+      width: 48px;
+      height: 48px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+    .empty-state h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      margin-bottom: 10px;
+    }
+    .empty-state p {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .empty-state a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      padding: 14px 36px;
+      border: 1px solid var(--border);
+      transition: border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+    .empty-state a:hover { border-color: rgba(237,232,223,0.3); transform: translateY(-1px); }
+    .empty-state a:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 3px; }
+    .empty-state a:active { transform: translateY(0); }
+
+    /* ─── CONTINUE LINK ─── */
+    .continue-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease, gap 0.25s ease;
+    }
+    .continue-link:hover { color: var(--cream-dim); gap: 12px; }
+    .continue-link:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 4px; }
+
+    /* ─── ORDER SUMMARY ─── */
+    .order-summary {
+      position: sticky;
+      top: 130px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 36px;
+    }
+    .summary-heading {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .summary-row:last-of-type { margin-bottom: 0; }
+    .summary-label {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .summary-value {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--cream-dim);
+    }
+    .summary-value.free {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+    .summary-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+    .summary-row-total .summary-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--cream-dim);
+      letter-spacing: 0.06em;
+    }
+    .summary-total-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── CHECKOUT BUTTON ─── */
+    .btn-checkout {
+      width: 100%;
+      background: var(--brand);
+      color: var(--cream);
+      border: none;
+      padding: 16px 36px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+      margin-top: 24px;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-checkout:hover { background: var(--brand-lt); transform: translateY(-1px); }
+    .btn-checkout:focus-visible { outline: 1px solid var(--brand-lt); outline-offset: 3px; }
+    .btn-checkout:active { transform: translateY(0); }
+
+    /* ─── SECURE NOTE ─── */
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 14px;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .secure-note svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .payments-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .payments-note strong {
+      font-weight: 400;
+      color: var(--cream-dim);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 56px 72px 40px;
+    }
+    .footer-logo {
+      margin-bottom: 48px;
+    }
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-bottom p {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── CHECKOUT STEPS ─── */
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; }
+    .step { display: flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .step.active { color: var(--cream); }
+    .step.done { color: var(--gold); }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 9px; flex-shrink: 0; font-family: 'Outfit', sans-serif; }
+    .step.active .step-num { background: var(--cream); border-color: var(--cream); color: var(--bg); }
+    .step.done .step-num { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+    .step-line { width: 48px; height: 1px; background: var(--border); margin: 0 16px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 10px 24px; }
+      .nav-links { display: none; }
+      .page-header { padding: 40px 24px 40px; }
+      .cart-main {
+        grid-template-columns: 1fr;
+        padding: 0 24px 80px;
+      }
+      .order-summary { position: static; }
+      .col-headers { display: none; }
+      .cart-item {
+        grid-template-columns: 80px 1fr;
+        grid-template-rows: auto auto;
+        gap: 16px;
+      }
+      .qty-control { grid-column: 2; }
+      .cart-item-price-col {
+        grid-column: 2;
+        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-width: auto;
+      }
+      footer { padding: 40px 24px 32px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo" aria-label="Altara Home">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+  <!-- CHECKOUT STEPS BAR -->
+  <div class="steps-bar">
+    <a href="collection.html" class="back-btn" aria-label="Continue shopping">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="checkout-steps" aria-label="Checkout progress">
+      <div class="step active"><span class="step-num">1</span>Cart</div>
+      <div class="step-line" aria-hidden="true"></div>
+      <div class="step"><span class="step-num">2</span>Checkout</div>
+      <div class="step-line" aria-hidden="true"></div>
+      <div class="step"><span class="step-num">3</span>Confirmation</div>
+    </div>
+  </div>
+
+  <!-- CART MAIN -->
+  <main class="cart-main">
+
+    <!-- LEFT: CART ITEMS -->
+    <div class="cart-items">
+      <div class="col-headers" id="col-headers" aria-hidden="true" style="display:none">
+        <span>Product</span>
+        <span></span>
+        <span class="col-qty">Quantity</span>
+        <span class="col-price">Price</span>
+      </div>
+
+      <!-- DYNAMIC CART ITEMS -->
+      <div id="cart-items-list"></div>
+
+      <!-- EMPTY STATE -->
+      <div class="empty-state" id="empty-state" aria-live="polite" style="display:flex">
+        <svg class="empty-state-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <h3>Your cart is empty</h3>
+        <p>Discover the Altara collection and find your perfect seat cover.</p>
+        <a href="collection.html">Continue Shopping</a>
+      </div>
+
+      <!-- CONTINUE LINK -->
+      <a href="collection.html" class="continue-link" id="continue-link" aria-label="Continue shopping" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Continue Shopping
+      </a>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <aside class="order-summary" aria-label="Order summary">
+      <p class="summary-heading">Order Summary</p>
+
+      <div class="summary-row">
+        <span class="summary-label">Subtotal</span>
+        <span class="summary-value" id="subtotal">$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Shipping</span>
+        <span class="summary-value free">Free</span>
+      </div>
+
+      <hr class="summary-divider" aria-hidden="true">
+
+      <div class="summary-row summary-row-total">
+        <span class="summary-label">Total</span>
+        <span class="summary-total-value" id="total">$0.00</span>
+      </div>
+
+      <a href="checkout.html" class="btn-checkout" role="button">Proceed to Checkout</a>
+
+      <p class="secure-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        Secure &amp; encrypted checkout
+      </p>
+
+      <hr class="summary-divider" aria-hidden="true">
+
+      <div class="payments-note">
+        <strong>We accept</strong>
+        Visa &middot; Mastercard &middot; PayPal &middot; Apple Pay
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Altara. All rights reserved.</p>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 50);
+    });
+
+    // ─── Dynamic Back Button ───
+    (function() {
+      const btn = document.querySelector('.back-btn');
+      const ref = document.referrer;
+      const checkoutFlow = ['cart.html', 'checkout.html', 'confirmation.html'];
+      const fromCheckout = checkoutFlow.some(p => ref.includes(p));
+      if (ref && !fromCheckout) {
+        sessionStorage.setItem('altara-back-origin', ref);
+      }
+      const origin = sessionStorage.getItem('altara-back-origin');
+      if (btn && origin) btn.href = origin;
+    })();
+
+    // ─── Cart System ───
+    const CART_KEY = 'altara-cart';
+
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || { items: [] }; }
+      catch { return { items: [] }; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function fmt(n) { return '$' + n.toFixed(2); }
+
+    function getTotal(cart) {
+      return cart.items.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const list = document.getElementById('cart-items-list');
+      const emptyState = document.getElementById('empty-state');
+      const colHeaders = document.getElementById('col-headers');
+      const continueLink = document.getElementById('continue-link');
+      const countBadge = document.getElementById('item-count');
+      const subtotalEl = document.getElementById('subtotal');
+      const totalEl = document.getElementById('total');
+
+      list.innerHTML = '';
+
+      if (cart.items.length === 0) {
+        emptyState.style.display = 'flex';
+        colHeaders.style.display = 'none';
+        continueLink.style.display = 'none';
+        if (countBadge) countBadge.textContent = '';
+        subtotalEl.textContent = '$0.00';
+        totalEl.textContent = '$0.00';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      colHeaders.style.display = '';
+      continueLink.style.display = '';
+      const totalQty = cart.items.reduce((s, i) => s + i.qty, 0);
+      if (countBadge) countBadge.textContent = '(' + totalQty + ')';
+
+      cart.items.forEach(item => {
+        const article = document.createElement('article');
+        article.className = 'cart-item';
+        article.dataset.id = item.id;
+        article.innerHTML = `
+          <img src="${item.image}" alt="${item.name} seat cover" class="cart-item-img" width="96" height="96">
+          <div class="cart-item-info">
+            <p class="cart-item-name">${item.name}</p>
+            <p class="cart-item-meta">Seat Cover</p>
+            ${item.variant ? `<p class="cart-item-meta">${item.variant}</p>` : ''}
+            <p class="cart-item-feature">MagFit&trade;</p>
+          </div>
+          <div class="qty-control" role="group" aria-label="Quantity">
+            <button class="qty-btn" aria-label="Decrease quantity" onclick="changeQty('${item.id}',-1)">-</button>
+            <div class="qty-value" aria-live="polite">${item.qty}</div>
+            <button class="qty-btn" aria-label="Increase quantity" onclick="changeQty('${item.id}',1)">+</button>
+          </div>
+          <div class="cart-item-price-col">
+            <span class="cart-item-price">${fmt(item.price * item.qty)}</span>
+            <button class="remove-btn" aria-label="Remove ${item.name} from cart" onclick="removeItem('${item.id}')">
+              <span class="remove-x" aria-hidden="true">&times;</span>
+              <span class="remove-label">Remove</span>
+            </button>
+          </div>
+        `;
+        list.appendChild(article);
+      });
+
+      const total = getTotal(cart);
+      subtotalEl.textContent = fmt(total);
+      totalEl.textContent = fmt(total);
+    }
+
+    function changeQty(id, delta) {
+      const cart = getCart();
+      const item = cart.items.find(i => i.id === id);
+      if (item) { item.qty = Math.max(1, item.qty + delta); saveCart(cart); renderCart(); }
+    }
+
+    function removeItem(id) {
+      const cart = getCart();
+      const article = document.querySelector(`[data-id="${id}"]`);
+      if (article) { article.style.opacity = '0'; article.style.transition = 'opacity 0.25s ease'; }
+      setTimeout(() => {
+        cart.items = cart.items.filter(i => i.id !== id);
+        saveCart(cart);
+        renderCart();
+      }, 250);
+    }
+
+    // Cart badge
+    function updateNavBadge() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b) { b.textContent = n > 0 ? (n > 99 ? '99+' : n) : ''; b.classList.toggle('visible', n > 0); }
+      } catch(e) {}
+    }
+
+    // Init
+    renderCart();
+    updateNavBadge();
+
+    // ─── Inline Search ───
+    (function() {
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+      function openSearch() { nav.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+      function closeSearch() { nav.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('search-active')) closeSearch(); });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+  </script>
+
+</body>
+</html>

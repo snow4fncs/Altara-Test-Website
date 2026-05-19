@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account - Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 56px;
+      background: rgba(12,13,16,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.4s ease;
+    }
+    nav.scrolled {
+      border-bottom-color: var(--border);
+    }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img {
+      height: 140px;
+      transform: translateY(8px);
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:focus-visible { outline: 1px solid rgba(237,232,223,0.4); outline-offset: 4px; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-icon-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(237,232,223,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn:focus-visible { outline: 1px solid rgba(237,232,223,0.4); outline-offset: 6px; }
+    .nav-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-icon-btn span {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+    .nav-cart-count { position: relative; }
+    .cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -10px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 8px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      text-align: center;
+      padding-top: 160px;
+      padding-bottom: 72px;
+      position: relative;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(77,98,114,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    .eyebrow::before,
+    .eyebrow::after {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.45;
+    }
+    .page-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px;
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .page-h1 em {
+      font-style: italic;
+      color: var(--cream-dim);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── FORMS SECTION ─── */
+    .forms-section {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 120px 72px 120px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    .form-col h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      color: var(--cream);
+      margin-bottom: 40px;
+    }
+
+    /* ─── FIELD STYLES ─── */
+    .field { margin-bottom: 28px; }
+    .field label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .field input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0 0 13px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.25s ease;
+    }
+    .field input:focus { border-bottom-color: var(--gold); }
+    .field input::placeholder { color: rgba(237,232,223,0.18); }
+    .field input:focus-visible { border-bottom-color: var(--gold); }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ─── FORGOT LINK ─── */
+    .forgot-row {
+      margin-bottom: 28px;
+      margin-top: -8px;
+    }
+    .forgot-link {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .forgot-link:hover { color: var(--cream-dim); }
+    .forgot-link:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 3px; }
+
+    /* ─── BUTTONS ─── */
+    .btn-primary {
+      width: 100%;
+      background: var(--brand);
+      color: var(--cream);
+      border: none;
+      padding: 16px 36px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+      margin-top: 8px;
+      display: block;
+      text-align: center;
+    }
+    .btn-primary:hover { background: var(--brand-lt); transform: translateY(-1px); }
+    .btn-primary:focus-visible { outline: 1px solid var(--brand-lt); outline-offset: 3px; }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--cream-dim);
+      padding: 15px 36px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .btn-ghost:hover { border-color: rgba(237,232,223,0.3); color: var(--cream); transform: translateY(-1px); }
+    .btn-ghost:focus-visible { outline: 1px solid rgba(237,232,223,0.3); outline-offset: 3px; }
+    .btn-ghost:active { transform: translateY(0); }
+
+    .google-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ─── DIVIDER ─── */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+    }
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .or-divider span {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── VERTICAL DIVIDER ─── */
+    .vertical-divider {
+      width: 1px;
+      background: var(--border);
+      margin: 0 64px;
+      align-self: stretch;
+    }
+
+    /* ─── CHECKBOX ─── */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+      margin-top: 4px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      accent-color: var(--brand);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checkbox-row label {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    .checkbox-row label a {
+      color: var(--cream-dim);
+      text-decoration: underline;
+      text-decoration-color: rgba(154,149,144,0.4);
+      transition: color 0.2s ease;
+    }
+    .checkbox-row label a:hover { color: var(--cream); }
+
+    /* ─── SIGN IN NOTE ─── */
+    .signin-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .signin-note a {
+      color: var(--cream-dim);
+      text-decoration: underline;
+      text-decoration-color: rgba(154,149,144,0.4);
+      transition: color 0.2s ease;
+    }
+    .signin-note a:hover { color: var(--cream); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 56px 72px 40px;
+    }
+    .footer-logo {
+      margin-bottom: 48px;
+    }
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.72;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-bottom p {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── CHECKOUT STEPS ─── */
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(12,13,16,0.5); border-bottom: 1px solid var(--border); margin-top: 80px; }
+    .step { display: flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .step.active { color: var(--cream); }
+    .step.done { color: var(--gold); }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 9px; flex-shrink: 0; font-family: 'Outfit', sans-serif; }
+    .step.active .step-num { background: var(--cream); border-color: var(--cream); color: var(--bg); }
+    .step.done .step-num { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+    .step-line { width: 48px; height: 1px; background: var(--border); margin: 0 16px; }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: transparent; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 76px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.6); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 10px 24px; }
+      .nav-links { display: none; }
+      .forms-section {
+        grid-template-columns: 1fr;
+        padding: 0 24px 80px;
+        gap: 56px;
+      }
+      .vertical-divider { display: none; }
+      .field-row { grid-template-columns: 1fr; }
+      footer { padding: 40px 24px 32px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo" aria-label="Altara Home">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+
+  <!-- FORMS SECTION -->
+  <section class="forms-section" aria-label="Account forms">
+
+    <!-- LEFT: SIGN IN -->
+    <div class="form-col" id="sign-in-col">
+      <h2>Sign In</h2>
+      <form action="#" method="post" novalidate>
+        <div class="field">
+          <label for="signin-email">Email Address</label>
+          <input
+            type="email"
+            id="signin-email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+        <div class="field">
+          <label for="signin-password">Password</label>
+          <input
+            type="password"
+            id="signin-password"
+            name="password"
+            placeholder="Your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+        <div class="forgot-row">
+          <a href="#" class="forgot-link">Forgot your password?</a>
+        </div>
+        <button type="submit" class="btn-primary">Sign In</button>
+        <div class="or-divider">
+          <span>or</span>
+        </div>
+        <button type="button" class="btn-ghost" aria-label="Continue with Google">
+          <!-- Google G SVG -->
+          <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+      </form>
+    </div>
+
+    <!-- VERTICAL DIVIDER -->
+    <div class="vertical-divider" aria-hidden="true"></div>
+
+    <!-- RIGHT: CREATE ACCOUNT -->
+    <div class="form-col" id="create-col">
+      <h2>Create Account</h2>
+      <form action="#" method="post" novalidate>
+        <div class="field field-row">
+          <div>
+            <label for="first-name">First Name</label>
+            <input
+              type="text"
+              id="first-name"
+              name="first-name"
+              placeholder="Jane"
+              autocomplete="given-name"
+              required
+            >
+          </div>
+          <div>
+            <label for="last-name">Last Name</label>
+            <input
+              type="text"
+              id="last-name"
+              name="last-name"
+              placeholder="Smith"
+              autocomplete="family-name"
+              required
+            >
+          </div>
+        </div>
+        <div class="field">
+          <label for="create-email">Email Address</label>
+          <input
+            type="email"
+            id="create-email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+        <div class="field">
+          <label for="create-password">Password</label>
+          <input
+            type="password"
+            id="create-password"
+            name="password"
+            placeholder="Create a password"
+            autocomplete="new-password"
+            required
+          >
+        </div>
+        <div class="field">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Repeat your password"
+            autocomplete="new-password"
+            required
+          >
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="terms-agree" name="terms" required>
+          <label for="terms-agree">
+            I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">Create Account</button>
+        <p class="signin-note">Already have an account? <a href="#sign-in-col">Sign in</a></p>
+      </form>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Altara. All rights reserved.</p>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 50);
+    });
+    // Cart badge
+    (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
+      } catch(e) {}
+    })();
+
+    // Inline search
+    (function() {
+      const navEl = document.getElementById('nav');
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+      function openSearch() { navEl.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+      function closeSearch() { navEl.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('search-active')) closeSearch(); });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+  </script>
+
+</body>
+</html>

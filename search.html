@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search - Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10;
+      --bg-2: #111317;
+      --bg-3: #181B1F;
+      --brand: #4D6272;
+      --brand-lt: #607D8F;
+      --cream: #EDE8DF;
+      --cream-dim: #9A9590;
+      --gold: #C4A97A;
+      --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 56px;
+      background: rgba(12,13,16,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.4s ease;
+    }
+    nav.scrolled { border-bottom-color: var(--border); }
+    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo img { height: 140px;
+      transform: translateY(8px); width: auto; filter: brightness(0) invert(1); opacity: 0.72; display: block; transition: opacity 0.3s ease; }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-icon-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s ease; padding: 0; }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-icon-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: inherit; }
+
+    .nav-cart-count { position: relative; }
+    .cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -10px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 8px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: transparent; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.55); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.25); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12.5px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.55); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 76px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.6); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: 140px 72px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .results-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .results-query {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+    .results-query em { font-style: italic; color: var(--cream-dim); }
+    .results-count {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 16px;
+      display: block;
+    }
+
+    /* ─── RESULTS GRID ─── */
+    .results-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 72px 120px;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 40px;
+    }
+    .product-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .product-card:nth-child(2) { animation-delay: 0.1s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .card-image {
+      width: 100%;
+      background: var(--bg-2);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .card-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .product-card:hover .card-image img { transform: scale(1.04); }
+    .card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(12,13,16,0.4) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .card-eyebrow {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 8px;
+      transition: color 0.2s ease;
+    }
+    .product-card:hover .card-name { color: var(--cream-dim); }
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      transition: gap 0.25s ease, color 0.2s ease;
+    }
+    .product-card:hover .card-cta { gap: 12px; color: var(--cream); }
+
+    /* ─── NO RESULTS ─── */
+    .no-results {
+      text-align: center;
+      padding: 80px 0;
+    }
+    .no-results-icon {
+      width: 48px;
+      height: 48px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin: 0 auto 28px;
+      display: block;
+      opacity: 0.4;
+    }
+    .no-results h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      margin-bottom: 12px;
+    }
+    .no-results p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+    .no-results a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      padding: 14px 36px;
+      border: 1px solid var(--border);
+      transition: border-color 0.25s ease, transform 0.2s ease;
+    }
+    .no-results a:hover { border-color: rgba(237,232,223,0.3); transform: translateY(-1px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 56px 72px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo img { height: 80px; width: auto; filter: brightness(0) invert(1); opacity: 0.48; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .footer-bottom p { font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: 0.04em; }
+
+    @media (max-width: 768px) {
+      nav { padding: 10px 24px; }
+      .nav-links { display: none; }
+      .page-header { padding: 120px 24px 40px; }
+      .results-query { font-size: 36px; }
+      .results-section { padding: 40px 24px 80px; }
+      .results-grid { grid-template-columns: 1fr; }
+      footer { padding: 40px 24px 32px; flex-direction: column; gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo" aria-label="Altara Home">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links" role="list">
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#craft">Materials</a></li>
+      </ul>
+      <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+        <span class="nav-search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+          <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+          <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" id="search-open-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SEARCH PANEL -->
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <p class="search-panel-label">Suggested Searches</p>
+    <ul class="search-suggestions-list" role="list">
+      <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+      <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+      <li><a href="collection.html">View All Products</a></li>
+    </ul>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <span class="results-label">Search Results</span>
+    <h1 class="results-query" id="results-heading">Results for <em id="query-display"></em></h1>
+    <span class="results-count" id="results-count"></span>
+  </header>
+
+  <!-- RESULTS -->
+  <main class="results-section">
+    <div class="results-grid" id="results-grid"></div>
+    <div class="no-results" id="no-results" style="display:none">
+      <svg class="no-results-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <h2>No results found</h2>
+      <p>Try a different search term, or browse the full collection below.</p>
+      <a href="collection.html">View All Products</a>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Altara. All rights reserved.</p>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 50);
+    });
+
+    // ─── Product database ───
+    const PRODUCTS = [
+      {
+        id: 'contrast-white',
+        name: 'Contrast White',
+        price: 59,
+        url: 'product-contrast-white.html',
+        image: 'Product Photos/Altara Product Image 1.png',
+        keywords: ['contrast', 'white', 'light', 'ivory', 'cream', 'seat cover', 'microfibre', 'magfit', 'car', 'piping', 'seat', 'cover', 'altara']
+      },
+      {
+        id: 'midnight-black',
+        name: 'Midnight Black',
+        price: 59,
+        url: 'product-midnight-black.html',
+        image: 'Product Photos/Altara Product Image 7.png',
+        keywords: ['midnight', 'black', 'dark', 'charcoal', 'seat cover', 'microfibre', 'magfit', 'car', 'piping', 'seat', 'cover', 'altara', 'deep', 'classic']
+      }
+    ];
+
+    function scoreProduct(product, query) {
+      const q = query.toLowerCase().trim();
+      if (!q) return 1;
+      let score = 0;
+      if (product.name.toLowerCase().includes(q)) score += 10;
+      product.keywords.forEach(k => {
+        if (k.includes(q) || q.includes(k)) score += 2;
+        if (k === q) score += 5;
+      });
+      return score;
+    }
+
+    function renderResults(query) {
+      const grid = document.getElementById('results-grid');
+      const noResults = document.getElementById('no-results');
+      const countEl = document.getElementById('results-count');
+      const queryDisplay = document.getElementById('query-display');
+
+      queryDisplay.textContent = query || 'all products';
+
+      const matches = query
+        ? PRODUCTS.map(p => ({ ...p, score: scoreProduct(p, query) }))
+            .filter(p => p.score > 0)
+            .sort((a, b) => b.score - a.score)
+        : PRODUCTS;
+
+      if (matches.length === 0) {
+        grid.style.display = 'none';
+        noResults.style.display = 'block';
+        countEl.textContent = 'No products matched your search';
+        return;
+      }
+
+      grid.style.display = '';
+      noResults.style.display = 'none';
+      countEl.textContent = matches.length === 1 ? '1 product found' : `${matches.length} products found`;
+
+      grid.innerHTML = matches.map(p => `
+        <a href="${p.url}" class="product-card">
+          <div class="card-image">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+          </div>
+          <p class="card-eyebrow">Seat Cover</p>
+          <h2 class="card-name">${p.name}</h2>
+          <p class="card-price">$${p.price}</p>
+          <span class="card-cta">
+            View Product
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+      `).join('');
+    }
+
+    // Parse query from URL
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q') || '';
+    renderResults(query);
+
+    // Cart badge
+    (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
+        const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
+        const b = document.getElementById('nav-cart-badge');
+        if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
+      } catch(e) {}
+    })();
+
+    // ─── Inline search ───
+    (function() {
+      const navEl = document.getElementById('nav');
+      const openBtn = document.getElementById('search-open-btn');
+      const closeBtn = document.getElementById('nav-search-close');
+      const searchArea = document.getElementById('nav-search-area');
+      const panel = document.getElementById('search-panel');
+      const inp = document.getElementById('nav-search-q');
+      function openSearch() { navEl.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+      function closeSearch() { navEl.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+      openBtn.addEventListener('click', openSearch);
+      closeBtn.addEventListener('click', closeSearch);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('search-active')) closeSearch(); });
+      panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+  </script>
+</body>
+</html>
