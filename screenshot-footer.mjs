@@ -1,0 +1,11 @@
+import puppeteer from 'puppeteer-core';
+const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', args: ['--no-sandbox'], defaultViewport: { width: 1440, height: 900 }, headless: true });
+const p = await b.newPage();
+await p.goto(process.argv[2] || 'http://localhost:3000', { waitUntil: 'networkidle0' });
+await new Promise(r => setTimeout(r, 400));
+const info = await p.$eval('footer', el => { const r = el.getBoundingClientRect(); return { top: r.top + window.scrollY, h: r.height }; });
+await p.evaluate(y => window.scrollTo(0, y), info.top);
+await new Promise(r => setTimeout(r, 200));
+await p.screenshot({ path: process.argv[3] || 'temporary screenshots/footer.png', clip: { x: 0, y: info.top, width: 1440, height: Math.min(info.h, 500) } });
+await b.close();
+console.log('Done');

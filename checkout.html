@@ -45,9 +45,9 @@
     }
 
     /* ─── NAV ─── */
-    nav { position: fixed; inset: 0 0 auto 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 6px 56px; height: 64px; background: rgba(12,13,16,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); transition: background 0.4s ease; }
-    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
-    .nav-logo img { height: 140px; transform: translateY(8px); width: auto; filter: brightness(0) invert(1); opacity: 0.72; display: block; transition: opacity 0.3s ease; }
+    nav { position: fixed; inset: 0 0 auto 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; height: 58px; background: rgba(12,13,16,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); transition: background 0.4s ease; }
+    .nav-logo { overflow: hidden; height: 50px; display: flex; align-items: center; }
+    .nav-logo img { height: 110px; transform: translateY(5px); width: auto; filter: brightness(0) invert(1); opacity: 0.72; display: block; transition: opacity 0.3s ease; }
     nav:hover .nav-logo img { opacity: 0.92; }
     .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; transition: opacity 0.18s ease, transform 0.18s ease; }
     .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
@@ -85,7 +85,7 @@
     .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
 
     /* ─── CHECKOUT STEPS BAR ─── */
-    .steps-bar { margin-top: 64px; display: flex; align-items: center; justify-content: center; padding: 12px 56px; background: rgba(12,13,16,0.6); border-bottom: 1px solid var(--border); position: relative; }
+    .steps-bar { margin-top: 58px; display: flex; align-items: center; justify-content: center; padding: 12px 56px; background: rgba(12,13,16,0.6); border-bottom: 1px solid var(--border); position: relative; }
     .back-btn { position: absolute; left: 56px; display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: color 0.25s ease; padding: 0; }
     .back-btn:hover { color: var(--cream); }
     .back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
@@ -613,7 +613,7 @@
         </div>
         <div class="summary-row">
           <span>Shipping</span>
-          <span>Free</span>
+          <span id="summary-shipping"></span>
         </div>
         <div class="summary-row total">
           <span>Total</span>
@@ -635,7 +635,7 @@
     <div class="footer-bottom">
       <p>© 2026 Altara. All rights reserved.</p>
       <div style="display:flex;align-items:center;gap:10px;">
-        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://instagram.com/altara.au" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
         <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
       </div>
     </div>
@@ -688,6 +688,7 @@
       if (!items || items.length === 0) {
         container.innerHTML = '<p class="summary-empty">No items</p>';
         document.getElementById('summary-subtotal').textContent = '$0.00';
+        document.getElementById('summary-shipping').textContent = '';
         document.getElementById('summary-total').textContent = '$0.00';
         return;
       }
@@ -718,6 +719,7 @@
 
       container.innerHTML = html;
       document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('summary-shipping').textContent = 'Free';
       document.getElementById('summary-total').textContent = formatPrice(subtotal);
     }
 

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping - Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10; --bg-2: #111317; --bg-3: #181B1F;
+      --brand: #4D6272; --brand-lt: #607D8F;
+      --cream: #EDE8DF; --cream-dim: #9A9590;
+      --gold: #C4A97A; --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+      --line: rgba(255,255,255,0.07);
+      --nav-h: 58px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.032; pointer-events: none; z-index: 9999; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    nav.scrolled { border-bottom-color: var(--line); }
+    .nav-logo { display: flex; align-items: center; height: 50px; overflow: hidden; }
+    .nav-logo img { height: 110px; transform: translateY(5px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
+    nav:hover .nav-logo img { opacity: 0.88; }
+    .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s ease; padding: 0; }
+    .nav-btn:hover { color: var(--cream); }
+    .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-cart { position: relative; }
+    .cart-badge { position: absolute; top: -4px; right: -7px; background: var(--gold); color: var(--bg); font-size: 7px; font-weight: 700; min-width: 14px; height: 14px; border-radius: 7px; display: flex; align-items: center; justify-content: center; padding: 0 2px; opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+    .cart-badge.show { opacity: 1; transform: scale(1); }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.4); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.2); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.5); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.25); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.35); font-size: 17px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 199; background: rgba(11,12,15,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); padding: 22px 48px 26px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.3); margin-bottom: 12px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { font-size: 12px; color: rgba(237,232,223,0.42); text-decoration: none; font-weight: 300; padding: 6px 0; letter-spacing: 0.04em; transition: color 0.2s ease; }
+    .search-suggestions-list a:hover { color: rgba(237,232,223,0.75); }
+
+    /* PAGE HERO */
+    .page-hero {
+      margin-top: var(--nav-h);
+      padding: 80px 72px 60px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 100% at 5% 100%, rgba(196,169,122,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 90% 10%, rgba(77,98,114,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .page-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.38);
+      margin-bottom: 22px;
+    }
+    .page-eyebrow a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .page-eyebrow a:hover { color: rgba(237,232,223,0.65); }
+    .page-eyebrow span { opacity: 0.4; }
+    .page-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 5.5vw, 80px);
+      font-weight: 300;
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .page-h1 em { font-style: italic; color: rgba(237,232,223,0.45); }
+    .page-desc {
+      font-size: 14px;
+      color: var(--cream-dim);
+      line-height: 1.85;
+      max-width: 480px;
+      font-weight: 300;
+    }
+
+    /* SUPPORT NAV */
+    .support-nav {
+      position: static;
+      height: auto;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0 72px;
+      background: var(--bg-2);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .sn-link {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.38);
+      text-decoration: none;
+      padding: 18px 0;
+      margin-right: 44px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      top: 1px;
+    }
+    .sn-link:hover { color: rgba(237,232,223,0.7); }
+    .sn-link.active { color: var(--cream); border-bottom-color: var(--gold); }
+
+    /* SHIPPING CONTENT */
+    .shipping-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 72px 72px 120px;
+    }
+
+    .shipping-section { margin-bottom: 72px; }
+
+    .section-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.75;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .shipping-intro {
+      font-size: 14px;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 40px;
+      max-width: 640px;
+    }
+    .shipping-intro strong { font-weight: 500; color: rgba(237,232,223,0.72); }
+
+    /* Rate Table */
+    .rate-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+    .rate-table th {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.38);
+      text-align: left;
+      padding: 0 0 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rate-table td {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.62);
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .rate-table td:first-child { color: rgba(237,232,223,0.82); font-weight: 400; }
+    .rate-table tr:last-child td { border-bottom: none; }
+    .rate-free { color: var(--gold) !important; font-weight: 500 !important; }
+
+    /* Info Blocks */
+    .info-block {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      background: var(--bg-2);
+      position: relative;
+    }
+    .info-block::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gold);
+      opacity: 0.35;
+    }
+    .info-block-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: rgba(237,232,223,0.82);
+      margin-bottom: 10px;
+    }
+    .info-block p {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.48);
+      line-height: 1.85;
+    }
+    .info-block p strong { font-weight: 500; color: rgba(237,232,223,0.68); }
+
+    /* Process Steps */
+    .process-steps { display: flex; flex-direction: column; gap: 0; }
+    .process-step {
+      display: flex;
+      gap: 28px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .process-step:first-child { border-top: 1px solid var(--border); }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--gold);
+      opacity: 0.4;
+      line-height: 1;
+      min-width: 36px;
+      padding-top: 2px;
+    }
+    .step-content {}
+    .step-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(237,232,223,0.82);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .step-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.48);
+      line-height: 1.8;
+    }
+    .step-desc strong { font-weight: 500; color: rgba(237,232,223,0.68); }
+
+    /* FOOTER */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 72px 72px 44px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 64px; }
+    .footer-logo img { height: 110px; filter: brightness(0) invert(1); opacity: 0.5; display: block; margin-bottom: 22px; }
+    .footer-tagline { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.75; max-width: 240px; }
+    .footer-col h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin-bottom: 22px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .footer-col ul a { font-size: 13px; font-weight: 300; color: var(--muted); text-decoration: none; transition: color 0.2s ease; }
+    .footer-col ul a:hover { color: var(--cream-dim); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p { font-size: 11.5px; font-weight: 300; color: var(--muted); }
+    .footer-social { border-top: 1px solid var(--border); padding: 28px 0 32px; display: flex; align-items: center; gap: 28px; }
+    .footer-social h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin: 0; }
+    .footer-social-icons { display: flex; gap: 14px; align-items: center; }
+    .social-icon { color: var(--muted); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; transition: color 0.2s ease, border-color 0.2s ease; }
+    .social-icon:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
+    .social-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* HAMBURGER & MOBILE */
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px 8px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .ham-line { display: block; width: 22px; height: 1px; background: var(--cream); opacity: 0.78; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.25s ease; transform-origin: center; }
+    .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
+    .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
+    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; background: var(--bg); flex-direction: column; padding: 80px 32px 48px; opacity: 0; transform: translateY(-10px); transition: opacity 0.36s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .mob-overlay.open { opacity: 1; transform: translateY(0); }
+    .mob-nav-list { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .mob-nav-item { border-bottom: 1px solid var(--border); opacity: 0; transform: translateX(-14px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .mob-overlay.open .mob-nav-item:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.06s; }
+    .mob-overlay.open .mob-nav-item:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-nav-item:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.20s; }
+    .mob-nav-a { display: flex; align-items: center; justify-content: space-between; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 10vw, 50px); font-weight: 300; letter-spacing: -0.02em; color: var(--cream); text-decoration: none; padding: 18px 0; transition: color 0.2s ease; -webkit-tap-highlight-color: transparent; }
+    .mob-nav-a:active { color: var(--gold); }
+    .mob-bottom { border-top: 1px solid var(--border); padding-top: 24px; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease 0.26s, transform 0.4s ease 0.26s; }
+    .mob-overlay.open .mob-bottom { opacity: 1; transform: none; }
+    .mob-actions { display: flex; gap: 28px; margin-bottom: 20px; }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(237,232,223,0.6); text-decoration: none; transition: color 0.2s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 48px; }
+    .mob-action:active { color: var(--cream); }
+    .mob-action svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .mob-tagline { font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.04em; }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mob-overlay { display: flex; }
+      .nav-center { display: none !important; }
+      #search-open-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      nav { padding: 0 20px; }
+      .nav-logo { height: 46px; }
+      .nav-logo img { height: 100px; transform: translateY(4px); }
+      .nav-actions { gap: 14px; }
+      .page-hero { padding: 56px 24px 44px; }
+      .support-nav { padding: 0 24px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+      .support-nav::-webkit-scrollbar { display: none; }
+      .shipping-wrap { padding: 44px 24px 80px; }
+      .rate-table { font-size: 12px; }
+      .rate-table th, .rate-table td { padding: 14px 0; }
+      .info-block { padding: 22px 20px; }
+      footer { padding: 44px 24px 36px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+      .footer-logo img { height: 80px; margin-bottom: 14px; }
+      .footer-tagline { margin-bottom: 28px; }
+      .footer-col { border-top: 1px solid var(--border); }
+      .footer-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .footer-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
+      .footer-col.open h4::after { transform: rotate(45deg); }
+      .footer-col ul { display: none; padding-bottom: 16px; }
+      .footer-col.open ul { display: flex; }
+      .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></a>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="collection.html">Collection</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#craft">Materials</a></li>
+    </ul>
+    <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+      <span class="nav-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+        <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+        <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+      </form>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" id="search-open-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span>
+    </button>
+    <a href="account.html" class="nav-btn" aria-label="Account">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span>
+    </a>
+    <a href="cart.html" class="nav-btn nav-cart" aria-label="Cart">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span>
+      <span class="cart-badge" id="cart-badge"></span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+    </button>
+  </div>
+</nav>
+<div class="search-panel" id="search-panel" aria-hidden="true">
+  <p class="search-panel-label">Suggested Searches</p>
+  <ul class="search-suggestions-list" role="list">
+    <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+    <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+    <li><a href="collection.html">View All Products</a></li>
+  </ul>
+</div>
+
+<!-- PAGE HERO -->
+<header class="page-hero">
+  <div class="page-eyebrow">
+    <a href="index.html">Altara</a>
+    <span>/</span>
+    <span>Support</span>
+    <span>/</span>
+    <span style="color:rgba(237,232,223,0.65)">Shipping</span>
+  </div>
+  <h1 class="page-h1">Shipping<br><em>&amp; Delivery</em></h1>
+  <p class="page-desc">Altara orders are dispatched with care. Every package is inspected before it leaves our facility — your cover arrives exactly as it should.</p>
+</header>
+
+<!-- SUPPORT NAV -->
+<nav class="support-nav" aria-label="Support navigation">
+  <a href="faq.html" class="sn-link">FAQ</a>
+  <a href="shipping.html" class="sn-link active">Shipping</a>
+  <a href="returns.html" class="sn-link">Returns</a>
+  <a href="contact.html" class="sn-link">Contact</a>
+</nav>
+
+<!-- SHIPPING CONTENT -->
+<main class="shipping-wrap">
+
+  <div class="shipping-section">
+    <div class="section-label">Delivery Rates</div>
+    <p class="shipping-intro">We offer a range of shipping options across Australia and internationally. All orders are fulfilled within <strong>1-2 business days</strong> of payment confirmation.</p>
+
+    <table class="rate-table" aria-label="Australian shipping rates">
+      <thead>
+        <tr>
+          <th style="width:30%">Service</th>
+          <th style="width:28%">Estimated Delivery</th>
+          <th style="width:22%">Cost</th>
+          <th style="width:20%">Carrier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Standard Shipping</td>
+          <td>3-7 business days</td>
+          <td>Calculated at checkout</td>
+          <td>Australia Post</td>
+        </tr>
+        <tr>
+          <td>Express Shipping</td>
+          <td>1-3 business days</td>
+          <td>Calculated at checkout</td>
+          <td>Australia Post</td>
+        </tr>
+        <tr>
+          <td>Free Shipping</td>
+          <td>3-7 business days</td>
+          <td class="rate-free">Free</td>
+          <td>Australia Post</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-block">
+      <div class="info-block-title">Free Shipping Threshold</div>
+      <p>Complimentary standard shipping applies automatically to all Australian orders. No minimum spend required. Free shipping eligibility is displayed at checkout prior to payment.</p>
+    </div>
+  </div>
+
+  <div class="shipping-section">
+    <div class="section-label">International Shipping</div>
+    <p class="shipping-intro">Altara ships to selected international destinations. International delivery timeframes and rates are calculated at checkout based on your location.</p>
+
+    <table class="rate-table" aria-label="International shipping rates">
+      <thead>
+        <tr>
+          <th style="width:30%">Region</th>
+          <th style="width:28%">Estimated Delivery</th>
+          <th style="width:42%">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>New Zealand</td>
+          <td>5-10 business days</td>
+          <td>Tracked international post</td>
+        </tr>
+        <tr>
+          <td>United Kingdom</td>
+          <td>10-18 business days</td>
+          <td>Customs fees may apply</td>
+        </tr>
+        <tr>
+          <td>United States</td>
+          <td>10-18 business days</td>
+          <td>Customs fees may apply</td>
+        </tr>
+        <tr>
+          <td>Other Destinations</td>
+          <td>12-25 business days</td>
+          <td>Availability confirmed at checkout</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-block">
+      <div class="info-block-title">Customs &amp; Import Duties</div>
+      <p>International orders may be subject to customs duties, taxes, or import fees levied by the destination country. These charges are the responsibility of the recipient and are not included in the purchase price or shipping cost. Altara cannot predict or control these fees.</p>
+    </div>
+  </div>
+
+  <div class="shipping-section">
+    <div class="section-label">Order Processing</div>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Order Confirmed</div>
+          <p class="step-desc">You will receive an order confirmation email immediately after payment is processed. This email contains your order number and a summary of your purchase.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Fulfilment</div>
+          <p class="step-desc">Your order enters our fulfilment queue within <strong>2-4 hours</strong> of confirmation. Each cover is inspected for quality before packaging. Orders placed before 12:00 PM AEST are typically dispatched the same business day.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Dispatched</div>
+          <p class="step-desc">Once your order has left our facility, you will receive a dispatch confirmation email containing your <strong>tracking number</strong>. Use this to monitor your shipment via the Australia Post website or the carrier's tracking portal.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Delivered</div>
+          <p class="step-desc">Your Altara seat cover arrives in protective packaging, ready to install. If no one is available to receive the parcel, the carrier will leave a collection card or arrange a redelivery according to their standard procedure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shipping-section">
+    <div class="section-label">Important Notes</div>
+
+    <div class="info-block" style="margin-bottom:12px;">
+      <div class="info-block-title">Business Day Definition</div>
+      <p>Business days are Monday through Friday, excluding Australian public holidays. Orders placed on weekends or public holidays will be processed on the next available business day.</p>
+    </div>
+    <div class="info-block" style="margin-bottom:12px;">
+      <div class="info-block-title">Address Accuracy</div>
+      <p>Please ensure your delivery address is entered correctly at checkout. Altara is not responsible for delays or failed deliveries resulting from an incorrect or incomplete address. If you notice an error, contact us <strong>immediately</strong> after placing your order — changes cannot be made once an order has been dispatched.</p>
+    </div>
+    <div class="info-block">
+      <div class="info-block-title">Lost or Delayed Parcels</div>
+      <p>In the rare event your parcel is lost or significantly delayed beyond the estimated timeframe, please contact us. We will liaise with the carrier on your behalf and work to resolve the issue as quickly as possible.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+      </div>
+      <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="collection.html">Seat Covers</a></li>
+        <li><a href="collection.html">Collections</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="returns.html">Returns</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-social">
+    <h4>Follow Us</h4>
+    <div class="footer-social-icons">
+      <a href="https://instagram.com/altara.au" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://facebook.com/altara" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Altara. All rights reserved.</p>
+    <p>Engineered comfort for modern movement.</p>
+  </div>
+</footer>
+
+<!-- MOBILE OVERLAY -->
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <ul class="mob-nav-list" role="list">
+    <li class="mob-nav-item"><a href="collection.html" class="mob-nav-a">Collection</a></li>
+    <li class="mob-nav-item"><a href="index.html#features" class="mob-nav-a">Features</a></li>
+    <li class="mob-nav-item"><a href="index.html#craft" class="mob-nav-a">Materials</a></li>
+  </ul>
+  <div class="mob-bottom">
+    <div class="mob-actions">
+      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+    </div>
+    <p class="mob-tagline">Engineered comfort for modern movement.</p>
+  </div>
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
+  try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
+  (function(){
+    const navEl=document.getElementById('nav'),openBtn=document.getElementById('search-open-btn'),closeBtn=document.getElementById('nav-search-close'),searchArea=document.getElementById('nav-search-area'),panel=document.getElementById('search-panel'),inp=document.getElementById('nav-search-q');
+    function openSearch(){navEl.classList.add('search-active');panel.classList.add('open');searchArea.setAttribute('aria-hidden','false');panel.setAttribute('aria-hidden','false');setTimeout(()=>inp.focus(),120);}
+    function closeSearch(){navEl.classList.remove('search-active');panel.classList.remove('open');searchArea.setAttribute('aria-hidden','true');panel.setAttribute('aria-hidden','true');inp.value='';}
+    openBtn.addEventListener('click',openSearch);
+    closeBtn.addEventListener('click',closeSearch);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
+    panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
+  })();
+
+  // Mobile hamburger
+  (function(){
+    const hamburger=document.getElementById('hamburger'),overlay=document.getElementById('mob-overlay');
+    if(!hamburger||!overlay) return;
+    function openMenu(){hamburger.classList.add('open');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');hamburger.setAttribute('aria-expanded','true');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+    function closeMenu(){hamburger.classList.remove('open');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');hamburger.setAttribute('aria-expanded','false');document.documentElement.style.overflow='';document.body.style.overflow='';}
+    hamburger.addEventListener('click',()=>overlay.classList.contains('open')?closeMenu():openMenu());
+    overlay.querySelectorAll('.mob-nav-a').forEach(a=>a.addEventListener('click',closeMenu));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeMenu();});
+  })();
+
+  // Footer accordion mobile
+  document.querySelectorAll('.footer-col h4').forEach(h4=>{
+    h4.addEventListener('click',()=>{
+      if(window.innerWidth>768) return;
+      const col=h4.closest('.footer-col'),isOpen=col.classList.contains('open');
+      document.querySelectorAll('.footer-col').forEach(c=>c.classList.remove('open'));
+      if(!isOpen) col.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

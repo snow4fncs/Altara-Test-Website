@@ -51,7 +51,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 56px;
+      padding: 4px 52px;
       background: rgba(12,13,16,0.88);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
@@ -61,10 +61,10 @@
     nav.scrolled {
       border-bottom-color: var(--border);
     }
-    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo { overflow: hidden; height: 50px; display: flex; align-items: center; }
     .nav-logo img {
-      height: 140px;
-      transform: translateY(8px);
+      height: 110px;
+      transform: translateY(5px);
       width: auto;
       filter: brightness(0) invert(1);
       opacity: 0.72;
@@ -395,6 +395,47 @@
       font-family: 'Cormorant Garamond', serif;
     }
 
+    /* ─── HAMBURGER & MOBILE ─── */
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px 8px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .ham-line { display: block; width: 22px; height: 1px; background: var(--cream); opacity: 0.72; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.25s ease; transform-origin: center; }
+    .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
+    .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
+    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; background: var(--bg); flex-direction: column; padding: 80px 32px 48px; opacity: 0; transform: translateY(-10px); transition: opacity 0.36s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .mob-overlay.open { opacity: 1; transform: translateY(0); }
+    .mob-nav-list { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .mob-nav-item { border-bottom: 1px solid var(--border); opacity: 0; transform: translateX(-14px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .mob-overlay.open .mob-nav-item:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.06s; }
+    .mob-overlay.open .mob-nav-item:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-nav-item:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.20s; }
+    .mob-nav-a { display: flex; align-items: center; justify-content: space-between; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 10vw, 50px); font-weight: 300; letter-spacing: -0.02em; color: var(--cream); text-decoration: none; padding: 18px 0; transition: color 0.2s ease; -webkit-tap-highlight-color: transparent; }
+    .mob-nav-a:active { color: var(--gold); }
+    .mob-bottom { border-top: 1px solid var(--border); padding-top: 24px; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease 0.26s, transform 0.4s ease 0.26s; }
+    .mob-overlay.open .mob-bottom { opacity: 1; transform: none; }
+    .mob-actions { display: flex; gap: 28px; margin-bottom: 20px; }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(237,232,223,0.6); text-decoration: none; transition: color 0.2s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 48px; }
+    .mob-action:active { color: var(--cream); }
+    .mob-action svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .mob-tagline { font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.04em; }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mob-overlay { display: flex; }
+      .nav-center { display: none !important; }
+      .nav-actions .search-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      nav { padding: 0 20px; height: 62px; }
+      .nav-logo { height: 46px; }
+      .nav-logo img { height: 100px; transform: translateY(4px); }
+      .nav-actions { gap: 14px; }
+      .collection-header { padding: 84px 24px 28px; flex-direction: column; gap: 16px; }
+      .collection-header-right { flex: none; padding-left: 0; max-width: 100%; }
+      .product-grid { grid-template-columns: 1fr; }
+      .product-tile:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .product-tile-info { padding: 16px 24px 20px; }
+      footer { padding: 10px 24px 14px; }
+    }
+
     /* ─── SEARCH ─── */
     .search-btn { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
     .search-btn:hover { color: var(--cream); }
@@ -457,6 +498,11 @@
         <span>Cart</span>
         <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
       </a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+      </button>
     </div>
   </nav>
 
@@ -534,10 +580,10 @@
       <div class="footer-col">
         <h4>Support</h4>
         <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Shipping</a></li>
-          <li><a href="#">Returns</a></li>
-          <li><a href="mailto:hello@altara.com.au">Contact</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="shipping.html">Shipping</a></li>
+          <li><a href="returns.html">Returns</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -551,7 +597,7 @@
     <div class="footer-bottom">
       <p class="footer-copy">© 2026 Altara. All rights reserved.</p>
       <div style="display:flex;align-items:center;gap:12px;">
-        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <a href="https://instagram.com/altara.au" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         </a>
         <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'">
@@ -560,6 +606,22 @@
       </div>
     </div>
   </footer>
+
+  <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <ul class="mob-nav-list" role="list">
+      <li class="mob-nav-item"><a href="collection.html" class="mob-nav-a">Collection</a></li>
+      <li class="mob-nav-item"><a href="index.html#features" class="mob-nav-a">Features</a></li>
+      <li class="mob-nav-item"><a href="index.html#craft" class="mob-nav-a">Materials</a></li>
+    </ul>
+    <div class="mob-bottom">
+      <div class="mob-actions">
+        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+        <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+      </div>
+      <p class="mob-tagline">Engineered comfort for modern movement.</p>
+    </div>
+  </div>
 
   <script>
     const nav = document.getElementById('nav');
@@ -591,6 +653,15 @@
       closeBtn.addEventListener('click', closeSearch);
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('search-active')) closeSearch(); });
       panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+    })();
+    (function(){
+      const hamburger=document.getElementById('hamburger'),overlay=document.getElementById('mob-overlay');
+      if(!hamburger||!overlay) return;
+      function openMenu(){hamburger.classList.add('open');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');hamburger.setAttribute('aria-expanded','true');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+      function closeMenu(){hamburger.classList.remove('open');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');hamburger.setAttribute('aria-expanded','false');document.documentElement.style.overflow='';document.body.style.overflow='';}
+      hamburger.addEventListener('click',()=>overlay.classList.contains('open')?closeMenu():openMenu());
+      overlay.querySelectorAll('.mob-nav-a').forEach(a=>a.addEventListener('click',closeMenu));
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeMenu();});
     })();
   </script>
 </body>

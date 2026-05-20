@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Midnight Black — Altara</title>
+  <title>Midnight Black -Altara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -18,27 +18,27 @@
       --gold:  #C4A97A;
       --muted: #6B7078;
       --line:  rgba(255,255,255,0.07);
-      --nav-h: 64px;
-      --thumb-h: 100px;
+      --nav-h: 58px;
+      --thumb-h: 88px;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; }
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
 
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
     nav.scrolled { border-bottom-color: var(--line); }
-    .nav-logo { display: flex; align-items: center; height: var(--nav-h); overflow: hidden; }
-    .nav-logo img { height: 120px; transform: translateY(7px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
+    .nav-logo { display: flex; align-items: center; height: 50px; overflow: hidden; }
+    .nav-logo img { height: 110px; transform: translateY(5px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
     nav:hover .nav-logo img { opacity: 0.88; }
-    .nav-links { display: flex; gap: 38px; list-style: none; }
-    .nav-links a { color: rgba(237,232,223,0.55); text-decoration: none; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s; }
     .nav-links a:hover { color: var(--cream); }
-    .nav-actions { display: flex; align-items: center; gap: 24px; }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.55); text-decoration: none; transition: color 0.2s; padding: 0; }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s; padding: 0; }
     .nav-btn:hover { color: var(--cream); }
-    .nav-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-    .nav-btn span { font-size: 7.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+    .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
     .nav-cart { position: relative; }
     .cart-badge { position: absolute; top: -4px; right: -7px; background: var(--gold); color: var(--bg); font-size: 7px; font-weight: 700; min-width: 14px; height: 14px; border-radius: 7px; display: flex; align-items: center; justify-content: center; padding: 0 2px; opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
     .cart-badge.show { opacity: 1; transform: scale(1); }
@@ -54,16 +54,17 @@
     .nav-search-input::placeholder { color: rgba(237,232,223,0.25); }
     .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.35); font-size: 17px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
     .nav-search-close:hover { color: var(--cream); }
-    .search-panel { position: fixed; top: 64px; left: 0; right: 0; z-index: 199; background: rgba(11,12,15,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); padding: 22px 48px 26px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel { position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 199; background: rgba(11,12,15,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); padding: 22px 48px 26px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
     .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
     .search-panel-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.3); margin-bottom: 12px; }
     .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
     .search-suggestions-list a { display: block; font-size: 13px; font-weight: 300; color: rgba(237,232,223,0.55); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
     .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
 
-    .product-hero { margin-top: var(--nav-h); height: calc(100vh - var(--nav-h)); display: grid; grid-template-columns: 62% 38%; overflow: hidden; }
-    .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: hidden; }
+    .product-hero { margin-top: var(--nav-h); display: grid; grid-template-columns: 62% 38%; align-items: start; }
+    .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
     .ph-image-area { overflow: hidden; position: relative; background: #131210; }
+    .ph-image-area::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, var(--bg) 0%, rgba(12,13,16,0.18) 22%, transparent 55%), linear-gradient(to top, var(--bg) 0%, transparent 18%); pointer-events: none; z-index: 1; }
     .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 16px 28px; transition: opacity 0.22s ease; }
     .ph-main-img.fade { opacity: 0; }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
@@ -74,8 +75,7 @@
     .ph-thumb::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.2s; }
     .ph-thumb.active::after { background: var(--gold); }
     .ph-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 6px; }
-    .ph-info { overflow-y: auto; scrollbar-width: none; padding: 48px 48px 56px 52px; display: flex; flex-direction: column; }
-    .ph-info::-webkit-scrollbar { display: none; }
+    .ph-info { padding: 48px 48px 56px 52px; display: flex; flex-direction: column; }
 
     .pi-back { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.3); text-decoration: none; margin-bottom: 32px; transition: color 0.22s; align-self: flex-start; }
     .pi-back svg { width: 9px; height: 9px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
@@ -86,11 +86,23 @@
     .pi-price { font-size: 16px; font-weight: 300; color: rgba(237,232,223,0.65); letter-spacing: 0.03em; }
     .pi-sep { width: 100%; height: 1px; background: var(--line); margin: 24px 0; flex-shrink: 0; }
     .pi-label { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.38); margin-bottom: 12px; }
+    .pi-colorway-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .pi-viewing-indicator { display: flex; align-items: center; gap: 7px; }
+    .pi-viewing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; animation: vdot 2.2s ease-in-out infinite; }
+    @keyframes vdot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,169,122,0.5); opacity: 1; }
+      50% { box-shadow: 0 0 0 5px rgba(196,169,122,0); opacity: 0.7; }
+    }
+    .pi-viewing-name { font-size: 10px; font-weight: 400; color: rgba(237,232,223,0.55); letter-spacing: 0.06em; }
     .pi-variants { display: flex; gap: 10px; margin-bottom: 22px; }
-    .pi-var { width: 72px; height: 72px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; background: #131210; text-decoration: none; display: block; flex-shrink: 0; transition: border-color 0.22s; }
-    .pi-var img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 5px; }
-    .pi-var.active { border-color: var(--gold); outline: 1px solid rgba(196,169,122,0.2); outline-offset: 2px; }
-    .pi-var:hover:not(.active) { border-color: rgba(237,232,223,0.22); }
+    .pi-var { flex: 1; max-width: 130px; position: relative; overflow: hidden; background: #131210; text-decoration: none; display: block; cursor: pointer; opacity: 0.52; transition: opacity 0.25s ease; border: none; }
+    .pi-var::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.25s ease; }
+    .pi-var.active { opacity: 1; }
+    .pi-var.active::after { background: var(--gold); }
+    .pi-var:hover:not(.active) { opacity: 0.8; }
+    .pi-var img { width: 100%; height: 92px; object-fit: contain; display: block; padding: 6px 10px; background: #131210; }
+    .pi-var-label { display: block; font-size: 8px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(237,232,223,0.36); padding: 5px 8px 7px; background: rgba(17,19,22,0.95); }
+    .pi-var.active .pi-var-label { color: rgba(237,232,223,0.72); }
     .pi-add { display: block; width: 100%; background: var(--brand); color: var(--cream); border: none; padding: 16px 16px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; margin-bottom: 12px; transition: background 0.24s; }
     .pi-add:hover { background: var(--blt); }
     .pi-add:focus-visible { outline: 1px solid var(--blt); outline-offset: 2px; }
@@ -110,49 +122,102 @@
     .pi-acc-inner p { margin: 0; }
     .pi-acc-inner ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
     .pi-acc-inner ul li { display: flex; align-items: flex-start; gap: 12px; }
-    .pi-acc-inner ul li::before { content: '—'; color: var(--gold); opacity: 0.5; flex-shrink: 0; font-size: 11px; margin-top: 3px; }
+    .pi-acc-inner ul li::before { content: '-'; color: var(--gold); opacity: 0.5; flex-shrink: 0; font-size: 11px; margin-top: 3px; }
     .pi-spec { display: flex; padding: 10px 0; border-bottom: 1px solid var(--line); }
     .pi-spec:first-child { border-top: 1px solid var(--line); margin-top: 4px; }
     .pi-sk { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.32); min-width: 100px; flex-shrink: 0; padding-top: 1px; }
     .pi-sv { font-size: 13.5px; color: rgba(237,232,223,0.6); font-weight: 300; }
     .pi-ref { font-size: 10px; color: rgba(237,232,223,0.2); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 24px; }
 
-    .editorial { height: 46vh; overflow: hidden; position: relative; border-top: 1px solid var(--line); }
-    .editorial img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; }
-    .editorial::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(11,12,15,0.22) 100%); pointer-events: none; }
-
-    .complete { display: grid; grid-template-columns: 38% 62%; border-top: 1px solid var(--line); min-height: 58vh; }
-    .complete-copy { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); }
-    .complete-ey { font-size: 7.5px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.58; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    /* ── HAMBURGER & MOBILE OVERLAY ─── */
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px 8px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .ham-line { display: block; width: 22px; height: 1px; background: var(--cream); opacity: 0.72; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.25s ease; transform-origin: center; }
+    .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
+    .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
+    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; background: var(--bg); flex-direction: column; padding: 80px 32px 48px; opacity: 0; transform: translateY(-10px); transition: opacity 0.36s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .mob-overlay.open { opacity: 1; transform: translateY(0); }
+    .mob-nav-list { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .mob-nav-item { border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(-14px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .mob-overlay.open .mob-nav-item:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.06s; }
+    .mob-overlay.open .mob-nav-item:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-nav-item:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.20s; }
+    .mob-nav-a { display: flex; align-items: center; justify-content: space-between; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 10vw, 50px); font-weight: 300; letter-spacing: -0.02em; color: var(--cream); text-decoration: none; padding: 18px 0; transition: color 0.2s ease; -webkit-tap-highlight-color: transparent; }
+    .mob-nav-a:active { color: var(--gold); }
+    .mob-bottom { border-top: 1px solid var(--line); padding-top: 24px; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease 0.26s, transform 0.4s ease 0.26s; }
+    .mob-overlay.open .mob-bottom { opacity: 1; transform: none; }
+    .mob-actions { display: flex; gap: 28px; margin-bottom: 20px; }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(237,232,223,0.6); text-decoration: none; transition: color 0.2s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 48px; }
+    .mob-action:active { color: var(--cream); }
+    .mob-action svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .mob-tagline { font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.04em; }
+    .complete { display: grid; grid-template-columns: 44% 56%; border-top: 1px solid var(--line); height: clamp(480px, 55vh, 620px); }
+    .complete-copy { padding: 80px 72px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); background: var(--bg); }
+    .complete-ey { font-size: 7.5px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.65; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
     .complete-ey::before { content: ''; width: 18px; height: 1px; background: var(--gold); opacity: 0.5; flex-shrink: 0; }
-    .complete-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 3.4vw, 48px); font-weight: 300; letter-spacing: -0.018em; line-height: 0.98; color: var(--cream); margin-bottom: 16px; }
-    .complete-h em { font-style: italic; color: rgba(237,232,223,0.32); }
-    .complete-p { font-size: 12px; color: rgba(237,232,223,0.36); line-height: 1.86; margin-bottom: 28px; max-width: 260px; font-weight: 300; }
-    .complete-a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: rgba(237,232,223,0.45); font-size: 8px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; transition: color 0.22s; }
-    .complete-a::after { content: ''; display: block; width: 20px; height: 1px; background: currentColor; transition: width 0.26s; }
-    .complete-a:hover { color: rgba(237,232,223,0.75); }
-    .complete-a:hover::after { width: 38px; }
-    .complete-img { overflow: hidden; background: #131210; display: flex; align-items: center; justify-content: center; }
-    .complete-img img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 32px 48px; transition: transform 1.4s cubic-bezier(0.25,0.46,0.45,0.94); }
-    .complete-img:hover img { transform: scale(1.03); }
+    .complete-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 72px); font-weight: 300; letter-spacing: -0.022em; line-height: 0.9; color: var(--cream); margin-bottom: 22px; }
+    .complete-h em { font-style: italic; color: rgba(237,232,223,0.3); }
+    .complete-p { font-size: 13px; color: rgba(237,232,223,0.45); line-height: 1.82; margin-bottom: 36px; max-width: 360px; font-weight: 300; }
+    .complete-a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: rgba(237,232,223,0.5); font-size: 8px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; transition: color 0.22s; }
+    .complete-a::after { content: ''; display: block; width: 24px; height: 1px; background: currentColor; transition: width 0.28s; }
+    .complete-a:hover { color: rgba(237,232,223,0.85); }
+    .complete-a:hover::after { width: 44px; }
+    .complete-img { overflow: hidden; background: #131210; display: block; cursor: pointer; }
+    .complete-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 1.8s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .complete-img:hover img { transform: scale(1.04); }
+    .complete.pre-reveal { opacity: 0; transform: translateY(36px); }
+    .complete { transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1); }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mob-overlay { display: flex; }
+      .nav-center { display: none !important; }
+      #search-open-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      nav { padding: 0 20px; }
+      .nav-logo { height: 46px; }
+      .nav-logo img { height: 100px; transform: translateY(4px); }
+      .nav-actions { gap: 14px; }
+      .product-hero { grid-template-columns: 1fr; height: auto; display: block; }
+      .ph-left { grid-template-rows: auto var(--thumb-h); height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
+      .ph-image-area { height: 72vw; max-height: 360px; }
+      .ph-info { padding: 28px 24px 48px; }
+      .pi-back { margin-bottom: 22px; }
+      .pi-var img { height: 68px; }
+      .complete { grid-template-columns: 1fr; min-height: auto; }
+      .complete-copy { padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--line); }
+      .complete-img { height: 70vw; max-height: 320px; }
+      .complete-img img { height: 100%; width: 100%; }
+      footer { padding: 44px 24px 32px; }
+      .ft { grid-template-columns: 1fr; gap: 0; padding-bottom: 0; border-bottom: none; }
+      .ft-logo img { height: 64px; }
+      .ft-tag { margin-bottom: 20px; }
+      .ft-col { border-top: 1px solid var(--line); }
+      .ft-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .ft-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
+      .ft-col.open h4::after { transform: rotate(45deg); }
+      .ft-col ul { display: none; padding-bottom: 14px; }
+      .ft-col.open ul { display: flex; }
+      .ft-social { flex-wrap: wrap; padding: 16px 0 18px; gap: 14px; }
+    }
 
-    footer { background: var(--bg); border-top: 1px solid var(--line); padding: 64px 64px 36px; }
-    .ft { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
-    .ft-logo img { height: 80px; filter: brightness(0) invert(1); opacity: 0.32; display: block; margin-bottom: 12px; }
-    .ft-tag { font-size: 11px; color: rgba(237,232,223,0.22); line-height: 1.72; font-weight: 300; max-width: 192px; }
-    .ft-col h4 { font-size: 7.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.2); margin-bottom: 16px; }
-    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .ft-col ul a { font-size: 11px; color: rgba(237,232,223,0.26); text-decoration: none; font-weight: 300; transition: color 0.2s; }
-    .ft-col ul a:hover { color: rgba(237,232,223,0.55); }
-    .ft-bot { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; }
-    .ft-copy { font-size: 9.5px; color: rgba(237,232,223,0.14); font-weight: 300; }
-    .ft-em { font-size: 9.5px; color: rgba(237,232,223,0.14); letter-spacing: 0.06em; font-style: italic; font-family: 'Cormorant Garamond', serif; }
-    .ft-social { border-top: 1px solid var(--line); padding: 24px 0 20px; display: flex; align-items: center; gap: 24px; }
-    .ft-social h4 { font-size: 7.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.2); margin: 0; }
-    .ft-social-icons { display: flex; gap: 12px; align-items: center; }
-    .ft-social-link { color: rgba(237,232,223,0.26); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; transition: color 0.2s ease, border-color 0.2s ease; }
-    .ft-social-link:hover { color: rgba(237,232,223,0.55); border-color: rgba(237,232,223,0.2); }
-    .ft-social-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    footer { background: var(--bg); border-top: 1px solid var(--line); padding: 72px 72px 44px; }
+    .ft { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 64px; border-bottom: 1px solid var(--line); }
+    .ft-logo img { height: 110px; filter: brightness(0) invert(1); opacity: 0.5; display: block; margin-bottom: 22px; }
+    .ft-tag { font-size: 13px; color: var(--muted); line-height: 1.75; font-weight: 300; max-width: 240px; }
+    .ft-col h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin-bottom: 22px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .ft-col ul a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 300; transition: color 0.2s; }
+    .ft-col ul a:hover { color: rgba(237,232,223,0.72); }
+    .ft-bot { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid var(--line); }
+    .ft-copy { font-size: 11.5px; color: var(--muted); font-weight: 300; }
+    .ft-em { font-size: 11.5px; color: var(--muted); letter-spacing: 0.04em; font-style: normal; }
+    .ft-social { border-top: 1px solid var(--line); padding: 28px 0 32px; display: flex; align-items: center; gap: 28px; }
+    .ft-social h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin: 0; }
+    .ft-social-icons { display: flex; gap: 14px; align-items: center; }
+    .ft-social-link { color: var(--muted); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; transition: color 0.2s ease, border-color 0.2s ease; }
+    .ft-social-link:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
+    .ft-social-link svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
     .toast { position: fixed; bottom: 32px; right: 32px; z-index: 600; background: var(--bg-2); border: 1px solid var(--line); padding: 16px 20px; display: flex; align-items: center; gap: 16px; min-width: 276px; opacity: 0; transform: translateY(8px); transition: opacity 0.26s, transform 0.26s; pointer-events: none; }
     .toast.show { opacity: 1; transform: none; pointer-events: all; }
@@ -196,6 +261,11 @@
       <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span>
       <span class="cart-badge" id="cart-badge"></span>
     </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+    </button>
   </div>
 </nav>
 
@@ -217,12 +287,12 @@
 <div class="product-hero">
   <div class="ph-left">
     <div class="ph-image-area">
-      <img class="ph-main-img" id="ph-main-img" src="Product Photos/Altara Product Image 7.png" alt="Midnight Black — View 1">
+      <img class="ph-main-img" id="ph-main-img" src="Product Photos/Altara Product Image 7.png" alt="Midnight Black -View 1">
     </div>
     <div class="ph-thumbs">
       <button class="ph-thumb active" data-src="Product Photos/Altara Product Image 7.png"><img src="Product Photos/Altara Product Image 7.png" alt="View 1"></button>
-      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 4.png"><img src="Product Photos/Altara Product Image 4.png" alt="View 2"></button>
-      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 3.png"><img src="Product Photos/Altara Product Image 3.png" alt="View 3"></button>
+      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 6.png"><img src="Product Photos/Altara Product Image 6.png" alt="View 2"></button>
+      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 5.png"><img src="Product Photos/Altara Product Image 5.png" alt="View 3"></button>
     </div>
   </div>
 
@@ -234,10 +304,22 @@
     <h1 class="pi-name">Midnight<br><em>Black</em></h1>
     <p class="pi-price">$59 AUD</p>
     <div class="pi-sep"></div>
-    <p class="pi-label">Colourway</p>
+    <div class="pi-colorway-header">
+      <p class="pi-label">Colourway</p>
+      <div class="pi-viewing-indicator">
+        <span class="pi-viewing-dot"></span>
+        <span class="pi-viewing-name">Midnight Black</span>
+      </div>
+    </div>
     <div class="pi-variants">
-      <a href="product-contrast-white.html" class="pi-var" title="Contrast White"><img src="Product Photos/Altara Product Image 1.png" alt="Contrast White"></a>
-      <div class="pi-var active" title="Midnight Black"><img src="Product Photos/Altara Product Image 7.png" alt="Midnight Black"></div>
+      <a href="product-contrast-white.html" class="pi-var" title="Contrast White">
+        <img src="Product Photos/Altara Product Image 1.png" alt="Contrast White">
+        <span class="pi-var-label">Contrast White</span>
+      </a>
+      <div class="pi-var active" title="Midnight Black">
+        <img src="Product Photos/Altara Product Image 7.png" alt="Midnight Black">
+        <span class="pi-var-label">Midnight Black</span>
+      </div>
     </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
     <div class="pi-perks">
@@ -246,12 +328,12 @@
       <span class="pi-perk"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure Checkout</span>
     </div>
     <div class="pi-sep"></div>
-    <p class="pi-desc">Black-on-black piping against premium black microfibre. Discreet, seamless, and built to disappear into any luxury interior without a trace. Secured by Altara MagFit™ magnetic snap-on clips — tool-free, rattle-free, refined.</p>
+    <p class="pi-desc">Black-on-black piping against premium black microfibre. Discreet, seamless, and built to disappear into any luxury interior without a trace. Secured by Altara MagFit™ magnetic snap-on clips -tool-free, rattle-free, refined.</p>
     <div class="pi-sep"></div>
     <div>
       <div class="pi-acc open">
         <button class="pi-acc-btn">Overview <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-        <div class="pi-acc-body"><div class="pi-acc-inner"><p>The Midnight Black seat cover is Altara's most discreet offering — a tonal exercise in restraint. Black microfibre meets black piping in a cover engineered to integrate seamlessly. The Altara script embroidery reveals itself only up close. MagFit™ clips install in minutes and leave no trace when removed.</p></div></div>
+        <div class="pi-acc-body"><div class="pi-acc-inner"><p>The Midnight Black seat cover is Altara's most discreet offering -a tonal exercise in restraint. Black microfibre meets black piping in a cover engineered to integrate seamlessly. The Altara script embroidery reveals itself only up close. MagFit™ clips install in minutes and leave no trace when removed.</p></div></div>
       </div>
       <div class="pi-acc">
         <button class="pi-acc-btn">Specifications <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -274,7 +356,7 @@
       <div class="pi-acc">
         <button class="pi-acc-btn">Care &amp; Washing <svg class="pi-ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
         <div class="pi-acc-body"><div class="pi-acc-inner"><ul>
-          <li>Machine wash cold, gentle cycle</li><li>Do not tumble dry — hang dry only</li><li>Do not iron or bleach</li>
+          <li>Machine wash cold, gentle cycle</li><li>Do not tumble dry -hang dry only</li><li>Do not iron or bleach</li>
         </ul></div></div>
       </div>
     </div>
@@ -282,31 +364,27 @@
   </div>
 </div>
 
-<div class="editorial">
-  <img src="Product Photos/Altara Product Image 6.png" alt="Altara in vehicle">
-</div>
-
 <section class="complete">
   <div class="complete-copy">
     <div class="complete-ey">Also Available</div>
     <h2 class="complete-h">Contrast<br><em>White</em></h2>
-    <p class="complete-p">Sharp white contrast piping on premium black microfibre — the performance-inspired finish for drivers who notice every detail.</p>
+    <p class="complete-p">Sharp white contrast piping on premium black microfibre -the performance-inspired finish for drivers who notice every detail.</p>
     <a href="product-contrast-white.html" class="complete-a">Discover Contrast White</a>
   </div>
-  <div class="complete-img"><img src="Product Photos/Altara Product Image 1.png" alt="Contrast White"></div>
+  <a href="product-contrast-white.html" class="complete-img"><img src="Product Photos/Homepage image 2.png" alt="Also Available"></a>
 </section>
 
 <footer>
   <div class="ft">
     <div><div class="ft-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div><p class="ft-tag">Engineered comfort for modern movement.</p></div>
     <div class="ft-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li></ul></div>
-    <div class="ft-col"><h4>Support</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="mailto:hello@altara.com.au">Contact</a></li></ul></div>
+    <div class="ft-col"><h4>Support</h4><ul><li><a href="faq.html">FAQ</a></li><li><a href="shipping.html">Shipping</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     <div class="ft-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Privacy</a></li></ul></div>
   </div>
   <div class="ft-social">
     <h4>Follow Us</h4>
     <div class="ft-social-icons">
-      <a href="https://instagram.com/altara" class="ft-social-link" aria-label="Instagram" target="_blank" rel="noopener">
+      <a href="https://instagram.com/altara.au" class="ft-social-link" aria-label="Instagram" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
       <a href="https://facebook.com/altara" class="ft-social-link" aria-label="Facebook" target="_blank" rel="noopener">
@@ -316,6 +394,22 @@
   </div>
   <div class="ft-bot"><p class="ft-copy">© 2026 Altara. All rights reserved.</p><p class="ft-em">Engineered comfort for modern movement.</p></div>
 </footer>
+
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <ul class="mob-nav-list" role="list">
+    <li class="mob-nav-item"><a href="collection.html" class="mob-nav-a">Collection</a></li>
+    <li class="mob-nav-item"><a href="index.html#features" class="mob-nav-a">Features</a></li>
+    <li class="mob-nav-item"><a href="index.html#craft" class="mob-nav-a">Materials</a></li>
+  </ul>
+  <div class="mob-bottom">
+    <div class="mob-actions">
+      <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+    </div>
+    <p class="mob-tagline">Engineered comfort for modern movement.</p>
+  </div>
+</div>
 
 <script>
   const nav = document.getElementById('nav');
@@ -354,6 +448,33 @@
     closeBtn.addEventListener('click',closeSearch);
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
     panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
+  })();
+  (function(){
+    const hamburger=document.getElementById('hamburger'),overlay=document.getElementById('mob-overlay');
+    if(!hamburger||!overlay) return;
+    function openMenu(){hamburger.classList.add('open');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');hamburger.setAttribute('aria-expanded','true');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+    function closeMenu(){hamburger.classList.remove('open');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');hamburger.setAttribute('aria-expanded','false');document.documentElement.style.overflow='';document.body.style.overflow='';}
+    hamburger.addEventListener('click',()=>overlay.classList.contains('open')?closeMenu():openMenu());
+    overlay.querySelectorAll('.mob-nav-a').forEach(a=>a.addEventListener('click',closeMenu));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeMenu();});
+  })();
+  document.querySelectorAll('.ft-col h4').forEach(h4=>{
+    h4.addEventListener('click',()=>{
+      if(window.innerWidth>768) return;
+      const col=h4.closest('.ft-col'),isOpen=col.classList.contains('open');
+      document.querySelectorAll('.ft-col').forEach(c=>c.classList.remove('open'));
+      if(!isOpen) col.classList.add('open');
+    });
+  });
+  (function(){
+    const el=document.querySelector('.complete');
+    if(!el) return;
+    el.classList.add('pre-reveal');
+    new IntersectionObserver((entries,io)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){e.target.classList.remove('pre-reveal');io.unobserve(e.target);}
+      });
+    },{threshold:0.08,rootMargin:'0px 0px -30px 0px'}).observe(el);
   })();
 </script>
 </body>

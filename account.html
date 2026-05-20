@@ -52,7 +52,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 56px;
+      padding: 4px 52px;
+      height: 58px;
       background: rgba(12,13,16,0.88);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
@@ -62,10 +63,10 @@
     nav.scrolled {
       border-bottom-color: var(--border);
     }
-    .nav-logo { overflow: hidden; height: 64px; display: flex; align-items: center; }
+    .nav-logo { overflow: hidden; height: 50px; display: flex; align-items: center; }
     .nav-logo img {
-      height: 140px;
-      transform: translateY(8px);
+      height: 110px;
+      transform: translateY(5px);
       width: auto;
       filter: brightness(0) invert(1);
       opacity: 0.72;
@@ -439,7 +440,7 @@
     }
 
     /* ─── CHECKOUT STEPS ─── */
-    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(12,13,16,0.5); border-bottom: 1px solid var(--border); margin-top: 80px; }
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(12,13,16,0.5); border-bottom: 1px solid var(--border); margin-top: 58px; }
     .step { display: flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
     .step.active { color: var(--cream); }
     .step.done { color: var(--gold); }
@@ -465,7 +466,7 @@
     .nav-search-input::placeholder { color: rgba(237,232,223,0.28); }
     .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.4); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
     .nav-search-close:hover { color: var(--cream); }
-    .search-panel { position: fixed; top: 76px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel { position: fixed; top: 58px; left: 0; right: 0; z-index: 199; background: rgba(12,13,16,0.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.055); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
     .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
     .search-panel-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 14px; }
     .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
@@ -673,7 +674,7 @@
     <div class="footer-bottom">
       <p>© 2026 Altara. All rights reserved.</p>
       <div style="display:flex;align-items:center;gap:10px;">
-        <a href="https://instagram.com/altara" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://instagram.com/altara.au" aria-label="Instagram" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
         <a href="https://facebook.com/altara" aria-label="Facebook" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;transition:color 0.2s,border-color 0.2s;" onmouseenter="this.style.color='var(--cream)';this.style.borderColor='rgba(237,232,223,0.3)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.1)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
       </div>
     </div>
