@@ -231,27 +231,94 @@
     .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
     .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
     .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
-    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; background: var(--bg); flex-direction: column; padding: 80px 32px 48px; opacity: 0; transform: translateY(-10px); transition: opacity 0.36s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94); }
-    .mob-overlay.open { opacity: 1; transform: translateY(0); }
-    .mob-nav-list { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-    .mob-nav-item { border-bottom: 1px solid var(--border); opacity: 0; transform: translateX(-14px); transition: opacity 0.4s ease, transform 0.4s ease; }
-    .mob-overlay.open .mob-nav-item:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.06s; }
-    .mob-overlay.open .mob-nav-item:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
-    .mob-overlay.open .mob-nav-item:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.20s; }
-    .mob-nav-a { display: flex; align-items: center; justify-content: space-between; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 10vw, 50px); font-weight: 300; letter-spacing: -0.02em; color: var(--cream); text-decoration: none; padding: 18px 0; transition: color 0.2s ease; -webkit-tap-highlight-color: transparent; }
-    .mob-nav-a:active { color: var(--gold); }
-    .mob-bottom { border-top: 1px solid var(--border); padding-top: 24px; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease 0.26s, transform 0.4s ease 0.26s; }
-    .mob-overlay.open .mob-bottom { opacity: 1; transform: none; }
-    .mob-actions { display: flex; gap: 28px; margin-bottom: 20px; }
-    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(237,232,223,0.6); text-decoration: none; transition: color 0.2s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 48px; }
+    /* ── Mobile overlay ── */
+    .mob-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 302;
+      background: var(--bg);
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mob-overlay.open { opacity: 1; pointer-events: all; }
+
+    .mob-ol-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
+    .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
+    .mob-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.5); padding: 10px; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s; }
+    .mob-close:active { color: var(--cream); }
+    .mob-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .mob-ol-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 36px 24px 24px; }
+
+    .mob-ol-section { margin-bottom: 36px; }
+    .mob-ol-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.75; margin-bottom: 4px;
+    }
+
+    .mob-main-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+      font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300;
+      letter-spacing: -0.01em; color: var(--cream); text-decoration: none;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease;
+    }
+    .mob-main-link:first-of-type { border-top: 1px solid var(--border); }
+    .mob-overlay.open .mob-main-link:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.07s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.19s; }
+    .mob-main-link:active { color: var(--gold); }
+    .mob-main-arr { font-size: 16px; color: var(--gold); opacity: 0.45; pointer-events: none; transition: opacity 0.18s, transform 0.18s; }
+    .mob-main-link:active .mob-main-arr { opacity: 1; transform: translateX(3px); }
+
+    .mob-sub-list { list-style: none; padding: 0; }
+    .mob-sub-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045);
+      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5);
+      text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      transition: color 0.18s ease;
+      opacity: 0; transform: translateY(6px);
+    }
+    .mob-overlay.open .mob-sub-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.22s; }
+    .mob-overlay.open .mob-sub-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.28s; }
+    .mob-overlay.open .mob-sub-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.34s; }
+    .mob-overlay.open .mob-sub-link:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.40s; }
+    .mob-sub-link:active { color: var(--cream); }
+    .mob-sub-arr { font-size: 11px; opacity: 0.3; pointer-events: none; }
+
+    .mob-ol-footer {
+      border-top: 1px solid var(--border); padding: 18px 24px 28px;
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s;
+    }
+    .mob-overlay.open .mob-ol-footer { opacity: 1; transform: none; }
+    .mob-ol-actions { display: flex; gap: 0; }
+    .mob-action {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      color: rgba(237,232,223,0.5); text-decoration: none;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
+    }
     .mob-action:active { color: var(--cream); }
-    .mob-action svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-    .mob-action span { font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
-    .mob-tagline { font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.04em; }
+    .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+    .mob-ol-tagline { font-size: 10px; font-weight: 300; color: rgba(237,232,223,0.22); letter-spacing: 0.06em; font-style: italic; }
 
     @media (max-width: 768px) {
       .hamburger { display: flex; }
-      .mob-overlay { display: flex; }
+      .mob-overlay { display: flex; visibility: visible; }
       .nav-center { display: none !important; }
       #search-open-btn { display: none; }
       .nav-actions a[href="account.html"] { display: none; }
@@ -549,18 +616,46 @@
 </footer>
 
 <!-- MOBILE OVERLAY -->
-<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-  <ul class="mob-nav-list" role="list">
-    <li class="mob-nav-item"><a href="collection.html" class="mob-nav-a">Collection</a></li>
-    <li class="mob-nav-item"><a href="index.html#features" class="mob-nav-a">Features</a></li>
-    <li class="mob-nav-item"><a href="index.html#craft" class="mob-nav-a">Materials</a></li>
-  </ul>
-  <div class="mob-bottom">
-    <div class="mob-actions">
-      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
-      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-ol-header">
+    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <button class="mob-close" id="mob-close" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mob-ol-body">
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Shop</div>
+      <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
+      <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
+      <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
     </div>
-    <p class="mob-tagline">Engineered comfort for modern movement.</p>
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Support</div>
+      <ul class="mob-sub-list">
+        <li><a href="faq.html" class="mob-sub-link">FAQ <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="shipping.html" class="mob-sub-link">Shipping &amp; Delivery <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="returns.html" class="mob-sub-link">Returns &amp; Exchanges <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="contact.html" class="mob-sub-link">Contact Us <span class="mob-sub-arr">→</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="mob-ol-footer">
+    <div class="mob-ol-actions">
+      <a href="search.html" class="mob-action">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </a>
+      <a href="account.html" class="mob-action">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="mob-action">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Cart</span>
+      </a>
+    </div>
+    <span class="mob-ol-tagline">Altara®</span>
   </div>
 </div>
 
@@ -588,15 +683,37 @@
     });
   });
 
-  // Mobile hamburger
-  (function(){
-    const hamburger=document.getElementById('hamburger'),overlay=document.getElementById('mob-overlay');
-    if(!hamburger||!overlay) return;
-    function openMenu(){hamburger.classList.add('open');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');hamburger.setAttribute('aria-expanded','true');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
-    function closeMenu(){hamburger.classList.remove('open');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');hamburger.setAttribute('aria-expanded','false');document.documentElement.style.overflow='';document.body.style.overflow='';}
-    hamburger.addEventListener('click',()=>overlay.classList.contains('open')?closeMenu():openMenu());
-    overlay.querySelectorAll('.mob-nav-a').forEach(a=>a.addEventListener('click',closeMenu));
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeMenu();});
+  // Mobile hamburger menu
+  (function() {
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('mob-overlay');
+    const closeBtn = document.getElementById('mob-close');
+    if (!hamburger || !overlay) return;
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+      overlay.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
+    });
   })();
 
   // Footer accordion mobile
