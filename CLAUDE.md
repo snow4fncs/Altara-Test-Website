@@ -52,3 +52,4 @@
 - Do not stop after one screenshot pass
 - Do not use `transition-all`
 - Do not use default Tailwind blue/indigo as primary color
+- **Never push to GitHub or deploy to production without explicit user approval.** Test on localhost first. Only push when the user explicitly says to (e.g. "push it", "deploy it").
