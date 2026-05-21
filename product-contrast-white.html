@@ -22,7 +22,7 @@
       --thumb-h: 88px;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body { height: 100%; overflow-x: hidden; }
     body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; }
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
 
@@ -384,7 +384,7 @@
       .complete-copy { padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--line); }
       .complete-img { height: 70vw; max-height: 320px; }
       .complete-img img { height: 100%; width: 100%; }
-      .ft { grid-template-columns: 1fr; gap: 0; padding-bottom: 0; border-bottom: none; }
+      .ft { grid-template-columns: 1fr !important; gap: 0; padding-bottom: 0; border-bottom: none; }
       .ft-logo img { height: 64px; }
       .ft-tag { margin-bottom: 20px; }
       .ft-col { border-top: 1px solid var(--line); }
@@ -394,6 +394,7 @@
       .ft-col ul { display: none; padding-bottom: 14px; }
       .ft-col.open ul { display: flex; }
       .ft-social { flex-wrap: wrap; padding: 16px 0 18px; gap: 14px; }
+      footer { padding: 44px 24px 36px; }
     }
 
     /* ── TOAST ────────────────────────────────── */
