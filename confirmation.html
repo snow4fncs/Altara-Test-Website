@@ -923,7 +923,7 @@
     h4.addEventListener('click', () => { h4.parentElement.classList.toggle('open'); });
   });
 // Mobile hamburger menu
-  (function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger');
     const overlay = document.getElementById('mob-overlay');
     const closeBtn = document.getElementById('mob-close');
@@ -951,7 +951,7 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
     });
-  })();
+  });
 
   // Mobile overlay inline search
   (function() {
