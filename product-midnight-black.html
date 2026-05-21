@@ -22,7 +22,7 @@
       --thumb-h: 88px;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow-x: hidden; }
+    html, body { height: 100%; }
     body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; }
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
 
@@ -219,6 +219,9 @@
     .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
     .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
     .mob-ol-tagline { font-size: 10px; font-weight: 300; color: rgba(237,232,223,0.22); letter-spacing: 0.06em; font-style: italic; }
+    .mob-ol-header-right { display: flex; align-items: center; }
+    .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
+    .mob-ol-header .mob-action span { display: none; }
     .complete { display: grid; grid-template-columns: 44% 56%; border-top: 1px solid var(--line); height: clamp(480px, 55vh, 620px); }
     .complete-copy { padding: 80px 72px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); background: var(--bg); }
     .complete-ey { font-size: 7.5px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.65; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
@@ -247,9 +250,8 @@
       .nav-actions { gap: 14px; }
       .product-hero { grid-template-columns: 1fr; height: auto; display: block; }
       .ph-left { grid-template-rows: auto var(--thumb-h); height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
-      .ph-image-area { height: 90vw; max-height: 480px; }
-      .ph-image-area::after { background: linear-gradient(to top, var(--bg) 0%, transparent 22%); }
-      .ph-main-img { object-fit: cover; padding: 0; }
+      .ph-image-area { aspect-ratio: 3/4; height: auto; max-height: 540px; }
+      .ph-main-img { object-fit: contain; padding: 8px 16px; }
       .ph-info { padding: 28px 24px 48px; }
       .pi-back { margin-bottom: 22px; }
       .pi-var img { height: 68px; }
@@ -467,9 +469,16 @@
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
   <div class="mob-ol-header">
     <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
-    <button class="mob-close" id="mob-close" aria-label="Close menu">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+    <div class="mob-ol-header-right">
+      <div class="mob-ol-actions">
+        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+        <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+      </div>
+      <button class="mob-close" id="mob-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
   </div>
   <div class="mob-ol-body">
     <div class="mob-ol-section">
@@ -489,20 +498,6 @@
     </div>
   </div>
   <div class="mob-ol-footer">
-    <div class="mob-ol-actions">
-      <a href="search.html" class="mob-action">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Search</span>
-      </a>
-      <a href="account.html" class="mob-action">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        <span>Account</span>
-      </a>
-      <a href="cart.html" class="mob-action">
-        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span>Cart</span>
-      </a>
-    </div>
     <span class="mob-ol-tagline">Altara®</span>
   </div>
 </div>
