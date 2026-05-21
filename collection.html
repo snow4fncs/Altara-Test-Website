@@ -52,17 +52,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 4px 52px;
-      background: transparent;
+      background: rgba(12,13,16,0.97);
       border-bottom: 1px solid transparent;
       transition: border-color 0.3s ease, transform 0.35s ease;
-    }
-    nav::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(12,13,16,0.95);
-      pointer-events: none;
-      z-index: -1;
     }
     nav.scrolled {
       border-bottom-color: var(--border);
@@ -739,15 +731,7 @@
         
       }
 
-      let _tapped = false;
-      hamburger.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        _tapped = true;
-        overlay.classList.contains('open') ? closeMenu() : openMenu();
-        setTimeout(() => { _tapped = false; }, 400);
-      });
       hamburger.addEventListener('click', () => {
-        if (_tapped) { _tapped = false; return; }
         overlay.classList.contains('open') ? closeMenu() : openMenu();
       });
       if (closeBtn) closeBtn.addEventListener('click', closeMenu);
