@@ -22,7 +22,7 @@
       --thumb-h: 88px;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body { height: 100%; overflow-x: hidden; }
     body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; }
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
 
@@ -397,11 +397,13 @@
       .nav-actions { gap: 14px; }
       .product-hero { grid-template-columns: 1fr; height: auto; display: block; }
       .ph-left { grid-template-rows: auto var(--thumb-h); height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
-      .ph-image-area { height: 72vw; max-height: 360px; }
+      .ph-image-area { height: 90vw; max-height: 480px; }
+      .ph-image-area::after { background: linear-gradient(to top, var(--bg) 0%, transparent 22%); }
+      .ph-main-img { object-fit: cover; padding: 0; }
       .ph-info { padding: 28px 24px 48px; }
       .pi-back { margin-bottom: 22px; }
       .pi-var img { height: 68px; }
-      .complete { grid-template-columns: 1fr; min-height: auto; }
+      .complete { grid-template-columns: 1fr; height: auto; min-height: auto; }
       .complete-copy { padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--line); }
       .complete-img { height: 70vw; max-height: 320px; }
       .complete-img img { height: 100%; width: 100%; }
