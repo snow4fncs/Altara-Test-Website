@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>The Collection - Altara Seat Covers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -351,7 +351,7 @@
 
     .mob-ol-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+      padding: 0 24px; padding-top: env(safe-area-inset-top, 0px); height: calc(62px + env(safe-area-inset-top, 0px)); border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
     .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
     .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
