@@ -32,10 +32,17 @@
       height: var(--nav-h);
       display: flex; align-items: center; justify-content: space-between;
       padding: 4px 52px;
-      background: rgba(11,12,15,0.95);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      background: transparent;
       border-bottom: 1px solid transparent;
       transition: border-color 0.3s, transform 0.35s ease;
+    }
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(12,13,16,0.95);
+      pointer-events: none;
+      z-index: -1;
     }
     nav.scrolled { border-bottom-color: var(--line); }
     .nav-logo { display: flex; align-items: center; height: 50px; overflow: hidden; }
