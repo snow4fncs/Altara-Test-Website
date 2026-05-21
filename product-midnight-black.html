@@ -64,7 +64,7 @@
     .product-hero { margin-top: var(--nav-h); display: grid; grid-template-columns: 62% 38%; align-items: start; }
     .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
     .ph-image-area { overflow: hidden; position: relative; background: #131210; }
-    .ph-image-area::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, var(--bg) 0%, rgba(12,13,16,0.18) 22%, transparent 55%), linear-gradient(to top, var(--bg) 0%, transparent 18%); pointer-events: none; z-index: 1; }
+    .ph-image-area::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 15%; background: linear-gradient(to top, var(--bg) 0%, transparent 100%); pointer-events: none; z-index: 1; }
     .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 16px 28px;  }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
     .ph-thumb { flex: 1; min-width: 0; background: #131210; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
@@ -308,6 +308,15 @@
     .social-icon { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; color: var(--muted); text-decoration: none; transition: color 0.2s, border-color 0.2s; }
     .social-icon:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
     .social-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  
+    /* ─── MOB OVERLAY INLINE SEARCH ─── */
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
 <body>
@@ -479,13 +488,20 @@
   <div class="mob-ol-header">
     <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
     <div class="mob-ol-header-right">
-        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
         <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
         <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
         <button class="mob-close" id="mob-close" aria-label="Close menu">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
+  </div>
+  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
+    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
+    </form>
+    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
   </div>
   <div class="mob-ol-body">
     <div class="mob-ol-section">
@@ -613,6 +629,19 @@
       });
     },{threshold:0.08,rootMargin:'0px 0px -30px 0px'}).observe(el);
   })();
-</script>
+
+  // Mobile overlay inline search
+  (function() {
+    const searchBtn = document.getElementById('mob-search-btn');
+    const searchBar = document.getElementById('mob-search-bar');
+    const searchField = document.getElementById('mob-search-field');
+    if (!searchBtn || !searchBar) return;
+    searchBtn.addEventListener('click', () => {
+      const open = searchBar.classList.toggle('open');
+      searchBar.setAttribute('aria-hidden', String(!open));
+      if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
+    });
+  })();
+  </script>
 </body>
 </html>

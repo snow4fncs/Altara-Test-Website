@@ -1227,6 +1227,15 @@
       letter-spacing: 0.025em;
     }
     .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+  
+    /* ─── MOB OVERLAY INLINE SEARCH ─── */
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
 <body>
@@ -1556,7 +1565,7 @@
     <div class="mob-ol-header">
       <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <div class="mob-ol-header-right">
-        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
           <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
           <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
         <button class="mob-close" id="mob-close" aria-label="Close menu">
@@ -1564,7 +1573,14 @@
         </button>
       </div>
     </div>
-    <div class="mob-ol-body">
+  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
+    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
+    </form>
+    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
+  </div>
+  <div class="mob-ol-body">
       <div class="mob-ol-section">
         <div class="mob-ol-label">Shop</div>
         <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
@@ -1720,6 +1736,19 @@
         });
       });
     })();
+  
+  // Mobile overlay inline search
+  (function() {
+    const searchBtn = document.getElementById('mob-search-btn');
+    const searchBar = document.getElementById('mob-search-bar');
+    const searchField = document.getElementById('mob-search-field');
+    if (!searchBtn || !searchBar) return;
+    searchBtn.addEventListener('click', () => {
+      const open = searchBar.classList.toggle('open');
+      searchBar.setAttribute('aria-hidden', String(!open));
+      if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
+    });
+  })();
   </script>
 </body>
 </html>
