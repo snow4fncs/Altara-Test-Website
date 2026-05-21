@@ -730,7 +730,15 @@
 
     }
 
+    let _tapped = false;
+    hamburger.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      _tapped = true;
+      overlay.classList.contains('open') ? closeMenu() : openMenu();
+      setTimeout(() => { _tapped = false; }, 400);
+    });
     hamburger.addEventListener('click', () => {
+      if (_tapped) { _tapped = false; return; }
       overlay.classList.contains('open') ? closeMenu() : openMenu();
     });
     if (closeBtn) closeBtn.addEventListener('click', closeMenu);

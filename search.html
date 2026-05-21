@@ -657,7 +657,17 @@
         overlay.setAttribute('aria-hidden', 'true'); hamburger.setAttribute('aria-expanded', 'false');
         document.documentElement.style.overflow = ''; document.body.style.overflow = '';
       }
-      hamburger.addEventListener('click', () => { overlay.classList.contains('open') ? closeMenu() : openMenu(); });
+      let _tapped = false;
+      hamburger.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        _tapped = true;
+        overlay.classList.contains('open') ? closeMenu() : openMenu();
+        setTimeout(() => { _tapped = false; }, 400);
+      });
+      hamburger.addEventListener('click', () => {
+        if (_tapped) { _tapped = false; return; }
+        overlay.classList.contains('open') ? closeMenu() : openMenu();
+      });
       if (closeBtn) closeBtn.addEventListener('click', closeMenu);
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu(); });
     })();
