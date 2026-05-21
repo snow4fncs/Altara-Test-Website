@@ -23,7 +23,7 @@
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.032; pointer-events: none; z-index: 9999; }
 
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; background: rgba(11,12,15,0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 0.3s, transform 0.35s ease; }
     nav.scrolled { border-bottom-color: var(--line); }
     .nav-logo { display: flex; align-items: center; height: 50px; overflow: hidden; }
     .nav-logo img { height: 110px; transform: translateY(5px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
@@ -660,11 +660,9 @@
   <div class="mob-ol-header">
       <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <div class="mob-ol-header-right">
-        <div class="mob-ol-actions">
-          <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
           <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
           <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
-        </div>
         <button class="mob-close" id="mob-close" aria-label="Close menu">
           <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -694,7 +692,19 @@
 
 <script>
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
+  (function() {
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastY + 4 && y > 80) {
+        nav.style.transform = 'translateY(-100%)';
+      } else if (y < lastY - 4 || y <= 80) {
+        nav.style.transform = 'translateY(0)';
+      }
+      nav.classList.toggle('scrolled', y > 50);
+      lastY = y;
+    }, { passive: true });
+  })();
   try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
   (function(){
     const navEl=document.getElementById('nav'),openBtn=document.getElementById('search-open-btn'),closeBtn=document.getElementById('nav-search-close'),searchArea=document.getElementById('nav-search-area'),panel=document.getElementById('search-panel'),inp=document.getElementById('nav-search-q');

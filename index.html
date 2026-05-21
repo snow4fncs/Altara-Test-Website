@@ -52,7 +52,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 4px 52px;
-      transition: background 0.6s ease, backdrop-filter 0.6s ease, border-color 0.6s ease, padding 0.4s ease;
+      transition: background 0.6s ease, backdrop-filter 0.6s ease, border-color 0.6s ease, padding 0.4s ease, transform 0.35s ease;
       border-bottom: 1px solid transparent;
       background: transparent;
     }
@@ -1556,11 +1556,9 @@
     <div class="mob-ol-header">
       <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <div class="mob-ol-header-right">
-        <div class="mob-ol-actions">
-          <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
+        <a href="search.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></a>
           <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
           <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
-        </div>
         <button class="mob-close" id="mob-close" aria-label="Close menu">
           <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -1591,9 +1589,19 @@
   <script>
     // Nav scroll
     const nav = document.getElementById('nav');
+    (function() {
+    let lastY = 0;
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
+      const y = window.scrollY;
+      if (y > lastY + 4 && y > 80) {
+        nav.style.transform = 'translateY(-100%)';
+      } else if (y < lastY - 4 || y <= 80) {
+        nav.style.transform = 'translateY(0)';
+      }
+      nav.classList.toggle('scrolled', y > 50);
+      lastY = y;
     }, { passive: true });
+  })();
 
     // Scroll reveal
     const revEls = document.querySelectorAll('.rev');
