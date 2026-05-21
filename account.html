@@ -585,21 +585,60 @@
     .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
     .mob-ol-tagline { font-size: 10px; font-weight: 300; color: rgba(237,232,223,0.22); letter-spacing: 0.06em; font-style: italic; }
 
+    /* ─── OVERLAY HEADER-RIGHT ─── */
+    .mob-ol-header-right { display: flex; align-items: center; }
+    .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
+    .mob-ol-header .mob-action span { display: none; }
+
+    /* ─── NO ACCOUNT LINK ─── */
+    .no-account-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .no-account-link a {
+      color: var(--cream-dim);
+      text-decoration: underline;
+      text-decoration-color: rgba(154,149,144,0.4);
+      transition: color 0.2s ease;
+      cursor: pointer;
+    }
+    .no-account-link a:hover { color: var(--cream); }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
       .hamburger { display: flex; }
       .mob-overlay { display: flex; visibility: visible; }
-      nav { padding: 10px 24px; }
-      .nav-links { display: none; }
+      nav { padding: 0 20px; }
+      .nav-center { display: none !important; }
+      #search-open-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      .nav-logo img { height: 90px; }
+
       .forms-section {
         grid-template-columns: 1fr;
-        padding: 0 24px 80px;
-        gap: 56px;
+        padding: 80px 24px 80px;
+        gap: 0;
       }
       .vertical-divider { display: none; }
       .field-row { grid-template-columns: 1fr; }
       footer { padding: 40px 24px 32px; }
       .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+
+      #create-col {
+        display: none;
+        padding-top: 48px;
+        border-top: 1px solid var(--border);
+        margin-top: 8px;
+      }
+      #create-col.visible { display: block; }
+      .no-account-link { display: block; }
+    }
+
+    @media (min-width: 769px) {
+      .no-account-link { display: none; }
     }
   </style>
 </head>
@@ -692,6 +731,7 @@
           <a href="#" class="forgot-link">Forgot your password?</a>
         </div>
         <button type="submit" class="btn-primary">Sign In</button>
+        <p class="no-account-link">No account? <a id="show-create-btn">Create one</a></p>
         <div class="or-divider">
           <span>or</span>
         </div>
@@ -830,6 +870,18 @@
       panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
     })();
 
+    // "No account? Create one" toggle (mobile only)
+    (function() {
+      const showBtn = document.getElementById('show-create-btn');
+      const createCol = document.getElementById('create-col');
+      if (!showBtn || !createCol) return;
+      showBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        createCol.classList.add('visible');
+        createCol.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+
     // Mobile hamburger menu
     (function() {
       const hamburger = document.getElementById('hamburger');
@@ -867,9 +919,23 @@
   <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
     <div class="mob-ol-header">
       <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
-      <button class="mob-close" id="mob-close" aria-label="Close menu">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <div class="mob-ol-header-right">
+        <a href="search.html" class="mob-action" aria-label="Search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Search</span>
+        </a>
+        <a href="account.html" class="mob-action" aria-label="Account">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Account</span>
+        </a>
+        <a href="cart.html" class="mob-action" aria-label="Cart">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span>Cart</span>
+        </a>
+        <button class="mob-close" id="mob-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
     </div>
     <div class="mob-ol-body">
       <div class="mob-ol-section">
@@ -889,20 +955,6 @@
       </div>
     </div>
     <div class="mob-ol-footer">
-      <div class="mob-ol-actions">
-        <a href="search.html" class="mob-action">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <span>Search</span>
-        </a>
-        <a href="account.html" class="mob-action">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <span>Account</span>
-        </a>
-        <a href="cart.html" class="mob-action">
-          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          <span>Cart</span>
-        </a>
-      </div>
       <span class="mob-ol-tagline">Altara®</span>
     </div>
   </div>

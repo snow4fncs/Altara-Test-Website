@@ -511,7 +511,11 @@
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       mainImg.classList.add('fade');
-      setTimeout(() => { mainImg.src = btn.dataset.src; mainImg.classList.remove('fade'); }, 180);
+      setTimeout(() => {
+        mainImg.onload = () => { mainImg.classList.remove('fade'); mainImg.onload = null; };
+        mainImg.src = btn.dataset.src;
+        if (mainImg.complete && mainImg.naturalWidth > 0) { mainImg.classList.remove('fade'); }
+      }, 230);
     });
   });
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
