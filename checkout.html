@@ -473,11 +473,9 @@
     .mob-sub-link:active { color: var(--cream); }
     .mob-sub-arr { font-size: 11px; opacity: 0.3; pointer-events: none; }
 
-    .mob-ol-
-    .mob-overlay.open .mob-ol-
     .mob-ol-actions { display: flex; gap: 0; }
     .mob-action {
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none;
       color: rgba(237,232,223,0.5); text-decoration: none;
       touch-action: manipulation; -webkit-tap-highlight-color: transparent;
       padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
@@ -834,6 +832,57 @@
   </div>
 </footer>
 
+  <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
+    <div class="mob-ol-header">
+      <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+      <div class="mob-ol-header-right">
+        <button class="mob-action" id="mob-search-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Search</span>
+        </button>
+        <a href="account.html" class="mob-action" aria-label="Account">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Account</span>
+        </a>
+        <a href="cart.html" class="mob-action" aria-label="Cart">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span>Cart</span>
+        </a>
+        <button class="mob-close" id="mob-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
+    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
+    </form>
+    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
+  </div>
+  <div class="mob-ol-body">
+      <div class="mob-ol-section">
+        <div class="mob-ol-label">Shop</div>
+        <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
+        <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
+        <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
+      </div>
+      <div class="mob-ol-section">
+        <div class="mob-ol-label">Support</div>
+        <ul class="mob-sub-list">
+          <li><a href="faq.html" class="mob-sub-link">FAQ <span class="mob-sub-arr">→</span></a></li>
+          <li><a href="shipping.html" class="mob-sub-link">Shipping &amp; Delivery <span class="mob-sub-arr">→</span></a></li>
+          <li><a href="returns.html" class="mob-sub-link">Returns &amp; Exchanges <span class="mob-sub-arr">→</span></a></li>
+          <li><a href="contact.html" class="mob-sub-link">Contact Us <span class="mob-sub-arr">→</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mob-ol-footer">
+      <span class="mob-ol-tagline">Altara®</span>
+    </div>
+  </div>
+
+
   <script>
     // Cart badge
     (function() {
@@ -1072,55 +1121,5 @@
     });
   })();
   </script>
-
-  <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
-    <div class="mob-ol-header">
-      <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
-      <div class="mob-ol-header-right">
-        <a href="search.html" class="mob-action" aria-label="Search">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <span>Search</span>
-        </a>
-        <a href="account.html" class="mob-action" aria-label="Account">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <span>Account</span>
-        </a>
-        <a href="cart.html" class="mob-action" aria-label="Cart">
-          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          <span>Cart</span>
-        </a>
-        <button class="mob-close" id="mob-close" aria-label="Close menu">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-    </div>
-  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
-    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
-    </form>
-    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
-  </div>
-  <div class="mob-ol-body">
-      <div class="mob-ol-section">
-        <div class="mob-ol-label">Shop</div>
-        <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
-        <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
-        <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
-      </div>
-      <div class="mob-ol-section">
-        <div class="mob-ol-label">Support</div>
-        <ul class="mob-sub-list">
-          <li><a href="faq.html" class="mob-sub-link">FAQ <span class="mob-sub-arr">→</span></a></li>
-          <li><a href="shipping.html" class="mob-sub-link">Shipping &amp; Delivery <span class="mob-sub-arr">→</span></a></li>
-          <li><a href="returns.html" class="mob-sub-link">Returns &amp; Exchanges <span class="mob-sub-arr">→</span></a></li>
-          <li><a href="contact.html" class="mob-sub-link">Contact Us <span class="mob-sub-arr">→</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mob-ol-footer">
-      <span class="mob-ol-tagline">Altara®</span>
-    </div>
-  </div>
 </body>
 </html>

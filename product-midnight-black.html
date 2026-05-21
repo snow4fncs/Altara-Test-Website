@@ -204,7 +204,7 @@
     .mob-overlay.open .mob-ol-
     .mob-ol-actions { display: flex; gap: 0; }
     .mob-action {
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none;
       color: rgba(237,232,223,0.5); text-decoration: none;
       touch-action: manipulation; -webkit-tap-highlight-color: transparent;
       padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
@@ -260,8 +260,8 @@
       .ft-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       .ft-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
       .ft-col.open h4::after { transform: rotate(45deg); }
-      .ft-col ul { display: none; padding-bottom: 14px; }
-      .ft-col.open ul { display: flex; }
+      .ft-col ul { display: none !important; padding-bottom: 14px; }
+      .ft-col.open ul { display: flex !important; }
       .ft-social { flex-wrap: wrap; padding: 16px 0 18px; gap: 14px; }
       footer { padding: 44px 24px 36px; }
     }
