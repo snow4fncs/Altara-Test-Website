@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Privacy Policy - Altara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0D10; --bg-2: #111317; --bg-3: #181B1F;
+      --brand: #4D6272; --brand-lt: #607D8F;
+      --cream: #EDE8DF; --cream-dim: #9A9590;
+      --gold: #C4A97A; --muted: #72787F;
+      --border: rgba(255,255,255,0.065);
+      --line: rgba(255,255,255,0.07);
+      --nav-h: calc(58px + env(safe-area-inset-top, 0px));
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.032; pointer-events: none; z-index: 9999; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 4px 52px; padding-top: calc(env(safe-area-inset-top, 0px) + 4px); background: rgba(12,13,16,0.97); border-bottom: 1px solid transparent; transition: border-color 0.3s, transform 0.35s ease; }
+    nav.scrolled { border-bottom-color: var(--line); }
+    .nav-logo { display: flex; align-items: center; height: 50px; overflow: hidden; }
+    .nav-logo img { height: 110px; transform: translateY(5px); filter: brightness(0) invert(1); opacity: 0.68; transition: opacity 0.3s; }
+    nav:hover .nav-logo img { opacity: 0.88; }
+    .nav-links { display: flex; align-items: center; gap: 44px; list-style: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+    .nav-links a { color: rgba(237,232,223,0.72); text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-actions { display: flex; align-items: center; gap: 28px; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.72); text-decoration: none; transition: color 0.2s ease; padding: 0; }
+    .nav-btn:hover { color: var(--cream); }
+    .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-cart { position: relative; }
+    .cart-badge { position: absolute; top: -4px; right: -7px; background: var(--gold); color: var(--bg); font-size: 7px; font-weight: 700; min-width: 14px; height: 14px; border-radius: 7px; display: flex; align-items: center; justify-content: center; padding: 0 2px; opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+    .cart-badge.show { opacity: 1; transform: scale(1); }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(237,232,223,0.4); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(237,232,223,0.2); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 300; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(237,232,223,0.5); }
+    .nav-search-input::placeholder { color: rgba(237,232,223,0.25); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.35); font-size: 17px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 199; background: rgba(11,12,15,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); padding: 22px 48px 26px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.3); margin-bottom: 12px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { font-size: 12px; color: rgba(237,232,223,0.42); text-decoration: none; font-weight: 300; padding: 6px 0; letter-spacing: 0.04em; transition: color 0.2s ease; }
+    .search-suggestions-list a:hover { color: rgba(237,232,223,0.75); }
+
+    /* PAGE HERO */
+    .page-hero { margin-top: var(--nav-h); padding: 80px 72px 60px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 100% at 5% 100%, rgba(196,169,122,0.04) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 90% 10%, rgba(77,98,114,0.05) 0%, transparent 60%); pointer-events: none; }
+    .page-eyebrow { display: flex; align-items: center; gap: 14px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.38); margin-bottom: 22px; }
+    .page-eyebrow a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .page-eyebrow a:hover { color: rgba(237,232,223,0.65); }
+    .page-eyebrow span { opacity: 0.4; }
+    .page-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5.5vw, 80px); font-weight: 300; line-height: 0.96; letter-spacing: -0.025em; color: var(--cream); margin-bottom: 24px; }
+    .page-h1 em { font-style: italic; color: rgba(237,232,223,0.45); }
+    .page-desc { font-size: 14px; color: var(--cream-dim); line-height: 1.85; max-width: 520px; font-weight: 300; }
+    .page-meta { margin-top: 32px; display: flex; gap: 40px; flex-wrap: wrap; }
+    .page-meta-item { }
+    .page-meta-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.28); margin-bottom: 4px; }
+    .page-meta-value { font-size: 12px; font-weight: 300; color: rgba(237,232,223,0.5); }
+
+    /* PRIVACY CONTENT */
+    .privacy-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 72px 120px;
+    }
+    .privacy-toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 40px);
+      align-self: start;
+      padding-right: 48px;
+    }
+    .toc-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 20px;
+    }
+    .toc-list { list-style: none; }
+    .toc-list li + li { margin-top: 2px; }
+    .toc-list a {
+      font-size: 11.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.35);
+      text-decoration: none;
+      padding: 6px 0;
+      display: block;
+      border-left: 1px solid transparent;
+      padding-left: 12px;
+      margin-left: -12px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .toc-list a:hover { color: rgba(237,232,223,0.65); border-left-color: rgba(196,169,122,0.3); }
+
+    /* PRIVACY SECTIONS */
+    .privacy-body {}
+    .privacy-section {
+      margin-bottom: 72px;
+      scroll-margin-top: calc(var(--nav-h) + 32px);
+    }
+    .privacy-section:last-child { margin-bottom: 0; }
+    .privacy-section-num {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.55;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .privacy-section-num::after { content: ''; flex: 0 0 32px; height: 1px; background: rgba(196,169,122,0.2); }
+    .privacy-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+      margin-bottom: 28px;
+    }
+    .privacy-section p {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.95;
+      margin-bottom: 18px;
+    }
+    .privacy-section p:last-child { margin-bottom: 0; }
+    .privacy-section strong { font-weight: 500; color: rgba(237,232,223,0.72); }
+    .privacy-section a { color: rgba(196,169,122,0.75); text-decoration: none; border-bottom: 1px solid rgba(196,169,122,0.25); transition: color 0.2s, border-color 0.2s; }
+    .privacy-section a:hover { color: var(--gold); border-bottom-color: rgba(196,169,122,0.5); }
+    .privacy-list {
+      list-style: none;
+      margin: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .privacy-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.75;
+    }
+    .privacy-list li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 9px;
+      opacity: 0.55;
+    }
+    .privacy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+    .privacy-table th {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.35);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .privacy-table td {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.5);
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.7;
+    }
+    .privacy-table tr:last-child td { border-bottom: none; }
+    .privacy-callout {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 2px solid rgba(196,169,122,0.35);
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .privacy-callout p {
+      font-size: 13px;
+      color: rgba(237,232,223,0.48);
+      margin-bottom: 0;
+    }
+    .privacy-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 72px 0;
+    }
+
+    /* FOOTER */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 72px 72px 44px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 64px; }
+    .footer-logo img { height: 110px; filter: brightness(0) invert(1); opacity: 0.5; display: block; margin-bottom: 22px; }
+    .footer-tagline { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.75; max-width: 240px; }
+    .footer-col h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin-bottom: 22px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .footer-col ul a { font-size: 13px; font-weight: 300; color: var(--muted); text-decoration: none; transition: color 0.2s ease; }
+    .footer-col ul a:hover { color: var(--cream-dim); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p { font-size: 11.5px; font-weight: 300; color: var(--muted); }
+    .footer-social { border-top: 1px solid var(--border); padding: 28px 0 32px; display: flex; align-items: center; gap: 28px; }
+    .footer-social h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.5); margin: 0; }
+    .footer-social-icons { display: flex; gap: 14px; align-items: center; }
+    .social-icon { color: var(--muted); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; transition: color 0.2s ease, border-color 0.2s ease; }
+    .social-icon:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
+    .social-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* HAMBURGER & MOBILE */
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 16px 14px; min-width: 44px; min-height: 44px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .ham-line { display: block; width: 22px; height: 1px; background: var(--cream); opacity: 0.78; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.25s ease; transform-origin: center; }
+    .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
+    .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
+    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 302; background: var(--bg); flex-direction: column; opacity: 0; pointer-events: none; -webkit-transform: translateZ(0); transform: translateZ(0); will-change: opacity; transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
+    .mob-overlay.open { display: flex; opacity: 1; pointer-events: all; }
+    .mob-ol-header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
+    .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
+    .mob-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.5); padding: 10px; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s; }
+    .mob-close:active { color: var(--cream); }
+    .mob-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-ol-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 36px 24px 24px; }
+    .mob-ol-section { margin-bottom: 36px; }
+    .mob-ol-label { font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 4px; }
+    .mob-main-link { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--border); font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; letter-spacing: -0.01em; color: var(--cream); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; opacity: 0; transform: translateY(10px); transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease; }
+    .mob-main-link:first-of-type { border-top: 1px solid var(--border); }
+    .mob-overlay.open .mob-main-link:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.07s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.19s; }
+    .mob-main-link:active { color: var(--gold); }
+    .mob-main-arr { font-size: 16px; color: var(--gold); opacity: 0.45; pointer-events: none; transition: opacity 0.18s, transform 0.18s; }
+    .mob-sub-list { list-style: none; padding: 0; }
+    .mob-sub-link { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.18s ease; opacity: 0; transform: translateY(6px); }
+    .mob-overlay.open .mob-sub-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.22s; }
+    .mob-overlay.open .mob-sub-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.28s; }
+    .mob-overlay.open .mob-sub-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.34s; }
+    .mob-overlay.open .mob-sub-link:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.40s; }
+    .mob-sub-link:active { color: var(--cream); }
+    .mob-sub-arr { font-size: 11px; opacity: 0.3; pointer-events: none; }
+    .mob-ol-footer { border-top: 1px solid var(--border); padding: 18px 24px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s; }
+    .mob-overlay.open .mob-ol-footer { opacity: 1; transform: none; }
+    .mob-ol-actions { display: flex; gap: 0; }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; padding: 8px 16px; transition: color 0.18s ease; min-width: 56px; }
+    .mob-action:active { color: var(--cream); }
+    .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+    .mob-ol-tagline { font-size: 10px; font-weight: 300; color: rgba(237,232,223,0.22); letter-spacing: 0.06em; font-style: italic; }
+    .mob-ol-header-right { display: flex; align-items: center; }
+    .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
+    .mob-ol-header .mob-action span { display: none; }
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mob-overlay { display: flex; visibility: visible; }
+      .nav-center { display: none !important; }
+      #search-open-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      nav { padding: 0 20px; padding-top: env(safe-area-inset-top, 0px); background: rgba(12,13,16,0.98); transform: translateY(0) !important; }
+      .nav-logo { height: 46px; }
+      .nav-logo img { height: 100px; transform: translateY(4px); }
+      .nav-actions { gap: 14px; }
+      .page-hero { padding: 56px 24px 44px; }
+      .page-meta { gap: 24px; }
+      .privacy-layout { grid-template-columns: 1fr; padding: 44px 24px 80px; gap: 48px; }
+      .privacy-toc { position: static; padding-right: 0; }
+      footer { padding: 44px 24px 36px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+      .footer-logo img { height: 80px; margin-bottom: 14px; }
+      .footer-tagline { margin-bottom: 28px; }
+      .footer-col { border-top: 1px solid var(--border); }
+      .footer-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .footer-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
+      .footer-col.open h4::after { transform: rotate(45deg); }
+      .footer-col ul { display: none; padding-bottom: 16px; }
+      .footer-col.open ul { display: flex; }
+      .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .privacy-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></a>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="collection.html">Collection</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#craft">Materials</a></li>
+    </ul>
+    <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+      <span class="nav-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+        <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+        <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+      </form>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" id="search-open-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span>
+    </button>
+    <a href="account.html" class="nav-btn" aria-label="Account">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span>
+    </a>
+    <a href="cart.html" class="nav-btn nav-cart" aria-label="Cart">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span>
+      <span class="cart-badge" id="cart-badge"></span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+    </button>
+  </div>
+</nav>
+<div class="search-panel" id="search-panel" aria-hidden="true">
+  <p class="search-panel-label">Suggested Searches</p>
+  <ul class="search-suggestions-list" role="list">
+    <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+    <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+    <li><a href="collection.html">View All Products</a></li>
+  </ul>
+</div>
+
+<!-- PAGE HERO -->
+<header class="page-hero">
+  <div class="page-eyebrow">
+    <a href="index.html">Altara</a>
+    <span>/</span>
+    <span style="color:rgba(237,232,223,0.65)">Privacy Policy</span>
+  </div>
+  <h1 class="page-h1">Privacy<br><em>Policy</em></h1>
+  <p class="page-desc">Altara is committed to the responsible handling of your personal information. This policy explains clearly and completely how we collect, use, and protect your data.</p>
+  <div class="page-meta">
+    <div class="page-meta-item">
+      <div class="page-meta-label">Effective Date</div>
+      <div class="page-meta-value">1 January 2026</div>
+    </div>
+    <div class="page-meta-item">
+      <div class="page-meta-label">Last Updated</div>
+      <div class="page-meta-value">22 May 2026</div>
+    </div>
+    <div class="page-meta-item">
+      <div class="page-meta-label">Governing Law</div>
+      <div class="page-meta-value">Privacy Act 1988 (Cth), Australian Privacy Principles</div>
+    </div>
+  </div>
+</header>
+
+<!-- PRIVACY CONTENT -->
+<div class="privacy-layout">
+  <!-- TOC -->
+  <aside class="privacy-toc">
+    <div class="toc-label">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#overview">1. Overview</a></li>
+      <li><a href="#collection">2. Information We Collect</a></li>
+      <li><a href="#use">3. How We Use Your Information</a></li>
+      <li><a href="#sharing">4. Disclosure to Third Parties</a></li>
+      <li><a href="#cookies">5. Cookies &amp; Tracking</a></li>
+      <li><a href="#security">6. Data Security</a></li>
+      <li><a href="#retention">7. Data Retention</a></li>
+      <li><a href="#rights">8. Your Rights</a></li>
+      <li><a href="#children">9. Children's Privacy</a></li>
+      <li><a href="#international">10. International Transfers</a></li>
+      <li><a href="#changes">11. Changes to This Policy</a></li>
+      <li><a href="#contact">12. Contact Us</a></li>
+    </ul>
+  </aside>
+
+  <!-- BODY -->
+  <main class="privacy-body">
+
+    <div class="privacy-section" id="overview">
+      <div class="privacy-section-num">01</div>
+      <h2>Overview</h2>
+      <p>Altara ("we", "us", "our") operates the website altaradesign.com and processes personal information in connection with the sale of our premium seat cover products. We are committed to handling your personal information in accordance with the <strong>Privacy Act 1988 (Cth)</strong> and the <strong>Australian Privacy Principles (APPs)</strong>.</p>
+      <p>This Privacy Policy applies to all personal information collected through our website, order system, customer service channels, and any other touchpoints through which you interact with Altara. By using our website or placing an order, you acknowledge that you have read and understood this policy.</p>
+      <div class="privacy-callout">
+        <p><strong>Our commitment:</strong> We collect only what is necessary, retain it only as long as required, and never sell your personal information to third parties under any circumstances.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section" id="collection">
+      <div class="privacy-section-num">02</div>
+      <h2>Information We Collect</h2>
+      <p>We collect personal information through two primary channels: information you provide directly, and information collected automatically through your use of our website.</p>
+      <p><strong>Information you provide directly:</strong></p>
+      <ul class="privacy-list">
+        <li><strong>Order information:</strong> Your name, delivery address, email address, and phone number, provided when you place an order. This information is necessary to fulfil your purchase.</li>
+        <li><strong>Payment information:</strong> Card details and billing address, provided at checkout. Payment data is processed exclusively by our secure payment provider and is never stored on Altara's systems.</li>
+        <li><strong>Account information:</strong> If you create an account, your name, email address, and password (stored in encrypted form). Account creation is optional.</li>
+        <li><strong>Communications:</strong> Any information you provide when contacting us through our contact form, by email, or through customer service channels, including the content of your enquiry.</li>
+        <li><strong>Reviews and feedback:</strong> If you submit a product review or provide feedback, the content you provide together with your name (or chosen display name).</li>
+      </ul>
+      <p><strong>Information collected automatically:</strong></p>
+      <ul class="privacy-list">
+        <li><strong>Device and browser data:</strong> Your IP address, browser type and version, operating system, device type, and screen resolution.</li>
+        <li><strong>Usage data:</strong> Pages visited, time spent on page, referring URLs, links clicked, and navigation patterns within our website.</li>
+        <li><strong>Transaction data:</strong> Records of products viewed, added to cart, and purchased, together with timestamps and order values.</li>
+        <li><strong>Cookie data:</strong> Preferences, session identifiers, and analytics data stored in accordance with our Cookie Policy set out in Section 5.</li>
+      </ul>
+    </div>
+
+    <div class="privacy-section" id="use">
+      <div class="privacy-section-num">03</div>
+      <h2>How We Use Your Information</h2>
+      <p>We use your personal information strictly for the purposes for which it was collected, or for directly related purposes. The table below outlines our primary processing activities:</p>
+      <table class="privacy-table">
+        <thead>
+          <tr>
+            <th>Purpose</th>
+            <th>Legal Basis</th>
+            <th>Information Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Processing and fulfilling your order</td>
+            <td>Contractual necessity</td>
+            <td>Name, address, email, phone, payment details</td>
+          </tr>
+          <tr>
+            <td>Sending order confirmations and shipping updates</td>
+            <td>Contractual necessity</td>
+            <td>Name, email address, order details</td>
+          </tr>
+          <tr>
+            <td>Responding to customer enquiries and support requests</td>
+            <td>Legitimate interest</td>
+            <td>Name, email, enquiry content</td>
+          </tr>
+          <tr>
+            <td>Processing returns, refunds, and exchanges</td>
+            <td>Contractual necessity</td>
+            <td>Order details, name, address, email</td>
+          </tr>
+          <tr>
+            <td>Sending marketing communications (where consent is given)</td>
+            <td>Consent</td>
+            <td>Email address, purchase history</td>
+          </tr>
+          <tr>
+            <td>Improving our website and product offering</td>
+            <td>Legitimate interest</td>
+            <td>Usage data, device data, analytics</td>
+          </tr>
+          <tr>
+            <td>Fraud prevention and security monitoring</td>
+            <td>Legal obligation / Legitimate interest</td>
+            <td>IP address, order data, payment metadata</td>
+          </tr>
+          <tr>
+            <td>Complying with legal and regulatory obligations</td>
+            <td>Legal obligation</td>
+            <td>Transaction records, identity information</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>We do not use your personal information for automated decision-making or profiling in any way that produces legal or similarly significant effects.</p>
+    </div>
+
+    <div class="privacy-section" id="sharing">
+      <div class="privacy-section-num">04</div>
+      <h2>Disclosure to Third Parties</h2>
+      <p>Altara does not sell, rent, or trade your personal information. We share your information only with trusted service providers who assist us in operating our business, under binding contractual obligations that restrict their use of your data to the purposes we specify.</p>
+      <p><strong>Service providers we work with include:</strong></p>
+      <ul class="privacy-list">
+        <li><strong>Payment processing:</strong> Stripe Inc. processes all payment card transactions. Card data is transmitted directly to Stripe's PCI-DSS compliant infrastructure and is never accessible to Altara. Stripe's privacy policy is available at stripe.com/privacy.</li>
+        <li><strong>Order fulfilment and logistics:</strong> Shipping carriers and logistics partners receive your name, delivery address, and contact number for the purpose of delivering your order.</li>
+        <li><strong>Email communications:</strong> Our transactional and marketing email platform receives your email address and name to enable order confirmations, shipping notifications, and (with your consent) marketing messages.</li>
+        <li><strong>Website hosting and infrastructure:</strong> Our hosting provider maintains the servers and infrastructure on which our website operates. Data is stored in secure, geographically compliant data centres.</li>
+        <li><strong>Analytics:</strong> We use anonymised and aggregated analytics data to understand website performance. No personally identifiable information is shared with analytics providers.</li>
+      </ul>
+      <p>We may also disclose personal information where required by law, court order, or regulatory authority; where necessary to protect the rights, property, or safety of Altara, our customers, or the public; or in connection with a business sale or merger, subject to the incoming party assuming equivalent privacy obligations.</p>
+    </div>
+
+    <div class="privacy-section" id="cookies">
+      <div class="privacy-section-num">05</div>
+      <h2>Cookies &amp; Tracking Technologies</h2>
+      <p>Our website uses cookies — small data files stored on your device — to enable core functionality, remember your preferences, and understand how visitors interact with our site. We use three categories of cookies:</p>
+      <ul class="privacy-list">
+        <li><strong>Strictly necessary cookies:</strong> Required for the website to function correctly. These include session identifiers that maintain your shopping cart and authentication state. These cookies cannot be disabled without impairing core functionality.</li>
+        <li><strong>Functional cookies:</strong> Store your preferences such as currency selection and previously viewed products, allowing us to provide a more personalised experience on return visits.</li>
+        <li><strong>Analytics cookies:</strong> Enable us to understand aggregate traffic patterns, popular pages, and technical performance. Data collected is anonymised and used solely to improve the website experience.</li>
+      </ul>
+      <p>We do not use advertising or tracking cookies. We do not enable third-party advertisers to place cookies on our site. You may control cookie preferences through your browser settings. Disabling strictly necessary cookies will impair website functionality, including the ability to complete a purchase.</p>
+      <p>Our website does not respond to Do Not Track signals, as there is no consistent industry standard for this mechanism.</p>
+    </div>
+
+    <div class="privacy-section" id="security">
+      <div class="privacy-section-num">06</div>
+      <h2>Data Security</h2>
+      <p>We take the security of your personal information seriously and implement appropriate technical and organisational measures to protect it against unauthorised access, disclosure, alteration, or destruction.</p>
+      <ul class="privacy-list">
+        <li>All data transmitted between your browser and our website is encrypted using <strong>TLS 1.2 or higher</strong>.</li>
+        <li>Payment card data is processed exclusively through <strong>Stripe's PCI-DSS Level 1 certified</strong> infrastructure. Altara does not store, process, or transmit card numbers.</li>
+        <li>Account passwords are stored as <strong>salted cryptographic hashes</strong>. Altara staff cannot access your password.</li>
+        <li>Access to personal data within Altara's systems is restricted to personnel with a legitimate operational need, on a least-privilege basis.</li>
+        <li>We conduct regular reviews of our data handling practices and update security measures in response to evolving threats.</li>
+      </ul>
+      <p>No method of transmission or storage is completely secure. In the event of a data breach that is likely to result in serious harm, we will notify affected individuals and the Office of the Australian Information Commissioner (OAIC) in accordance with the <strong>Notifiable Data Breaches (NDB) scheme</strong> within 30 days of becoming aware.</p>
+    </div>
+
+    <div class="privacy-section" id="retention">
+      <div class="privacy-section-num">07</div>
+      <h2>Data Retention</h2>
+      <p>We retain personal information only for as long as necessary to fulfil the purposes for which it was collected, or as required by law.</p>
+      <ul class="privacy-list">
+        <li><strong>Order and transaction records:</strong> Retained for 7 years from the date of the transaction, as required for tax and accounting compliance under Australian law.</li>
+        <li><strong>Account information:</strong> Retained for the duration of the account's active status, and for 2 years following account closure or the date of last login, whichever is later.</li>
+        <li><strong>Customer service communications:</strong> Retained for 3 years from the date of the last communication, to enable us to provide continuity of service and resolve any subsequent disputes.</li>
+        <li><strong>Marketing consent records:</strong> Retained for the duration of the marketing relationship and for 2 years following unsubscription, to demonstrate compliance with consent obligations.</li>
+        <li><strong>Analytics and usage data:</strong> Retained in anonymised, aggregated form indefinitely for the purpose of website improvement. Identifiable usage data is retained for no longer than 26 months.</li>
+      </ul>
+      <p>When retention periods expire, personal information is securely deleted or de-identified. Where de-identification rather than deletion is appropriate, we ensure that the de-identification is irreversible.</p>
+    </div>
+
+    <div class="privacy-section" id="rights">
+      <div class="privacy-section-num">08</div>
+      <h2>Your Rights</h2>
+      <p>Under the Australian Privacy Principles and applicable law, you have the following rights in relation to your personal information:</p>
+      <ul class="privacy-list">
+        <li><strong>Access:</strong> You may request a copy of the personal information we hold about you at any time. We will provide this within 30 days of receiving a valid request, free of charge for reasonable requests.</li>
+        <li><strong>Correction:</strong> If any information we hold is inaccurate, incomplete, or out of date, you may request that we correct it. We will action corrections promptly.</li>
+        <li><strong>Deletion:</strong> You may request the deletion of your personal information where it is no longer necessary for the purpose for which it was collected, subject to our legal retention obligations.</li>
+        <li><strong>Withdrawal of consent:</strong> Where processing is based on your consent (such as marketing communications), you may withdraw that consent at any time without affecting the lawfulness of processing prior to withdrawal. You may unsubscribe from marketing emails at any time using the link in any email we send.</li>
+        <li><strong>Complaints:</strong> If you believe we have mishandled your personal information, you may lodge a complaint with us directly. If we are unable to resolve your complaint to your satisfaction, you may escalate it to the Office of the Australian Information Commissioner (OAIC) at oaic.gov.au.</li>
+      </ul>
+      <p>To exercise any of the rights above, please contact us using the details provided in Section 12. We may require you to verify your identity before actioning a request. We will not charge for handling rights requests in ordinary circumstances.</p>
+    </div>
+
+    <div class="privacy-section" id="children">
+      <div class="privacy-section-num">09</div>
+      <h2>Children's Privacy</h2>
+      <p>Our website and products are intended for adults. We do not knowingly collect personal information from individuals under the age of 18. If you are a parent or guardian and believe that a child under 18 has provided personal information to us, please contact us immediately and we will take steps to delete the information from our systems.</p>
+    </div>
+
+    <div class="privacy-section" id="international">
+      <div class="privacy-section-num">10</div>
+      <h2>International Data Transfers</h2>
+      <p>Altara is based in Australia, and we store the majority of personal information on servers located within Australia or in jurisdictions that provide an equivalent level of protection under Australian privacy law.</p>
+      <p>Some of our third-party service providers (including payment processors and email platforms) may process data on servers located in the United States or other jurisdictions. Before transferring data internationally, we ensure that appropriate safeguards are in place, including contractual clauses that require the recipient to handle personal information in accordance with the Australian Privacy Principles.</p>
+      <p>By using our website, you acknowledge that your information may be transferred to, and processed in, countries other than Australia. We take all reasonable steps to ensure such transfers are conducted securely and lawfully.</p>
+    </div>
+
+    <div class="privacy-section" id="changes">
+      <div class="privacy-section-num">11</div>
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices, legal requirements, or the services we offer. Material changes will be communicated by updating the "Last Updated" date at the top of this page and, where appropriate, by notifying customers directly via email.</p>
+      <p>We encourage you to review this policy periodically. Your continued use of our website following any update constitutes your acceptance of the revised policy. If you do not agree with the updated terms, please discontinue use of our website and contact us to discuss your concerns.</p>
+    </div>
+
+    <div class="privacy-section" id="contact">
+      <div class="privacy-section-num">12</div>
+      <h2>Contact Us</h2>
+      <p>If you have any questions, concerns, or requests relating to this Privacy Policy or the handling of your personal information, please contact us through any of the following channels:</p>
+      <ul class="privacy-list">
+        <li><strong>Email:</strong> <a href="mailto:privacy@altaradesign.com">privacy@altaradesign.com</a></li>
+        <li><strong>Contact form:</strong> <a href="contact.html">altaradesign.com/contact</a></li>
+        <li><strong>Response time:</strong> We will acknowledge all privacy-related enquiries within 2 business days and aim to resolve them within 30 days.</li>
+      </ul>
+      <p>We take all privacy enquiries seriously. If you remain dissatisfied after contacting us, you may lodge a complaint with the <strong>Office of the Australian Information Commissioner (OAIC)</strong>:</p>
+      <ul class="privacy-list">
+        <li>Website: <a href="https://www.oaic.gov.au" target="_blank" rel="noopener">oaic.gov.au</a></li>
+        <li>Phone: 1300 363 992</li>
+        <li>Post: GPO Box 5218, Sydney NSW 2001</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+      <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="collection.html">Seat Covers</a></li>
+        <li><a href="collection.html">Collections</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="returns.html">Returns</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-social">
+    <h4>Follow Us</h4>
+    <div class="footer-social-icons">
+      <a href="https://instagram.com/altara.au" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://facebook.com/altara" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Altara. All rights reserved.</p>
+    <p>Engineered comfort for modern movement.</p>
+  </div>
+</footer>
+
+<!-- MOBILE OVERLAY -->
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-ol-header">
+    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <div class="mob-ol-header-right">
+      <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
+      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+      <button class="mob-close" id="mob-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
+    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
+    </form>
+    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
+  </div>
+  <div class="mob-ol-body">
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Shop</div>
+      <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
+      <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
+      <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
+    </div>
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Support</div>
+      <ul class="mob-sub-list">
+        <li><a href="faq.html" class="mob-sub-link">FAQ <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="shipping.html" class="mob-sub-link">Shipping &amp; Delivery <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="returns.html" class="mob-sub-link">Returns &amp; Exchanges <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="contact.html" class="mob-sub-link">Contact Us <span class="mob-sub-arr">→</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="mob-ol-footer">
+    <span class="mob-ol-tagline">Altara®</span>
+  </div>
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  (function() {
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; return; }
+      if (y > lastY + 4 && y > 80) {
+        nav.style.transform = 'translateY(-100%)';
+      } else if (y < lastY - 4 || y <= 80) {
+        nav.style.transform = 'translateY(0)';
+      }
+      nav.classList.toggle('scrolled', y > 50);
+      lastY = y;
+    }, { passive: true });
+  })();
+  try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
+  (function(){
+    const navEl=document.getElementById('nav'),openBtn=document.getElementById('search-open-btn'),closeBtn=document.getElementById('nav-search-close'),searchArea=document.getElementById('nav-search-area'),panel=document.getElementById('search-panel'),inp=document.getElementById('nav-search-q');
+    function openSearch(){navEl.classList.add('search-active');panel.classList.add('open');searchArea.setAttribute('aria-hidden','false');panel.setAttribute('aria-hidden','false');setTimeout(()=>inp.focus(),120);}
+    function closeSearch(){navEl.classList.remove('search-active');panel.classList.remove('open');searchArea.setAttribute('aria-hidden','true');panel.setAttribute('aria-hidden','true');inp.value='';}
+    openBtn.addEventListener('click',openSearch);
+    closeBtn.addEventListener('click',closeSearch);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
+    panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
+  })();
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('mob-overlay');
+    const closeBtn = document.getElementById('mob-close');
+    if (!hamburger || !overlay) return;
+    function openMenu() { hamburger.classList.add('open'); overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); hamburger.setAttribute('aria-expanded','true'); }
+    function closeMenu() { hamburger.classList.remove('open'); overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false'); }
+    hamburger.addEventListener('click', () => { overlay.classList.contains('open') ? closeMenu() : openMenu(); });
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu(); });
+  });
+  document.querySelectorAll('.footer-col h4').forEach(h4=>{
+    h4.addEventListener('click',()=>{
+      if(window.innerWidth>768) return;
+      const col=h4.closest('.footer-col'),isOpen=col.classList.contains('open');
+      document.querySelectorAll('.footer-col').forEach(c=>c.classList.remove('open'));
+      if(!isOpen) col.classList.add('open');
+    });
+  });
+  (function() {
+    const searchBtn = document.getElementById('mob-search-btn');
+    const searchBar = document.getElementById('mob-search-bar');
+    const searchField = document.getElementById('mob-search-field');
+    if (!searchBtn || !searchBar) return;
+    searchBtn.addEventListener('click', () => {
+      const open = searchBar.classList.toggle('open');
+      searchBar.setAttribute('aria-hidden', String(!open));
+      if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
+    });
+  })();
+</script>
+</body>
+</html>

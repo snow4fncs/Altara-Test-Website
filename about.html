@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Contact - Altara</title>
+  <title>About - Altara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
     /* PAGE HERO */
     .page-hero {
       margin-top: var(--nav-h);
-      padding: 80px 72px 60px;
+      padding: 100px 72px 80px;
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
@@ -70,8 +70,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 50% 100% at 5% 100%, rgba(196,169,122,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 90% 10%, rgba(77,98,114,0.05) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 80% at 0% 100%, rgba(196,169,122,0.045) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 100% 0%, rgba(77,98,114,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 30% 40% at 50% 50%, rgba(196,169,122,0.015) 0%, transparent 70%);
       pointer-events: none;
     }
     .page-eyebrow {
@@ -83,261 +84,354 @@
       letter-spacing: 0.24em;
       text-transform: uppercase;
       color: rgba(237,232,223,0.38);
-      margin-bottom: 22px;
+      margin-bottom: 32px;
     }
     .page-eyebrow a { color: inherit; text-decoration: none; transition: color 0.2s; }
     .page-eyebrow a:hover { color: rgba(237,232,223,0.65); }
     .page-eyebrow span { opacity: 0.4; }
+    .hero-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 28px;
+    }
     .page-h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(48px, 5.5vw, 80px);
+      font-size: clamp(52px, 7vw, 108px);
       font-weight: 300;
-      line-height: 0.96;
-      letter-spacing: -0.025em;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
       color: var(--cream);
-      margin-bottom: 24px;
+      margin-bottom: 40px;
     }
-    .page-h1 em { font-style: italic; color: rgba(237,232,223,0.45); }
-    .page-desc {
-      font-size: 14px;
-      color: var(--cream-dim);
-      line-height: 1.85;
-      max-width: 480px;
+    .page-h1 em { font-style: italic; color: rgba(237,232,223,0.4); }
+    .hero-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 960px;
+    }
+    .hero-intro p {
+      font-size: 14.5px;
+      color: rgba(237,232,223,0.58);
+      line-height: 1.9;
       font-weight: 300;
+    }
+    .hero-intro p + p { margin-top: 18px; }
+    .hero-intro strong { font-weight: 500; color: rgba(237,232,223,0.78); }
+
+    /* DIVIDER */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 72px;
+      margin: 0;
+    }
+    .section-divider::before,
+    .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-divider span {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.55;
+      white-space: nowrap;
     }
 
-    /* SUPPORT NAV */
-    .support-nav {
-      position: static;
-      height: auto;
+    /* STORY SECTION */
+    .story-section {
+      padding: 100px 72px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      padding: 0 72px;
-      background: var(--bg-2);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 96px;
+      align-items: start;
     }
-    .sn-link {
+    .story-left { position: sticky; top: calc(var(--nav-h) + 40px); }
+    .story-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 120px;
+      font-weight: 300;
+      line-height: 1;
+      color: rgba(237,232,223,0.04);
+      letter-spacing: -0.04em;
+      margin-bottom: -24px;
+      display: block;
+    }
+    .story-chapter {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.65;
+      margin-bottom: 20px;
+    }
+    .story-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 3.5vw, 54px);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+    .story-heading em { font-style: italic; color: rgba(237,232,223,0.45); }
+    .story-right {}
+    .story-body p {
+      font-size: 14.5px;
+      color: rgba(237,232,223,0.55);
+      line-height: 1.95;
+      font-weight: 300;
+      margin-bottom: 22px;
+    }
+    .story-body p:last-child { margin-bottom: 0; }
+    .story-body strong { font-weight: 500; color: rgba(237,232,223,0.78); }
+    .story-pull {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.45;
+      color: rgba(237,232,223,0.7);
+      letter-spacing: -0.01em;
+      border-left: 1px solid var(--gold);
+      padding-left: 28px;
+      margin: 40px 0;
+    }
+
+    /* VALUES GRID */
+    .values-section {
+      padding: 100px 72px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .values-header { margin-bottom: 64px; }
+    .values-eyebrow {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.65;
+      margin-bottom: 20px;
+    }
+    .values-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 4vw, 62px);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+    }
+    .values-title em { font-style: italic; color: rgba(237,232,223,0.42); }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      background: var(--border);
+    }
+    .value-card {
+      background: var(--bg-2);
+      padding: 48px 44px;
+      transition: background 0.3s ease;
+    }
+    .value-card:hover { background: var(--bg-3); }
+    .value-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gold);
+      opacity: 0.5;
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+      display: block;
+    }
+    .value-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .value-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.45);
+      line-height: 1.85;
+    }
+
+    /* CRAFT SECTION */
+    .craft-section {
+      padding: 100px 72px;
+      border-bottom: 1px solid var(--border);
+    }
+    .craft-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 96px;
+      align-items: start;
+    }
+    .craft-body p {
+      font-size: 14.5px;
+      color: rgba(237,232,223,0.55);
+      line-height: 1.95;
+      font-weight: 300;
+      margin-bottom: 22px;
+    }
+    .craft-body strong { font-weight: 500; color: rgba(237,232,223,0.78); }
+    .craft-specs {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+    }
+    .craft-spec {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .craft-spec-label {
       font-size: 10px;
       font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-      text-decoration: none;
-      padding: 18px 0;
-      margin-right: 44px;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s ease, border-color 0.2s ease;
-      position: relative;
-      top: 1px;
+      color: rgba(237,232,223,0.35);
     }
-    .sn-link:hover { color: rgba(237,232,223,0.7); }
-    .sn-link.active { color: var(--cream); border-bottom-color: var(--gold); }
-
-    /* CONTACT CONTENT */
-    .contact-wrap {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 80px 72px 120px;
-    }
-
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    /* Left Column - Info */
-    .contact-info {}
-    .contact-info-intro {
-      font-size: 14px;
-      color: rgba(237,232,223,0.5);
-      line-height: 1.9;
+    .craft-spec-value {
+      font-size: 13px;
       font-weight: 300;
-      margin-bottom: 52px;
-      max-width: 360px;
+      color: rgba(237,232,223,0.65);
+      text-align: right;
     }
-    .contact-info-intro strong { font-weight: 500; color: rgba(237,232,223,0.72); }
-
-    .contact-channel {
-      padding: 28px 0;
-      border-top: 1px solid var(--border);
-    }
-    .contact-channel:last-child { border-bottom: 1px solid var(--border); }
-    .contact-channel-label {
+    .craft-aside {}
+    .craft-aside-label {
       font-size: 9px;
       font-weight: 600;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 20px;
+    }
+    .craft-aside-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 3vw, 50px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 40px;
+    }
+    .craft-aside-heading em { font-style: italic; color: rgba(237,232,223,0.42); }
+    .craft-feature-list { list-style: none; }
+    .craft-feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.5);
+      line-height: 1.6;
+    }
+    .craft-feature-list li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 8px;
+      opacity: 0.7;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      padding: 120px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 50% 50%, rgba(196,169,122,0.04) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(77,98,114,0.04) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .cta-eyebrow {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--gold);
       opacity: 0.65;
-      margin-bottom: 10px;
+      margin-bottom: 24px;
     }
-    .contact-channel-value {
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(237,232,223,0.78);
-      margin-bottom: 6px;
-      letter-spacing: 0.01em;
-    }
-    .contact-channel-note {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.34);
-      line-height: 1.7;
-    }
-
-    .hours-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px 16px;
-      margin-top: 8px;
-    }
-    .hours-row {
-      display: contents;
-    }
-    .hours-day {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.38);
-      padding: 5px 0;
-    }
-    .hours-time {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.55);
-      padding: 5px 0;
-    }
-
-    /* Right Column - Form */
-    .contact-form-wrap {
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      padding: 44px 44px 52px;
-      position: relative;
-    }
-    .contact-form-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold) 0%, transparent 60%);
-      opacity: 0.4;
-    }
-
-    .form-heading {
+    .cta-heading {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 26px;
+      font-size: clamp(42px, 5vw, 78px);
       font-weight: 300;
-      letter-spacing: -0.01em;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
       color: var(--cream);
-      margin-bottom: 8px;
-    }
-    .form-subheading {
-      font-size: 12.5px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.38);
-      margin-bottom: 36px;
-      line-height: 1.6;
-    }
-
-    .form-field { margin-bottom: 22px; }
-    .form-label {
-      display: block;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-      margin-bottom: 8px;
-    }
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      color: rgba(237,232,223,0.82);
-      font-family: 'Outfit', sans-serif;
-      font-size: 13.5px;
-      font-weight: 300;
-      padding: 13px 16px;
-      outline: none;
-      transition: border-color 0.2s ease, background 0.2s ease;
-      border-radius: 0;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    .form-input::placeholder, .form-textarea::placeholder { color: rgba(237,232,223,0.22); }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: rgba(196,169,122,0.4);
-      background: rgba(255,255,255,0.05);
-    }
-    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
-
-    .form-select-wrap { position: relative; }
-    .form-select-wrap::after {
-      content: '';
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid rgba(237,232,223,0.3);
-      pointer-events: none;
-    }
-    .form-select option { background: var(--bg-2); color: var(--cream); }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .form-submit {
-      width: 100%;
-      padding: 15px 24px;
-      background: transparent;
-      border: 1px solid rgba(196,169,122,0.4);
-      color: var(--gold);
-      font-family: 'Outfit', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      margin-top: 8px;
-    }
-    .form-submit:hover {
-      background: rgba(196,169,122,0.08);
-      border-color: rgba(196,169,122,0.65);
-      color: rgba(196,169,122,0.9);
-    }
-    .form-submit:active {
-      background: rgba(196,169,122,0.14);
-    }
-
-    .form-note {
-      font-size: 11px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.28);
-      line-height: 1.6;
-      margin-top: 16px;
-    }
-
-    /* Placeholder notice */
-    .placeholder-notice {
-      background: rgba(196,169,122,0.04);
-      border: 1px solid rgba(196,169,122,0.12);
-      padding: 14px 20px;
       margin-bottom: 28px;
-      border-radius: 1px;
     }
-    .placeholder-notice p {
-      font-size: 11.5px;
+    .cta-heading em { font-style: italic; color: rgba(237,232,223,0.42); }
+    .cta-desc {
+      font-size: 14px;
+      color: rgba(237,232,223,0.45);
       font-weight: 300;
-      color: rgba(196,169,122,0.55);
-      line-height: 1.6;
+      max-width: 460px;
+      margin: 0 auto 52px;
+      line-height: 1.85;
     }
+    .cta-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--cream);
+      color: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 17px 40px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: rgba(237,232,223,0.6);
+      font-family: 'Outfit', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 17px 40px;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-secondary:hover { color: var(--cream); border-color: rgba(237,232,223,0.3); }
 
     /* FOOTER */
     footer { background: var(--bg); border-top: 1px solid var(--border); padding: 72px 72px 44px; }
@@ -363,89 +457,41 @@
     .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
     .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
     .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
-    /* ── Mobile overlay ── */
     .mob-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 302;
-      background: var(--bg);
-      flex-direction: column;
-      opacity: 0;
-      pointer-events: none;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      will-change: opacity;
+      display: none; position: fixed; inset: 0; z-index: 302; background: var(--bg);
+      flex-direction: column; opacity: 0; pointer-events: none;
+      -webkit-transform: translateZ(0); transform: translateZ(0); will-change: opacity;
       transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .mob-overlay.open { display: flex; opacity: 1; pointer-events: all; }
-
-    .mob-ol-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-    }
+    .mob-ol-header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
     .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
     .mob-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.5); padding: 10px; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s; }
     .mob-close:active { color: var(--cream); }
     .mob-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
     .mob-ol-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 36px 24px 24px; }
-
     .mob-ol-section { margin-bottom: 36px; }
-    .mob-ol-label {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.75; margin-bottom: 4px;
-    }
-
-    .mob-main-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 0; border-bottom: 1px solid var(--border);
-      font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300;
-      letter-spacing: -0.01em; color: var(--cream); text-decoration: none;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease;
-    }
+    .mob-ol-label { font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 4px; }
+    .mob-main-link { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--border); font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; letter-spacing: -0.01em; color: var(--cream); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; opacity: 0; transform: translateY(10px); transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease; }
     .mob-main-link:first-of-type { border-top: 1px solid var(--border); }
     .mob-overlay.open .mob-main-link:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.07s; }
     .mob-overlay.open .mob-main-link:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
     .mob-overlay.open .mob-main-link:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.19s; }
     .mob-main-link:active { color: var(--gold); }
     .mob-main-arr { font-size: 16px; color: var(--gold); opacity: 0.45; pointer-events: none; transition: opacity 0.18s, transform 0.18s; }
-    .mob-main-link:active .mob-main-arr { opacity: 1; transform: translateX(3px); }
-
     .mob-sub-list { list-style: none; padding: 0; }
-    .mob-sub-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045);
-      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400;
-      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5);
-      text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      transition: color 0.18s ease;
-      opacity: 0; transform: translateY(6px);
-    }
+    .mob-sub-link { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.18s ease; opacity: 0; transform: translateY(6px); }
     .mob-overlay.open .mob-sub-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.22s; }
     .mob-overlay.open .mob-sub-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.28s; }
     .mob-overlay.open .mob-sub-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.34s; }
     .mob-overlay.open .mob-sub-link:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.40s; }
     .mob-sub-link:active { color: var(--cream); }
     .mob-sub-arr { font-size: 11px; opacity: 0.3; pointer-events: none; }
-
-    .mob-ol-footer {
-      border-top: 1px solid var(--border); padding: 18px 24px 28px;
-      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s;
-    }
+    .mob-ol-footer { border-top: 1px solid var(--border); padding: 18px 24px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s; }
     .mob-overlay.open .mob-ol-footer { opacity: 1; transform: none; }
     .mob-ol-actions { display: flex; gap: 0; }
-    .mob-action {
-      display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none;
-      color: rgba(237,232,223,0.5); text-decoration: none;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
-    }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; padding: 8px 16px; transition: color 0.18s ease; min-width: 56px; }
     .mob-action:active { color: var(--cream); }
     .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
     .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
@@ -453,6 +499,13 @@
     .mob-ol-header-right { display: flex; align-items: center; }
     .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
     .mob-ol-header .mob-action span { display: none; }
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 
     @media (max-width: 768px) {
       .hamburger { display: flex; }
@@ -464,13 +517,18 @@
       .nav-logo { height: 46px; }
       .nav-logo img { height: 100px; transform: translateY(4px); }
       .nav-actions { gap: 14px; }
-      .page-hero { padding: 56px 24px 44px; }
-      .support-nav { padding: 0 24px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-      .support-nav::-webkit-scrollbar { display: none; }
-      .contact-wrap { padding: 44px 24px 80px; }
-      .contact-layout { grid-template-columns: 1fr; gap: 52px; }
-      .contact-form-wrap { padding: 32px 24px 40px; }
-      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .page-hero { padding: 64px 24px 56px; }
+      .hero-intro { grid-template-columns: 1fr; gap: 0; }
+      .hero-intro p + p { margin-top: 16px; }
+      .story-section { padding: 64px 24px; grid-template-columns: 1fr; gap: 40px; }
+      .story-left { position: static; }
+      .story-number { font-size: 72px; margin-bottom: -16px; }
+      .values-section { padding: 64px 24px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .craft-section { padding: 64px 24px; }
+      .craft-inner { grid-template-columns: 1fr; gap: 48px; }
+      .cta-section { padding: 80px 24px; }
+      .cta-actions { flex-direction: column; align-items: center; }
       footer { padding: 44px 24px 36px; }
       .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
       .footer-logo img { height: 80px; margin-bottom: 14px; }
@@ -482,16 +540,8 @@
       .footer-col ul { display: none; padding-bottom: 16px; }
       .footer-col.open ul { display: flex; }
       .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
-  
-    /* ─── MOB OVERLAY INLINE SEARCH ─── */
-    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
-    .mob-search-bar.open { display: flex; }
-    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
-    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
-    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
-    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
 <body>
@@ -527,9 +577,7 @@
       <span class="cart-badge" id="cart-badge"></span>
     </a>
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
+      <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
     </button>
   </div>
 </nav>
@@ -547,122 +595,143 @@
   <div class="page-eyebrow">
     <a href="index.html">Altara</a>
     <span>/</span>
-    <span>Support</span>
-    <span>/</span>
-    <span style="color:rgba(237,232,223,0.65)">Contact</span>
+    <span style="color:rgba(237,232,223,0.65)">About</span>
   </div>
-  <h1 class="page-h1">Get<br><em>In Touch</em></h1>
-  <p class="page-desc">We are here to help. Whether you have a question about fit, an order inquiry, or simply need advice — our team responds promptly and personally.</p>
+  <div class="hero-label">Our Story</div>
+  <h1 class="page-h1">Designed for<br><em>those who demand more</em></h1>
+  <div class="hero-intro">
+    <p>Altara was founded on a single conviction: that the interior of your vehicle deserves the same level of consideration as every other surface you inhabit. We build for the driver who refuses to compromise — on aesthetics, on function, on the quiet luxury of a well-appointed interior.</p>
+    <p>Every Altara product is the result of obsessive material research, rigorous engineering, and a design philosophy rooted in restraint. <strong>Nothing is added without purpose. Nothing is removed without consequence.</strong></p>
+  </div>
 </header>
 
-<!-- SUPPORT NAV -->
-<nav class="support-nav" aria-label="Support navigation">
-  <a href="faq.html" class="sn-link">FAQ</a>
-  <a href="shipping.html" class="sn-link">Shipping</a>
-  <a href="returns.html" class="sn-link">Returns</a>
-  <a href="contact.html" class="sn-link active">Contact</a>
-</nav>
-
-<!-- CONTACT CONTENT -->
-<main class="contact-wrap">
-  <div class="contact-layout">
-
-    <!-- Left: Info -->
-    <div class="contact-info">
-      <p class="contact-info-intro">Before reaching out, you may find your answer in our <a href="faq.html" style="color:var(--gold);opacity:0.8;text-decoration:none;">FAQ</a>. For all other enquiries, use the form or reach us directly through the channels below.</p>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Email</div>
-        <div class="contact-channel-value"><a href="mailto:hello@altaradesign.com" style="color:var(--cream);text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">hello@altaradesign.com</a></div>
-        <div class="contact-channel-note">We aim to respond to all enquiries within 1-2 business days.</div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Instagram</div>
-        <div class="contact-channel-value">@altara.au</div>
-        <div class="contact-channel-note">DMs are monitored Monday through Friday during business hours.</div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Support Hours</div>
-        <div class="contact-channel-note" style="margin-top:4px;">
-          <div class="hours-grid">
-            <span class="hours-day">Monday - Friday</span><span class="hours-time">9:00 AM - 5:00 PM AEST</span>
-            <span class="hours-day">Saturday</span><span class="hours-time">10:00 AM - 2:00 PM AEST</span>
-            <span class="hours-day">Sunday</span><span class="hours-time">Closed</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Based In</div>
-        <div class="contact-channel-value">Australia</div>
-        <div class="contact-channel-note">All enquiries handled by our local team.</div>
-      </div>
-    </div>
-
-    <!-- Right: Form -->
-    <div class="contact-form-wrap">
-      <h2 class="form-heading">Send a Message</h2>
-      <p class="form-subheading">Complete the form below and we will be in touch shortly.</p>
-
-      <form id="contact-form" novalidate>
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label" for="f-first">First Name</label>
-            <input class="form-input" type="text" id="f-first" name="first_name" placeholder="Jane" autocomplete="given-name">
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="f-last">Last Name</label>
-            <input class="form-input" type="text" id="f-last" name="last_name" placeholder="Smith" autocomplete="family-name">
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-email">Email Address</label>
-          <input class="form-input" type="email" id="f-email" name="email" placeholder="jane@example.com" autocomplete="email">
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-order">Order Number (Optional)</label>
-          <input class="form-input" type="text" id="f-order" name="order_number" placeholder="ALT-XXXXXX">
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-subject">Enquiry Type</label>
-          <div class="form-select-wrap">
-            <select class="form-select" id="f-subject" name="subject">
-              <option value="" disabled selected>Select a topic</option>
-              <option value="product">Product &amp; Fit</option>
-              <option value="order">Order Status</option>
-              <option value="shipping">Shipping &amp; Delivery</option>
-              <option value="returns">Returns &amp; Exchanges</option>
-              <option value="wholesale">Wholesale Enquiry</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-message">Message</label>
-          <textarea class="form-textarea" id="f-message" name="message" placeholder="How can we help you today?"></textarea>
-        </div>
-
-        <button type="submit" class="form-submit">Send Message</button>
-        <p class="form-note">By submitting this form, you agree to our privacy policy. Your information will never be shared with third parties.</p>
-      </form>
-    </div>
-
+<!-- ORIGIN STORY -->
+<section class="story-section">
+  <div class="story-left">
+    <span class="story-number">01</span>
+    <div class="story-chapter">The Origin</div>
+    <h2 class="story-heading">Born from<br><em>frustration</em><br>with compromise</h2>
   </div>
-</main>
+  <div class="story-right story-body">
+    <p>The idea for Altara emerged from a simple, repeated frustration: the car seat cover market was dominated by bulk-manufactured products that looked like afterthoughts — bulky, poorly fitted, visually offensive against any considered interior.</p>
+    <p>The alternatives were custom upholstery at a prohibitive cost, or nothing at all. Neither was acceptable. <strong>There had to be a third option</strong> — a product that delivered premium protection and genuine aesthetic refinement, without the permanence of a full reupholster.</p>
+    <blockquote class="story-pull">"We spent months sourcing materials, engineering the attachment system, and refining the silhouette. The goal was a cover that looked like it belonged — as if the car had always been this way."</blockquote>
+    <p>The MagFit system was the breakthrough that made it possible. A magnetic attachment architecture that holds with absolute conviction, installs in under two minutes, and leaves no trace when removed. For the first time, premium seat protection was reversible.</p>
+    <p>Altara launched with two colourways — <strong>Midnight Black</strong> and <strong>Contrast White</strong> — each designed to complement the tonal range of the modern vehicle interior. Both are produced to an identical standard, with no hierarchy between them.</p>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="values-header">
+    <div class="values-eyebrow">What We Stand For</div>
+    <h2 class="values-title">Four principles that<br><em>govern everything we make</em></h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <span class="value-num">I</span>
+      <div class="value-name">Precision</div>
+      <p class="value-desc">Every dimension is intentional. The cover silhouette, the clip placement, the stitch density — each is the result of testing, not assumption. We do not ship a product until it performs exactly as designed across the full range of vehicle configurations.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-num">II</span>
+      <div class="value-name">Restraint</div>
+      <p class="value-desc">We add nothing for the sake of adding. Altara products are defined by what is absent as much as what is present. No excess branding, no unnecessary hardware, no design decisions made for the sake of looking different. Only what serves the function.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-num">III</span>
+      <div class="value-name">Longevity</div>
+      <p class="value-desc">Premium microfibre holds its integrity through repeated washing cycles and extended daily use. We engineer for years, not seasons. A product that requires early replacement has already failed — regardless of how it performed when new.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-num">IV</span>
+      <div class="value-name">Reversibility</div>
+      <p class="value-desc">Your vehicle remains entirely yours. The MagFit system leaves no permanent marks, no adhesive residue, no surface compression. Altara fits into your life without altering it. Remove it in sixty seconds and your original seat is exactly as you left it.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-num">V</span>
+      <div class="value-name">Transparency</div>
+      <p class="value-desc">We publish our materials, our care instructions, and our fit compatibility information in full. If a product is not right for your vehicle, we will tell you before you purchase. We do not sell what we cannot stand behind.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-num">VI</span>
+      <div class="value-name">Refinement</div>
+      <p class="value-desc">Aesthetic consideration is not optional at this level. Contrast piping, tonal stitching, embroidered script — the visual details matter because the interior of a well-specified vehicle is a considered environment, and every element within it contributes to the whole.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CRAFT -->
+<section class="craft-section">
+  <div class="craft-inner">
+    <div>
+      <div class="craft-body">
+        <p>The Altara seat cover is built from a <strong>high-density premium microfibre</strong> — a fabric chosen after extensive comparison testing across more than thirty material variants. The selection criteria were uncompromising: tactile quality, moisture resistance, colour retention through repeated washing, and a drape profile that reads as intentional rather than installed.</p>
+        <p>Beneath the primary face fabric, an <strong>integrated rubber dot anti-slip backing</strong> maintains cover position through all driving conditions without relying on straps, cinches, or hooks that mark the original seat surface.</p>
+        <p>The perimeter is finished with <strong>precision-sewn contrast or tonal piping</strong>, stitched to a density that will not degrade over time. The Altara script branding is <strong>embroidered directly into the fabric</strong> — not printed, not heat-transferred — so it ages with the same grace as the cover itself.</p>
+      </div>
+      <div class="craft-specs">
+        <div class="craft-spec">
+          <span class="craft-spec-label">Primary Material</span>
+          <span class="craft-spec-value">High-density premium microfibre</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Backing</span>
+          <span class="craft-spec-value">Rubber dot anti-slip matrix</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Dimensions</span>
+          <span class="craft-spec-value">145 cm × 70 cm</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Attachment</span>
+          <span class="craft-spec-value">MagFit magnetic clip system</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Branding</span>
+          <span class="craft-spec-value">Machine embroidery, Altara script</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Care</span>
+          <span class="craft-spec-value">Machine washable, cold, gentle cycle</span>
+        </div>
+        <div class="craft-spec">
+          <span class="craft-spec-label">Available Colourways</span>
+          <span class="craft-spec-value">Midnight Black / Contrast White</span>
+        </div>
+      </div>
+    </div>
+    <div class="craft-aside">
+      <div class="craft-aside-label">MagFit Technology</div>
+      <h2 class="craft-aside-heading">The system<br>that makes it<br><em>possible</em></h2>
+      <ul class="craft-feature-list">
+        <li>Precision-calibrated magnetic clips tuned for daily driving load — including hard braking, lateral cornering, and rapid acceleration — without any seat surface contact</li>
+        <li>Tool-free installation in under two minutes per seat, with no vehicle modification required at any stage</li>
+        <li>Full reversibility — no marks, no residue, no compression left on original upholstery upon removal</li>
+        <li>Clip geometry designed to engage behind the seat back with a single positive action, confirming correct seating with tactile feedback</li>
+        <li>Compatible with the full range of standard passenger vehicle seat configurations, including split-fold rear seats</li>
+        <li>Engineered for long-term magnetic strength retention without field degradation under normal use conditions</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-eyebrow">Begin Here</div>
+  <h2 class="cta-heading">Experience<br><em>the difference</em></h2>
+  <p class="cta-desc">The Altara seat cover is available now in Midnight Black and Contrast White. Free shipping on all orders. 30-day returns, no questions asked.</p>
+  <div class="cta-actions">
+    <a href="collection.html" class="btn-primary">Shop the Collection</a>
+    <a href="contact.html" class="btn-secondary">Get in Touch</a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-logo">
-        <img src="brand assets/Altara Brand Logo.png" alt="Altara">
-      </div>
+      <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
     </div>
     <div class="footer-col">
@@ -709,16 +778,16 @@
 <!-- MOBILE OVERLAY -->
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
   <div class="mob-ol-header">
-      <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
-      <div class="mob-ol-header-right">
-        <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
-          <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
-          <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
-        <button class="mob-close" id="mob-close" aria-label="Close menu">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
+    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <div class="mob-ol-header-right">
+      <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
+      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+      <button class="mob-close" id="mob-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
+  </div>
   <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
     <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -774,39 +843,17 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
     panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
   })();
-
-  // Mobile hamburger menu
-  (function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger');
     const overlay = document.getElementById('mob-overlay');
     const closeBtn = document.getElementById('mob-close');
     if (!hamburger || !overlay) return;
-
-    function openMenu() {
-      hamburger.classList.add('open');
-      overlay.classList.add('open');
-      overlay.setAttribute('aria-hidden', 'false');
-      hamburger.setAttribute('aria-expanded', 'true');
-
-    }
-    function closeMenu() {
-      hamburger.classList.remove('open');
-      overlay.classList.remove('open');
-      overlay.setAttribute('aria-hidden', 'true');
-      hamburger.setAttribute('aria-expanded', 'false');
-
-    }
-
-    hamburger.addEventListener('click', () => {
-      overlay.classList.contains('open') ? closeMenu() : openMenu();
-    });
+    function openMenu() { hamburger.classList.add('open'); overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); hamburger.setAttribute('aria-expanded','true'); }
+    function closeMenu() { hamburger.classList.remove('open'); overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false'); }
+    hamburger.addEventListener('click', () => { overlay.classList.contains('open') ? closeMenu() : openMenu(); });
     if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
-    });
-  })();
-
-  // Footer accordion mobile
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu(); });
+  });
   document.querySelectorAll('.footer-col h4').forEach(h4=>{
     h4.addEventListener('click',()=>{
       if(window.innerWidth>768) return;
@@ -815,30 +862,6 @@
       if(!isOpen) col.classList.add('open');
     });
   });
-
-  // Form submission placeholder
-  document.getElementById('contact-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const first = document.getElementById('f-first').value.trim();
-    const last = document.getElementById('f-last').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const order = document.getElementById('f-order').value.trim();
-    const subject = document.getElementById('f-subject');
-    const subjectText = subject.options[subject.selectedIndex]?.text || '';
-    const message = document.getElementById('f-message').value.trim();
-    const bodyLines = [
-      `Name: ${first} ${last}`,
-      `Email: ${email}`,
-      order ? `Order Number: ${order}` : '',
-      subjectText ? `Enquiry Type: ${subjectText}` : '',
-      '',
-      message
-    ].filter(l => l !== undefined && !(l === '' && !message));
-    const mailto = `mailto:hello@altaradesign.com?subject=${encodeURIComponent('Customer Enquiry' + (subjectText ? ': ' + subjectText : ''))}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-    window.location.href = mailto;
-  });
-
-  // Mobile overlay inline search
   (function() {
     const searchBtn = document.getElementById('mob-search-btn');
     const searchBar = document.getElementById('mob-search-bar');
@@ -850,6 +873,6 @@
       if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
     });
   })();
-  </script>
+</script>
 </body>
 </html>
