@@ -350,7 +350,7 @@
       will-change: opacity;
       transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .mob-overlay.open { opacity: 1; pointer-events: all; }
+    .mob-overlay.open { display: flex; opacity: 1; pointer-events: all; }
 
     .mob-ol-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -734,6 +734,10 @@
       }
 
       hamburger.addEventListener('click', () => {
+        overlay.classList.contains('open') ? closeMenu() : openMenu();
+      });
+      hamburger.addEventListener('touchend', (e) => {
+        e.preventDefault();
         overlay.classList.contains('open') ? closeMenu() : openMenu();
       });
       if (closeBtn) closeBtn.addEventListener('click', closeMenu);
