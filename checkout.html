@@ -419,6 +419,9 @@
       flex-direction: column;
       opacity: 0;
       pointer-events: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: opacity;
       transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .mob-overlay.open { opacity: 1; pointer-events: all; }
@@ -1089,16 +1092,14 @@
         overlay.classList.add('open');
         overlay.setAttribute('aria-hidden', 'false');
         hamburger.setAttribute('aria-expanded', 'true');
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
+        
       }
       function closeMenu() {
         hamburger.classList.remove('open');
         overlay.classList.remove('open');
         overlay.setAttribute('aria-hidden', 'true');
         hamburger.setAttribute('aria-expanded', 'false');
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
+        
       }
 
       hamburger.addEventListener('click', () => {

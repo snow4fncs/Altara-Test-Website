@@ -287,6 +287,9 @@
       display: none; position: fixed; inset: 0; z-index: 302;
       background: var(--bg); flex-direction: column;
       opacity: 0; pointer-events: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: opacity;
       transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .mob-overlay.open { opacity: 1; pointer-events: all; }

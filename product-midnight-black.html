@@ -144,6 +144,9 @@
       flex-direction: column;
       opacity: 0;
       pointer-events: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: opacity;
       transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .mob-overlay.open { opacity: 1; pointer-events: all; }
@@ -254,13 +257,13 @@
       .complete-img { height: 70vw; max-height: 320px; }
       .complete-img img { height: 100%; width: 100%; }
       .ft { grid-template-columns: 1fr !important; gap: 0; padding-bottom: 0; border-bottom: none; }
-      .ft-logo img { height: 64px; }
-      .ft-tag { margin-bottom: 20px; }
+      .ft-logo img { height: 80px; margin-bottom: 0; }
+      .ft-tag { margin-bottom: 28px; }
       .ft-col { border-top: 1px solid var(--line); }
-      .ft-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .ft-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       .ft-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
       .ft-col.open h4::after { transform: rotate(45deg); }
-      .ft-col ul { display: none !important; padding-bottom: 14px; }
+      .ft-col ul { display: none !important; padding-bottom: 16px; }
       .ft-col.open ul { display: flex !important; }
       .ft-social { flex-wrap: wrap; padding: 16px 0 18px; gap: 14px; }
       footer { padding: 44px 24px 36px; }
@@ -592,16 +595,14 @@
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
+
     }
     function closeMenu() {
       hamburger.classList.remove('open');
       overlay.classList.remove('open');
       overlay.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
+
     }
 
     hamburger.addEventListener('click', () => {
