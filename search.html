@@ -276,7 +276,7 @@
     .no-results a:hover { border-color: rgba(237,232,223,0.3); transform: translateY(-1px); }
 
     /* ── Hamburger ── */
-    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px 8px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 16px 14px; min-width: 44px; min-height: 44px; z-index: 302; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .ham-line { display: block; width: 22px; height: 1px; background: var(--cream); opacity: 0.78; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease; transform-origin: center; }
     .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
     .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
