@@ -331,7 +331,7 @@
     .mob-ol-header .mob-action span { display: none; }
 
     @media (max-width: 768px) {
-      nav { padding: 0 20px; padding-top: env(safe-area-inset-top, 0px); background: rgba(12,13,16,0.98); height: calc(58px + env(safe-area-inset-top, 0px)); }
+      nav { padding: 0 20px; padding-top: env(safe-area-inset-top, 0px); background: rgba(12,13,16,0.98); height: calc(58px + env(safe-area-inset-top, 0px)); transform: translateY(0) !important; }
       .nav-center { display: none !important; }
       #search-open-btn { display: none; }
       .nav-actions a[href="account.html"] { display: none; }
@@ -520,6 +520,7 @@
     let lastY = 0;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
+      if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; return; }
       if (y > lastY + 4 && y > 80) {
         nav.style.transform = 'translateY(-100%)';
       } else if (y < lastY - 4 || y <= 80) {

@@ -443,7 +443,7 @@
       .nav-center { display: none !important; }
       .nav-actions .search-btn { display: none; }
       .nav-actions a[href="account.html"] { display: none; }
-      nav { padding: 0 20px; height: 62px; }
+      nav { padding: 0 20px; height: 62px;  transform: translateY(0) !important; }
       .nav-logo { height: 46px; }
       .nav-logo img { height: 100px; transform: translateY(4px); }
       .nav-actions { gap: 14px; }
@@ -669,6 +669,7 @@
     let lastY = 0;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
+      if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; return; }
       if (y > lastY + 4 && y > 80) {
         nav.style.transform = 'translateY(-100%)';
       } else if (y < lastY - 4 || y <= 80) {
