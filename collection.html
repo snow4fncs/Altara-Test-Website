@@ -499,6 +499,7 @@
     .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
     .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
     .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none; -webkit-transform: translateZ(0); transform: translateZ(0); }
   </style>
 </head>
 <body>
