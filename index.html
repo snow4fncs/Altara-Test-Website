@@ -54,7 +54,7 @@
       justify-content: space-between;
       padding: 4px 52px;
       padding-top: calc(env(safe-area-inset-top, 0px) + 4px);
-      transition: background 0.6s ease, backdrop-filter 0.6s ease, border-color 0.6s ease, padding 0.4s ease, transform 0.35s ease;
+      transition: background 0.5s ease, border-color 0.5s ease, padding 0.3s ease, transform 0.3s ease;
       border-bottom: 1px solid transparent;
       background: transparent;
     }
@@ -1247,7 +1247,7 @@
     .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
     .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
     .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-      body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none; -webkit-transform: translateZ(0); transform: translateZ(0); }
+      body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none;  }
   </style>
   <meta name="description" content="Premium car seat covers engineered for modern life. Altara blends luxury materials with precision fit for a comfortable, stylish drive. Shop now.">
   <link rel="canonical" href="https://altaradesign.com/">
@@ -1632,17 +1632,22 @@
     // Nav scroll
     const nav = document.getElementById('nav');
     (function() {
-    let lastY = 0;
+    let lastY = 0, ticking = false;
     window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; return; }
-      if (y > lastY + 4 && y > 80) {
-        nav.style.transform = 'translateY(-100%)';
-      } else if (y < lastY - 4 || y <= 80) {
-        nav.style.transform = 'translateY(0)';
-      }
-      nav.classList.toggle('scrolled', y > 50);
-      lastY = y;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; ticking = false; return; }
+        if (y > lastY + 4 && y > 80) {
+          nav.style.transform = 'translateY(-100%)';
+        } else if (y < lastY - 4 || y <= 80) {
+          nav.style.transform = 'translateY(0)';
+        }
+        nav.classList.toggle('scrolled', y > 50);
+        lastY = y;
+        ticking = false;
+      });
     }, { passive: true });
   })();
 
