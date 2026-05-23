@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:#0C0D10">
 <head>
   <meta charset="UTF-8">
+  <script>/* page-transition */(function(){var de=document.documentElement;de.style.opacity='0';var n=false,done=false;function forceIn(){try{var r=de.querySelectorAll('.rev:not(.in)');for(var i=0;i<r.length;i++){if(r[i].getBoundingClientRect().top<window.innerHeight+1){r[i].style.transition='none';r[i].classList.add('in');}}var p=de.querySelectorAll('.pre-reveal');for(var j=0;j<p.length;j++){p[j].style.transition='none';p[j].classList.remove('pre-reveal');}}catch(e){}}function reveal(){if(done)return;done=true;forceIn();de.style.transition='opacity 0.5s cubic-bezier(0.4,0,0.2,1)';de.style.opacity='1';}var gf=setTimeout(reveal,5000);function sched(){var ft=setTimeout(reveal,1500);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){clearTimeout(ft);setTimeout(reveal,80);});}else{clearTimeout(ft);setTimeout(reveal,80);}}function go(){clearTimeout(gf);gf=setTimeout(reveal,5000);var hi=de.querySelector('[fetchpriority="high"]')||de.querySelector('.ph-main-img');if(hi&&!hi.complete){var is=false;function od(){if(is)return;is=true;sched();}hi.addEventListener('load',od,{once:true});hi.addEventListener('error',od,{once:true});setTimeout(od,2000);}else{sched();}}if(document.readyState!=='loading'){go();}else{document.addEventListener('DOMContentLoaded',go);}window.addEventListener('pageshow',function(e){if(e.persisted){n=false;done=false;de.style.transition='none';de.style.opacity='0';requestAnimationFrame(function(){requestAnimationFrame(go);});}});document.addEventListener('click',function(e){if(n)return;var a=e.target.closest('a');if(!a)return;var h=a.getAttribute('href');if(!h||h.startsWith('#'))return;if(h.startsWith('http')&&!h.includes('altaradesign.com'))return;if(a.target==='_blank')return;if(h.startsWith('mailto:')||h.startsWith('tel:'))return;e.preventDefault();n=true;de.style.transition='opacity 0.22s ease';de.style.opacity='0';var nf=false;function dn(){if(nf)return;nf=true;window.location.href=h;}de.addEventListener('transitionend',dn,{once:true});setTimeout(dn,350);});})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0C0D10">
   <title>Contact - Altara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
   <style>
     :root {
       --bg: #0C0D10; --bg-2: #111317; --bg-3: #181B1F;
@@ -714,7 +715,7 @@
       <a href="https://instagram.com/altara.au" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
-      <a href="https://facebook.com/altara" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+      <a href="https://www.facebook.com/people/Altara/61590417895053/" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
       </a>
     </div>
@@ -875,6 +876,5 @@
     });
   })();
   </script>
-<script src="/transition.js"></script>
 </body>
 </html>
