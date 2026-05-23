@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     body { margin: 0; background: #0C0D10; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Outfit', sans-serif; color: rgba(237,232,223,0.5); font-size: 13px; letter-spacing: 0.06em; }
+      body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none; -webkit-transform: translateZ(0); transform: translateZ(0); }
   </style>
 </head>
 <body>

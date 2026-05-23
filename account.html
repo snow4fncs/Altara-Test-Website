@@ -414,7 +414,7 @@
     .signin-note a:hover { color: var(--cream); }
 
     /* ─── CHECKOUT STEPS ─── */
-    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(12,13,16,0.5); border-bottom: 1px solid var(--border); margin-top: calc(58px + env(safe-area-inset-top, 0px)); }
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(12,13,16,0.5); border-bottom: 1px solid var(--border); margin-top: calc(62px + env(safe-area-inset-top, 0px)); }
     .step { display: flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
     .step.active { color: var(--cream); }
     .step.done { color: var(--gold); }
@@ -495,7 +495,7 @@
 
     .mob-ol-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; padding-top: env(safe-area-inset-top, 0px); height: calc(62px + env(safe-area-inset-top, 0px)); border-bottom: 1px solid var(--border); flex-shrink: 0;
+      padding: 0 24px; padding-top: env(safe-area-inset-top, 0px); height: auto; min-height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
     .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
     .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
@@ -585,7 +585,7 @@
     @media (max-width: 768px) {
       .hamburger { display: flex; }
       .mob-overlay { display: flex; visibility: visible; }
-      nav { padding: 0 20px; padding-top: env(safe-area-inset-top, 0px); background: #0C0D10; height: calc(58px + env(safe-area-inset-top, 0px)); transform: translateY(0) !important; }
+      nav { padding: 0 20px; background: #0C0D10; height: 62px; margin-top: env(safe-area-inset-top, 0px); transform: translateY(0) !important; }
       .nav-center { display: none !important; }
       #search-open-btn { display: none; }
       .nav-actions a[href="account.html"] { display: none; }
