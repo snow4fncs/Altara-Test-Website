@@ -1171,14 +1171,29 @@
       document.getElementById('orders-lookup').style.display = '';
     }
 
-    sb.auth.onAuthStateChange((event, session) => {
-      if (event === 'INITIAL_SESSION') {
-        if (session) showDashboard(session.user);
-      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        showDashboard(session.user);
-      } else if (event === 'SIGNED_OUT') {
-        showForms();
+    // Explicitly handle OAuth callback tokens from URL hash
+    (function() {
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = params.get('access_token');
+      const refresh_token = params.get('refresh_token');
+      if (access_token && refresh_token) {
+        sb.auth.setSession({ access_token, refresh_token }).then(({ data }) => {
+          if (data.session) {
+            history.replaceState(null, '', window.location.pathname);
+            showDashboard(data.session.user);
+          }
+        });
+        return;
       }
+      // No hash tokens — check localStorage for existing session
+      sb.auth.getSession().then(({ data: { session } }) => {
+        if (session) showDashboard(session.user);
+      });
+    })();
+
+    sb.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN') showDashboard(session.user);
+      else if (event === 'SIGNED_OUT') showForms();
     });
 
     // ─── Google OAuth ───
