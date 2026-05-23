@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     :root {
       --bg: #0C0D10;
@@ -612,6 +613,26 @@
       .no-account-link { display: none; }
     }
 
+    /* ─── AUTH FEEDBACK ─── */
+    .auth-error { font-size: 12px; font-weight: 300; color: #c97a7a; margin-top: 12px; display: none; }
+    .auth-error.visible { display: block; }
+    .auth-success { font-size: 12px; font-weight: 300; color: var(--gold); margin-top: 12px; display: none; }
+    .auth-success.visible { display: block; }
+
+    /* ─── DASHBOARD ─── */
+    #dashboard-section { display: none; max-width: 880px; margin: 0 auto; padding: 80px 72px 40px; }
+    .dashboard-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 56px; gap: 24px; }
+    .dashboard-welcome-label { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .dashboard-name { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--cream); line-height: 1.1; }
+    .dashboard-email { font-size: 12px; font-weight: 300; color: var(--muted); margin-top: 6px; }
+    .btn-signout { background: transparent; border: 1px solid var(--border); color: var(--cream-dim); padding: 11px 24px; font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: border-color 0.25s ease, color 0.25s ease; white-space: nowrap; flex-shrink: 0; }
+    .btn-signout:hover { border-color: rgba(237,232,223,0.3); color: var(--cream); }
+    @media (max-width: 768px) {
+      #dashboard-section { padding: 60px 24px 40px; }
+      .dashboard-header { flex-direction: column; }
+      .dashboard-name { font-size: 36px; }
+    }
+
     /* ─── ORDER HISTORY ─── */
     .orders-section {
       max-width: 880px;
@@ -873,13 +894,26 @@
   </div>
 
 
-  <!-- FORMS SECTION -->
+  <!-- DASHBOARD (logged in) -->
+  <div id="dashboard-section">
+    <div class="dashboard-header">
+      <div>
+        <div class="dashboard-welcome-label">Welcome back</div>
+        <div class="dashboard-name" id="dashboard-name">—</div>
+        <div class="dashboard-email" id="dashboard-email"></div>
+      </div>
+      <button class="btn-signout" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- FORMS SECTION (logged out) -->
+  <div id="auth-forms">
   <section class="forms-section" aria-label="Account forms">
 
     <!-- LEFT: SIGN IN -->
     <div class="form-col" id="sign-in-col">
       <h2>Sign In</h2>
-      <form action="#" method="post" novalidate>
+      <form id="sign-in-form" novalidate>
         <div class="field">
           <label for="signin-email">Email Address</label>
           <input
@@ -906,6 +940,7 @@
           <a href="#" class="forgot-link">Forgot your password?</a>
         </div>
         <button type="submit" class="btn-primary">Sign In</button>
+        <p class="auth-error" id="signin-error"></p>
         <p class="no-account-link">No account? <a id="show-create-btn">Create one</a></p>
         <div class="or-divider">
           <span>or</span>
@@ -929,7 +964,7 @@
     <!-- RIGHT: CREATE ACCOUNT -->
     <div class="form-col" id="create-col">
       <h2>Create Account</h2>
-      <form action="#" method="post" novalidate>
+      <form id="create-form" novalidate>
         <div class="field field-row">
           <div>
             <label for="first-name">First Name</label>
@@ -994,18 +1029,21 @@
           </label>
         </div>
         <button type="submit" class="btn-primary">Create Account</button>
+        <p class="auth-error" id="create-error"></p>
+        <p class="auth-success" id="create-success">Account created — check your email to confirm, then sign in.</p>
         <p class="signin-note">Already have an account? <a href="#sign-in-col">Sign in</a></p>
       </form>
     </div>
 
   </section>
+  </div><!-- end #auth-forms -->
 
   <!-- ORDER HISTORY -->
-  <section class="orders-section" aria-label="Order history">
+  <section class="orders-section" id="orders-section" aria-label="Order history">
     <hr class="orders-divider">
     <h2 class="orders-heading">Order History</h2>
-    <p class="orders-subtext">Enter the email address used at checkout to view your past orders.</p>
-    <div class="orders-lookup">
+    <p class="orders-subtext" id="orders-subtext">Enter the email address used at checkout to view your past orders.</p>
+    <div class="orders-lookup" id="orders-lookup">
       <div class="field">
         <label for="lookup-email">Email Address</label>
         <input type="email" id="lookup-email" placeholder="your@email.com" autocomplete="email">
@@ -1107,7 +1145,116 @@
       panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
     })();
 
-    // ─── Order History Lookup ───
+    // ─── Supabase Auth ───
+    const sb = supabase.createClient(
+      'https://qhyactfkoumechqkwfdr.supabase.co',
+      'sb_publishable_7scUSWcQ3wu1N889Qboosw_i9McbUfs'
+    );
+
+    function showDashboard(user) {
+      document.getElementById('auth-forms').style.display = 'none';
+      document.getElementById('dashboard-section').style.display = 'block';
+      const meta = user.user_metadata || {};
+      const name = [meta.first_name, meta.last_name].filter(Boolean).join(' ') || user.email.split('@')[0];
+      document.getElementById('dashboard-name').textContent = name;
+      document.getElementById('dashboard-email').textContent = user.email;
+      document.getElementById('orders-subtext').style.display = 'none';
+      document.getElementById('orders-lookup').style.display = 'none';
+      loadOrders(user.email);
+    }
+
+    function showForms() {
+      document.getElementById('auth-forms').style.display = '';
+      document.getElementById('dashboard-section').style.display = 'none';
+      document.getElementById('orders-subtext').style.display = '';
+      document.getElementById('orders-lookup').style.display = '';
+    }
+
+    sb.auth.onAuthStateChange((event, session) => {
+      if (session) { showDashboard(session.user); }
+      else { showForms(); }
+    });
+
+    document.getElementById('sign-in-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('[type=submit]');
+      const errEl = document.getElementById('signin-error');
+      errEl.classList.remove('visible');
+      btn.textContent = 'Signing in…'; btn.disabled = true;
+      const { error } = await sb.auth.signInWithPassword({
+        email: document.getElementById('signin-email').value.trim(),
+        password: document.getElementById('signin-password').value,
+      });
+      btn.textContent = 'Sign In'; btn.disabled = false;
+      if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
+    });
+
+    document.getElementById('create-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('[type=submit]');
+      const errEl = document.getElementById('create-error');
+      const okEl = document.getElementById('create-success');
+      errEl.classList.remove('visible'); okEl.classList.remove('visible');
+      const pw = document.getElementById('create-password').value;
+      const pw2 = document.getElementById('confirm-password').value;
+      if (pw !== pw2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('visible'); return; }
+      btn.textContent = 'Creating…'; btn.disabled = true;
+      const { error } = await sb.auth.signUp({
+        email: document.getElementById('create-email').value.trim(),
+        password: pw,
+        options: { data: { first_name: document.getElementById('first-name').value.trim(), last_name: document.getElementById('last-name').value.trim() } },
+      });
+      btn.textContent = 'Create Account'; btn.disabled = false;
+      if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
+      else { okEl.classList.add('visible'); e.target.reset(); }
+    });
+
+    async function signOut() {
+      await sb.auth.signOut();
+    }
+
+    async function loadOrders(email) {
+      const resultEl = document.getElementById('orders-result');
+      resultEl.innerHTML = '<p class="orders-empty" style="padding:24px 0">Loading orders…</p>';
+      try {
+        const res = await fetch('/api/get-orders?email=' + encodeURIComponent(email));
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        renderOrders(data.orders || []);
+      } catch (err) {
+        resultEl.innerHTML = '<p class="orders-error">Could not load orders. Please try again.</p>';
+      }
+    }
+
+    function renderOrders(orders) {
+      const resultEl = document.getElementById('orders-result');
+      if (!orders.length) {
+        resultEl.innerHTML = '<div class="orders-empty"><strong>No orders yet</strong>Your orders will appear here after your first purchase.</div>';
+        return;
+      }
+      resultEl.innerHTML = '<div class="orders-list">' + orders.map(o => {
+        const date = new Date(o.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+        const ref = 'ALTARA-' + (o.stripe_session_id || o.id).replace('cs_test_','').replace('cs_live_','').slice(0,8).toUpperCase();
+        const items = (o.items || []).map(i => `
+          <div class="order-card-item">
+            <span>${i.name}<span class="order-card-item-qty">× ${i.qty}</span></span>
+            <span class="order-card-item-price">$${Number(i.price).toFixed(2)}</span>
+          </div>`).join('');
+        return `<div class="order-card">
+          <div class="order-card-header">
+            <div><div class="order-card-ref">${ref}</div><div class="order-card-date">${date}</div></div>
+            <div class="order-card-status">${o.status || 'Paid'}</div>
+          </div>
+          <div class="order-card-items">${items}</div>
+          <div class="order-card-footer">
+            <span class="order-card-total-label">Total</span>
+            <span class="order-card-total">A$${Number(o.total).toFixed(2)}</span>
+          </div>
+        </div>`;
+      }).join('') + '</div>';
+    }
+
+    // ─── Order History Lookup (guest) ───
     async function lookupOrders() {
       const emailEl = document.getElementById('lookup-email');
       const btn = document.getElementById('btn-lookup');
@@ -1128,37 +1275,7 @@
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || 'Lookup failed');
-
-        const orders = data.orders || [];
-
-        if (orders.length === 0) {
-          resultEl.innerHTML = '<div class="orders-empty"><strong>No orders found</strong>No orders were found for that email address.</div>';
-        } else {
-          resultEl.innerHTML = '<div class="orders-list">' + orders.map(o => {
-            const date = new Date(o.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
-            const ref = o.stripe_session_id ? ('ALTARA-' + o.stripe_session_id.replace('cs_test_','').replace('cs_live_','').slice(0,8).toUpperCase()) : o.id.slice(0,8).toUpperCase();
-            const items = (o.items || []).map(i => `
-              <div class="order-card-item">
-                <span>${i.name}<span class="order-card-item-qty">× ${i.qty}</span></span>
-                <span class="order-card-item-price">$${i.price.toFixed(2)}</span>
-              </div>`).join('');
-            return `
-              <div class="order-card">
-                <div class="order-card-header">
-                  <div>
-                    <div class="order-card-ref">${ref}</div>
-                    <div class="order-card-date">${date}</div>
-                  </div>
-                  <div class="order-card-status">${o.status || 'Paid'}</div>
-                </div>
-                <div class="order-card-items">${items}</div>
-                <div class="order-card-footer">
-                  <span class="order-card-total-label">Total</span>
-                  <span class="order-card-total">A$${o.total.toFixed(2)}</span>
-                </div>
-              </div>`;
-          }).join('') + '</div>';
-        }
+        renderOrders(data.orders || []);
       } catch (err) {
         resultEl.innerHTML = '<p class="orders-error">Something went wrong. Please try again.</p>';
         console.error(err);
