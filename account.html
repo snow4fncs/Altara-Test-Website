@@ -1148,7 +1148,8 @@
     // ─── Supabase Auth ───
     const sb = supabase.createClient(
       'https://qhyactfkoumechqkwfdr.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoeWFjdGZrb3VtZWNocWt3ZmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMzg0NDcsImV4cCI6MjA5NDgxNDQ0N30.2MLMZewBbq8B2TpaBLIyJQPW-ixrmC8dqROZWhmZl_0'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoeWFjdGZrb3VtZWNocWt3ZmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMzg0NDcsImV4cCI6MjA5NDgxNDQ0N30.2MLMZewBbq8B2TpaBLIyJQPW-ixrmC8dqROZWhmZl_0',
+      { auth: { flowType: 'implicit' } }
     );
 
     function showDashboard(user) {
@@ -1206,11 +1207,10 @@
       const { error } = await sb.auth.signInWithPassword({ email, password });
       btn.textContent = 'Sign In'; btn.disabled = false;
       if (error) {
-        const noAccount = error.message.toLowerCase().includes('invalid') || error.message.toLowerCase().includes('not found');
-        if (noAccount) {
-          errEl.innerHTML = 'No account found with that email. <a href="#" id="goto-signup" style="color:var(--cream-dim);text-decoration:underline">Create one →</a>';
+        if (error.message.toLowerCase().includes('invalid')) {
+          errEl.innerHTML = 'Incorrect email or password. No account? <a href="#" id="goto-signup" style="color:var(--cream-dim);text-decoration:underline">Create one →</a>';
           errEl.classList.add('visible');
-          document.getElementById('goto-signup').addEventListener('click', ev => {
+          document.getElementById('goto-signup')?.addEventListener('click', ev => {
             ev.preventDefault();
             document.getElementById('create-email').value = email;
             const createCol = document.getElementById('create-col');
