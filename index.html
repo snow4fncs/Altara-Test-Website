@@ -1073,9 +1073,9 @@
       .nav-center { display: none !important; }
       .nav-actions .search-btn { display: none; }
       .nav-actions a[href="account.html"] { display: none; }
-      nav { padding: 0 20px; backdrop-filter: none; -webkit-backdrop-filter: none; background: rgb(12,13,16) !important; height: 62px; margin-top: env(safe-area-inset-top, 0px); transform: translateY(0) !important; transition: none !important; }
+      nav { padding: env(safe-area-inset-top, 0px) 20px 9px; backdrop-filter: none; -webkit-backdrop-filter: none; background: rgb(12,13,16) !important; height: calc(62px + env(safe-area-inset-top, 0px)); margin-top: 0; align-items: flex-end; transform: translateY(0) !important; transition: none !important; }
       nav::before { display: none; }
-      nav.scrolled { padding: 0 20px; background: rgb(12,13,16); backdrop-filter: none; -webkit-backdrop-filter: none; }
+      nav.scrolled { padding: env(safe-area-inset-top, 0px) 20px 9px; background: rgb(12,13,16); backdrop-filter: none; -webkit-backdrop-filter: none; }
       .nav-logo { height: 46px; }
       .nav-logo img { height: 100px; transform: translateY(4px); }
       .nav-actions { gap: 14px; }
