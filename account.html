@@ -1170,9 +1170,17 @@
       document.getElementById('orders-lookup').style.display = '';
     }
 
-    sb.auth.onAuthStateChange((event, session) => {
+    // Check existing session on load first
+    sb.auth.getSession().then(({ data: { session } }) => {
       if (session) { showDashboard(session.user); }
-      else { showForms(); }
+    });
+
+    sb.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        showDashboard(session.user);
+      } else if (event === 'SIGNED_OUT') {
+        showForms();
+      }
     });
 
     // ─── Google OAuth ───
