@@ -1261,7 +1261,7 @@
         errEl.classList.add('visible'); return;
       }
       const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://altaradesign.com/auth-callback.html?type=recovery',
+        redirectTo: 'https://altaradesign.com/auth-callback.html',
       });
       if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
       else { okEl.classList.add('visible'); }

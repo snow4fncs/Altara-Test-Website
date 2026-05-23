@@ -20,31 +20,36 @@
 
     async function handleCallback() {
       const hash = new URLSearchParams(window.location.hash.slice(1));
+      const search = new URLSearchParams(window.location.search);
+
+      // ── Case 1: tokens in hash (implicit flow) ──
       const access_token = hash.get('access_token');
       const refresh_token = hash.get('refresh_token');
-      const type = hash.get('type');
-
       if (access_token && refresh_token) {
         await sb.auth.setSession({ access_token, refresh_token });
-        // Password recovery — show reset form
-        if (type === 'recovery') {
-          window.location.href = '/account.html?reset=1';
-          return;
-        }
-        // Normal sign-in
-        window.location.href = '/account.html';
+        window.location.href = hash.get('type') === 'recovery' ? '/account.html?reset=1' : '/account.html';
         return;
       }
 
-      // PKCE flow: code in query string
-      const code = new URLSearchParams(window.location.search).get('code');
+      // ── Case 2: token_hash in query params (new Supabase email format) ──
+      const token_hash = search.get('token_hash');
+      const type = search.get('type');
+      if (token_hash && type) {
+        const { error } = await sb.auth.verifyOtp({ token_hash, type });
+        if (!error) {
+          window.location.href = type === 'recovery' ? '/account.html?reset=1' : '/account.html';
+          return;
+        }
+      }
+
+      // ── Case 3: PKCE code ──
+      const code = search.get('code');
       if (code) {
         await sb.auth.exchangeCodeForSession(code);
         window.location.href = '/account.html';
         return;
       }
 
-      // Nothing to process
       window.location.href = '/account.html';
     }
 
