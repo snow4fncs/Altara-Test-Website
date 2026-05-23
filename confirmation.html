@@ -300,11 +300,12 @@
       margin-bottom: 10px;
     }
     .delivery-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 300;
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
       color: var(--cream);
-      letter-spacing: -0.01em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     /* Order items */
@@ -808,15 +809,9 @@
 </footer>
 
 <script>
-  // Cart badge (confirmation page - cart is cleared so badge stays 0)
-  (function() {
-    try {
-      const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
-      const n = (c.items || []).reduce((s, i) => s + (i.qty || 1), 0);
-      const b = document.getElementById('nav-cart-badge');
-      if (b && n > 0) { b.textContent = n > 99 ? '99+' : n; b.classList.add('visible'); }
-    } catch(e) {}
-  })();
+  // Clear cart on confirmation page — order is complete
+  try { localStorage.removeItem('altara-cart'); } catch(e) {}
+  // Badge stays hidden (cart is empty)
 
   // ─── NAV SCROLL ───
   const nav = document.getElementById('nav');
@@ -897,12 +892,6 @@
     listEl.innerHTML = '<p class="order-empty">Your items are on their way.</p>';
   }
 
-  // ─── CLEAR CART ───
-  try {
-    localStorage.removeItem('altara-cart');
-  } catch (e) {}
-
-  
   // Footer accordion (mobile)
   document.querySelectorAll('.footer-col h4').forEach(h4 => {
     h4.addEventListener('click', () => { h4.parentElement.classList.toggle('open'); });
