@@ -774,7 +774,7 @@
         <span class="summary-total-value" id="total">$0.00</span>
       </div>
 
-      <a href="checkout.html" class="btn-checkout" role="button">Proceed to Checkout</a>
+      <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()">Proceed to Checkout</button>
 
       <p class="secure-note">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -981,6 +981,37 @@
         const b = document.getElementById('nav-cart-badge');
         if (b) { b.textContent = n > 0 ? (n > 99 ? '99+' : n) : ''; b.classList.toggle('visible', n > 0); }
       } catch(e) {}
+    }
+
+    // ─── Stripe Checkout ───
+    async function startCheckout() {
+      const cart = getCart();
+      if (!cart.items.length) return;
+
+      const btn = document.getElementById('btn-checkout');
+      btn.textContent = 'Redirecting…';
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+
+      try {
+        const res = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart.items.map(i => ({ id: i.id, qty: i.qty })) }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error(data.error || 'Checkout failed');
+        }
+      } catch (err) {
+        btn.textContent = 'Proceed to Checkout';
+        btn.disabled = false;
+        btn.style.opacity = '';
+        alert('Something went wrong. Please try again.');
+        console.error(err);
+      }
     }
 
     // Init

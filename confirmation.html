@@ -851,27 +851,9 @@
   })();
 
   // ─── ORDER NUMBER ───
-  function generateOrderNumber() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let result = 'ALTARA-';
-    for (let i = 0; i < 5; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  }
-
-  let orderNum = generateOrderNumber();
-  try {
-    const orderData = localStorage.getItem('altara-order');
-    if (orderData) {
-      const order = JSON.parse(orderData);
-      if (order && order.number) {
-        orderNum = order.number;
-      }
-    }
-  } catch (e) {}
-
-  document.getElementById('order-num').textContent = orderNum;
+  const sessionId = new URLSearchParams(window.location.search).get('session_id');
+  const orderNum = sessionId ? sessionId.replace('cs_test_', '').replace('cs_live_', '').slice(0, 12).toUpperCase() : 'ALTARA-' + Math.random().toString(36).slice(2,7).toUpperCase();
+  document.getElementById('order-num').textContent = 'ALTARA-' + orderNum;
 
   // ─── ORDER ITEMS ───
   let cartItems = [];
