@@ -262,17 +262,17 @@
       .complete-copy { padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--line); }
       .complete-img { height: 70vw; max-height: 320px; }
       .complete-img img { height: 100%; width: 100%; }
-      .ft { grid-template-columns: 1fr !important; gap: 0; padding-bottom: 0; border-bottom: none; }
-      .ft-logo img { height: 80px; margin-bottom: 0; }
-      .ft-tag { margin-bottom: 28px; }
-      .ft-col { border-top: 1px solid var(--line); }
-      .ft-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-      .ft-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
-      .ft-col.open h4::after { transform: rotate(45deg); }
-      .ft-col ul { display: none !important; padding-bottom: 16px; }
-      .ft-col.open ul { display: flex !important; }
-      .ft-social { flex-wrap: wrap; padding: 16px 0 18px; gap: 14px; }
       footer { padding: 44px 24px 36px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+      .footer-logo img { height: 80px; }
+      .footer-tagline { margin-bottom: 28px; }
+      .footer-col { border-top: 1px solid var(--border); }
+      .footer-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .footer-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300; opacity: 0.4; transition: transform 0.3s ease, opacity 0.2s ease; line-height: 1; }
+      .footer-col.open h4::after { transform: rotate(45deg); opacity: 0.7; }
+      .footer-col ul { display: none; padding-bottom: 16px; }
+      .footer-col.open ul { display: flex; }
+      .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
     }
     .ft { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 64px; border-bottom: 1px solid var(--line); }
     .ft-logo img { height: 110px; filter: brightness(0) invert(1); opacity: 0.5; display: block; margin-bottom: 22px; }
@@ -490,24 +490,30 @@
 </section>
 
 <footer>
-  <div class="ft">
-    <div><div class="ft-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div><p class="ft-tag">Engineered comfort for modern movement.</p></div>
-    <div class="ft-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li></ul></div>
-    <div class="ft-col"><h4>Support</h4><ul><li><a href="faq.html">FAQ</a></li><li><a href="shipping.html">Shipping</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div class="ft-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="#">Privacy</a></li></ul></div>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+      <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
+    </div>
+    <div class="footer-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="faq.html">FAQ</a></li><li><a href="shipping.html">Shipping</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="privacy.html">Privacy Policy</a></li></ul></div>
   </div>
-  <div class="ft-social">
+  <div class="footer-social">
     <h4>Follow Us</h4>
-    <div class="ft-social-icons">
-      <a href="https://instagram.com/altara.au" class="ft-social-link" aria-label="Instagram" target="_blank" rel="noopener">
+    <div class="footer-social-icons">
+      <a href="https://instagram.com/altara.au" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
-      <a href="https://www.facebook.com/people/Altara/61590417895053/" class="ft-social-link" aria-label="Facebook" target="_blank" rel="noopener">
+      <a href="https://www.facebook.com/people/Altara/61590417895053/" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
       </a>
     </div>
   </div>
-  <div class="ft-bot"><p class="ft-copy">© 2026 Altara. All rights reserved.</p><p class="ft-em">Engineered comfort for modern movement.</p></div>
+  <div class="footer-bottom">
+    <p>© 2026 Altara. All rights reserved.</p>
+    <p>Engineered comfort for modern movement.</p>
+  </div>
 </footer>
 
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
@@ -641,14 +647,6 @@
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
     });
   })();
-  document.querySelectorAll('.ft-col h4').forEach(h4=>{
-    h4.addEventListener('click',()=>{
-      if(window.innerWidth>768) return;
-      const col=h4.closest('.ft-col'),isOpen=col.classList.contains('open');
-      document.querySelectorAll('.ft-col').forEach(c=>c.classList.remove('open'));
-      if(!isOpen) col.classList.add('open');
-    });
-  });
   (function(){
     const el=document.querySelector('.complete');
     if(!el) return;
