@@ -945,7 +945,7 @@
         <div class="or-divider">
           <span>or</span>
         </div>
-        <button type="button" class="btn-ghost" aria-label="Continue with Google">
+        <button type="button" class="btn-ghost btn-google" aria-label="Continue with Google">
           <!-- Google G SVG -->
           <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -1175,34 +1175,78 @@
       else { showForms(); }
     });
 
+    // ─── Google OAuth ───
+    document.querySelectorAll('.btn-google').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await sb.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.origin + '/account.html' },
+        });
+      });
+    });
+
+    // ─── Sign In ───
     document.getElementById('sign-in-form').addEventListener('submit', async e => {
       e.preventDefault();
       const btn = e.target.querySelector('[type=submit]');
       const errEl = document.getElementById('signin-error');
       errEl.classList.remove('visible');
+      const email = document.getElementById('signin-email').value.trim();
+      const password = document.getElementById('signin-password').value;
+      if (!email || !password) {
+        errEl.textContent = 'Please enter your email and password.';
+        errEl.classList.add('visible'); return;
+      }
       btn.textContent = 'Signing in…'; btn.disabled = true;
-      const { error } = await sb.auth.signInWithPassword({
-        email: document.getElementById('signin-email').value.trim(),
-        password: document.getElementById('signin-password').value,
-      });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
       btn.textContent = 'Sign In'; btn.disabled = false;
-      if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
+      if (error) {
+        const noAccount = error.message.toLowerCase().includes('invalid') || error.message.toLowerCase().includes('not found');
+        if (noAccount) {
+          errEl.innerHTML = 'No account found with that email. <a href="#" id="goto-signup" style="color:var(--cream-dim);text-decoration:underline">Create one →</a>';
+          errEl.classList.add('visible');
+          document.getElementById('goto-signup').addEventListener('click', ev => {
+            ev.preventDefault();
+            document.getElementById('create-email').value = email;
+            const createCol = document.getElementById('create-col');
+            createCol.classList.add('visible');
+            createCol.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('first-name').focus();
+          });
+        } else {
+          errEl.textContent = error.message;
+          errEl.classList.add('visible');
+        }
+      }
     });
 
+    // ─── Create Account ───
     document.getElementById('create-form').addEventListener('submit', async e => {
       e.preventDefault();
       const btn = e.target.querySelector('[type=submit]');
       const errEl = document.getElementById('create-error');
       const okEl = document.getElementById('create-success');
       errEl.classList.remove('visible'); okEl.classList.remove('visible');
+
+      const firstName = document.getElementById('first-name').value.trim();
+      const lastName = document.getElementById('last-name').value.trim();
+      const email = document.getElementById('create-email').value.trim();
       const pw = document.getElementById('create-password').value;
       const pw2 = document.getElementById('confirm-password').value;
+      const terms = document.getElementById('terms-agree').checked;
+
+      if (!firstName || !lastName) { errEl.textContent = 'Please enter your first and last name.'; errEl.classList.add('visible'); return; }
+      if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.classList.add('visible'); return; }
+      if (!pw) { errEl.textContent = 'Please enter a password.'; errEl.classList.add('visible'); return; }
+      if (pw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.classList.add('visible'); return; }
       if (pw !== pw2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('visible'); return; }
+      if (!terms) { errEl.textContent = 'Please agree to the Terms & Conditions to continue.'; errEl.classList.add('visible'); return; }
+
       btn.textContent = 'Creating…'; btn.disabled = true;
       const { error } = await sb.auth.signUp({
-        email: document.getElementById('create-email').value.trim(),
+        email,
         password: pw,
-        options: { data: { first_name: document.getElementById('first-name').value.trim(), last_name: document.getElementById('last-name').value.trim() } },
+        options: { data: { first_name: firstName, last_name: lastName } },
       });
       btn.textContent = 'Create Account'; btn.disabled = false;
       if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
