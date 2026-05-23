@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signing in — Altara</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    body { margin: 0; background: #0C0D10; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Outfit', sans-serif; color: rgba(237,232,223,0.5); font-size: 13px; letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+  Signing in…
+  <script>
+    const sb = supabase.createClient(
+      'https://qhyactfkoumechqkwfdr.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoeWFjdGZrb3VtZWNocWt3ZmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMzg0NDcsImV4cCI6MjA5NDgxNDQ0N30.2MLMZewBbq8B2TpaBLIyJQPW-ixrmC8dqROZWhmZl_0',
+      { auth: { flowType: 'implicit' } }
+    );
+
+    async function handleCallback() {
+      // Implicit flow: tokens in URL hash
+      const hash = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = hash.get('access_token');
+      const refresh_token = hash.get('refresh_token');
+
+      if (access_token && refresh_token) {
+        await sb.auth.setSession({ access_token, refresh_token });
+        window.location.href = '/account.html';
+        return;
+      }
+
+      // PKCE flow: code in query string
+      const code = new URLSearchParams(window.location.search).get('code');
+      if (code) {
+        await sb.auth.exchangeCodeForSession(code);
+        window.location.href = '/account.html';
+        return;
+      }
+
+      // Password recovery
+      const type = hash.get('type') || new URLSearchParams(window.location.search).get('type');
+      if (type === 'recovery' && access_token && refresh_token) {
+        await sb.auth.setSession({ access_token, refresh_token });
+        window.location.href = '/account.html?reset=1';
+        return;
+      }
+
+      // Nothing to process — go to account anyway
+      window.location.href = '/account.html';
+    }
+
+    handleCallback();
+  </script>
+</body>
+</html>

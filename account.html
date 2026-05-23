@@ -894,6 +894,24 @@
   </div>
 
 
+  <!-- PASSWORD RESET FORM -->
+  <div id="reset-section" style="display:none; max-width:440px; margin:0 auto; padding:160px 24px 80px;">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream);margin-bottom:32px;">Set New Password</h2>
+    <form id="reset-form" novalidate>
+      <div class="field">
+        <label for="new-password">New Password</label>
+        <input type="password" id="new-password" placeholder="At least 8 characters" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="confirm-new-password">Confirm Password</label>
+        <input type="password" id="confirm-new-password" placeholder="Repeat new password" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn-primary">Update Password</button>
+      <p class="auth-error" id="reset-error"></p>
+      <p class="auth-success" id="reset-success">Password updated — you're now signed in.</p>
+    </form>
+  </div>
+
   <!-- DASHBOARD (logged in) -->
   <div id="dashboard-section">
     <div class="dashboard-header">
@@ -937,7 +955,9 @@
           >
         </div>
         <div class="forgot-row">
-          <a href="#" class="forgot-link">Forgot your password?</a>
+          <a href="#" class="forgot-link" id="forgot-link">Forgot your password?</a>
+          <p class="auth-success" id="forgot-success" style="margin-top:8px">Check your email — we've sent a reset link.</p>
+          <p class="auth-error" id="forgot-error" style="margin-top:8px"></p>
         </div>
         <button type="submit" class="btn-primary">Sign In</button>
         <p class="auth-error" id="signin-error"></p>
@@ -1196,12 +1216,63 @@
       else if (event === 'SIGNED_OUT') showForms();
     });
 
+    // ─── Password Reset (from email link) ───
+    if (new URLSearchParams(window.location.search).get('reset') === '1') {
+      document.getElementById('reset-section').style.display = 'block';
+      document.getElementById('auth-forms').style.display = 'none';
+      document.getElementById('orders-section').style.display = 'none';
+    }
+
+    document.getElementById('reset-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const pw = document.getElementById('new-password').value;
+      const pw2 = document.getElementById('confirm-new-password').value;
+      const errEl = document.getElementById('reset-error');
+      const okEl = document.getElementById('reset-success');
+      errEl.classList.remove('visible'); okEl.classList.remove('visible');
+      if (pw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.classList.add('visible'); return; }
+      if (pw !== pw2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('visible'); return; }
+      const btn = e.target.querySelector('[type=submit]');
+      btn.textContent = 'Updating…'; btn.disabled = true;
+      const { error } = await sb.auth.updateUser({ password: pw });
+      btn.textContent = 'Update Password'; btn.disabled = false;
+      if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
+      else {
+        okEl.classList.add('visible');
+        setTimeout(() => {
+          document.getElementById('reset-section').style.display = 'none';
+          history.replaceState(null, '', '/account.html');
+          sb.auth.getSession().then(({ data: { session } }) => {
+            if (session) showDashboard(session.user);
+          });
+        }, 1500);
+      }
+    });
+
+    // ─── Forgot Password ───
+    document.getElementById('forgot-link').addEventListener('click', async e => {
+      e.preventDefault();
+      const email = document.getElementById('signin-email').value.trim();
+      const okEl = document.getElementById('forgot-success');
+      const errEl = document.getElementById('forgot-error');
+      okEl.classList.remove('visible'); errEl.classList.remove('visible');
+      if (!email) {
+        errEl.textContent = 'Enter your email above first.';
+        errEl.classList.add('visible'); return;
+      }
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://altaradesign.com/auth-callback.html?type=recovery',
+      });
+      if (error) { errEl.textContent = error.message; errEl.classList.add('visible'); }
+      else { okEl.classList.add('visible'); }
+    });
+
     // ─── Google OAuth ───
     document.querySelectorAll('.btn-google').forEach(btn => {
       btn.addEventListener('click', async () => {
         await sb.auth.signInWithOAuth({
           provider: 'google',
-          options: { redirectTo: window.location.origin + '/account.html' },
+          options: { redirectTo: 'https://altaradesign.com/auth-callback.html' },
         });
       });
     });
