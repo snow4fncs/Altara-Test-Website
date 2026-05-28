@@ -57,7 +57,7 @@ async function sendConfirmationEmail(email, name) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Altara <hello@altara.au>',
+      from: 'Altara <hello@altaradesign.com>',
       to: email,
       subject: "You're on the list — Altara launches August 2026",
       html,
