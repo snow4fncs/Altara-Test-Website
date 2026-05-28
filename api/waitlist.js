@@ -34,8 +34,8 @@ async function sendConfirmationEmail(email, name) {
         <p style="margin:3px 0 0;font-size:11px;color:#72787F;">Waitlist members only</p>
       </td></tr>
       <tr><td style="padding:10px 0;">
-        <p style="margin:0;font-size:13px;color:#EDE8DF;">Free shipping Australia-wide</p>
-        <p style="margin:3px 0 0;font-size:11px;color:#72787F;">On all first orders</p>
+        <p style="margin:0;font-size:13px;color:#EDE8DF;">Free shipping — waitlist members only</p>
+        <p style="margin:3px 0 0;font-size:11px;color:#72787F;">No minimum order · Your exclusive perk</p>
       </td></tr>
     </table>
   </td></tr>
