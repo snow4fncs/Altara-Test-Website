@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 async function sendConfirmationEmail(email, name) {
-  if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.RESEND_API_KEY) { console.error('RESEND_API_KEY not set — skipping email'); return; }
   const first = name ? name.trim().split(' ')[0] : 'there';
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#0C0D10;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
