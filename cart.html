@@ -1337,7 +1337,7 @@
   </script>
   <style>
     @property --wl-ba { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-    .wl-btn::before { content: ''; position: absolute; inset: 0; padding: 1px; background: conic-gradient(from var(--wl-ba), rgba(196,169,122,0) 0%, rgba(196,169,122,0) 62%, rgba(196,169,122,0.12) 68%, rgba(196,169,122,0.45) 75%, rgba(196,169,122,0.12) 82%, rgba(196,169,122,0) 88%, rgba(196,169,122,0) 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: wl-ba-spin 6s linear infinite; pointer-events: none; z-index: 1; }
+    .wl-btn::before { content: ''; position: absolute; inset: 0; padding: 1px; background: conic-gradient(from var(--wl-ba), rgba(196,169,122,0) 0%, rgba(196,169,122,0) 55%, rgba(196,169,122,0.3) 63%, rgba(196,169,122,0.85) 71%, rgba(196,169,122,1) 75%, rgba(196,169,122,0.85) 79%, rgba(196,169,122,0.3) 87%, rgba(196,169,122,0) 93%, rgba(196,169,122,0) 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: wl-ba-spin 4s linear infinite; pointer-events: none; z-index: 1; }
     @keyframes wl-ba-spin { to { --wl-ba: 360deg; } }
     .wl-btn.wl-loading::before { opacity: 0; animation: none; }
     .wl-success-star, .wl-success-tag, .wl-success-h, .wl-success-msg, .wl-success-email-note, .wl-success-dismiss { transform: none !important; }
