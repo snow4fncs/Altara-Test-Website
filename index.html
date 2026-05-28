@@ -1270,6 +1270,164 @@
     .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
     .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none;  }
+
+    /* ─── ANNOUNCEMENT BAR ─── */
+    .announce-bar {
+      background: var(--brand);
+      color: var(--cream);
+      text-align: center;
+      padding: 11px 20px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .ab-dot { opacity: 0.45; }
+
+    /* ─── WAITLIST MODAL ─── */
+    .wl-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12,13,16,0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .wl-overlay.open { opacity: 1; pointer-events: all; }
+    .wl-panel {
+      background: #111317;
+      border: 1px solid rgba(255,255,255,0.08);
+      max-width: 460px;
+      width: 92%;
+      padding: 52px 44px 44px;
+      position: relative;
+      text-align: center;
+      transform: translateY(12px);
+      transition: transform 0.35s ease;
+    }
+    .wl-overlay.open .wl-panel { transform: translateY(0); }
+    .wl-close {
+      position: absolute;
+      top: 18px; right: 22px;
+      background: none; border: none;
+      color: rgba(237,232,223,0.35);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+      padding: 4px;
+    }
+    .wl-close:hover { color: var(--cream); }
+    .wl-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .wl-pill-line { width: 24px; height: 1px; background: var(--gold); }
+    .wl-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 6vw, 38px);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.15;
+      margin: 0 0 14px;
+      letter-spacing: 0.01em;
+    }
+    .wl-heading em { font-style: italic; }
+    .wl-sub {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      color: var(--cream-dim);
+      line-height: 1.65;
+      margin: 0 0 30px;
+    }
+    .wl-form { display: flex; flex-direction: column; gap: 10px; }
+    .wl-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      color: var(--cream);
+      padding: 14px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .wl-input::placeholder { color: rgba(237,232,223,0.3); }
+    .wl-input:focus { border-color: rgba(255,255,255,0.28); }
+    .wl-btn {
+      background: var(--brand);
+      color: var(--cream);
+      border: none;
+      padding: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.24s, transform 0.2s;
+      width: 100%;
+      margin-top: 6px;
+    }
+    .wl-btn:hover { background: var(--brand-lt); transform: translateY(-1px); }
+    .wl-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .wl-note {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      color: rgba(237,232,223,0.28);
+      margin-top: 14px;
+      letter-spacing: 0.06em;
+    }
+    .wl-success { display: none; padding: 12px 0; }
+    .wl-success-icon {
+      width: 52px; height: 52px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+    }
+    .wl-success-icon svg { stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .wl-success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--cream);
+      margin: 0 0 10px;
+    }
+    .wl-success-sub {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      color: var(--cream-dim);
+      line-height: 1.65;
+    }
+    .wl-err {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      color: #e07070;
+      margin-top: 8px;
+      display: none;
+    }
   </style>
   <meta name="description" content="Premium car seat covers engineered for modern life. Altara blends luxury materials with precision fit for a comfortable, stylish drive. Shop now.">
   <link rel="canonical" href="https://altaradesign.com/">
@@ -1287,6 +1445,15 @@
   <meta name="twitter:image" content="https://altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
 </head>
 <body>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="announce-bar" role="banner">
+    <span>Launching August 2026</span>
+    <span class="ab-dot">·</span>
+    <span>Pre-register for Early Access</span>
+    <span class="ab-dot">·</span>
+    <span>Free Shipping Australia-Wide</span>
+  </div>
 
   <!-- NAV -->
   <nav id="nav">
@@ -1358,7 +1525,7 @@
     <div class="hero-left">
       <span class="pill" aria-hidden="true">
         <span class="pill-line"></span>
-        Premium Seat Covers
+        Launching August 2026
       </span>
       <h1 class="hero-h1">
         Drive in<br>
@@ -1366,10 +1533,10 @@
         Comfort.
       </h1>
       <p class="hero-sub">
-        Premium microfibre seat covers engineered for everyday movement. Protect what matters - without compromising style.
+        Premium microfibre seat covers, engineered for the way you move. First run is limited — secure your spot before we open to the public.
       </p>
       <div class="hero-ctas">
-        <a href="collection.html" class="btn-primary">Shop the Collection</a>
+        <button class="btn-primary" id="hero-waitlist-btn" style="border:none;cursor:pointer;font-family:inherit;">Join the Waitlist</button>
         <a href="#showcase" class="btn-ghost">Learn More</a>
       </div>
     </div>
@@ -1802,5 +1969,74 @@
     });
   })();
   </script>
+
+  <!-- WAITLIST MODAL -->
+  <div class="wl-overlay" id="wl-overlay" role="dialog" aria-modal="true" aria-labelledby="wl-title">
+    <div class="wl-panel">
+      <button class="wl-close" id="wl-close" aria-label="Close">&#215;</button>
+      <div class="wl-pill"><span class="wl-pill-line"></span>Early Access</div>
+      <h2 class="wl-heading" id="wl-title">Be First.<br><em>Altara Launches<br>August 2026.</em></h2>
+      <p class="wl-sub">Join the waitlist for early access, first-run availability, and launch-day pricing. Limited to the first 100.</p>
+      <div id="wl-form-wrap">
+        <form class="wl-form" id="wl-form" novalidate>
+          <input class="wl-input" type="text" id="wl-name" name="name" placeholder="First name" autocomplete="given-name">
+          <input class="wl-input" type="email" id="wl-email" name="email" placeholder="Email address" required autocomplete="email">
+          <button class="wl-btn" type="submit" id="wl-submit">Reserve My Spot</button>
+          <p class="wl-err" id="wl-err"></p>
+        </form>
+        <p class="wl-note">No spam. Just your launch notification.</p>
+      </div>
+      <div class="wl-success" id="wl-success">
+        <div class="wl-success-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="wl-success-title">You're on the list.</p>
+        <p class="wl-success-sub">We'll reach out when Altara drops.<br>August 2026 — stay close.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Waitlist modal
+    (function() {
+      var overlay = document.getElementById('wl-overlay');
+      var form = document.getElementById('wl-form');
+      var success = document.getElementById('wl-success');
+      var errEl = document.getElementById('wl-err');
+
+      function openWL() { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+      function closeWL() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+
+      var heroBtn = document.getElementById('hero-waitlist-btn');
+      if (heroBtn) heroBtn.addEventListener('click', openWL);
+      document.getElementById('wl-close').addEventListener('click', closeWL);
+      overlay.addEventListener('click', function(e) { if (e.target === overlay) closeWL(); });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWL(); });
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('wl-submit');
+        var name = document.getElementById('wl-name').value.trim();
+        var email = document.getElementById('wl-email').value.trim();
+        errEl.style.display = 'none';
+        if (!email || !email.includes('@')) { errEl.textContent = 'Please enter a valid email.'; errEl.style.display = 'block'; return; }
+        btn.textContent = 'Reserving…'; btn.disabled = true;
+        try {
+          var res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, product: 'homepage' }) });
+          if (res.ok) {
+            if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'Altara Waitlist' });
+            form.style.display = 'none'; document.querySelector('.wl-note').style.display = 'none';
+            success.style.display = 'block';
+          } else {
+            var d = await res.json();
+            if (d.error === 'already_registered') { errEl.textContent = "You're already on the list — we'll be in touch."; }
+            else { errEl.textContent = 'Something went wrong. Please try again.'; }
+            errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false;
+          }
+        } catch(err) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false; }
+      });
+    })();
+  </script>
+
 </body>
 </html>
