@@ -1436,7 +1436,7 @@
     /* ─── BUTTON GOLD ANIMATION & SUCCESS TRANSITION ─── */
     .wl-btn { position: relative; overflow: hidden; }
     .wl-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 25%, rgba(196,169,122,0.5) 50%, transparent 75%); transform: translateX(-200%); pointer-events: none; }
-    .wl-btn.wl-loading::after { animation: wl-gold-sweep 1s ease-in-out infinite; }
+    .wl-btn.wl-loading::after { animation: wl-gold-sweep 2.5s ease-in-out infinite; }
     .wl-btn.wl-loading { box-shadow: 0 0 0 1px rgba(196,169,122,0.4), 0 0 28px rgba(196,169,122,0.12); }
     @keyframes wl-gold-sweep { from { transform: translateX(-200%); } to { transform: translateX(200%); } }
     .wl-close { z-index: 10 !important; }

@@ -50,19 +50,27 @@ async function sendConfirmationEmail(email, name) {
 </table>
 </body></html>`;
 
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: 'Altara <hello@altaradesign.com>',
-      to: email,
-      subject: "You're on the list — Altara launches August 2026",
-      html,
-    }),
-  }).catch(err => console.error('Email error:', err));
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Altara <hello@altaradesign.com>',
+        to: email,
+        subject: "You're on the list — Altara launches August 2026",
+        html,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`Resend error ${res.status}:`, body);
+    }
+  } catch (err) {
+    console.error('Email fetch error:', err);
+  }
 }
 
 export default async function handler(req, res) {
