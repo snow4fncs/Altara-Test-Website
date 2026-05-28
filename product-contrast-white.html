@@ -1147,5 +1147,28 @@
   <script>
     (function(){function p(){var b=document.querySelector('.announce-bar'),n=document.querySelector('nav');if(!b||!n)return;var h=b.getBoundingClientRect().height;n.style.top=h+'px';document.body.style.paddingTop=h+'px';}p();window.addEventListener('resize',p);})();
   </script>
+  <style>
+    @property --wl-ba { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+    .wl-btn::before { content: ''; position: absolute; inset: 0; padding: 1px; background: conic-gradient(from var(--wl-ba), rgba(196,169,122,0) 0%, rgba(196,169,122,0) 62%, rgba(196,169,122,0.12) 68%, rgba(196,169,122,0.45) 75%, rgba(196,169,122,0.12) 82%, rgba(196,169,122,0) 88%, rgba(196,169,122,0) 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: wl-ba-spin 6s linear infinite; pointer-events: none; z-index: 1; }
+    @keyframes wl-ba-spin { to { --wl-ba: 360deg; } }
+    .wl-btn.wl-loading::before { opacity: 0; animation: none; }
+    .wl-success-star, .wl-success-tag, .wl-success-h, .wl-success-msg, .wl-success-email-note, .wl-success-dismiss { transform: none !important; }
+    .wl-success { opacity: 0 !important; transition: opacity 0.5s ease !important; transform: none !important; }
+    .wl-success.wl-visible { opacity: 1 !important; }
+    .wl-success-bar { transform: scaleX(0) !important; transition: transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s !important; }
+    .wl-success.wl-visible .wl-success-bar { transform: scaleX(1) !important; }
+    .wl-success-star { opacity: 0 !important; transition: opacity 0.4s ease 0.2s !important; }
+    .wl-success.wl-visible .wl-success-star { opacity: 1 !important; }
+    .wl-success-tag { opacity: 0 !important; transition: opacity 0.4s ease 0.32s !important; }
+    .wl-success.wl-visible .wl-success-tag { opacity: 1 !important; }
+    .wl-success-h { opacity: 0 !important; transition: opacity 0.45s ease 0.42s !important; }
+    .wl-success.wl-visible .wl-success-h { opacity: 1 !important; }
+    .wl-success-msg { opacity: 0 !important; transition: opacity 0.4s ease 0.56s !important; }
+    .wl-success.wl-visible .wl-success-msg { opacity: 1 !important; }
+    .wl-success-email-note { opacity: 0 !important; transition: opacity 0.4s ease 0.68s !important; }
+    .wl-success.wl-visible .wl-success-email-note { opacity: 1 !important; }
+    .wl-success-dismiss { opacity: 0 !important; transition: opacity 0.4s ease 0.8s !important; }
+    .wl-success.wl-visible .wl-success-dismiss { opacity: 1 !important; }
+  </style>
 </body>
 </html>
