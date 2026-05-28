@@ -54,6 +54,7 @@
       font-weight: 300;
       line-height: 1.7;
       overflow-x: hidden;
+      padding-top: 40px;
     }
 
     body::after {
@@ -69,7 +70,7 @@
     /* ─── NAV ─── */
     nav {
       position: fixed;
-      inset: 0 0 auto 0;
+      top: 40px; left: 0; right: 0;
       z-index: 200;
       display: flex;
       align-items: center;
@@ -1273,6 +1274,11 @@
 
     /* ─── ANNOUNCEMENT BAR ─── */
     .announce-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 201;
       background: var(--brand);
       color: var(--cream);
       text-align: center;
@@ -1428,6 +1434,19 @@
       margin-top: 8px;
       display: none;
     }
+    .announce-pulse { width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0;animation:ab-pulse 2s ease-in-out infinite; }
+    @keyframes ab-pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+    .ab-hide-mobile { }
+    @media(max-width:600px){.ab-hide-mobile{display:none;}}
+    /* ─── COUNTDOWN ─── */
+    .hero-launch { margin-top: 44px; opacity:0; transform:translateY(18px); animation: up 0.7s ease 1.25s forwards; }
+    .hero-launch-label { font-family:'Outfit',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(237,232,223,0.38);margin-bottom:14px; }
+    .hero-countdown { display:flex;align-items:center;gap:10px; }
+    .cd-block { display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px; }
+    .cd-num { font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--cream);line-height:1;letter-spacing:0.02em; }
+    .cd-unit { font-family:'Outfit',sans-serif;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,223,0.3); }
+    .cd-colon { font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:12px;opacity:0.5; }
+    @media(max-width:700px){.cd-num{font-size:28px;}.cd-block{min-width:36px;}.hero-launch{margin-top:28px;}}
   </style>
   <meta name="description" content="Premium car seat covers engineered for modern life. Altara blends luxury materials with precision fit for a comfortable, stylish drive. Shop now.">
   <link rel="canonical" href="https://altaradesign.com/">
@@ -1448,11 +1467,10 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar" role="banner">
+    <span class="announce-pulse" aria-hidden="true"></span>
     <span>Launching August 2026</span>
     <span class="ab-dot">·</span>
-    <span>Pre-register for Early Access</span>
-    <span class="ab-dot">·</span>
-    <span>Free Shipping Australia-Wide</span>
+    <span class="ab-hide-mobile">Join the Waitlist — Limited First Run</span>
   </div>
 
   <!-- NAV -->
@@ -1538,6 +1556,18 @@
       <div class="hero-ctas">
         <button class="btn-primary" id="hero-waitlist-btn" style="border:none;cursor:pointer;font-family:inherit;">Join the Waitlist</button>
         <a href="#showcase" class="btn-ghost">Learn More</a>
+      </div>
+      <div class="hero-launch">
+        <p class="hero-launch-label">Launching in</p>
+        <div class="hero-countdown">
+          <div class="cd-block"><span class="cd-num" id="cd-days">--</span><span class="cd-unit">Days</span></div>
+          <span class="cd-colon">:</span>
+          <div class="cd-block"><span class="cd-num" id="cd-hrs">--</span><span class="cd-unit">Hrs</span></div>
+          <span class="cd-colon">:</span>
+          <div class="cd-block"><span class="cd-num" id="cd-min">--</span><span class="cd-unit">Min</span></div>
+          <span class="cd-colon">:</span>
+          <div class="cd-block"><span class="cd-num" id="cd-sec">--</span><span class="cd-unit">Sec</span></div>
+        </div>
       </div>
     </div>
 
@@ -1984,7 +2014,6 @@
           <button class="wl-btn" type="submit" id="wl-submit">Reserve My Spot</button>
           <p class="wl-err" id="wl-err"></p>
         </form>
-        <p class="wl-note">No spam. Just your launch notification.</p>
       </div>
       <div class="wl-success" id="wl-success">
         <div class="wl-success-icon">
@@ -2025,7 +2054,7 @@
           var res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, product: 'homepage' }) });
           if (res.ok) {
             if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'Altara Waitlist' });
-            form.style.display = 'none'; document.querySelector('.wl-note').style.display = 'none';
+            form.style.display = 'none';
             success.style.display = 'block';
           } else {
             var d = await res.json();
@@ -2035,6 +2064,24 @@
           }
         } catch(err) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false; }
       });
+    })();
+
+    // Countdown to August 1 2026 AEST
+    (function(){
+      function tick(){
+        var launch=new Date('2026-08-01T00:00:00+10:00');
+        var diff=Math.max(0,launch-new Date());
+        var pad=function(n){return String(n).padStart(2,'0');};
+        var d=document.getElementById('cd-days');
+        var h=document.getElementById('cd-hrs');
+        var m=document.getElementById('cd-min');
+        var s=document.getElementById('cd-sec');
+        if(d)d.textContent=pad(Math.floor(diff/86400000));
+        if(h)h.textContent=pad(Math.floor((diff%86400000)/3600000));
+        if(m)m.textContent=pad(Math.floor((diff%3600000)/60000));
+        if(s)s.textContent=pad(Math.floor((diff%60000)/1000));
+      }
+      tick();setInterval(tick,1000);
     })();
   </script>
 

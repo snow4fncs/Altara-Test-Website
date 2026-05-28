@@ -54,6 +54,7 @@
       font-weight: 300;
       line-height: 1.7;
       overflow-x: hidden;
+      padding-top: 40px;
     }
 
     body::after {
@@ -69,7 +70,7 @@
     /* ─── NAV ─── */
     nav {
       position: fixed;
-      inset: 0 0 auto 0;
+      top: 40px; left: 0; right: 0;
       z-index: 200;
       display: flex;
       align-items: center;
@@ -527,6 +528,11 @@
 
     /* ─── ANNOUNCEMENT BAR ─── */
     .announce-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 201;
       background: var(--brand);
       color: var(--cream);
       text-align: center;
@@ -556,6 +562,10 @@
       padding: 6px 12px;
       backdrop-filter: blur(6px);
     }
+    .announce-pulse { width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0;animation:ab-pulse 2s ease-in-out infinite; }
+    @keyframes ab-pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+    .ab-hide-mobile { }
+    @media(max-width:600px){.ab-hide-mobile{display:none;}}
   </style>
   <meta name="description" content="Explore the Altara collection of premium car seat covers — Midnight Black and Contrast White. Engineered for comfort, style, and a perfect fit.">
   <link rel="canonical" href="https://altaradesign.com/collection.html">
@@ -576,11 +586,10 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar" role="banner">
+    <span class="announce-pulse" aria-hidden="true"></span>
     <span>Launching August 2026</span>
     <span class="ab-dot">·</span>
-    <span>Pre-register for Early Access</span>
-    <span class="ab-dot">·</span>
-    <span>Free Shipping Australia-Wide</span>
+    <span class="ab-hide-mobile">Join the Waitlist — Limited First Run</span>
   </div>
 
   <!-- NAV -->
