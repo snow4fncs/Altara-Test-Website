@@ -629,7 +629,25 @@
     @keyframes ab-pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
     .ab-hide-mobile { }
     @media(max-width:600px){.ab-hide-mobile{display:none;}}
-  </style>
+    /* ─── BUTTON GOLD ANIMATION & SUCCESS TRANSITION ─── */
+    .wl-btn { position: relative; overflow: hidden; }
+    .wl-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 25%, rgba(196,169,122,0.5) 50%, transparent 75%); transform: translateX(-200%); pointer-events: none; }
+    .wl-btn.wl-loading::after { animation: wl-gold-sweep 1s ease-in-out infinite; }
+    .wl-btn.wl-loading { box-shadow: 0 0 0 1px rgba(196,169,122,0.4), 0 0 28px rgba(196,169,122,0.12); }
+    @keyframes wl-gold-sweep { from { transform: translateX(-200%); } to { transform: translateX(200%); } }
+    .wl-close { z-index: 10 !important; }
+    .wl-success { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1); }
+    .wl-success.wl-visible { opacity: 1; transform: translateY(0); }
+    .wl-success-bar { transform: scaleX(0); transition: transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s; }
+    .wl-success.wl-visible .wl-success-bar { transform: scaleX(1); }
+    .wl-success-star, .wl-success-tag, .wl-success-h, .wl-success-msg, .wl-success-email-note, .wl-success-dismiss { opacity: 0; transform: translateY(14px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1); }
+    .wl-success.wl-visible .wl-success-star { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+    .wl-success.wl-visible .wl-success-tag { opacity: 1; transform: translateY(0); transition-delay: 0.28s; }
+    .wl-success.wl-visible .wl-success-h { opacity: 1; transform: translateY(0); transition-delay: 0.38s; }
+    .wl-success.wl-visible .wl-success-msg { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
+    .wl-success.wl-visible .wl-success-email-note { opacity: 1; transform: translateY(0); transition-delay: 0.6s; }
+    .wl-success.wl-visible .wl-success-dismiss { opacity: 1; transform: translateY(0); transition-delay: 0.72s; }
+</style>
   <meta name="description" content="Altara Contrast White seat cover — premium materials, precision fit for modern vehicles. Free shipping Australia-wide. Shop now.">
   <link rel="canonical" href="https://altaradesign.com/product-contrast-white.html">
   <meta property="og:type" content="website">
@@ -1101,22 +1119,27 @@
         var email = document.getElementById('wl-email').value.trim();
         errEl.style.display = 'none';
         if (!email || !email.includes('@')) { errEl.textContent = 'Please enter a valid email.'; errEl.style.display = 'block'; return; }
-        btn.textContent = 'Reserving…'; btn.disabled = true;
+        btn.textContent = 'Reserving…'; btn.disabled = true; btn.classList.add('wl-loading');
         try {
           var res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, product: 'contrast-white' }) });
           if (res.ok) {
             if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'Altara Waitlist' });
-            form.style.display = 'none';
-            success.style.display = 'block';
-            var dismiss = document.getElementById('wl-success-dismiss');
-            if (dismiss) dismiss.addEventListener('click', closeWL);
+            btn.classList.remove('wl-loading');
+            var fadeEls = overlay.querySelectorAll('.wl-pill, .wl-heading, .wl-sub, #wl-form-wrap');
+            fadeEls.forEach(function(el){ el.style.transition='opacity 0.3s ease'; el.style.opacity='0'; });
+            setTimeout(function(){
+              success.style.display = 'block';
+              requestAnimationFrame(function(){ requestAnimationFrame(function(){ success.classList.add('wl-visible'); }); });
+              var dismiss = document.getElementById('wl-success-dismiss');
+              if (dismiss) dismiss.addEventListener('click', closeWL);
+            }, 320);
           } else {
             var d = await res.json();
             if (d.error === 'already_registered') { errEl.textContent = "You're already on the list — we'll be in touch."; }
             else { errEl.textContent = 'Something went wrong. Please try again.'; }
-            errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false;
+            errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false; btn.classList.remove('wl-loading');
           }
-        } catch(err) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false; }
+        } catch(err) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.style.display = 'block'; btn.textContent = 'Reserve My Spot'; btn.disabled = false; btn.classList.remove('wl-loading'); }
       });
     })();
   </script>
