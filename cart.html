@@ -380,6 +380,8 @@
       font-weight: 500;
       letter-spacing: 0.08em;
     }
+    .ship-threshold-msg { font-size: 10px; color: rgba(237,232,223,0.3); letter-spacing: 0.06em; text-align: right; margin: -6px 0 8px; }
+    .ship-threshold-msg em { color: var(--gold); font-style: normal; }
     .summary-divider {
       border: none;
       border-top: 1px solid var(--border);
@@ -888,8 +890,9 @@
       </div>
       <div class="summary-row">
         <span class="summary-label">Shipping</span>
-        <span class="summary-value free" id="cart-shipping"></span>
+        <span class="summary-value" id="cart-shipping"></span>
       </div>
+      <p class="ship-threshold-msg" id="ship-threshold-msg" style="display:none"></p>
 
       <hr class="summary-divider" aria-hidden="true">
 
@@ -1079,10 +1082,21 @@
         list.appendChild(article);
       });
 
+      const FREE_SHIP = 80;
+      const SHIP_RATE = 9.95;
       const total = getTotal(cart);
+      const shipping = total >= FREE_SHIP ? 0 : SHIP_RATE;
       subtotalEl.textContent = fmt(total);
-      document.getElementById('cart-shipping').textContent = 'Free';
-      totalEl.textContent = fmt(total);
+      const shipEl = document.getElementById('cart-shipping');
+      const threshMsg = document.getElementById('ship-threshold-msg');
+      if (shipping === 0) {
+        shipEl.textContent = 'Free'; shipEl.classList.add('free');
+        if (threshMsg) threshMsg.style.display = 'none';
+      } else {
+        shipEl.textContent = fmt(shipping); shipEl.classList.remove('free');
+        if (threshMsg) { threshMsg.innerHTML = 'Add <em>$' + (FREE_SHIP - total).toFixed(0) + '</em> more for free shipping'; threshMsg.style.display = 'block'; }
+      }
+      totalEl.textContent = fmt(total + shipping);
     }
 
     function changeQty(id, delta) {

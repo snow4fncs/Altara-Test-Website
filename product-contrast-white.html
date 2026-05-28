@@ -212,6 +212,16 @@
     }
 
     .pi-sep { width: 100%; height: 1px; background: var(--line); margin: 24px 0; flex-shrink: 0; }
+    .pack-wrap { margin: 4px 0 20px; }
+    .pack-opts { display: flex; gap: 8px; }
+    .pack-opt { flex: 1; padding: 14px 16px; background: transparent; border: 1px solid rgba(237,232,223,0.1); cursor: pointer; text-align: left; transition: border-color 0.22s, background 0.22s; -webkit-tap-highlight-color: transparent; }
+    .pack-opt:hover { border-color: rgba(237,232,223,0.2); }
+    .pack-opt.active { border-color: rgba(196,169,122,0.45); background: rgba(196,169,122,0.04); }
+    .pack-opt-name { display: block; font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 6px; transition: color 0.22s; }
+    .pack-opt.active .pack-opt-name { color: rgba(237,232,223,0.6); }
+    .pack-opt-price { display: block; font-size: 16px; font-weight: 300; color: var(--cream); letter-spacing: 0.02em; }
+    .pack-opt-currency { font-size: 11px; opacity: 0.5; }
+    .pack-opt-meta { display: block; font-size: 10px; color: var(--gold); margin-top: 6px; letter-spacing: 0.04em; }
 
     .pi-label {
       font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
@@ -772,7 +782,7 @@
 
     <p class="pi-cat">Seat Cover &nbsp;·&nbsp; MagFit™</p>
     <h1 class="pi-name">Contrast<br><em>White</em></h1>
-    <p class="pi-price">$59 AUD</p>
+    <p class="pi-price" id="pi-price-display">$59 AUD</p>
 
     <div class="pi-sep"></div>
 
@@ -794,12 +804,26 @@
       </a>
     </div>
 
+    <div class="pack-wrap">
+      <p class="pi-label">Pack</p>
+      <div class="pack-opts">
+        <button class="pack-opt active" id="pack-single" type="button">
+          <span class="pack-opt-name">Single</span>
+          <span class="pack-opt-price">$59 <span class="pack-opt-currency">AUD</span></span>
+        </button>
+        <button class="pack-opt" id="pack-twin" type="button">
+          <span class="pack-opt-name">Twin Set</span>
+          <span class="pack-opt-price">$97 <span class="pack-opt-currency">AUD</span></span>
+          <span class="pack-opt-meta">Save $21 · Free Shipping</span>
+        </button>
+      </div>
+    </div>
     <button class="pi-add" id="waitlist-btn">Join the Waitlist — Launching August 2026</button>
 
     <div class="pi-perks">
       <span class="pi-perk">
         <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Free Shipping
+        Free shipping on orders $80+
       </span>
       <span class="pi-perk">
         <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
@@ -994,6 +1018,12 @@
       document.getElementById('wl-overlay').classList.add('open');
       document.body.style.overflow = 'hidden';
     });
+  (function(){
+    var s=document.getElementById('pack-single'),t=document.getElementById('pack-twin'),p=document.getElementById('pi-price-display');
+    if(!s||!t)return;
+    s.addEventListener('click',function(){s.classList.add('active');t.classList.remove('active');if(p)p.textContent='$59 AUD';});
+    t.addEventListener('click',function(){t.classList.add('active');s.classList.remove('active');if(p)p.textContent='$97 AUD';});
+  })();
   try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
 
   // Inline search
@@ -1121,7 +1151,7 @@
         if (!email || !email.includes('@')) { errEl.textContent = 'Please enter a valid email.'; errEl.style.display = 'block'; return; }
         btn.textContent = 'Reserving…'; btn.disabled = true; btn.classList.add('wl-loading');
         try {
-          var res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, product: 'contrast-white' }) });
+          var res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, product: (document.getElementById('pack-twin')&&document.getElementById('pack-twin').classList.contains('active'))?'contrast-white-twin':'contrast-white' }) });
           if (res.ok) {
             if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'Altara Waitlist' });
             btn.classList.remove('wl-loading');
