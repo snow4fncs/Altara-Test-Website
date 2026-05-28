@@ -59,6 +59,7 @@ async function sendConfirmationEmail(email, name) {
       },
       body: JSON.stringify({
         from: 'Altara <altara@altaradesign.com>',
+        reply_to: 'hello@altaradesign.com',
         to: email,
         subject: "You're on the list — Altara launches August 2026",
         html,
