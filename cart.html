@@ -690,10 +690,16 @@
     .wl-btn:hover { background:var(--brand-lt);transform:translateY(-1px); }
     .wl-btn:disabled { opacity:0.55;cursor:not-allowed;transform:none; }
     .wl-note { font-family:'Outfit',sans-serif;font-size:10px;color:rgba(237,232,223,0.28);margin-top:14px;letter-spacing:0.06em; }
-    .wl-success { display:none;padding:12px 0; }
-    .wl-success-icon { width:52px;height:52px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px; }
-    .wl-success-title { font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream);margin:0 0 10px; }
-    .wl-success-sub { font-family:'Outfit',sans-serif;font-size:13px;color:var(--cream-dim);line-height:1.65; }
+    .wl-panel { position: relative !important; overflow: hidden !important; }
+    .wl-success { display: none; position: absolute; inset: 0; background: #111317; padding: 52px 44px 44px; text-align: center; }
+    .wl-success-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #C4A97A, transparent); }
+    .wl-success-star { display: block; font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--gold); margin-bottom: 12px; line-height: 1; }
+    .wl-success-tag { display: block; font-family: 'Outfit', sans-serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+    .wl-success-h { font-family: 'Cormorant Garamond', serif; font-size: 50px; font-weight: 300; font-style: italic; color: var(--cream); line-height: 1.05; margin: 0 0 22px; }
+    .wl-success-msg { font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--cream-dim); line-height: 1.7; margin: 0 0 22px; }
+    .wl-success-email-note { font-family: 'Outfit', sans-serif; font-size: 11px; color: rgba(196,169,122,0.5); border-top: 1px solid rgba(255,255,255,0.07); padding-top: 18px; letter-spacing: 0.05em; }
+    .wl-success-dismiss { display: inline-block; font-family: 'Outfit', sans-serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.3); background: none; border: none; cursor: pointer; margin-top: 20px; transition: color 0.2s; padding: 0; }
+    .wl-success-dismiss:hover { color: var(--cream); }
     .wl-err { font-family:'Outfit',sans-serif;font-size:11px;color:#e07070;margin-top:8px;display:none; }
     /* ─── ANNOUNCEMENT BAR ─── */
     .announce-bar {
@@ -1256,11 +1262,13 @@
         </form>
       </div>
       <div class="wl-success" id="wl-success">
-        <div class="wl-success-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4A97A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="wl-success-title">You're on the list.</p>
-        <p class="wl-success-sub">We'll reach out when Altara drops.<br>August 2026 — stay close.</p>
+        <div class="wl-success-bar"></div>
+        <span class="wl-success-star" aria-hidden="true">✦</span>
+        <span class="wl-success-tag">Spot Reserved</span>
+        <p class="wl-success-h">You're<br>on the<br>list.</p>
+        <p class="wl-success-msg">Welcome to the first run. We'll be in touch before August 2026 with your early access and exclusive launch offer.</p>
+        <p class="wl-success-email-note">A confirmation has been sent to your email.</p>
+        <button class="wl-success-dismiss" id="wl-success-dismiss">Continue browsing →</button>
       </div>
     </div>
   </div>
@@ -1289,6 +1297,8 @@
             if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'Altara Waitlist' });
             form.style.display = 'none';
             success.style.display = 'block';
+            var dismiss = document.getElementById('wl-success-dismiss');
+            if (dismiss) dismiss.addEventListener('click', closeWL);
           } else {
             var d = await res.json();
             errEl.textContent = d.error === 'already_registered' ? "You're already on the list — we'll be in touch." : 'Something went wrong. Please try again.';
