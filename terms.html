@@ -26,7 +26,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0C0D10">
   <meta name="color-scheme" content="dark">
-  <title>Contact - Altara</title>
+  <title>Terms &amp; Conditions - Altara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
@@ -81,285 +81,167 @@
     .search-suggestions-list a:hover { color: rgba(237,232,223,0.75); }
 
     /* PAGE HERO */
-    .page-hero {
-      margin-top: var(--nav-h);
-      padding: 80px 72px 60px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-    }
-    .page-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 50% 100% at 5% 100%, rgba(196,169,122,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 90% 10%, rgba(77,98,114,0.05) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .page-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 9.5px;
-      font-weight: 500;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-      margin-bottom: 22px;
-    }
+    .page-hero { margin-top: var(--nav-h); padding: 80px 72px 60px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 100% at 5% 100%, rgba(196,169,122,0.04) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 90% 10%, rgba(77,98,114,0.05) 0%, transparent 60%); pointer-events: none; }
+    .page-eyebrow { display: flex; align-items: center; gap: 14px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(237,232,223,0.38); margin-bottom: 22px; }
     .page-eyebrow a { color: inherit; text-decoration: none; transition: color 0.2s; }
     .page-eyebrow a:hover { color: rgba(237,232,223,0.65); }
     .page-eyebrow span { opacity: 0.4; }
-    .page-h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(48px, 5.5vw, 80px);
-      font-weight: 300;
-      line-height: 0.96;
-      letter-spacing: -0.025em;
-      color: var(--cream);
-      margin-bottom: 24px;
-    }
+    .page-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5.5vw, 80px); font-weight: 300; line-height: 0.96; letter-spacing: -0.025em; color: var(--cream); margin-bottom: 24px; }
     .page-h1 em { font-style: italic; color: rgba(237,232,223,0.45); }
-    .page-desc {
-      font-size: 14px;
-      color: var(--cream-dim);
-      line-height: 1.85;
-      max-width: 480px;
-      font-weight: 300;
-    }
+    .page-desc { font-size: 14px; color: var(--cream-dim); line-height: 1.85; max-width: 520px; font-weight: 300; }
+    .page-meta { margin-top: 32px; display: flex; gap: 40px; flex-wrap: wrap; }
+    .page-meta-item { }
+    .page-meta-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.28); margin-bottom: 4px; }
+    .page-meta-value { font-size: 12px; font-weight: 300; color: rgba(237,232,223,0.5); }
 
-    /* SUPPORT NAV */
-    .support-nav {
-      position: static;
-      height: auto;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      padding: 0 72px;
-      background: var(--bg-2);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    .sn-link {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-      text-decoration: none;
-      padding: 18px 0;
-      margin-right: 44px;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s ease, border-color 0.2s ease;
-      position: relative;
-      top: 1px;
-    }
-    .sn-link:hover { color: rgba(237,232,223,0.7); }
-    .sn-link.active { color: var(--cream); border-bottom-color: var(--gold); }
-
-    /* CONTACT CONTENT */
-    .contact-wrap {
-      max-width: 960px;
+    /* PRIVACY CONTENT */
+    .privacy-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 80px 72px 120px;
     }
-
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 80px;
-      align-items: start;
+    .privacy-toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 40px);
+      align-self: start;
+      padding-right: 48px;
     }
-
-    /* Left Column - Info */
-    .contact-info {}
-    .contact-info-intro {
-      font-size: 14px;
-      color: rgba(237,232,223,0.5);
-      line-height: 1.9;
-      font-weight: 300;
-      margin-bottom: 52px;
-      max-width: 360px;
-    }
-    .contact-info-intro strong { font-weight: 500; color: rgba(237,232,223,0.72); }
-
-    .contact-channel {
-      padding: 28px 0;
-      border-top: 1px solid var(--border);
-    }
-    .contact-channel:last-child { border-bottom: 1px solid var(--border); }
-    .contact-channel-label {
-      font-size: 9px;
+    .toc-label {
+      font-size: 8.5px;
       font-weight: 600;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.26em;
       text-transform: uppercase;
       color: var(--gold);
-      opacity: 0.65;
-      margin-bottom: 10px;
+      opacity: 0.6;
+      margin-bottom: 20px;
     }
-    .contact-channel-value {
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(237,232,223,0.78);
-      margin-bottom: 6px;
-      letter-spacing: 0.01em;
-    }
-    .contact-channel-note {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.34);
-      line-height: 1.7;
-    }
-
-    .hours-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px 16px;
-      margin-top: 8px;
-    }
-    .hours-row {
-      display: contents;
-    }
-    .hours-day {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.38);
-      padding: 5px 0;
-    }
-    .hours-time {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.55);
-      padding: 5px 0;
-    }
-
-    /* Right Column - Form */
-    .contact-form-wrap {
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      padding: 44px 44px 52px;
-      position: relative;
-    }
-    .contact-form-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold) 0%, transparent 60%);
-      opacity: 0.4;
-    }
-
-    .form-heading {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 26px;
-      font-weight: 300;
-      letter-spacing: -0.01em;
-      color: var(--cream);
-      margin-bottom: 8px;
-    }
-    .form-subheading {
-      font-size: 12.5px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.38);
-      margin-bottom: 36px;
-      line-height: 1.6;
-    }
-
-    .form-field { margin-bottom: 22px; }
-    .form-label {
-      display: block;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-      margin-bottom: 8px;
-    }
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      color: rgba(237,232,223,0.82);
-      font-family: 'Outfit', sans-serif;
-      font-size: 13.5px;
-      font-weight: 300;
-      padding: 13px 16px;
-      outline: none;
-      transition: border-color 0.2s ease, background 0.2s ease;
-      border-radius: 0;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    .form-input::placeholder, .form-textarea::placeholder { color: rgba(237,232,223,0.22); }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: rgba(196,169,122,0.4);
-      background: rgba(255,255,255,0.05);
-    }
-    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
-
-    .form-select-wrap { position: relative; }
-    .form-select-wrap::after {
-      content: '';
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid rgba(237,232,223,0.3);
-      pointer-events: none;
-    }
-    .form-select option { background: var(--bg-2); color: var(--cream); }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .form-submit {
-      width: 100%;
-      padding: 15px 24px;
-      background: transparent;
-      border: 1px solid rgba(196,169,122,0.4);
-      color: var(--gold);
-      font-family: 'Outfit', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      margin-top: 8px;
-    }
-    .form-submit:hover {
-      background: rgba(196,169,122,0.08);
-      border-color: rgba(196,169,122,0.65);
-      color: rgba(196,169,122,0.9);
-    }
-    .form-submit:active {
-      background: rgba(196,169,122,0.14);
-    }
-
-    .form-note {
-      font-size: 11px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.28);
-      line-height: 1.6;
-      margin-top: 16px;
-    }
-
-    /* Placeholder notice */
-    .placeholder-notice {
-      background: rgba(196,169,122,0.04);
-      border: 1px solid rgba(196,169,122,0.12);
-      padding: 14px 20px;
-      margin-bottom: 28px;
-      border-radius: 1px;
-    }
-    .placeholder-notice p {
+    .toc-list { list-style: none; }
+    .toc-list li + li { margin-top: 2px; }
+    .toc-list a {
       font-size: 11.5px;
       font-weight: 300;
-      color: rgba(196,169,122,0.55);
-      line-height: 1.6;
+      color: rgba(237,232,223,0.35);
+      text-decoration: none;
+      padding: 6px 0;
+      display: block;
+      border-left: 1px solid transparent;
+      padding-left: 12px;
+      margin-left: -12px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .toc-list a:hover { color: rgba(237,232,223,0.65); border-left-color: rgba(196,169,122,0.3); }
+
+    /* PRIVACY SECTIONS */
+    .privacy-body {}
+    .privacy-section {
+      margin-bottom: 72px;
+      scroll-margin-top: calc(var(--nav-h) + 32px);
+    }
+    .privacy-section:last-child { margin-bottom: 0; }
+    .privacy-section-num {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.55;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .privacy-section-num::after { content: ''; flex: 0 0 32px; height: 1px; background: rgba(196,169,122,0.2); }
+    .privacy-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+      margin-bottom: 28px;
+    }
+    .privacy-section p {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.95;
+      margin-bottom: 18px;
+    }
+    .privacy-section p:last-child { margin-bottom: 0; }
+    .privacy-section strong { font-weight: 500; color: rgba(237,232,223,0.72); }
+    .privacy-section a { color: rgba(196,169,122,0.75); text-decoration: none; border-bottom: 1px solid rgba(196,169,122,0.25); transition: color 0.2s, border-color 0.2s; }
+    .privacy-section a:hover { color: var(--gold); border-bottom-color: rgba(196,169,122,0.5); }
+    .privacy-list {
+      list-style: none;
+      margin: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .privacy-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.52);
+      line-height: 1.75;
+    }
+    .privacy-list li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 9px;
+      opacity: 0.55;
+    }
+    .privacy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+    .privacy-table th {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.35);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .privacy-table td {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.5);
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.7;
+    }
+    .privacy-table tr:last-child td { border-bottom: none; }
+    .privacy-callout {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 2px solid rgba(196,169,122,0.35);
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .privacy-callout p {
+      font-size: 13px;
+      color: rgba(237,232,223,0.48);
+      margin-bottom: 0;
+    }
+    .privacy-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 72px 0;
     }
 
     /* FOOTER */
@@ -386,89 +268,36 @@
     .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
     .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
     .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
-    /* ── Mobile overlay ── */
-    .mob-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 302;
-      background: var(--bg);
-      flex-direction: column;
-      opacity: 0;
-      pointer-events: none;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      will-change: opacity;
-      transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    .mob-overlay { display: none; position: fixed; inset: 0; z-index: 302; background: var(--bg); flex-direction: column; opacity: 0; pointer-events: none;  will-change: opacity; transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
     .mob-overlay.open { display: flex; opacity: 1; pointer-events: all; }
-
-    .mob-ol-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-    }
+    .mob-ol-header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
     .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0) invert(1); opacity: 0.7; }
     .mob-close { background: none; border: none; cursor: pointer; color: rgba(237,232,223,0.5); padding: 10px; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s; }
     .mob-close:active { color: var(--cream); }
     .mob-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
     .mob-ol-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 36px 24px 24px; }
-
     .mob-ol-section { margin-bottom: 36px; }
-    .mob-ol-label {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.75; margin-bottom: 4px;
-    }
-
-    .mob-main-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 0; border-bottom: 1px solid var(--border);
-      font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300;
-      letter-spacing: -0.01em; color: var(--cream); text-decoration: none;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease;
-    }
+    .mob-ol-label { font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 4px; }
+    .mob-main-link { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--border); font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; letter-spacing: -0.01em; color: var(--cream); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; opacity: 0; transform: translateY(10px); transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease; }
     .mob-main-link:first-of-type { border-top: 1px solid var(--border); }
     .mob-overlay.open .mob-main-link:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.07s; }
     .mob-overlay.open .mob-main-link:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
     .mob-overlay.open .mob-main-link:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.19s; }
     .mob-main-link:active { color: var(--gold); }
     .mob-main-arr { font-size: 16px; color: var(--gold); opacity: 0.45; pointer-events: none; transition: opacity 0.18s, transform 0.18s; }
-    .mob-main-link:active .mob-main-arr { opacity: 1; transform: translateX(3px); }
-
     .mob-sub-list { list-style: none; padding: 0; }
-    .mob-sub-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045);
-      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400;
-      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5);
-      text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      transition: color 0.18s ease;
-      opacity: 0; transform: translateY(6px);
-    }
+    .mob-sub-link { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.045); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.18s ease; opacity: 0; transform: translateY(6px); }
     .mob-overlay.open .mob-sub-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.22s; }
     .mob-overlay.open .mob-sub-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.28s; }
     .mob-overlay.open .mob-sub-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.34s; }
     .mob-overlay.open .mob-sub-link:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.40s; }
     .mob-sub-link:active { color: var(--cream); }
     .mob-sub-arr { font-size: 11px; opacity: 0.3; pointer-events: none; }
-
-    .mob-ol-footer {
-      border-top: 1px solid var(--border); padding: 18px 24px 28px;
-      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s;
-    }
+    .mob-ol-footer { border-top: 1px solid var(--border); padding: 18px 24px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.38s ease 0.32s, transform 0.38s ease 0.32s; }
     .mob-overlay.open .mob-ol-footer { opacity: 1; transform: none; }
     .mob-ol-actions { display: flex; gap: 0; }
-    .mob-action {
-      display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none;
-      color: rgba(237,232,223,0.5); text-decoration: none;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
-    }
+    .mob-action { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; color: rgba(237,232,223,0.5); text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; padding: 8px 16px; transition: color 0.18s ease; min-width: 56px; }
     .mob-action:active { color: var(--cream); }
     .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
     .mob-action span { font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
@@ -476,6 +305,13 @@
     .mob-ol-header-right { display: flex; align-items: center; }
     .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
     .mob-ol-header .mob-action span { display: none; }
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 
     @media (max-width: 768px) {
       .hamburger { display: flex; }
@@ -491,12 +327,9 @@
       .nav-btn svg { width: 22px; height: 22px; }
       .nav-btn span { display: none; }
       .page-hero { padding: 56px 24px 44px; }
-      .support-nav { padding: 0 24px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-      .support-nav::-webkit-scrollbar { display: none; }
-      .contact-wrap { padding: 44px 24px 80px; }
-      .contact-layout { grid-template-columns: 1fr; gap: 52px; }
-      .contact-form-wrap { padding: 32px 24px 40px; }
-      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .page-meta { gap: 24px; }
+      .privacy-layout { grid-template-columns: 1fr; padding: 44px 24px 80px; gap: 48px; }
+      .privacy-toc { position: static; padding-right: 0; }
       footer { padding: 44px 24px 36px; }
       .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
       .footer-logo img { height: 80px; margin-bottom: 14px; }
@@ -508,31 +341,24 @@
       .footer-col ul { display: none; padding-bottom: 16px; }
       .footer-col.open ul { display: flex; }
       .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .privacy-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     }
-  
-    /* ─── MOB OVERLAY INLINE SEARCH ─── */
-    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
-    .mob-search-bar.open { display: flex; }
-    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.18); }
-    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(237,232,223,0.4); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
-    .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
-    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none;  }
   </style>
-  <meta name="description" content="Get in touch with the Altara team. We're here to help with questions about our premium car seat covers — sizing, shipping, or anything else.">
-  <link rel="canonical" href="https://www.altaradesign.com/contact.html">
+  <meta name="description" content="Altara Terms &amp; Conditions — ordering, pricing, delivery, returns, and your rights under Australian Consumer Law.">
+  <link rel="canonical" href="https://www.altaradesign.com/terms.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Altara">
-  <meta property="og:title" content="Contact Altara">
-  <meta property="og:description" content="Get in touch with the Altara team — we're here to help with any questions about our seat covers.">
-  <meta property="og:url" content="https://www.altaradesign.com/contact.html">
+  <meta property="og:title" content="Terms &amp; Conditions — Altara">
+  <meta property="og:description" content="Altara Terms &amp; Conditions — ordering, pricing, delivery, returns, and consumer rights.">
+  <meta property="og:url" content="https://www.altaradesign.com/terms.html">
   <meta property="og:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Contact Altara">
-  <meta name="twitter:description" content="Get in touch with the Altara team — we're here to help with any questions about our seat covers.">
+  <meta name="twitter:title" content="Terms &amp; Conditions — Altara">
+  <meta name="twitter:description" content="Altara Terms &amp; Conditions — ordering, pricing, delivery, returns, and consumer rights.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
 </head>
 <body>
@@ -568,9 +394,7 @@
       <span class="cart-badge" id="cart-badge"></span>
     </a>
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
+      <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
     </button>
   </div>
 </nav>
@@ -588,122 +412,178 @@
   <div class="page-eyebrow">
     <a href="index.html">Altara</a>
     <span>/</span>
-    <span>Support</span>
-    <span>/</span>
-    <span style="color:rgba(237,232,223,0.65)">Contact</span>
+    <span style="color:rgba(237,232,223,0.65)">Terms &amp; Conditions</span>
   </div>
-  <h1 class="page-h1">Get<br><em>In Touch</em></h1>
-  <p class="page-desc">We are here to help. Whether you have a question about fit, an order inquiry, or simply need advice — our team responds promptly and personally.</p>
+  <h1 class="page-h1">Terms &amp;<br><em>Conditions</em></h1>
+  <p class="page-desc">These terms set out the basis on which Altara sells to you. They cover ordering, pricing, delivery, returns, and your rights as a consumer. Please read them before placing an order.</p>
+  <div class="page-meta">
+    <div class="page-meta-item">
+      <div class="page-meta-label">Effective Date</div>
+      <div class="page-meta-value">3 August 2026</div>
+    </div>
+    <div class="page-meta-item">
+      <div class="page-meta-label">Last Updated</div>
+      <div class="page-meta-value">3 August 2026</div>
+    </div>
+    <div class="page-meta-item">
+      <div class="page-meta-label">Governing Law</div>
+      <div class="page-meta-value">Australian Consumer Law, Victoria, Australia</div>
+    </div>
+  </div>
 </header>
 
-<!-- SUPPORT NAV -->
-<nav class="support-nav" aria-label="Support navigation">
-  <a href="faq.html" class="sn-link">FAQ</a>
-  <a href="shipping.html" class="sn-link">Shipping</a>
-  <a href="returns.html" class="sn-link">Returns</a>
-  <a href="contact.html" class="sn-link active">Contact</a>
-</nav>
+<!-- TERMS CONTENT -->
+<div class="privacy-layout">
+  <aside class="privacy-toc">
+    <div class="toc-label">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#agreement">1. Agreement to These Terms</a></li>
+      <li><a href="#about">2. About Altara</a></li>
+      <li><a href="#products">3. Products &amp; Descriptions</a></li>
+      <li><a href="#pricing">4. Pricing &amp; GST</a></li>
+      <li><a href="#orders">5. Orders &amp; Acceptance</a></li>
+      <li><a href="#payment">6. Payment</a></li>
+      <li><a href="#shipping">7. Shipping &amp; Delivery</a></li>
+      <li><a href="#returns">8. Change of Mind Returns</a></li>
+      <li><a href="#acl">9. Your Rights Under Australian Consumer Law</a></li>
+      <li><a href="#ip">10. Intellectual Property</a></li>
+      <li><a href="#use">11. Acceptable Use</a></li>
+      <li><a href="#thirdparty">12. Third-Party Services</a></li>
+      <li><a href="#liability">13. Limitation of Liability</a></li>
+      <li><a href="#changes">14. Changes to These Terms</a></li>
+      <li><a href="#law">15. Governing Law &amp; Contact</a></li>
+    </ul>
+  </aside>
 
-<!-- CONTACT CONTENT -->
-<main class="contact-wrap">
-  <div class="contact-layout">
+  <main class="privacy-body">
 
-    <!-- Left: Info -->
-    <div class="contact-info">
-      <p class="contact-info-intro">Before reaching out, you may find your answer in our <a href="faq.html" style="color:var(--gold);opacity:0.8;text-decoration:none;">FAQ</a>. For all other enquiries, use the form or reach us directly through the channels below.</p>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Email</div>
-        <div class="contact-channel-value"><a href="mailto:hello@altaradesign.com" style="color:var(--cream);text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">hello@altaradesign.com</a></div>
-        <div class="contact-channel-note">We aim to respond to all enquiries within 1-2 business days.</div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Instagram</div>
-        <div class="contact-channel-value">@altara.au</div>
-        <div class="contact-channel-note">DMs are monitored Monday through Friday during business hours.</div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Support Hours</div>
-        <div class="contact-channel-note" style="margin-top:4px;">
-          <div class="hours-grid">
-            <span class="hours-day">Monday - Friday</span><span class="hours-time">9:00 AM - 5:00 PM AEST</span>
-            <span class="hours-day">Saturday</span><span class="hours-time">10:00 AM - 2:00 PM AEST</span>
-            <span class="hours-day">Sunday</span><span class="hours-time">Closed</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-channel">
-        <div class="contact-channel-label">Based In</div>
-        <div class="contact-channel-value">Australia</div>
-        <div class="contact-channel-note">All enquiries handled by our local team.</div>
+    <div class="privacy-section" id="agreement">
+      <div class="privacy-section-num">01</div>
+      <h2>Agreement to These Terms</h2>
+      <p>These Terms &amp; Conditions ("Terms") govern your use of altaradesign.com (the "Site") and any purchase you make from us. By placing an order, you agree to these Terms.</p>
+      <p>If you do not agree to these Terms, please do not place an order. We recommend saving or printing a copy for your records.</p>
+      <div class="privacy-callout">
+        <p><strong>Nothing in these Terms excludes your rights under the Australian Consumer Law.</strong> Where any part of these Terms conflicts with those rights, the Australian Consumer Law prevails.</p>
       </div>
     </div>
 
-    <!-- Right: Form -->
-    <div class="contact-form-wrap">
-      <h2 class="form-heading">Send a Message</h2>
-      <p class="form-subheading">Complete the form below and we will be in touch shortly.</p>
-
-      <form id="contact-form" novalidate>
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label" for="f-first">First Name</label>
-            <input class="form-input" type="text" id="f-first" name="first_name" placeholder="Jane" autocomplete="given-name">
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="f-last">Last Name</label>
-            <input class="form-input" type="text" id="f-last" name="last_name" placeholder="Smith" autocomplete="family-name">
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-email">Email Address</label>
-          <input class="form-input" type="email" id="f-email" name="email" placeholder="jane@example.com" autocomplete="email">
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-order">Order Number (Optional)</label>
-          <input class="form-input" type="text" id="f-order" name="order_number" placeholder="ALT-XXXXXX">
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-subject">Enquiry Type</label>
-          <div class="form-select-wrap">
-            <select class="form-select" id="f-subject" name="subject">
-              <option value="" disabled selected>Select a topic</option>
-              <option value="product">Product &amp; Fit</option>
-              <option value="order">Order Status</option>
-              <option value="shipping">Shipping &amp; Delivery</option>
-              <option value="returns">Returns &amp; Exchanges</option>
-              <option value="wholesale">Wholesale Enquiry</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label class="form-label" for="f-message">Message</label>
-          <textarea class="form-textarea" id="f-message" name="message" placeholder="How can we help you today?"></textarea>
-        </div>
-
-        <button type="submit" class="form-submit">Send Message</button>
-        <p class="form-note">By submitting this form, you agree to our privacy policy. Your information will never be shared with third parties.</p>
-      </form>
+    <div class="privacy-section" id="about">
+      <div class="privacy-section-num">02</div>
+      <h2>About Altara</h2>
+      <p>Altara ("we", "us", "our") sells premium microfibre vehicle seat covers direct to customers in Australia.</p>
+      <p>You can reach us at <a href="mailto:hello@altaradesign.com" style="color:var(--gold)">hello@altaradesign.com</a> or through our <a href="contact.html" style="color:var(--gold)">contact page</a>. We aim to respond to all enquiries within one business day.</p>
     </div>
 
-  </div>
-</main>
+    <div class="privacy-section" id="products">
+      <div class="privacy-section-num">03</div>
+      <h2>Products &amp; Descriptions</h2>
+      <p>We take care to describe and photograph our products accurately. Colours may appear differently depending on your screen, and minor variation in finish, stitching, or shade is normal for textile products and is not a defect.</p>
+      <p>Our covers are designed as a universal fit for most standard vehicle seats. Fit is not guaranteed for every vehicle, particularly seats with integrated airbags, built-in controls, or non-standard shapes. If you are unsure whether a cover suits your vehicle, contact us before ordering.</p>
+      <p>Product availability is not guaranteed until your order is accepted.</p>
+    </div>
+
+    <div class="privacy-section" id="pricing">
+      <div class="privacy-section-num">04</div>
+      <h2>Pricing &amp; GST</h2>
+      <p>All prices are listed in Australian dollars (AUD) and include GST where applicable.</p>
+      <p>Prices are those displayed at the time you place your order. We may change prices at any time, but changes will not affect orders we have already accepted.</p>
+      <p>If a product is listed at a materially incorrect price due to an error, we may cancel the order and refund you in full rather than supply at that price. We will contact you before doing so.</p>
+    </div>
+
+    <div class="privacy-section" id="orders">
+      <div class="privacy-section-num">05</div>
+      <h2>Orders &amp; Acceptance</h2>
+      <p>Placing an order is an offer to buy. Your order is accepted when we send you a dispatch confirmation, not when payment is taken.</p>
+      <p>We may decline or cancel an order where the product is unavailable, where there has been a pricing or description error, where we cannot deliver to your address, or where we reasonably suspect fraud. If we cancel an order after payment, we will refund you in full.</p>
+      <p>Please check your order confirmation carefully. If anything is wrong, contact us immediately &mdash; we can usually amend an order before it is dispatched, but not after.</p>
+    </div>
+
+    <div class="privacy-section" id="payment">
+      <div class="privacy-section-num">06</div>
+      <h2>Payment</h2>
+      <p>Payments are processed securely by Stripe. We accept major credit and debit cards (Visa, Mastercard, American Express), wallet payments including Apple Pay and Google Pay, and pay-later options including Klarna and Zip where offered at checkout.</p>
+      <p>Altara does not receive or store your full card details. Payment is taken at the time you complete checkout.</p>
+      <p>Where you choose a pay-later provider, your arrangement for repayment is with that provider and subject to their own terms. Any dispute about repayment terms, fees, or credit assessment is between you and that provider.</p>
+    </div>
+
+    <div class="privacy-section" id="shipping">
+      <div class="privacy-section-num">07</div>
+      <h2>Shipping &amp; Delivery</h2>
+      <p>We currently ship within Australia only. Only Australian delivery addresses can be entered at checkout.</p>
+      <p>Standard shipping is <strong>$9.95</strong>. Shipping is <strong>free on orders over $80</strong>. Your shipping cost is shown in the cart and again at checkout before payment.</p>
+      <p>Orders are fulfilled within 1-2 business days of payment confirmation. Estimated delivery is 3-7 business days from dispatch. These are estimates provided by our carrier, not guarantees, and delivery times may be affected by factors outside our control.</p>
+      <p>Risk in the goods passes to you on delivery. Please ensure the delivery address you provide is correct and accessible &mdash; we cannot redirect a parcel once dispatched. Full details are on our <a href="shipping.html" style="color:var(--gold)">shipping page</a>.</p>
+    </div>
+
+    <div class="privacy-section" id="returns">
+      <div class="privacy-section-num">08</div>
+      <h2>Change of Mind Returns</h2>
+      <p>We accept change of mind returns within <strong>30 days</strong> of delivery, provided the item is unused, in its original condition, and in its original packaging.</p>
+      <p>To start a return, contact us and we will issue a prepaid return label once your return is approved. Refunds are issued to your original payment method after we receive and inspect the item.</p>
+      <p>This 30-day change of mind policy is offered in addition to, and does not limit, your rights under the Australian Consumer Law. Full details are on our <a href="returns.html" style="color:var(--gold)">returns page</a>.</p>
+    </div>
+
+    <div class="privacy-section" id="acl">
+      <div class="privacy-section-num">09</div>
+      <h2>Your Rights Under Australian Consumer Law</h2>
+      <p>Our goods come with guarantees that cannot be excluded under the Australian Consumer Law.</p>
+      <p>You are entitled to a replacement or refund for a major failure, and to compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if they are not of acceptable quality and the failure does not amount to a major failure.</p>
+      <p>If you believe a product is faulty, contact us at <a href="mailto:hello@altaradesign.com" style="color:var(--gold)">hello@altaradesign.com</a> with your order number and photographs, and we will work with you to resolve it.</p>
+      <div class="privacy-callout">
+        <p><strong>Nothing in these Terms limits these rights.</strong> Any part of these Terms that would exclude, restrict, or modify a consumer guarantee does not apply to the extent the law does not permit it.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section" id="ip">
+      <div class="privacy-section-num">10</div>
+      <h2>Intellectual Property</h2>
+      <p>The Altara name, logo, product photography, page copy, and site design are owned by Altara and protected by intellectual property law.</p>
+      <p>You may view and share our content for personal, non-commercial purposes. You may not copy, reproduce, or use our branding or content for commercial purposes, or in a way that suggests affiliation or endorsement, without our written permission.</p>
+    </div>
+
+    <div class="privacy-section" id="use">
+      <div class="privacy-section-num">11</div>
+      <h2>Acceptable Use</h2>
+      <p>You agree not to use the Site in any way that is unlawful, that interferes with its operation or security, or that attempts to gain unauthorised access to any part of it or to another user’s account.</p>
+      <p>If you create an account, you are responsible for keeping your login details secure and for activity carried out under your account. Tell us promptly if you believe your account has been accessed without your permission.</p>
+    </div>
+
+    <div class="privacy-section" id="thirdparty">
+      <div class="privacy-section-num">12</div>
+      <h2>Third-Party Services</h2>
+      <p>We rely on third parties to operate parts of our service, including Stripe for payments, Australia Post for delivery, and analytics and email providers.</p>
+      <p>These providers operate under their own terms and privacy practices. We choose them carefully, but we are not responsible for their independent acts or omissions. How we handle your data is set out in our <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p>
+    </div>
+
+    <div class="privacy-section" id="liability">
+      <div class="privacy-section-num">13</div>
+      <h2>Limitation of Liability</h2>
+      <p>To the extent permitted by law, and subject to your rights under the Australian Consumer Law, our total liability for any claim relating to a product or your use of the Site is limited to the amount you paid for the relevant order.</p>
+      <p>We are not liable for indirect or consequential loss, including loss of profit or loss of use, to the extent the law permits us to exclude it.</p>
+      <p>We do not warrant that the Site will be uninterrupted or error free, and we may suspend or withdraw it for maintenance without notice.</p>
+    </div>
+
+    <div class="privacy-section" id="changes">
+      <div class="privacy-section-num">14</div>
+      <h2>Changes to These Terms</h2>
+      <p>We may update these Terms from time to time. The version published on this page at the time you place an order is the version that applies to that order.</p>
+      <p>Where changes are significant, we will make that clear on this page. The effective date above tells you when this version took effect.</p>
+    </div>
+
+    <div class="privacy-section" id="law">
+      <div class="privacy-section-num">15</div>
+      <h2>Governing Law &amp; Contact</h2>
+      <p>These Terms are governed by the laws of Victoria, Australia, and you and we submit to the non-exclusive jurisdiction of the courts of that state.</p>
+      <p>For any question about these Terms, contact us at <a href="mailto:hello@altaradesign.com" style="color:var(--gold)">hello@altaradesign.com</a>.</p>
+    </div>
+  </main>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-logo">
-        <img src="brand assets/Altara Brand Logo.png" alt="Altara">
-      </div>
+      <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <p class="footer-tagline">Engineered comfort for modern movement. Premium seat covers built for the way you live.</p>
     </div>
     <div class="footer-col">
@@ -751,16 +631,16 @@
 <!-- MOBILE OVERLAY -->
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
   <div class="mob-ol-header">
-      <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
-      <div class="mob-ol-header-right">
-        <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
-          <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
-          <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
-        <button class="mob-close" id="mob-close" aria-label="Close menu">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
+    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <div class="mob-ol-header-right">
+      <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
+      <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+      <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+      <button class="mob-close" id="mob-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
+  </div>
   <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
     <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -821,39 +701,17 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navEl.classList.contains('search-active'))closeSearch();});
     panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
   })();
-
-  // Mobile hamburger menu
-  (function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger');
     const overlay = document.getElementById('mob-overlay');
     const closeBtn = document.getElementById('mob-close');
     if (!hamburger || !overlay) return;
-
-    function openMenu() {
-      hamburger.classList.add('open');
-      overlay.classList.add('open');
-      overlay.setAttribute('aria-hidden', 'false');
-      hamburger.setAttribute('aria-expanded', 'true');
-
-    }
-    function closeMenu() {
-      hamburger.classList.remove('open');
-      overlay.classList.remove('open');
-      overlay.setAttribute('aria-hidden', 'true');
-      hamburger.setAttribute('aria-expanded', 'false');
-
-    }
-
-    hamburger.addEventListener('click', () => {
-      overlay.classList.contains('open') ? closeMenu() : openMenu();
-    });
+    function openMenu() { hamburger.classList.add('open'); overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); hamburger.setAttribute('aria-expanded','true'); }
+    function closeMenu() { hamburger.classList.remove('open'); overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false'); }
+    hamburger.addEventListener('click', () => { overlay.classList.contains('open') ? closeMenu() : openMenu(); });
     if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
-    });
-  })();
-
-  // Footer accordion mobile
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu(); });
+  });
   document.querySelectorAll('.footer-col h4').forEach(h4=>{
     h4.addEventListener('click',()=>{
       if(window.innerWidth>768) return;
@@ -862,30 +720,6 @@
       if(!isOpen) col.classList.add('open');
     });
   });
-
-  // Form submission placeholder
-  document.getElementById('contact-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const first = document.getElementById('f-first').value.trim();
-    const last = document.getElementById('f-last').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const order = document.getElementById('f-order').value.trim();
-    const subject = document.getElementById('f-subject');
-    const subjectText = subject.options[subject.selectedIndex]?.text || '';
-    const message = document.getElementById('f-message').value.trim();
-    const bodyLines = [
-      `Name: ${first} ${last}`,
-      `Email: ${email}`,
-      order ? `Order Number: ${order}` : '',
-      subjectText ? `Enquiry Type: ${subjectText}` : '',
-      '',
-      message
-    ].filter(l => l !== undefined && !(l === '' && !message));
-    const mailto = `mailto:hello@altaradesign.com?subject=${encodeURIComponent('Customer Enquiry' + (subjectText ? ': ' + subjectText : ''))}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-    window.location.href = mailto;
-  });
-
-  // Mobile overlay inline search
   (function() {
     const searchBtn = document.getElementById('mob-search-btn');
     const searchBar = document.getElementById('mob-search-bar');
@@ -897,6 +731,6 @@
       if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
     });
   })();
-  </script>
+</script>
 </body>
 </html>
