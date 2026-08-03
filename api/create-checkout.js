@@ -61,6 +61,9 @@ export default async function handler(req, res) {
       currency: 'aud',
       shipping_address_collection: { allowed_countries: ['AU'] },
       shipping_options: [orderTotal >= FREE_SHIP_THRESHOLD ? freeShipping : standardShipping],
+      // Lets customers redeem a promotion code at checkout. Without this the
+      // code entry field is not shown at all and any code we issue is unusable.
+      allow_promotion_codes: true,
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart.html`,
       metadata: { source: 'altara-web' },
