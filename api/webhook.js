@@ -106,7 +106,7 @@ export function orderEmailHtml({ first, ref, items, subtotal, shipping, total, a
   </td></tr>
 
   <tr><td style="padding:20px 48px;background:#0C0D10;border-top:1px solid rgba(255,255,255,0.06);">
-    <p style="margin:0;font-size:10px;color:rgba(237,232,223,0.2);text-align:center;letter-spacing:0.1em;">ALTARA &nbsp;&middot;&nbsp; Engineered Comfort for Modern Movement</p>
+    <p style="margin:0;font-size:10px;color:rgba(237,232,223,0.2);text-align:center;letter-spacing:0.1em;">ALTARA &nbsp;&middot;&nbsp; Tailored for Every Drive</p>
   </td></tr>
 </table>
 </td></tr>

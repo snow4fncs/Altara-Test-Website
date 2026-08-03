@@ -43,7 +43,7 @@ async function sendConfirmationEmail(email, name) {
     <a href="https://altara-test-website.vercel.app/collection.html" style="display:inline-block;background:#4D6272;color:#EDE8DF;text-decoration:none;padding:14px 44px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;">View the Collection</a>
   </td></tr>
   <tr><td style="padding:20px 48px;background:#0C0D10;border-top:1px solid rgba(255,255,255,0.06);">
-    <p style="margin:0;font-size:10px;color:rgba(237,232,223,0.2);text-align:center;letter-spacing:0.1em;">ALTARA &nbsp;·&nbsp; Engineered Comfort for Modern Movement</p>
+    <p style="margin:0;font-size:10px;color:rgba(237,232,223,0.2);text-align:center;letter-spacing:0.1em;">ALTARA &nbsp;·&nbsp; Tailored for Every Drive</p>
   </td></tr>
 </table>
 </td></tr>
