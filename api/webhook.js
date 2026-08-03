@@ -41,13 +41,24 @@ export default async function handler(req, res) {
       price: item.amount_total / 100,
     }));
 
-    // Save order to Supabase
+    // Stripe moved shipping details under collected_information; keep the old
+    // path as a fallback so this works across API versions.
+    const shipping = session.collected_information?.shipping_details
+      || session.shipping_details
+      || null;
+
+    if (!shipping?.address) {
+      console.error('No shipping address on session', session.id, '- order is not shippable');
+    }
+
+    // Save order to Supabase. Prefer the delivery recipient over the cardholder:
+    // they are often different people.
     const { error } = await supabase.from('orders').insert({
       stripe_session_id: session.id,
       stripe_payment_intent: session.payment_intent,
       customer_email: session.customer_details?.email,
-      customer_name: session.customer_details?.name,
-      shipping_address: session.shipping_details?.address,
+      customer_name: shipping?.name || session.customer_details?.name || null,
+      shipping_address: shipping?.address || null,
       items,
       subtotal: session.amount_subtotal / 100,
       total: session.amount_total / 100,
