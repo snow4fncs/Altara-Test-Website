@@ -315,7 +315,6 @@
       color: var(--cream);
       display: inline;
     }
-    .product-tile-name br { display: none; }
     .product-tile-right {
       padding-top: 0;
       flex-shrink: 0;
@@ -535,37 +534,35 @@
       z-index: 201;
       background: var(--brand);
       color: var(--cream);
-      text-align: center;
-      padding: 11px 20px;
+      padding: 11px 0;
       font-family: 'Outfit', sans-serif;
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
+      overflow: hidden;
+    }
+    .announce-viewport {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+    }
+    .announce-track {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
+      width: max-content;
+      animation: ab-marquee 46s linear infinite;
+      will-change: transform;
     }
-    .ab-dot { opacity: 0.45; }
-
-    .launch-badge {
-      position: absolute;
-      top: 16px; left: 16px;
-      background: rgba(12,13,16,0.82);
-      border: 1px solid rgba(196,169,122,0.4);
-      color: var(--gold);
-      font-family: 'Outfit', sans-serif;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      backdrop-filter: blur(6px);
+    .announce-seq { display: flex; align-items: center; flex-shrink: 0; }
+    .ab-item { white-space: nowrap; padding: 0 30px; }
+    .ab-dot { color: var(--gold); opacity: 0.62; font-size: 7px; line-height: 1; }
+    @keyframes ab-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .announce-bar:hover .announce-track { animation-play-state: paused; }
+    .ab-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    @media (prefers-reduced-motion: reduce) {
+      .announce-track { animation: none; width: 100%; justify-content: center; }
+      .announce-seq + .announce-seq { display: none; }
+      .ab-extra { display: none; }
     }
-    .announce-pulse { width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0;animation:ab-pulse 2s ease-in-out infinite; }
-    @keyframes ab-pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
-    .ab-hide-mobile { }
-    @media(max-width:600px){.ab-hide-mobile{display:none;}}
   </style>
   <meta name="description" content="Explore the Altara collection of premium car seat covers — Midnight Black and Contrast White. Engineered for comfort, style, and a perfect fit.">
   <link rel="canonical" href="https://altaradesign.com/collection.html">
@@ -585,11 +582,24 @@
 <body>
 
   <!-- ANNOUNCEMENT BAR -->
-  <div class="announce-bar" role="banner">
-    <span class="announce-pulse" aria-hidden="true"></span>
-    <span>Launching August 2026</span>
-    <span class="ab-dot">·</span>
-    <span class="ab-hide-mobile">Join the Waitlist — Limited First Run</span>
+  <div class="announce-bar">
+    <p class="ab-sr">Free shipping on orders over $80. 30-day returns. Australia-wide delivery. Secure checkout.</p>
+    <div class="announce-viewport" aria-hidden="true">
+      <div class="announce-track">
+        <div class="announce-seq">
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
+        </div>
+        <div class="announce-seq">
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- NAV -->
@@ -661,13 +671,12 @@
   <main class="product-grid">
     <a href="product-contrast-white.html" class="product-tile">
       <div class="product-tile-img-wrap">
-      <span class="launch-badge">Launching August 2026</span>
         <img src="Product Photos/Homepage image.png" alt="Contrast White Seat Cover" width="1672" height="941" loading="eager" fetchpriority="high">
       </div>
       <div class="product-tile-info">
         <div class="product-tile-left">
           <p class="product-tile-cat">Seat Cover</p>
-          <h2 class="product-tile-name">Contrast<br>White</h2>
+          <h2 class="product-tile-name">Contrast White</h2>
         </div>
         <div class="product-tile-right">
           <span class="product-tile-explore">Explore</span>
@@ -677,13 +686,12 @@
 
     <a href="product-midnight-black.html" class="product-tile">
       <div class="product-tile-img-wrap">
-      <span class="launch-badge">Launching August 2026</span>
         <img src="Product Photos/Homepage image 2.png" alt="Midnight Black Seat Cover" width="1672" height="941" loading="eager">
       </div>
       <div class="product-tile-info">
         <div class="product-tile-left">
           <p class="product-tile-cat">Seat Cover</p>
-          <h2 class="product-tile-name">Midnight<br>Black</h2>
+          <h2 class="product-tile-name">Midnight Black</h2>
         </div>
         <div class="product-tile-right">
           <span class="product-tile-explore">Explore</span>

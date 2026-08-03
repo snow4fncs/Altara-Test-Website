@@ -11,9 +11,9 @@ const PRODUCTS = {
 
 const PRICES = {
   'midnight-black': 59,
-  'midnight-black-twin': 97,
+  'midnight-black-twin': 89,
   'contrast-white': 59,
-  'contrast-white-twin': 97,
+  'contrast-white-twin': 89,
 };
 
 const FREE_SHIP_THRESHOLD = 80;
