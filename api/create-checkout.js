@@ -18,6 +18,44 @@ const PRICES = {
 
 const FREE_SHIP_THRESHOLD = 80;
 
+// ─── Twin Set bundle ────────────────────────────────────────────────────────
+// Any two single covers are charged as a Twin Set: 2 x $59 = $118 becomes $89,
+// so $29 comes off per pair. Mix or match, because two singles of one colour
+// are the same goods as that colour's Twin Set and must not cost more.
+//
+// This is recomputed here from the submitted cart. The cart page shows the same
+// figure for transparency, but nothing the browser sends about pricing is
+// trusted - only the item ids and quantities.
+const BUNDLE_PAIR_SAVING = 29;
+
+export function bundleDiscount(items) {
+  const singles = items
+    .filter(i => !/-twin$/.test(String(i.id)))
+    .reduce((n, i) => n + Math.max(1, Number(i.qty) || 1), 0);
+  return Math.floor(singles / 2) * BUNDLE_PAIR_SAVING;
+}
+
+// Coupons are reused by deterministic id so we do not litter the account with a
+// new object per checkout. Created on first use, so there is nothing to set up
+// in the Stripe dashboard.
+async function bundleCouponId(amountAud) {
+  const id = `altara-twin-bundle-${amountAud}`;
+  try {
+    const existing = await stripe.coupons.retrieve(id);
+    return existing.id;
+  } catch (err) {
+    if (err?.raw?.code !== 'resource_missing' && err?.statusCode !== 404) throw err;
+    const created = await stripe.coupons.create({
+      id,
+      amount_off: amountAud * 100,
+      currency: 'aud',
+      duration: 'once',
+      name: `Twin Set bundle (-$${amountAud})`,
+    });
+    return created.id;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -31,7 +69,10 @@ export default async function handler(req, res) {
       return { price: priceId, quantity: item.qty || 1 };
     });
 
-    const orderTotal = items.reduce((sum, item) => sum + (PRICES[item.id] || 0) * (item.qty || 1), 0);
+    const discount = bundleDiscount(items);
+    const grossTotal = items.reduce((sum, item) => sum + (PRICES[item.id] || 0) * (item.qty || 1), 0);
+    // Free shipping is judged on what the customer actually pays.
+    const orderTotal = grossTotal - discount;
     const freeShipping = {
       shipping_rate_data: {
         type: 'fixed_amount',
@@ -55,19 +96,30 @@ export default async function handler(req, res) {
       },
     };
 
-    const session = await stripe.checkout.sessions.create({
+    const params = {
       mode: 'payment',
       line_items,
       currency: 'aud',
       shipping_address_collection: { allowed_countries: ['AU'] },
       shipping_options: [orderTotal >= FREE_SHIP_THRESHOLD ? freeShipping : standardShipping],
-      // Lets customers redeem a promotion code at checkout. Without this the
-      // code entry field is not shown at all and any code we issue is unusable.
-      allow_promotion_codes: true,
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart.html`,
-      metadata: { source: 'altara-web' },
-    });
+      metadata: {
+        source: 'altara-web',
+        bundle_discount_aud: String(discount),
+      },
+    };
+
+    // Stripe rejects a session that both carries an automatic discount and
+    // offers the promotion code field, so the two are mutually exclusive: a
+    // bundle order gets the bundle, everything else can redeem a code.
+    if (discount > 0) {
+      params.discounts = [{ coupon: await bundleCouponId(discount) }];
+    } else {
+      params.allow_promotion_codes = true;
+    }
+
+    const session = await stripe.checkout.sessions.create(params);
 
     res.status(200).json({ url: session.url });
   } catch (err) {

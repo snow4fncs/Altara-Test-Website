@@ -612,20 +612,57 @@
       }
       .order-summary { position: static; }
       .col-headers { display: none; }
+
+      /* Two rows, not three. The old layout gave the quantity stepper and the
+         price a full-width row each, which made every line item 248px tall and
+         pushed the checkout button 178px below the fold on a 390x844 screen. */
       .cart-item {
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 64px 1fr auto;
         grid-template-rows: auto auto;
-        gap: 16px;
+        gap: 8px 14px;
+        padding: 16px 0;
+        align-items: start;
       }
-      .qty-control { grid-column: 2; }
+      .cart-item-img-link { grid-column: 1; grid-row: 1 / span 2; }
+      .cart-item-img { width: 64px; height: 64px; }
+      .cart-item-info { grid-column: 2; grid-row: 1; }
+      .qty-control { grid-column: 2; grid-row: 2; justify-self: start; }
       .cart-item-price-col {
-        grid-column: 2;
-        align-items: flex-start;
-        flex-direction: row;
-        align-items: center;
+        grid-column: 3;
+        grid-row: 1 / span 2;
+        flex-direction: column;
+        align-items: flex-end;
         justify-content: space-between;
+        align-self: stretch;
         min-width: auto;
+        gap: 8px;
       }
+
+      /* Mobile type: the small end of the scale was too small to read. */
+      .cart-item-name { font-size: 15.5px; margin-bottom: 3px; }
+      .cart-item-meta { font-size: 12.5px; line-height: 1.5; }
+      .cart-item-feature { font-size: 12.5px; }
+      .cart-item-price { font-size: 15.5px; }
+      .remove-label { font-size: 11px; }
+      .qty-btn { width: 34px; height: 34px; font-size: 15px; }
+      .qty-value { font-size: 14.5px; }
+      .summary-heading { font-size: 13px; }
+      .summary-label { font-size: 14px; }
+      .summary-value { font-size: 14px; }
+      .summary-total-value { font-size: 22px; }
+      .btn-checkout { font-size: 13px; padding: 17px 24px; }
+      .secure-note, .we-accept-label, .we-accept-list { font-size: 12px; }
+      .continue-link { font-size: 12px; }
+      .ship-threshold-msg { font-size: 12.5px; }
+
+      /* Tighten the summary so the button clears the fold even with the bundle
+         discount row present. Desktop spacing is untouched. */
+      .order-summary { padding: 26px; }
+      .summary-heading { margin-bottom: 16px; }
+      .summary-row { margin-bottom: 11px; }
+      .summary-divider { margin: 14px 0; }
+      .btn-checkout { margin-top: 16px; }
+      .cart-item { padding: 14px 0; }
       .steps-bar { padding: 10px 16px; gap: 8px; }
       .back-btn { position: static; font-size: 9px; letter-spacing: 0.1em; }
       .checkout-steps { flex: 1; justify-content: flex-end; }
@@ -716,7 +753,67 @@
       .ab-extra { display: none; }
     }
 
-</style>
+
+    .summary-label-save { color: var(--gold); }
+    .summary-value.save { color: var(--gold); font-variant-numeric: tabular-nums lining-nums; }
+    .bundle-nudge {
+      font-size: 11.5px; font-weight: 300; line-height: 1.6;
+      color: var(--cream-dim); margin: -4px 0 4px;
+      padding-left: 10px; border-left: 1px solid var(--gold);
+    }
+    .bundle-nudge em { font-style: normal; color: var(--gold); }
+    @media (max-width: 900px) { .bundle-nudge { font-size: 12.5px; } }
+  
+    /* Sticky mobile checkout bar */
+    .mcb {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 250;
+      display: none;
+      align-items: center; justify-content: space-between; gap: 14px;
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: rgba(12,13,16,0.97);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -1px 2px rgba(0,0,0,0.4), 0 -14px 34px -20px rgba(0,0,0,0.9);
+      transform: translateY(110%);
+      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
+    }
+    .mcb.show { transform: translateY(0); }
+    .mcb-total { display: flex; flex-direction: column; gap: 2px; }
+    .mcb-label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .mcb-value { font-size: 19px; font-weight: 400; color: var(--cream); font-variant-numeric: tabular-nums lining-nums; }
+    .mcb-btn {
+      flex: 0 0 auto;
+      background: var(--brand); color: var(--cream);
+      border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 16px 30px;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .mcb-btn:hover { opacity: 0.9; }
+    .mcb-btn:active { transform: scale(0.98); }
+    .mcb-btn:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    @media (max-width: 900px) { .mcb { display: flex; } }
+    @media (prefers-reduced-motion: reduce) { .mcb { transition: none; } }
+  
+    /* Cart lines link back to their product page. The image link is hidden from
+       assistive tech and the tab order because the name link beside it goes to
+       the same place - one stop for keyboard and screen reader users, not two. */
+    .cart-item-img-link { display: block; }
+    .cart-item-img { transition: opacity 0.25s ease; }
+    .cart-item-img-link:hover .cart-item-img { opacity: 0.82; }
+    .cart-item-img-link:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    a.cart-item-name {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--cream);
+      transition: color 0.22s ease;
+    }
+    a.cart-item-name:hover { color: var(--gold); }
+    a.cart-item-name:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      .cart-item-img, a.cart-item-name { transition: none; }
+    }
+  </style>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Review your Altara seat covers and complete your order. Secure checkout with free shipping on all Australian orders.">
   <link rel="canonical" href="https://www.altaradesign.com/cart.html">
@@ -870,6 +967,11 @@
         <span class="summary-label">Subtotal</span>
         <span class="summary-value" id="subtotal">$0.00</span>
       </div>
+      <div class="summary-row" id="bundle-row" style="display:none">
+        <span class="summary-label summary-label-save" id="bundle-label">Twin Set bundle</span>
+        <span class="summary-value save" id="bundle-value"></span>
+      </div>
+      <p class="bundle-nudge" id="bundle-nudge" style="display:none"></p>
       <div class="summary-row">
         <span class="summary-label">Shipping</span>
         <span class="summary-value" id="cart-shipping"></span>
@@ -903,6 +1005,18 @@
 
   </main>
 
+  <!-- Mobile safety net. With three or more items, or on a short screen, the
+       real checkout button cannot sit above the fold no matter how tight the
+       spacing gets. This bar appears only while that button is off-screen, so
+       there are never two visible checkout buttons competing. -->
+  <div class="mcb" id="mcb" aria-hidden="true">
+    <div class="mcb-total">
+      <span class="mcb-label">Total</span>
+      <span class="mcb-value" id="mcb-value">$0.00</span>
+    </div>
+    <button class="mcb-btn" type="button" onclick="startCheckout()">Checkout</button>
+  </div>
+
   <!-- FOOTER -->
     <footer>
   <div class="footer-grid">
@@ -917,6 +1031,7 @@
       <ul>
         <li><a href="collection.html">Seat Covers</a></li>
         <li><a href="collection.html">Collections</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1008,6 +1123,42 @@
       return cart.items.reduce((sum, i) => sum + i.price * i.qty, 0);
     }
 
+    // ─── Twin Set bundle ────────────────────────────────────────────────────
+    // Any two single covers are priced as a Twin Set: 2 x $59 = $118 becomes
+    // $89, so $29 comes off per pair. Mix or match - one black and one white
+    // qualifies, and so does two of the same. Without the "two of the same"
+    // case, two singles of one colour would cost $29 MORE than that colour's
+    // Twin Set, which is the same goods.
+    // This display is convenience only; api/create-checkout.js recomputes it
+    // from the cart and is the figure the customer is actually charged.
+    const BUNDLE_PAIR_SAVING = 29;
+
+    function bundleInfo(cart) {
+      const singles = cart.items
+        .filter(i => !/-twin$/.test(i.id))
+        .reduce((n, i) => n + i.qty, 0);
+      const pairs = Math.floor(singles / 2);
+      return {
+        singles,
+        pairs,
+        discount: pairs * BUNDLE_PAIR_SAVING,
+        oneAwayFromPair: singles % 2 === 1,
+      };
+    }
+
+    // Where each cart line links back to. Built from a fixed map rather than
+    // from the stored item, so nothing in localStorage can inject a URL. Twin
+    // sets share their colourway's page.
+    const PRODUCT_PAGES = {
+      'midnight-black': 'product-midnight-black.html',
+      'midnight-black-twin': 'product-midnight-black.html',
+      'contrast-white': 'product-contrast-white.html',
+      'contrast-white-twin': 'product-contrast-white.html',
+    };
+    function productHref(id) {
+      return PRODUCT_PAGES[id] || 'collection.html';
+    }
+
     function renderCart() {
       const cart = getCart();
       const list = document.getElementById('cart-items-list');
@@ -1051,10 +1202,13 @@
         const article = document.createElement('article');
         article.className = 'cart-item';
         article.dataset.id = item.id;
+        const href = productHref(item.id);
         article.innerHTML = `
-          <img src="${item.image}" alt="${item.name} seat cover" class="cart-item-img" width="96" height="96">
+          <a class="cart-item-img-link" href="${href}" tabindex="-1" aria-hidden="true">
+            <img src="${item.image}" alt="${item.name} seat cover" class="cart-item-img" width="96" height="96">
+          </a>
           <div class="cart-item-info">
-            <p class="cart-item-name">${item.name}</p>
+            <a class="cart-item-name" href="${href}">${item.name}</a>
             <p class="cart-item-meta">Seat Cover</p>
             ${item.variant ? `<p class="cart-item-meta">${item.variant}</p>` : ''}
             <p class="cart-item-feature">MagFit&trade;</p>
@@ -1077,9 +1231,35 @@
 
       const FREE_SHIP = 80;
       const SHIP_RATE = 9.95;
-      const total = getTotal(cart);
-      const shipping = total >= FREE_SHIP ? 0 : SHIP_RATE;
-      subtotalEl.textContent = fmt(total);
+      const subtotal = getTotal(cart);
+      const bundle = bundleInfo(cart);
+      const afterDiscount = subtotal - bundle.discount;
+      const shipping = afterDiscount >= FREE_SHIP ? 0 : SHIP_RATE;
+
+      subtotalEl.textContent = fmt(subtotal);
+
+      // Discount row: only present when a pair actually qualifies.
+      const discountRow = document.getElementById('bundle-row');
+      const discountVal = document.getElementById('bundle-value');
+      const bundleNudge = document.getElementById('bundle-nudge');
+      if (bundle.discount > 0) {
+        discountVal.textContent = '-' + fmt(bundle.discount);
+        discountRow.style.display = '';
+        document.getElementById('bundle-label').textContent =
+          bundle.pairs === 1 ? 'Twin Set bundle' : 'Twin Set bundle × ' + bundle.pairs;
+      } else {
+        discountRow.style.display = 'none';
+      }
+
+      if (bundleNudge) {
+        if (bundle.oneAwayFromPair) {
+          bundleNudge.innerHTML = 'Add one more cover and save <em>$' + BUNDLE_PAIR_SAVING + '</em> — any two count as a Twin Set';
+          bundleNudge.style.display = 'block';
+        } else {
+          bundleNudge.style.display = 'none';
+        }
+      }
+
       const shipEl = document.getElementById('cart-shipping');
       const threshMsg = document.getElementById('ship-threshold-msg');
       if (shipping === 0) {
@@ -1087,9 +1267,30 @@
         if (threshMsg) threshMsg.style.display = 'none';
       } else {
         shipEl.textContent = fmt(shipping); shipEl.classList.remove('free');
-        if (threshMsg) { threshMsg.innerHTML = 'Add <em>$' + (FREE_SHIP - total).toFixed(0) + '</em> more for free shipping'; threshMsg.style.display = 'block'; }
+        if (threshMsg) { threshMsg.innerHTML = 'Add <em>$' + (FREE_SHIP - afterDiscount).toFixed(0) + '</em> more for free shipping'; threshMsg.style.display = 'block'; }
       }
-      totalEl.textContent = fmt(total + shipping);
+      totalEl.textContent = fmt(afterDiscount + shipping);
+
+      const mcbValue = document.getElementById('mcb-value');
+      if (mcbValue) mcbValue.textContent = fmt(afterDiscount + shipping);
+      syncMobileBar();
+    }
+
+    // Show the sticky bar only while the real checkout button is out of view.
+    var mcbObserver = null;
+    function syncMobileBar() {
+      const bar = document.getElementById('mcb');
+      const btn = document.getElementById('btn-checkout');
+      if (!bar || !btn) return;
+      const hasItems = getCart().items.length > 0;
+      if (!hasItems) { bar.classList.remove('show'); bar.setAttribute('aria-hidden', 'true'); return; }
+      if (mcbObserver) mcbObserver.disconnect();
+      mcbObserver = new IntersectionObserver(function (entries) {
+        const visible = entries[0].isIntersecting;
+        bar.classList.toggle('show', !visible);
+        bar.setAttribute('aria-hidden', String(visible));
+      }, { threshold: 0.9 });
+      mcbObserver.observe(btn);
     }
 
     function changeQty(id, delta) {
@@ -1124,7 +1325,8 @@
       // Meta Pixel — InitiateCheckout
       (function() {
         var cart = getCart();
-        var total = getTotal(cart);
+        // report what the customer actually pays, not the pre-discount subtotal
+        var total = getTotal(cart) - bundleInfo(cart).discount;
         fbq('track', 'InitiateCheckout', {
           content_ids: cart.items.map(function(i){ return i.id; }),
           num_items: cart.items.reduce(function(a, i){ return a + i.qty; }, 0),
