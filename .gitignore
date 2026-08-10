@@ -3,3 +3,8 @@ temporary screenshots/
 .DS_Store
 .env
 .env.local
+
+# Local agent tooling (Higgsfield skills), not part of the site
+.agents/
+.claude/
+skills-lock.json

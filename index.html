@@ -1306,7 +1306,116 @@
       .announce-seq + .announce-seq { display: none; }
       .ab-extra { display: none; }
     }
-</style>
+    /* ── Reviews band (homepage + collection) ─────────────────────── */
+    .rvb { padding: 96px 72px; border-top: 1px solid var(--line, rgba(255,255,255,0.07)); }
+    .rvb-head { max-width: 1180px; margin: 0 auto 44px; }
+    .rvb-ey {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+    }
+    .rvb-h {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 4vw, 46px); font-weight: 300;
+      line-height: 1.06; letter-spacing: -0.02em; color: var(--cream);
+    }
+    .rvb-h em { font-style: italic; color: rgba(237,232,223,0.55); }
+
+    .rvb-agg { display: flex; align-items: center; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+    .rvb-agg-n {
+      font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300;
+      color: var(--cream); line-height: 1; font-variant-numeric: lining-nums;
+    }
+    .rvb-agg-sub { font-size: 11px; color: rgba(237,232,223,0.42); letter-spacing: 0.05em; }
+
+    /* exact-fill stars, never rounded */
+
+    .rvb-grid {
+      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+    }
+    .rvb-card {
+      background: var(--bg-2, #111317); border: 1px solid var(--line, rgba(255,255,255,0.07));
+      padding: 28px 30px 30px; display: flex; flex-direction: column; gap: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 18px 40px -28px rgba(77,98,114,0.5);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+    }
+    .rvb-card:hover { transform: translateY(-2px); border-color: rgba(196,169,122,0.28); }
+    .rvb-card-top { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; }
+    .rvb-name { font-size: 12px; color: var(--cream); letter-spacing: 0.04em; }
+    .rvb-ver {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 8.5px; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--brand-lt, #607D8F);
+    }
+    .rvb-ver svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 3; }
+    .rvb-date { font-size: 9.5px; color: var(--muted, #72787F); letter-spacing: 0.06em; margin-left: auto; }
+    .rvb-prod { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted, #72787F); }
+    .rvb-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400;
+      line-height: 1.28; letter-spacing: -0.01em; color: var(--cream);
+    }
+    .rvb-body { font-size: 13px; line-height: 1.85; color: var(--cream-dim, #9A9590); font-weight: 300; }
+
+    .rvb-foot { max-width: 1180px; margin: 34px auto 0; }
+    .rvb-all {
+      display: inline-flex; align-items: center; gap: 9px; padding: 14px 28px;
+      border: 1px solid var(--line, rgba(255,255,255,0.07)); color: var(--cream);
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .rvb-all:hover { opacity: 0.72; }
+    .rvb-all:active { transform: scale(0.98); }
+    .rvb-all:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+    .rvb-empty { grid-column: 1/-1; padding: 48px 30px; text-align: center; font-size: 12.5px; color: var(--muted, #72787F); border: 1px solid var(--line, rgba(255,255,255,0.07)); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rvb-card, .rvb-all { transition: none; }
+      .rvb-card:hover { transform: none; }
+    }
+    @media (max-width: 900px) {
+      .rvb { padding: 68px 24px; }
+      .rvb-head { margin-bottom: 32px; }
+      .rvb-grid { grid-template-columns: 1fr; }
+      .rvb-card { padding: 24px 24px 26px; }
+    }
+      /* ── Proportional star fill ─────────────────────────────────────────────
+       Two layers of identical stars: a grey base, and a gold copy clipped to an
+       exact pixel width. line-height:0 with a block-level base row is
+       load-bearing - an inline base sits on the text baseline while the absolute
+       fill sits at top:0, which offsets the layers and leaves grey stars
+       showing underneath. Clip width is computed from the star's AREA, not its
+       bounding box, because the left third of a star is a thin point. */
+    .starfill {
+      position: relative; display: inline-block; width: max-content;
+      flex: 0 0 auto; vertical-align: middle;
+      line-height: 0; font-size: 0;
+    }
+    .starfill .sf-base { display: flex; gap: 2px; }
+    .starfill .sf-fill {
+      position: absolute; top: 0; left: 0; bottom: 0;
+      display: flex; gap: 2px; overflow: hidden;
+    }
+    .starfill svg { width: 13px; height: 13px; display: block; flex: 0 0 auto; stroke: none; }
+    .starfill .sf-base svg { fill: rgba(237,232,223,0.16); }
+    .starfill .sf-fill svg { fill: var(--gold); }
+  
+    @media (max-width: 900px) {
+      .rvb-ey { font-size: 11px; }
+      .rvb-agg-sub { font-size: 12.5px; }
+      .rvb-name { font-size: 13.5px; }
+      .rvb-ver { font-size: 10px; }
+      .rvb-date { font-size: 11px; }
+      .rvb-prod { font-size: 10.5px; }
+      .rvb-title { font-size: 21px; }
+      .rvb-body { font-size: 14.5px; line-height: 1.8; }
+      .rvb-all { font-size: 11px; padding: 16px 30px; }
+      .ci-key { font-size: 10.5px; }
+      .ci-val { font-size: 14px; line-height: 1.8; }
+      .sec-label { font-size: 11px; }
+    }
+  </style>
   <meta name="description" content="Premium car seat covers engineered for modern life. Altara blends luxury materials with precision fit for a comfortable, stylish drive. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/">
   <meta property="og:type" content="website">
@@ -1608,6 +1717,18 @@
     </div>
   </div>
 
+
+  <!-- REVIEWS -->
+  <section class="rvb" id="reviews" aria-label="Customer reviews">
+    <div class="rvb-head">
+      <div class="rvb-ey rev">Reviews</div>
+      <h2 class="rvb-h rev d1">Owners, not<br><em>advertising.</em></h2>
+      <div class="rvb-agg rev d2" id="rvb-agg"></div>
+    </div>
+    <div class="rvb-grid rev d2" id="rvb-grid"></div>
+    <div class="rvb-foot rev d3"><a class="rvb-all" href="reviews.html">Read all reviews</a></div>
+  </section>
+
   <!-- CTA -->
   <div class="cta-strip" id="shop">
     <h2 class="sec-h2 rev">Protect your seats.<br><em>Elevate your drive.</em></h2>
@@ -1629,6 +1750,7 @@
         <ul>
           <li><a href="collection.html">Seat Covers</a></li>
           <li><a href="collection.html">Collections</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1865,5 +1987,105 @@
   <script>
     (function(){function p(){var b=document.querySelector('.announce-bar'),n=document.querySelector('nav');if(!b||!n)return;var h=b.getBoundingClientRect().height;n.style.top=h+'px';document.body.style.paddingTop=h+'px';}p();window.addEventListener('resize',p);})();
   </script>
+<script>
+(function () {
+  var grid = document.getElementById('rvb-grid');
+  var aggEl = document.getElementById('rvb-agg');
+  if (!grid) return;
+
+  var LABELS = { 'midnight-black': 'Midnight Black', 'contrast-white': 'Contrast White' };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  // Star geometry. The viewBox is cropped to the path bounds, so the star ink
+  // fills its box edge to edge and lines up with adjacent text.
+  var SF_SVG = '<svg viewBox="2 1.51 20 20" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  var SF_SIZE = 13, SF_GAP = 2, SF_ROW = SF_SIZE * 5 + SF_GAP * 4;
+  var SF_INSET = 0, SF_SHAPE = SF_SIZE; // tight viewBox: no dead space
+
+  // Area fraction -> horizontal clip fraction, integrated from the path above.
+  // Filling 40% of a star's ink means cutting at 44.6% of its width, not 40%.
+  var SF_AREA = [0, 0.190, 0.244, 0.278, 0.314, 0.350, 0.384, 0.416, 0.446,
+                 0.474, 0.500, 0.526, 0.554, 0.584, 0.616, 0.650, 0.686,
+                 0.722, 0.756, 0.810, 1];
+  function sfClipX(f) {
+    if (f <= 0) return 0;
+    if (f >= 1) return 1;
+    var i = Math.floor(f * 20), t = f * 20 - i;
+    return SF_AREA[i] + (SF_AREA[i + 1] - SF_AREA[i]) * t;
+  }
+
+  function sfStars(rating) {
+    var r = Math.max(0, Math.min(5, Number(rating) || 0));
+    var whole = Math.floor(r + 1e-9), frac = r - whole, px;
+    if (whole >= 5) px = SF_ROW;
+    else if (frac <= 1e-9) px = whole ? whole * SF_SIZE + (whole - 1) * SF_GAP : 0;
+    else px = whole * (SF_SIZE + SF_GAP) + SF_INSET + sfClipX(frac) * SF_SHAPE;
+
+    var base = '', fill = '';
+    for (var i = 0; i < 5; i++) { base += SF_SVG; fill += SF_SVG; }
+    return '<span class="starfill" role="img" aria-label="' + (Math.round(r * 10) / 10) + ' out of 5">' +
+             '<span class="sf-base">' + base + '</span>' +
+             '<span class="sf-fill" style="width:' + px.toFixed(2) + 'px">' + fill + '</span>' +
+           '</span>';
+  }
+
+  function stars(n) { return sfStars(n); }
+  function fmtDate(s) {
+    try {
+      var d = new Date(s);
+      if (isNaN(d)) return '';
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  function render(d) {
+    var list = (d && d.reviews) || [];
+
+    if (aggEl && d && d.count) {
+      aggEl.innerHTML =
+        '<span class="rvb-agg-n">' + d.average.toFixed(1) + '</span>' +
+        stars(d.average) +
+        '<span class="rvb-agg-sub">' + d.count +
+        (d.count === 1 ? ' verified review' : ' verified reviews') + '</span>';
+    }
+
+    if (!list.length) {
+      grid.innerHTML = '<p class="rvb-empty">No reviews published yet. Verified customers are invited to write one after their order arrives.</p>';
+      return;
+    }
+
+    // Three most recent, so this is a genuine sample rather than a curated
+    // highlight reel. Titled entries first only to break ties on the same day.
+    var featured = list.slice().sort(function (a, b) {
+      var t = new Date(b.created_at) - new Date(a.created_at);
+      if (t !== 0) return t;
+      return (b.title ? 1 : 0) - (a.title ? 1 : 0);
+    }).slice(0, 3);
+
+    grid.innerHTML = featured.map(function (r) {
+      return '<article class="rvb-card">' +
+        '<div class="rvb-card-top">' +
+          '<span class="rvb-name">' + esc(r.reviewer_name) + '</span>' +
+          (r.verified ? '<span class="rvb-ver"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>' : '') +
+          '<span class="rvb-date">' + fmtDate(r.created_at) + '</span>' +
+        '</div>' +
+        stars(r.rating) +
+        (LABELS[r.product] ? '<span class="rvb-prod">' + esc(LABELS[r.product]) + '</span>' : '') +
+        (r.title ? '<h3 class="rvb-title">' + esc(r.title) + '</h3>' : '') +
+        '<p class="rvb-body">' + esc(r.body) + '</p>' +
+      '</article>';
+    }).join('');
+  }
+
+  fetch('/api/reviews?product=all')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(render)
+    .catch(function () { render({ count: 0, average: 0, reviews: [] }); });
+})();
+</script>
 </body>
 </html>

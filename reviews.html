@@ -26,7 +26,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0C0D10">
   <meta name="color-scheme" content="dark">
-  <title>Returns - Altara</title>
+  <title>Customer Reviews - Altara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
@@ -157,171 +157,210 @@
     .sn-link:hover { color: rgba(237,232,223,0.7); }
     .sn-link.active { color: var(--cream); border-bottom-color: var(--gold); }
 
-    /* RETURNS CONTENT */
-    .returns-wrap {
-      max-width: 860px;
+    /* CONTACT CONTENT */
+    .contact-wrap {
+      max-width: 960px;
       margin: 0 auto;
-      padding: 72px 72px 120px;
+      padding: 80px 72px 120px;
     }
 
-    .returns-section { margin-bottom: 72px; }
-
-    .section-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: 0.75;
-      margin-bottom: 36px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: start;
     }
 
-    .returns-intro {
+    /* Left Column - Info */
+    .contact-info {}
+    .contact-info-intro {
       font-size: 14px;
-      color: rgba(237,232,223,0.52);
+      color: rgba(237,232,223,0.5);
       line-height: 1.9;
       font-weight: 300;
-      margin-bottom: 40px;
-      max-width: 640px;
+      margin-bottom: 52px;
+      max-width: 360px;
     }
-    .returns-intro strong { font-weight: 500; color: rgba(237,232,223,0.72); }
+    .contact-info-intro strong { font-weight: 500; color: rgba(237,232,223,0.72); }
 
-    /* Policy Stat Strip */
-    .policy-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 48px;
-    }
-    .policy-stat {
-      background: var(--bg-2);
-      padding: 28px 24px;
-      text-align: center;
-    }
-    .policy-stat-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 44px;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .policy-stat-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(237,232,223,0.38);
-    }
-
-    /* Info Blocks */
-    .info-block {
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 28px 32px;
-      margin-bottom: 16px;
-      background: var(--bg-2);
-      position: relative;
-    }
-    .info-block::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--gold);
-      opacity: 0.35;
-    }
-    .info-block-title {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      color: rgba(237,232,223,0.82);
-      margin-bottom: 10px;
-    }
-    .info-block p {
-      font-size: 13px;
-      font-weight: 300;
-      color: rgba(237,232,223,0.48);
-      line-height: 1.85;
-    }
-    .info-block p strong { font-weight: 500; color: rgba(237,232,223,0.68); }
-
-    /* Conditions List */
-    .conditions-list {
-      list-style: none;
+    .contact-channel {
+      padding: 28px 0;
       border-top: 1px solid var(--border);
     }
-    .conditions-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13.5px;
+    .contact-channel:last-child { border-bottom: 1px solid var(--border); }
+    .contact-channel-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.65;
+      margin-bottom: 10px;
+    }
+    .contact-channel-value {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(237,232,223,0.78);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+    .contact-channel-note {
+      font-size: 12px;
       font-weight: 300;
-      color: rgba(237,232,223,0.52);
+      color: rgba(237,232,223,0.34);
       line-height: 1.7;
     }
-    .conditions-list li::before {
-      content: '';
-      display: block;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--gold);
-      opacity: 0.5;
-      flex-shrink: 0;
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
       margin-top: 8px;
     }
-    .conditions-list li strong { font-weight: 500; color: rgba(237,232,223,0.72); }
-
-    /* Process Steps */
-    .process-steps { display: flex; flex-direction: column; gap: 0; }
-    .process-step {
-      display: flex;
-      gap: 28px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
+    .hours-row {
+      display: contents;
     }
-    .process-step:first-child { border-top: 1px solid var(--border); }
-    .step-num {
+    .hours-day {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.38);
+      padding: 5px 0;
+    }
+    .hours-time {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.55);
+      padding: 5px 0;
+    }
+
+    /* Right Column - Form */
+    .contact-form-wrap {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 44px 44px 52px;
+      position: relative;
+    }
+    .contact-form-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold) 0%, transparent 60%);
+      opacity: 0.4;
+    }
+
+    .form-heading {
       font-family: 'Cormorant Garamond', serif;
       font-size: 26px;
       font-weight: 300;
-      color: var(--gold);
-      opacity: 0.4;
-      line-height: 1;
-      min-width: 36px;
-      padding-top: 2px;
+      letter-spacing: -0.01em;
+      color: var(--cream);
+      margin-bottom: 8px;
     }
-    .step-content {}
-    .step-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(237,232,223,0.82);
-      margin-bottom: 6px;
-      letter-spacing: 0.02em;
-    }
-    .step-desc {
-      font-size: 13px;
+    .form-subheading {
+      font-size: 12.5px;
       font-weight: 300;
-      color: rgba(237,232,223,0.48);
-      line-height: 1.8;
+      color: rgba(237,232,223,0.38);
+      margin-bottom: 36px;
+      line-height: 1.6;
     }
-    .step-desc strong { font-weight: 500; color: rgba(237,232,223,0.68); }
+
+    .form-field { margin-bottom: 22px; }
+    .form-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.38);
+      margin-bottom: 8px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: rgba(237,232,223,0.82);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      font-weight: 300;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(237,232,223,0.22); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(196,169,122,0.4);
+      background: rgba(255,255,255,0.05);
+    }
+    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+
+    .form-select-wrap { position: relative; }
+    .form-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid rgba(237,232,223,0.3);
+      pointer-events: none;
+    }
+    .form-select option { background: var(--bg-2); color: var(--cream); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-submit {
+      width: 100%;
+      padding: 15px 24px;
+      background: transparent;
+      border: 1px solid rgba(196,169,122,0.4);
+      color: var(--gold);
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      margin-top: 8px;
+    }
+    .form-submit:hover {
+      background: rgba(196,169,122,0.08);
+      border-color: rgba(196,169,122,0.65);
+      color: rgba(196,169,122,0.9);
+    }
+    .form-submit:active {
+      background: rgba(196,169,122,0.14);
+    }
+
+    .form-note {
+      font-size: 11px;
+      font-weight: 300;
+      color: rgba(237,232,223,0.28);
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+
+    /* Placeholder notice */
+    .placeholder-notice {
+      background: rgba(196,169,122,0.04);
+      border: 1px solid rgba(196,169,122,0.12);
+      padding: 14px 20px;
+      margin-bottom: 28px;
+      border-radius: 1px;
+    }
+    .placeholder-notice p {
+      font-size: 11.5px;
+      font-weight: 300;
+      color: rgba(196,169,122,0.55);
+      line-height: 1.6;
+    }
 
     /* FOOTER */
     footer { background: var(--bg); border-top: 1px solid var(--border); padding: 72px 72px 44px; }
@@ -454,11 +493,10 @@
       .page-hero { padding: 56px 24px 44px; }
       .support-nav { padding: 0 24px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
       .support-nav::-webkit-scrollbar { display: none; }
-      .returns-wrap { padding: 44px 24px 80px; }
-      .policy-strip { grid-template-columns: repeat(3, 1fr); }
-      .policy-stat { padding: 20px 12px; }
-      .policy-stat-num { font-size: 32px; }
-      .info-block { padding: 22px 20px; }
+      .contact-wrap { padding: 44px 24px 80px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 52px; }
+      .contact-form-wrap { padding: 32px 24px 40px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
       footer { padding: 44px 24px 36px; }
       .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
       .footer-logo img { height: 80px; margin-bottom: 14px; }
@@ -481,20 +519,235 @@
     .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
     .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none;  }
+  
+    .form-group { margin-bottom: 20px; }
+    .rate-row { display: flex; align-items: center; gap: 6px; }
+    .rate-star { background: none; border: none; cursor: pointer; font-size: 26px; line-height: 1; padding: 2px; color: rgba(237,232,223,0.18); transition: color 0.15s ease, transform 0.15s ease; }
+    .rate-star:hover { transform: translateY(-1px); }
+    .rate-star.on { color: var(--gold); }
+    .rate-star:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .rate-hint { font-size: 11px; color: rgba(237,232,223,0.35); letter-spacing: 0.05em; margin-left: 10px; }
+    .form-err { font-size: 12px; color: #e07070; margin: 0 0 12px; display: none; line-height: 1.6; }
+    .r-done { display: none; text-align: center; padding: 24px 8px 8px; }
+    .r-done-star { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--gold); margin-bottom: 10px; }
+    .r-done-h { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; font-style: italic; color: var(--cream); }
+    .r-done-p { font-size: 13px; color: rgba(237,232,223,0.5); line-height: 1.8; margin-top: 12px; }
+    .r-done-a { display: inline-block; margin-top: 20px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
+    .r-done-a:hover { color: var(--cream); }
+      /* ── All reviews page ─────────────────────────────────────────── */
+    .ar-wrap { padding: 0 72px 100px; }
+
+    .ar-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto;
+      gap: 56px;
+      align-items: center;
+      padding: 44px 0 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ar-score { display: flex; flex-direction: column; gap: 10px; }
+    .ar-score-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 76px; font-weight: 300; line-height: 0.82;
+      letter-spacing: -0.03em; color: var(--cream);
+    }
+    .ar-score-n em { font-style: normal; font-size: 30px; color: var(--muted); }
+    .ar-score-sub { font-size: 11px; color: var(--cream-dim); letter-spacing: 0.05em; font-weight: 300; }
+
+    /* Stars fill to the exact rating - 4.6 shows as 4.6, never rounded up to 5. */
+
+    .ar-dist { display: grid; gap: 7px; max-width: 340px; }
+    .ar-dist-row {
+      display: grid; grid-template-columns: 30px 1fr 26px;
+      gap: 12px; align-items: center;
+      background: none; border: 0; padding: 0; cursor: pointer;
+      font-family: 'Outfit', sans-serif; text-align: left;
+    }
+    .ar-dist-label { font-size: 10px; color: var(--cream-dim); letter-spacing: 0.08em; }
+    .ar-dist-track {
+      height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden;
+    }
+    .ar-dist-fill {
+      display: block; height: 100%; background: var(--brand-lt);
+      transform-origin: left center;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ar-dist-n { font-size: 10px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+    .ar-dist-row:hover .ar-dist-fill,
+    .ar-dist-row[aria-pressed="true"] .ar-dist-fill { background: var(--gold); }
+    .ar-dist-row:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+    .ar-cta-write {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 30px;
+      background: var(--cream); color: var(--bg);
+      font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none; white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 16px 34px -22px rgba(12,13,16,0.9);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+    .ar-cta-write:hover { transform: translateY(-2px); opacity: 0.93; }
+    .ar-cta-write:active { transform: translateY(0); }
+    .ar-cta-write:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+
+    /* filter bar */
+    .ar-controls {
+      display: flex; flex-wrap: wrap; gap: 10px 28px;
+      align-items: center; justify-content: space-between;
+      padding: 26px 0; border-bottom: 1px solid var(--border);
+    }
+    .ar-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ar-chip {
+      font-family: 'Outfit', sans-serif;
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--cream-dim); background: transparent;
+      border: 1px solid var(--border); padding: 9px 16px; cursor: pointer;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ar-chip:hover { opacity: 0.75; }
+    .ar-chip:active { transform: scale(0.97); }
+    .ar-chip:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .ar-chip[aria-pressed="true"] {
+      color: var(--bg); background: var(--gold); border-color: var(--gold);
+    }
+    .ar-sort-wrap { display: flex; align-items: center; gap: 10px; }
+    .ar-sort-label { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .ar-sort {
+      font-family: 'Outfit', sans-serif; font-size: 11px; color: var(--cream);
+      background: var(--bg-2); border: 1px solid var(--border);
+      padding: 9px 12px; cursor: pointer;
+    }
+    .ar-sort:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+
+    .ar-count { font-size: 11px; color: var(--muted); padding: 22px 0 4px; letter-spacing: 0.04em; }
+
+    /* review list */
+    .ar-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+    .ar-item {
+      background: var(--bg-2); border: 1px solid var(--border);
+      padding: 30px 32px 32px;
+      display: flex; flex-direction: column; gap: 13px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 18px 40px -28px rgba(77,98,114,0.5);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+    }
+    .ar-item:hover { transform: translateY(-2px); border-color: rgba(196,169,122,0.28); }
+    .ar-item-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .ar-name { font-size: 12px; color: var(--cream); letter-spacing: 0.04em; font-weight: 400; }
+    .ar-verified {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 8.5px; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--brand-lt);
+    }
+    .ar-verified svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 3; }
+    .ar-date { font-size: 9.5px; color: var(--muted); letter-spacing: 0.06em; margin-left: auto; }
+    .ar-prod {
+      font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); padding-top: 2px;
+    }
+    .ar-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 400;
+      line-height: 1.25; letter-spacing: -0.01em; color: var(--cream);
+    }
+    .ar-body { font-size: 13.5px; line-height: 1.85; color: var(--cream-dim); font-weight: 300; }
+
+    /* states */
+    .ar-empty { background: var(--bg-2); padding: 72px 40px; text-align: center; display: grid; gap: 12px; }
+    .ar-empty-h { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--cream); }
+    .ar-empty-p { font-size: 13px; color: var(--cream-dim); line-height: 1.85; font-weight: 300; }
+    .ar-skeleton { background: var(--bg-2); padding: 60px 40px; text-align: center; font-size: 12px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .ar-note {
+      margin-top: 56px; padding: 34px 38px;
+      background: var(--bg-2); border-left: 1px solid var(--gold);
+      display: grid; gap: 10px; max-width: 720px;
+    }
+    .ar-note-h { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    .ar-note-p { font-size: 13px; line-height: 1.85; color: var(--cream-dim); font-weight: 300; }
+    .ar-note-p a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(237,232,223,0.3); }
+    .ar-note-p a:hover { border-bottom-color: var(--gold); color: var(--gold); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ar-item, .ar-cta-write, .ar-chip, .ar-dist-fill { transition: none; }
+      .ar-item:hover, .ar-cta-write:hover { transform: none; }
+    }
+
+    @media (max-width: 1000px) {
+      .ar-summary { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .ar-cta-write { grid-column: 1 / -1; justify-self: start; }
+    }
+    @media (max-width: 760px) {
+      .ar-wrap { padding: 0 24px 80px; }
+      .ar-summary { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 30px; }
+      .ar-score-n { font-size: 60px; }
+      .ar-dist { max-width: none; }
+      .ar-controls { padding: 20px 0; gap: 16px; }
+      .ar-sort-wrap { width: 100%; justify-content: space-between; }
+      .ar-list { grid-template-columns: 1fr; }
+      .ar-item { padding: 26px 24px 28px; }
+      .ar-note { padding: 26px 24px; margin-top: 40px; }
+    }
+
+        /* ── Proportional star fill ─────────────────────────────────────────────
+       Two layers of identical stars: a grey base, and a gold copy clipped to an
+       exact pixel width. line-height:0 with a block-level base row is
+       load-bearing - an inline base sits on the text baseline while the absolute
+       fill sits at top:0, which offsets the layers and leaves grey stars
+       showing underneath. Clip width is computed from the star's AREA, not its
+       bounding box, because the left third of a star is a thin point. */
+    .starfill {
+      position: relative; display: inline-block; width: max-content;
+      flex: 0 0 auto; vertical-align: middle;
+      line-height: 0; font-size: 0;
+    }
+    .starfill .sf-base { display: flex; gap: 2px; }
+    .starfill .sf-fill {
+      position: absolute; top: 0; left: 0; bottom: 0;
+      display: flex; gap: 2px; overflow: hidden;
+    }
+    .starfill svg { width: 13px; height: 13px; display: block; flex: 0 0 auto; stroke: none; }
+    .starfill .sf-base svg { fill: rgba(237,232,223,0.16); }
+    .starfill .sf-fill svg { fill: var(--gold); }
+  
+    /* Mobile legibility: the small end of the type scale was 8.5-10px, which is
+       fine as decorative micro-labelling on a desktop but unreadable on a phone.
+       Body copy gets a real lift; uppercase labels get a modest one so the
+       brand's styling survives. */
+    @media (max-width: 760px) {
+      .page-desc { font-size: 15px; line-height: 1.8; }
+      .ar-score-sub { font-size: 12.5px; }
+      .ar-dist-label, .ar-dist-n { font-size: 11.5px; }
+      .ar-cta-write { font-size: 11px; padding: 16px 30px; }
+      .ar-chip { font-size: 11px; padding: 11px 17px; }
+      .ar-sort-label { font-size: 11px; }
+      .ar-sort { font-size: 13.5px; }
+      .ar-count { font-size: 12.5px; }
+      .ar-name { font-size: 13.5px; }
+      .ar-verified { font-size: 10px; }
+      .ar-date { font-size: 11px; }
+      .ar-prod { font-size: 10.5px; }
+      .ar-title { font-size: 22px; }
+      .ar-body { font-size: 14.5px; line-height: 1.8; }
+      .ar-note-h { font-size: 10.5px; }
+      .ar-note-p { font-size: 14px; line-height: 1.8; }
+      .ar-empty-p { font-size: 14px; }
+    }
+  
+    @media (max-width: 760px) { .page-eyebrow { font-size: 11px; } }
   </style>
-  <meta name="description" content="Altara's returns and refund policy. Learn how to return your seat cover and what to expect from our process.">
-  <link rel="canonical" href="https://www.altaradesign.com/returns.html">
+  <meta name="description" content="Verified customer reviews of Altara car seat covers. Real owners, published unedited - including the critical ones.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://www.altaradesign.com/reviews.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Altara">
-  <meta property="og:title" content="Returns Policy — Altara">
-  <meta property="og:description" content="Altara returns and refund policy — how to return your seat cover and what to expect.">
-  <meta property="og:url" content="https://www.altaradesign.com/returns.html">
+  <meta property="og:title" content="Customer Reviews — Altara">
+  <meta property="og:description" content="Verified reviews from real Altara owners.">
+  <meta property="og:url" content="https://www.altaradesign.com/reviews.html">
   <meta property="og:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Returns Policy — Altara">
-  <meta name="twitter:description" content="Altara returns and refund policy — how to return your seat cover and what to expect.">
+  <meta name="twitter:title" content="Customer Reviews — Altara">
+  <meta name="twitter:description" content="Verified reviews from real Altara owners.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
 </head>
 <body>
@@ -550,113 +803,242 @@
   <div class="page-eyebrow">
     <a href="index.html">Altara</a>
     <span>/</span>
-    <span>Support</span>
-    <span>/</span>
-    <span style="color:rgba(237,232,223,0.65)">Returns</span>
+    <span style="color:rgba(237,232,223,0.65)">Reviews</span>
   </div>
-  <h1 class="page-h1">Returns<br><em>&amp; Exchanges</em></h1>
-  <p class="page-desc">We stand behind every Altara product. If something is not right, we make it right — simply and without complication.</p>
+  <h1 class="page-h1">What owners<br><em>actually say.</em></h1>
+  <p class="page-desc">Every review here was written by someone who bought the product. We publish the critical ones too &mdash; that is the only way the good ones mean anything.</p>
 </header>
 
-<!-- SUPPORT NAV -->
-<nav class="support-nav" aria-label="Support navigation">
-  <a href="faq.html" class="sn-link">FAQ</a>
-  <a href="shipping.html" class="sn-link">Shipping</a>
-  <a href="returns.html" class="sn-link active">Returns</a>
-  <a href="contact.html" class="sn-link">Contact</a>
-</nav>
+<main class="ar-wrap">
 
-<!-- RETURNS CONTENT -->
-<main class="returns-wrap">
+  <section class="ar-summary" id="ar-summary" aria-label="Rating summary">
+    <div class="ar-skeleton" style="grid-column:1/-1">Loading reviews&hellip;</div>
+  </section>
 
-  <div class="returns-section">
-    <div class="section-label">Our Promise</div>
-    <p class="returns-intro">Altara operates a straightforward, no-pressure returns policy. If your purchase does not meet your expectations, you have <strong>30 days from the date of delivery</strong> to initiate a return or exchange at no cost to you.</p>
-
-    <div class="policy-strip">
-      <div class="policy-stat">
-        <div class="policy-stat-num">30</div>
-        <div class="policy-stat-label">Day Window</div>
-      </div>
-      <div class="policy-stat">
-        <div class="policy-stat-num">Free</div>
-        <div class="policy-stat-label">Return Postage</div>
-      </div>
-      <div class="policy-stat">
-        <div class="policy-stat-num">Full</div>
-        <div class="policy-stat-label">Refund Issued</div>
-      </div>
+  <div class="ar-controls">
+    <div class="ar-chips" role="group" aria-label="Filter by product">
+      <button type="button" class="ar-chip" data-prod="all" aria-pressed="true">All covers</button>
+      <button type="button" class="ar-chip" data-prod="midnight-black" aria-pressed="false">Midnight Black</button>
+      <button type="button" class="ar-chip" data-prod="contrast-white" aria-pressed="false">Contrast White</button>
+    </div>
+    <div class="ar-sort-wrap">
+      <label class="ar-sort-label" for="ar-sort">Sort</label>
+      <select class="ar-sort" id="ar-sort">
+        <option value="recent">Most recent</option>
+        <option value="highest">Highest rated</option>
+        <option value="lowest">Lowest rated</option>
+      </select>
     </div>
   </div>
 
-  <div class="returns-section">
-    <div class="section-label">Conditions of Return</div>
-    <p class="returns-intro">To be eligible for a return or exchange, items must meet the following conditions:</p>
+  <p class="ar-count" id="ar-count" aria-live="polite"></p>
 
-    <ul class="conditions-list">
-      <li>The item is returned within <strong>30 days</strong> of the confirmed delivery date.</li>
-      <li>The seat cover is in its <strong>original, unused condition</strong> - unwashed, undamaged, with all MagFit clips included.</li>
-      <li>The item is returned in its <strong>original packaging</strong>, or equivalent protective packaging that prevents damage in transit.</li>
-      <li>A valid <strong>proof of purchase</strong> (order number or confirmation email) is provided with the return.</li>
-      <li>The return has been <strong>pre-authorised</strong> by Altara via our returns process. Items returned without prior authorisation may not be accepted.</li>
-    </ul>
+  <div class="ar-list" id="ar-list"></div>
 
-    <div class="info-block" style="margin-top: 28px;">
-      <div class="info-block-title">Non-Returnable Items</div>
-      <p>Items that show signs of use, soiling, damage caused by the customer, or that are returned beyond the 30-day window are ineligible for a refund or exchange. Altara reserves the right to decline a return that does not meet these conditions.</p>
-    </div>
-  </div>
-
-  <div class="returns-section">
-    <div class="section-label">How to Return</div>
-
-    <div class="process-steps">
-      <div class="process-step">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <div class="step-title">Initiate Your Return</div>
-          <p class="step-desc">Contact our support team via the <a href="contact.html" style="color:var(--gold);opacity:0.8;text-decoration:none;">Contact</a> page within 30 days of receiving your order. Include your order number and a brief description of the reason for return. We will respond within <strong>1-2 business days</strong>.</p>
-        </div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <div class="step-title">Receive Your Return Label</div>
-          <p class="step-desc">Once your return is approved, we will send a <strong>prepaid return shipping label</strong> to your email address. No cost is incurred on your part for return postage on eligible items.</p>
-        </div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <div class="step-title">Package &amp; Post</div>
-          <p class="step-desc">Securely package your item and affix the prepaid label. Drop the parcel at your nearest <strong>Australia Post</strong> outlet. Retain your tracking receipt as proof of lodgement.</p>
-        </div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <div class="step-title">Inspection &amp; Resolution</div>
-          <p class="step-desc">Upon receipt, we inspect the returned item within <strong>2 business days</strong>. If approved, your refund is issued to the original payment method within <strong>3-5 business days</strong>. Exchange orders are dispatched immediately upon approval.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="returns-section">
-    <div class="section-label">Faulty or Incorrect Items</div>
-    <p class="returns-intro">If you receive a product that is faulty, damaged in transit, or incorrect, we will resolve the issue immediately at no cost — regardless of the 30-day window.</p>
-
-    <div class="info-block" style="margin-bottom: 12px;">
-      <div class="info-block-title">Manufacturing Defects</div>
-      <p>All Altara products carry a <strong>12-month warranty</strong> against manufacturing defects. If your seat cover develops a defect under normal use within this period, we will repair or replace it at no cost. This warranty does not cover damage resulting from misuse, improper care, or normal wear and tear.</p>
-    </div>
-    <div class="info-block">
-      <div class="info-block-title">Damaged in Transit</div>
-      <p>In the event your order arrives damaged, please photograph the item and packaging immediately upon receipt and contact us within <strong>48 hours</strong>. We will arrange a replacement or full refund as a priority.</p>
-    </div>
-  </div>
+  <aside class="ar-note">
+    <p class="ar-note-h">How reviews work here</p>
+    <p class="ar-note-p">Only verified customers can write one. We match the email you ordered with against your purchase, so there is no way to post a review for a product you have not bought. Reviews are read before publication &mdash; we remove abuse and off-topic content, never criticism.</p>
+    <p class="ar-note-p">Bought one already? <a href="review.html">Write your review</a>.</p>
+  </aside>
 
 </main>
+
+<script>
+(function () {
+  var ALL = [];
+  var LABELS = { 'midnight-black': 'Midnight Black', 'contrast-white': 'Contrast White' };
+  var state = { product: 'all', stars: 0, sort: 'recent' };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Star geometry. The viewBox is cropped to the path bounds, so the star ink
+  // fills its box edge to edge and lines up with adjacent text.
+  var SF_SVG = '<svg viewBox="2 1.51 20 20" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  var SF_SIZE = 13, SF_GAP = 2, SF_ROW = SF_SIZE * 5 + SF_GAP * 4;
+  var SF_INSET = 0, SF_SHAPE = SF_SIZE; // tight viewBox: no dead space
+
+  // Area fraction -> horizontal clip fraction, integrated from the path above.
+  // Filling 40% of a star's ink means cutting at 44.6% of its width, not 40%.
+  var SF_AREA = [0, 0.190, 0.244, 0.278, 0.314, 0.350, 0.384, 0.416, 0.446,
+                 0.474, 0.500, 0.526, 0.554, 0.584, 0.616, 0.650, 0.686,
+                 0.722, 0.756, 0.810, 1];
+  function sfClipX(f) {
+    if (f <= 0) return 0;
+    if (f >= 1) return 1;
+    var i = Math.floor(f * 20), t = f * 20 - i;
+    return SF_AREA[i] + (SF_AREA[i + 1] - SF_AREA[i]) * t;
+  }
+
+  function sfStars(rating) {
+    var r = Math.max(0, Math.min(5, Number(rating) || 0));
+    var whole = Math.floor(r + 1e-9), frac = r - whole, px;
+    if (whole >= 5) px = SF_ROW;
+    else if (frac <= 1e-9) px = whole ? whole * SF_SIZE + (whole - 1) * SF_GAP : 0;
+    else px = whole * (SF_SIZE + SF_GAP) + SF_INSET + sfClipX(frac) * SF_SHAPE;
+
+    var base = '', fill = '';
+    for (var i = 0; i < 5; i++) { base += SF_SVG; fill += SF_SVG; }
+    return '<span class="starfill" role="img" aria-label="' + (Math.round(r * 10) / 10) + ' out of 5">' +
+             '<span class="sf-base">' + base + '</span>' +
+             '<span class="sf-fill" style="width:' + px.toFixed(2) + 'px">' + fill + '</span>' +
+           '</span>';
+  }
+
+  function starRow(n) { return sfStars(n); }
+
+  function fmtDate(s) {
+    try {
+      var d = new Date(s);
+      if (isNaN(d)) return '';
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  function scoped() {
+    return ALL.filter(function (r) {
+      return state.product === 'all' || r.product === state.product;
+    });
+  }
+
+  function visible() {
+    var list = scoped().filter(function (r) {
+      return !state.stars || r.rating === state.stars;
+    });
+    if (state.sort === 'highest') list.sort(function (a, b) { return b.rating - a.rating; });
+    else if (state.sort === 'lowest') list.sort(function (a, b) { return a.rating - b.rating; });
+    else list.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+    return list;
+  }
+
+  function renderSummary() {
+    var list = scoped();
+    var el = document.getElementById('ar-summary');
+    var count = list.length;
+
+    if (!count) {
+      el.innerHTML = '<div class="ar-skeleton" style="grid-column:1/-1">No published reviews for this selection yet.</div>';
+      return;
+    }
+
+    var avg = list.reduce(function (s, r) { return s + r.rating; }, 0) / count;
+    var dist = [5, 4, 3, 2, 1].map(function (n) {
+      return { stars: n, count: list.filter(function (r) { return r.rating === n; }).length };
+    });
+    var max = Math.max.apply(null, dist.map(function (d) { return d.count; })) || 1;
+
+    el.innerHTML =
+      '<div class="ar-score">' +
+        '<span class="ar-score-n">' + avg.toFixed(1) + '<em>/5</em></span>' +
+        starRow(avg) +
+        '<span class="ar-score-sub">Based on ' + count + (count === 1 ? ' verified review' : ' verified reviews') + '</span>' +
+      '</div>' +
+      '<div class="ar-dist">' + dist.map(function (d) {
+        var pressed = state.stars === d.stars;
+        return '<button type="button" class="ar-dist-row" data-stars="' + d.stars + '" aria-pressed="' + pressed + '" ' +
+               'aria-label="Show only ' + d.stars + ' star reviews">' +
+          '<span class="ar-dist-label">' + d.stars + '&#9733;</span>' +
+          '<span class="ar-dist-track"><span class="ar-dist-fill" style="transform:scaleX(' + (d.count / max) + ')"></span></span>' +
+          '<span class="ar-dist-n">' + d.count + '</span>' +
+        '</button>';
+      }).join('') + '</div>' +
+      '<a class="ar-cta-write" href="review.html">Write a review</a>';
+
+    Array.prototype.forEach.call(el.querySelectorAll('.ar-dist-row'), function (b) {
+      b.addEventListener('click', function () {
+        var v = Number(b.getAttribute('data-stars'));
+        state.stars = (state.stars === v) ? 0 : v;
+        renderSummary();
+        renderList();
+      });
+    });
+  }
+
+  function renderList() {
+    var list = visible();
+    var host = document.getElementById('ar-list');
+    var countEl = document.getElementById('ar-count');
+
+    var scope = state.product === 'all' ? 'all covers' : LABELS[state.product];
+    countEl.textContent = list.length
+      ? 'Showing ' + list.length + (list.length === 1 ? ' review' : ' reviews') + ' for ' + scope +
+        (state.stars ? ' rated ' + state.stars + ' stars' : '')
+      : '';
+
+    if (!list.length) {
+      host.innerHTML =
+        '<div class="ar-empty">' +
+          '<p class="ar-empty-h">Nothing matches that filter.</p>' +
+          '<p class="ar-empty-p">' + (ALL.length
+            ? 'Try clearing the star filter or choosing another cover.'
+            : 'No reviews have been published yet. Once orders start arriving, verified customers are invited to write one.') +
+          '</p>' +
+        '</div>';
+      return;
+    }
+
+    host.innerHTML = list.map(function (r) {
+      return '<article class="ar-item">' +
+        '<div class="ar-item-top">' +
+          '<span class="ar-name">' + esc(r.reviewer_name) + '</span>' +
+          (r.verified
+            ? '<span class="ar-verified"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>'
+            : '') +
+          '<span class="ar-date">' + fmtDate(r.created_at) + '</span>' +
+        '</div>' +
+        starRow(r.rating) +
+        (state.product === 'all' && LABELS[r.product]
+          ? '<span class="ar-prod">' + esc(LABELS[r.product]) + '</span>' : '') +
+        (r.title ? '<h2 class="ar-title">' + esc(r.title) + '</h2>' : '') +
+        '<p class="ar-body">' + esc(r.body) + '</p>' +
+      '</article>';
+    }).join('');
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.ar-chip'), function (chip) {
+    chip.addEventListener('click', function () {
+      state.product = chip.getAttribute('data-prod');
+      state.stars = 0;
+      Array.prototype.forEach.call(document.querySelectorAll('.ar-chip'), function (c) {
+        c.setAttribute('aria-pressed', String(c === chip));
+      });
+      renderSummary();
+      renderList();
+    });
+  });
+
+  document.getElementById('ar-sort').addEventListener('change', function (e) {
+    state.sort = e.target.value;
+    renderList();
+  });
+
+  // Deep link support: reviews.html?product=contrast-white
+  var qp = new URLSearchParams(location.search);
+  var wanted = qp.get('product');
+  if (wanted && LABELS[wanted]) {
+    state.product = wanted;
+    Array.prototype.forEach.call(document.querySelectorAll('.ar-chip'), function (c) {
+      c.setAttribute('aria-pressed', String(c.getAttribute('data-prod') === wanted));
+    });
+  }
+
+  fetch('/api/reviews?product=all')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (d) {
+      ALL = (d && d.reviews) || [];
+      renderSummary();
+      renderList();
+    })
+    .catch(function () {
+      ALL = [];
+      renderSummary();
+      renderList();
+    });
+})();
+</script>
 
 <!-- FOOTER -->
 <footer>
@@ -824,6 +1206,78 @@
       if(!isOpen) col.classList.add('open');
     });
   });
+
+  // Form submission placeholder
+  (function () {
+    // Only the write-a-review page has this form; other pages share this shell.
+    if (!document.getElementById('review-form')) return;
+    var rating = 0;
+    var stars = [].slice.call(document.querySelectorAll('.rate-star'));
+    var hint = document.getElementById('r-rate-hint');
+    var LABELS = { 1: 'Poor', 2: 'Fair', 3: 'Good', 4: 'Very good', 5: 'Excellent' };
+    function paint() {
+      stars.forEach(function (s) {
+        var v = +s.dataset.v;
+        s.classList.toggle('on', v <= rating);
+        s.setAttribute('aria-checked', String(v === rating));
+      });
+      hint.textContent = rating ? LABELS[rating] : 'Select a rating';
+    }
+    stars.forEach(function (s) {
+      s.addEventListener('click', function () { rating = +s.dataset.v; paint(); });
+    });
+
+    var form = document.getElementById('review-form');
+    var err = document.getElementById('r-err');
+    var btn = document.getElementById('r-submit');
+
+    function fail(msg) { err.textContent = msg; err.style.display = 'block'; }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      err.style.display = 'none';
+      var email = document.getElementById('r-email').value.trim();
+      var body = document.getElementById('r-body').value.trim();
+      if (!email || email.indexOf('@') === -1) return fail('Please enter the email address you ordered with.');
+      if (!rating) return fail('Please choose a star rating.');
+      if (body.length < 10) return fail('Please write a little more about the product.');
+
+      btn.disabled = true; btn.textContent = 'Submitting...';
+      try {
+        var res = await fetch('/api/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product: document.getElementById('r-product').value,
+            email: email,
+            name: document.getElementById('r-name').value.trim(),
+            rating: rating,
+            title: document.getElementById('r-title').value.trim(),
+            body: body
+          })
+        });
+        var data = await res.json().catch(function () { return {}; });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('r-done').style.display = 'block';
+          return;
+        }
+        fail(data.error || 'Something went wrong. Please try again.');
+      } catch (e2) {
+        fail('Something went wrong. Please try again.');
+      }
+      btn.disabled = false; btn.textContent = 'Submit Review';
+    });
+
+    // Prefill from the review-request email link: review.html?product=...&email=...
+    var q = new URLSearchParams(location.search);
+    if (q.get('product')) {
+      var sel = document.getElementById('r-product');
+      if ([].some.call(sel.options, function (o) { return o.value === q.get('product'); })) sel.value = q.get('product');
+    }
+    if (q.get('email')) document.getElementById('r-email').value = q.get('email');
+    paint();
+  })();
 
   // Mobile overlay inline search
   (function() {

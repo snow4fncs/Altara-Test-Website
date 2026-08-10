@@ -654,6 +654,42 @@
     .mob-search-field::placeholder { color: rgba(237,232,223,0.28); }
     .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #0C0D10; z-index: 9998; pointer-events: none;  }
+  
+    .confirm-review {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.014);
+      padding: 26px 28px 28px;
+      margin-bottom: 36px;
+      display: grid;
+      gap: 9px;
+      justify-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 1.05s forwards;
+    }
+    .confirm-review-label {
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .confirm-review-text {
+      font-size: 13px; line-height: 1.8; color: var(--cream-dim);
+      font-weight: 300; max-width: 46ch;
+    }
+    .confirm-review-link {
+      margin-top: 6px;
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      border-bottom: 1px solid rgba(237,232,223,0.3);
+      padding-bottom: 3px;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+    .confirm-review-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .confirm-review-link:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      .confirm-review { animation: none; opacity: 1; transform: none; }
+      .confirm-review-link { transition: none; }
+    }
   </style>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Your Altara order is confirmed. Thank you for your purchase — we'll be in touch with shipping details soon.">
@@ -789,6 +825,14 @@
     <!-- Separator -->
     <div class="separator"></div>
 
+    <!-- Review invitation. Deliberately framed for later: the product has not
+         arrived yet, so asking for a verdict now would be asking too early. -->
+    <div class="confirm-review">
+      <p class="confirm-review-label">When it arrives</p>
+      <p class="confirm-review-text">Live with it for a week, then tell other drivers how it went. Reviews here come from verified customers only &mdash; yours will count.</p>
+      <a href="review.html" class="confirm-review-link">Write a review</a>
+    </div>
+
     <!-- CTA buttons -->
     <div class="cta-row">
       <a href="collection.html" class="btn-outline">Continue Shopping</a>
@@ -812,6 +856,7 @@
       <ul>
         <li><a href="collection.html">Seat Covers</a></li>
         <li><a href="collection.html">Collections</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
       </ul>
     </div>
     <div class="footer-col">

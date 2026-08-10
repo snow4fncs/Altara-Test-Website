@@ -1,0 +1,236 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Review queue — Altara</title>
+<link rel="icon" href="favicon.png">
+<style>
+  :root {
+    --bg: #0C0D10; --bg-2: #111317; --bg-3: #181B1F;
+    --brand: #4D6272; --brand-lt: #607D8F;
+    --cream: #EDE8DF; --cream-dim: #9A9590;
+    --gold: #C4A97A; --muted: #72787F;
+    --border: rgba(255,255,255,0.065);
+    --good: #7FBF9A; --bad: #D98A8A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--cream);
+    font-family: 'Outfit', -apple-system, 'Avenir Next', 'Helvetica Neue', sans-serif;
+    font-weight: 300; font-size: 14px; line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  p { margin: 0; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .mark { font-family: 'Cormorant Garamond', Garamond, serif; font-size: 22px; letter-spacing: 0.34em; text-transform: uppercase; }
+  .ey { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  h1 { font-family: 'Cormorant Garamond', Garamond, serif; font-weight: 300; font-size: 44px; line-height: 1; letter-spacing: -0.025em; margin: 40px 0 10px; }
+  .sub { color: var(--cream-dim); max-width: 62ch; margin: 0 0 32px; font-size: 13.5px; }
+
+  .gate { background: var(--bg-2); border: 1px solid var(--border); padding: 28px 30px; display: grid; gap: 14px; max-width: 460px; }
+  .gate label { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-dim); }
+  input[type="password"], input[type="text"] {
+    font-family: inherit; font-size: 14px; color: var(--cream);
+    background: var(--bg); border: 1px solid var(--border); padding: 12px 14px; width: 100%;
+  }
+  input:focus-visible, button:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+
+  button {
+    font-family: inherit; cursor: pointer; border: 1px solid var(--border);
+    background: transparent; color: var(--cream);
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+    padding: 11px 20px;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  button:hover { opacity: 0.75; }
+  button:active { transform: scale(0.98); }
+  button[disabled] { opacity: 0.4; cursor: default; }
+  .primary { background: var(--cream); color: var(--bg); border-color: var(--cream); }
+  .approve { border-color: rgba(127,191,154,0.5); color: var(--good); }
+  .reject { border-color: rgba(217,138,138,0.45); color: var(--bad); }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 36px 0 18px; }
+  .count { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+
+  .queue { display: grid; gap: 16px; }
+  .card { background: var(--bg-2); border: 1px solid var(--border); padding: 24px 26px; display: grid; gap: 12px; }
+  .card-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .who { font-size: 13px; color: var(--cream); }
+  .stars { color: var(--gold); letter-spacing: 2px; font-size: 13px; }
+  .stars .off { color: rgba(255,255,255,0.15); }
+  .prod { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-lt); }
+  .when { font-size: 9.5px; color: var(--muted); margin-left: auto; }
+  .title { font-family: 'Cormorant Garamond', Garamond, serif; font-size: 20px; line-height: 1.3; }
+  .body { color: var(--cream-dim); font-size: 13.5px; }
+  .actions { display: flex; gap: 10px; padding-top: 4px; }
+
+  .msg { font-size: 12.5px; padding: 14px 16px; border-left: 1px solid var(--gold); background: var(--bg-2); color: var(--cream-dim); }
+  .msg.err { border-left-color: var(--bad); color: var(--bad); }
+  .empty { background: var(--bg-2); border: 1px solid var(--border); padding: 56px 30px; text-align: center; color: var(--cream-dim); }
+  .empty h2 { font-family: 'Cormorant Garamond', Garamond, serif; font-weight: 300; font-size: 26px; margin: 0 0 8px; color: var(--cream); }
+  a { color: var(--gold); }
+  .hide { display: none; }
+  @media (prefers-reduced-motion: reduce) { button { transition: none; } }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <span class="mark">Altara</span>
+    <span class="ey">Review queue &middot; internal</span>
+  </div>
+
+  <h1>Publish reviews</h1>
+  <p class="sub">Submitted reviews wait here until you approve them. Nothing a customer writes appears on the site until you publish it from this page.</p>
+
+  <div id="gate" class="gate">
+    <label for="tok">Admin token</label>
+    <input type="password" id="tok" autocomplete="current-password" placeholder="Paste your ADMIN_TOKEN">
+    <button class="primary" id="unlock" type="button">Unlock queue</button>
+    <p style="margin:0;font-size:11.5px;color:var(--muted);line-height:1.6">
+      Set <code>ADMIN_TOKEN</code> in your environment variables. Without it the moderation endpoint stays closed. On localhost the token is <code>dev</code>.
+    </p>
+  </div>
+
+  <div id="panel" class="hide">
+    <div class="bar">
+      <span class="count" id="count"></span>
+      <div style="display:flex;gap:10px">
+        <button type="button" id="refresh">Refresh</button>
+        <button type="button" id="lock">Lock</button>
+      </div>
+    </div>
+    <div id="msg"></div>
+    <div class="queue" id="queue"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'altara-admin-token';
+  var gate = document.getElementById('gate');
+  var panel = document.getElementById('panel');
+  var queue = document.getElementById('queue');
+  var msgBox = document.getElementById('msg');
+  var countEl = document.getElementById('count');
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function token() { return sessionStorage.getItem(KEY) || ''; }
+  function note(text, isErr) {
+    msgBox.innerHTML = text ? '<p class="msg' + (isErr ? ' err' : '') + '">' + esc(text) + '</p>' : '';
+  }
+  function stars(n) {
+    var out = '';
+    for (var i = 1; i <= 5; i++) out += '<span' + (i <= n ? '' : ' class="off"') + '>&#9733;</span>';
+    return '<span class="stars" aria-label="' + n + ' of 5">' + out + '</span>';
+  }
+  function fmt(s) {
+    try { var d = new Date(s); return isNaN(d) ? '' : d.toLocaleString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
+    catch (e) { return ''; }
+  }
+  var LABELS = { 'midnight-black': 'Midnight Black', 'contrast-white': 'Contrast White' };
+
+  function show(unlocked) {
+    gate.className = unlocked ? 'gate hide' : 'gate';
+    panel.className = unlocked ? '' : 'hide';
+  }
+
+  // Returns the promise so callers can show a confirmation *after* the reload,
+  // rather than having it wiped by the refresh.
+  function load() {
+    return fetch('/api/reviews?pending=1', { headers: { 'x-admin-token': token() } })
+      .then(function (r) {
+        if (r.status === 401) { throw new Error('That token was rejected. Check ADMIN_TOKEN is set on the server.'); }
+        if (!r.ok) { throw new Error('Could not load the queue (' + r.status + ').'); }
+        return r.json();
+      })
+      .then(function (d) {
+        var list = (d && d.reviews) || [];
+        countEl.textContent = list.length
+          ? list.length + (list.length === 1 ? ' review awaiting a decision' : ' reviews awaiting a decision')
+          : 'Queue is clear';
+        if (!list.length) {
+          queue.innerHTML = '<div class="empty"><h2>Nothing waiting.</h2><p>New submissions will appear here. <a href="reviews.html">See what is published</a>.</p></div>';
+          return;
+        }
+        queue.innerHTML = list.map(function (r) {
+          return '<article class="card" data-id="' + esc(r.id) + '">' +
+            '<div class="card-top">' +
+              '<span class="who">' + esc(r.reviewer_name) + '</span>' +
+              stars(r.rating) +
+              '<span class="prod">' + esc(LABELS[r.product] || r.product) + '</span>' +
+              '<span class="when">' + fmt(r.created_at) + '</span>' +
+            '</div>' +
+            (r.title ? '<p class="title">' + esc(r.title) + '</p>' : '') +
+            '<p class="body">' + esc(r.body) + '</p>' +
+            '<div class="actions">' +
+              '<button type="button" class="approve" data-act="approve">Publish</button>' +
+              '<button type="button" class="reject" data-act="reject">Reject</button>' +
+            '</div>' +
+          '</article>';
+        }).join('');
+      })
+      .catch(function (e) {
+        countEl.textContent = '';
+        queue.innerHTML = '';
+        note(e.message, true);
+      });
+  }
+
+  function act(card, action) {
+    var id = card.getAttribute('data-id');
+    var btns = card.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function (b) { b.disabled = true; });
+    note('');
+
+    fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token() },
+      body: JSON.stringify({ action: action, id: id })
+    })
+      .then(function (r) { if (!r.ok) throw new Error('That did not save (' + r.status + ').'); return r.json(); })
+      .then(function () { return load(); })
+      .then(function () {
+        note(action === 'approve'
+          ? 'Published. It is live on the product page and the reviews page.'
+          : 'Rejected and removed.');
+      })
+      .catch(function (e) {
+        Array.prototype.forEach.call(btns, function (b) { b.disabled = false; });
+        note(e.message, true);
+      });
+  }
+
+  queue.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var card = btn.closest('.card');
+    if (btn.getAttribute('data-act') === 'reject' &&
+        !confirm('Reject and permanently delete this review?')) return;
+    act(card, btn.getAttribute('data-act'));
+  });
+
+  document.getElementById('unlock').addEventListener('click', function () {
+    var v = document.getElementById('tok').value.trim();
+    if (!v) return;
+    sessionStorage.setItem(KEY, v);
+    show(true);
+    load();
+  });
+  document.getElementById('tok').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('unlock').click();
+  });
+  document.getElementById('refresh').addEventListener('click', function () { note(''); load(); });
+  document.getElementById('lock').addEventListener('click', function () {
+    sessionStorage.removeItem(KEY);
+    show(false);
+  });
+
+  if (token()) { show(true); load(); } else { show(false); }
+})();
+</script>

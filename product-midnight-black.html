@@ -414,7 +414,145 @@
       .ab-extra { display: none; }
     }
 
-</style>
+
+    /* ─── REVIEWS ─── */
+    .pi-rating { display: flex; align-items: center; gap: 10px; margin: 10px 0 0; min-height: 18px; }
+    .pi-rating[hidden] { display: none; }
+    .stars { display: inline-flex; gap: 2px; flex-shrink: 0; }
+    .stars svg { width: 13px; height: 13px; fill: var(--gold); stroke: none; }
+    .stars svg.empty { fill: rgba(237,232,223,0.16); }
+    .pi-rating-count { font-size: 11px; color: rgba(237,232,223,0.42); letter-spacing: 0.04em; text-decoration: none; transition: color 0.2s; }
+    a.pi-rating-count:hover { color: var(--gold); }
+    a.pi-rating-count:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+    .rv { padding: 96px 72px; background: var(--bg-2); border-top: 1px solid var(--line); scroll-margin-top: calc(var(--nav-h) + 48px); }
+    .rv-head { max-width: 1180px; margin: 0 auto 44px; }
+    .rv-ey { font-size: 10px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .rv-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 46px); font-weight: 300; line-height: 1.06; letter-spacing: -0.02em; color: var(--cream); }
+    .rv-h em { font-style: italic; color: rgba(237,232,223,0.55); }
+
+    .rv-wrap { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 270px 1fr; gap: 56px; align-items: start; }
+
+    .rv-summary { border: 1px solid var(--line); padding: 28px 26px; position: sticky; top: calc(var(--nav-h) + 56px); }
+    .rv-avg { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 300; color: var(--cream); line-height: 1; font-variant-numeric: lining-nums; }
+    .rv-avg-sub { font-size: 11px; color: rgba(237,232,223,0.4); letter-spacing: 0.05em; margin-top: 8px; }
+    .rv-dist { margin-top: 22px; display: flex; flex-direction: column; gap: 7px; }
+    .rv-dist-row { display: flex; align-items: center; gap: 10px; font-size: 10px; color: rgba(237,232,223,0.4); }
+    .rv-dist-label { width: 22px; flex-shrink: 0; letter-spacing: 0.06em; }
+    .rv-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .rv-bar span { display: block; height: 100%; background: var(--gold); opacity: 0.75; transform-origin: left; }
+    .rv-dist-n { width: 18px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+    .rv-list { display: flex; flex-direction: column; }
+    .rv-item { padding: 26px 0; border-bottom: 1px solid var(--line); }
+    .rv-item:first-child { padding-top: 0; }
+    .rv-item-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .rv-name { font-size: 13px; color: var(--cream); font-weight: 400; letter-spacing: 0.02em; }
+    .rv-verified { display: inline-flex; align-items: center; gap: 5px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(196,169,122,0.35); padding: 3px 8px; }
+    .rv-verified svg { width: 9px; height: 9px; stroke: var(--gold); fill: none; stroke-width: 2.4; }
+    .rv-date { font-size: 10px; color: rgba(237,232,223,0.3); letter-spacing: 0.05em; margin-left: auto; }
+    .rv-title { font-size: 14px; color: var(--cream); margin: 8px 0 6px; font-weight: 400; }
+    .rv-body { font-size: 13.5px; color: rgba(237,232,223,0.55); line-height: 1.85; font-weight: 300; }
+
+    .rv-empty { border: 1px solid var(--line); padding: 40px 32px; text-align: center; }
+    .rv-empty-h { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--cream); font-style: italic; }
+    .rv-empty-p { font-size: 13px; color: rgba(237,232,223,0.45); line-height: 1.8; margin-top: 10px; }
+
+    .rv-demo { border: 1px dashed rgba(196,169,122,0.5); background: rgba(196,169,122,0.06); padding: 12px 16px; margin-bottom: 24px; font-size: 11px; letter-spacing: 0.06em; color: var(--gold); text-align: center; }
+
+    @media (max-width: 900px) {
+      .rv { padding: 68px 24px; }
+      .rv-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .rv-summary { position: static; }
+    }
+  
+    .rv-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
+    .rv-write {
+      display: inline-flex; align-items: center; gap: 9px; padding: 13px 26px;
+      background: var(--cream); color: var(--bg);
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 14px 30px -20px rgba(12,13,16,0.9);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+    }
+    .rv-write:hover { transform: translateY(-2px); opacity: 0.93; }
+    .rv-write:active { transform: translateY(0); }
+    .rv-write:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+    .rv-all {
+      display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px;
+      border: 1px solid var(--line); color: var(--cream);
+      font-size: 9.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .rv-all:hover { opacity: 0.72; }
+    .rv-all:active { transform: scale(0.98); }
+    .rv-all:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      .rv-write, .rv-all { transition: none; }
+      .rv-write:hover { transform: none; }
+    }
+  
+    /* Exact-fill stars: a 4.7 average renders as 4.7, not rounded up to 5. */
+      /* ── Proportional star fill ─────────────────────────────────────────────
+       Two layers of identical stars: a grey base, and a gold copy clipped to an
+       exact pixel width. line-height:0 with a block-level base row is
+       load-bearing - an inline base sits on the text baseline while the absolute
+       fill sits at top:0, which offsets the layers and leaves grey stars
+       showing underneath. Clip width is computed from the star's AREA, not its
+       bounding box, because the left third of a star is a thin point. */
+    .starfill {
+      position: relative; display: inline-block; width: max-content;
+      flex: 0 0 auto; vertical-align: middle;
+      line-height: 0; font-size: 0;
+    }
+    .starfill .sf-base { display: flex; gap: 2px; }
+    .starfill .sf-fill {
+      position: absolute; top: 0; left: 0; bottom: 0;
+      display: flex; gap: 2px; overflow: hidden;
+    }
+    .starfill svg { width: 13px; height: 13px; display: block; flex: 0 0 auto; stroke: none; }
+    .starfill .sf-base svg { fill: rgba(237,232,223,0.16); }
+    .starfill .sf-fill svg { fill: var(--gold); }
+  
+    .pack-mix {
+      margin-top: 12px; padding: 11px 14px;
+      background: rgba(196,169,122,0.05);
+      border-left: 1px solid var(--gold);
+      font-size: 12px; font-weight: 300; line-height: 1.65;
+      color: var(--cream-dim);
+    }
+    .pack-mix strong { font-weight: 500; color: var(--gold); }
+    .pack-mix a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(237,232,223,0.3); }
+    .pack-mix a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .pack-mix a:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    @media (max-width: 900px) { .pack-mix { font-size: 13px; } }
+  
+    @media (max-width: 900px) {
+      .pack-opt-name { font-size: 10.5px; }
+      .pack-opt-meta { font-size: 11px; }
+      .pack-opt-price { font-size: 17px; }
+      .pi-perk { font-size: 12.5px; }
+      .pi-rating-count { font-size: 12.5px; }
+      .rv-avg-sub { font-size: 12.5px; }
+      .rv-dist-label, .rv-dist-n { font-size: 11.5px; }
+      .rv-name { font-size: 13.5px; }
+      .rv-verified { font-size: 10px; }
+      .rv-date { font-size: 11px; }
+      .rv-title { font-size: 16px; }
+      .rv-body { font-size: 14.5px; line-height: 1.8; }
+      .rv-empty-p { font-size: 14px; }
+      .rv-write, .rv-all { font-size: 11px; padding: 15px 26px; }
+    }
+  
+    @media (max-width: 900px) {
+      .pi-var-label { font-size: 10.5px; }
+      .complete-ey { font-size: 10.5px; }
+      .complete-a { font-size: 11px; }
+      .toast-t { font-size: 11px; }
+      .toast-lnk { font-size: 10.5px; }
+    }
+  </style>
   <meta name="description" content="Altara Midnight Black seat cover — premium materials, precision fit for modern vehicles. Free shipping Australia-wide. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/product-midnight-black.html">
   <meta property="og:type" content="website">
@@ -430,7 +568,7 @@
   <meta name="twitter:description" content="Altara Midnight Black seat cover — premium materials, precision fit. Free shipping across Australia.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%207.png">
 </head>
-<body>
+<body data-product="midnight-black">
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar">
@@ -525,6 +663,7 @@
     <p class="pi-cat">Seat Cover &nbsp;·&nbsp; MagFit™</p>
     <h1 class="pi-name">Midnight<br><em>Black</em></h1>
     <p class="pi-price" id="pi-price-display">$59 AUD</p>
+    <div class="pi-rating" id="pi-rating" hidden></div>
     <div class="pi-sep"></div>
     <div class="pi-colorway-header">
       <p class="pi-label">Colourway</p>
@@ -556,6 +695,7 @@
           <span class="pack-opt-meta">Save $29 · Free Shipping</span>
         </button>
       </div>
+      <p class="pack-mix">Mix and match: add <strong>any two covers</strong> and you pay the Twin Set price of <strong>$89</strong> &mdash; $29 off, applied automatically at checkout. Pair it with <a href="product-contrast-white.html">Contrast White</a>.</p>
     </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
     <div class="pi-perks">
@@ -600,6 +740,21 @@
   </div>
 </div>
 
+<section class="rv" id="reviews">
+  <div class="rv-head">
+    <div class="rv-ey">Reviews</div>
+    <h2 class="rv-h">What owners<br><em>actually say.</em></h2>
+    <div class="rv-actions">
+      <a class="rv-write" href="review.html?product=midnight-black">Write a review</a>
+      <a class="rv-all" href="reviews.html?product=midnight-black">Read all reviews</a>
+    </div>
+  </div>
+  <div class="rv-wrap">
+    <aside class="rv-summary" id="rv-summary"></aside>
+    <div class="rv-list" id="rv-list"></div>
+  </div>
+</section>
+
 <section class="complete">
   <div class="complete-copy">
     <div class="complete-ey">Also Available</div>
@@ -616,7 +771,7 @@
       <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
       <p class="footer-tagline">Tailored for every drive. Premium seat covers built for the way you live.</p>
     </div>
-    <div class="footer-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li></ul></div>
+    <div class="footer-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li><li><a href="reviews.html">Reviews</a></li></ul></div>
     <div class="footer-col"><h4>Support</h4><ul><li><a href="faq.html">FAQ</a></li><li><a href="shipping.html">Shipping</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="privacy.html">Privacy Policy</a></li>
 <li><a href="terms.html">Terms &amp; Conditions</a></li></ul></div>
@@ -814,5 +969,164 @@
     (function(){function p(){var b=document.querySelector('.announce-bar'),n=document.querySelector('nav');if(!b||!n)return;var h=b.getBoundingClientRect().height;n.style.top=h+'px';document.body.style.paddingTop=h+'px';}p();window.addEventListener('resize',p);})();
   </script>
   
+
+<script>
+(function () {
+  var PRODUCT = document.body.dataset.product;
+  if (!PRODUCT) return;
+
+  var STAR = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  // Star geometry. The viewBox is cropped to the path bounds, so the star ink
+  // fills its box edge to edge and lines up with adjacent text.
+  var SF_SVG = '<svg viewBox="2 1.51 20 20" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  var SF_SIZE = 13, SF_GAP = 2, SF_ROW = SF_SIZE * 5 + SF_GAP * 4;
+  var SF_INSET = 0, SF_SHAPE = SF_SIZE; // tight viewBox: no dead space
+
+  // Area fraction -> horizontal clip fraction, integrated from the path above.
+  // Filling 40% of a star's ink means cutting at 44.6% of its width, not 40%.
+  var SF_AREA = [0, 0.190, 0.244, 0.278, 0.314, 0.350, 0.384, 0.416, 0.446,
+                 0.474, 0.500, 0.526, 0.554, 0.584, 0.616, 0.650, 0.686,
+                 0.722, 0.756, 0.810, 1];
+  function sfClipX(f) {
+    if (f <= 0) return 0;
+    if (f >= 1) return 1;
+    var i = Math.floor(f * 20), t = f * 20 - i;
+    return SF_AREA[i] + (SF_AREA[i + 1] - SF_AREA[i]) * t;
+  }
+
+  function sfStars(rating) {
+    var r = Math.max(0, Math.min(5, Number(rating) || 0));
+    var whole = Math.floor(r + 1e-9), frac = r - whole, px;
+    if (whole >= 5) px = SF_ROW;
+    else if (frac <= 1e-9) px = whole ? whole * SF_SIZE + (whole - 1) * SF_GAP : 0;
+    else px = whole * (SF_SIZE + SF_GAP) + SF_INSET + sfClipX(frac) * SF_SHAPE;
+
+    var base = '', fill = '';
+    for (var i = 0; i < 5; i++) { base += SF_SVG; fill += SF_SVG; }
+    return '<span class="starfill" role="img" aria-label="' + (Math.round(r * 10) / 10) + ' out of 5">' +
+             '<span class="sf-base">' + base + '</span>' +
+             '<span class="sf-fill" style="width:' + px.toFixed(2) + 'px">' + fill + '</span>' +
+           '</span>';
+  }
+
+  function stars(n) { return sfStars(n); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function fmtDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  // Layout preview data. Gated to localhost so it can never reach production -
+  // altaradesign.com only ever renders verified reviews from the database.
+  var DEMO = {
+    count: 3,
+    average: 4.7,
+    distribution: [{stars:5,count:2},{stars:4,count:1},{stars:3,count:0},{stars:2,count:0},{stars:1,count:0}],
+    demo: true,
+    reviews: [
+      { reviewer_name: 'Sample reviewer A', rating: 5, verified: true, created_at: '2026-07-28',
+        title: 'Sample title line sits here',
+        body: 'Placeholder body copy for judging line length, leading and spacing. Real customer wording will replace this entirely. Roughly the length a genuine two or three sentence review tends to run to.' },
+      { reviewer_name: 'Sample reviewer B', rating: 5, verified: true, created_at: '2026-07-21',
+        title: 'A shorter sample headline',
+        body: 'A briefer placeholder, to check how the list reads when entries vary in length.' },
+      { reviewer_name: 'Sample reviewer C', rating: 4, verified: false, created_at: '2026-07-14',
+        title: '',
+        body: 'Placeholder without a title, and without the verified badge, so both variants are visible in the layout.' }
+    ]
+  };
+
+  // Demo layout data is opt-in via ?demo=1 on localhost only. Default behaviour
+  // even locally is the real thing, so the empty state is never hidden from view.
+  var demoMode = ['localhost', '127.0.0.1'].indexOf(location.hostname) !== -1
+    && /[?&]demo=1(&|$)/.test(location.search);
+
+  function renderSummaryBadge(d) {
+    var el = document.getElementById('pi-rating');
+    if (!el || !d.count) return;
+    el.innerHTML = stars(d.average) +
+      '<a class="pi-rating-count" href="#reviews">' + d.average + ' &middot; ' +
+      d.count + (d.count === 1 ? ' review' : ' reviews') + '</a>';
+    el.hidden = false;
+  }
+
+  // Emit AggregateRating for search results. Real data only: never for demo
+  // layout data, and never when there are no published reviews to describe.
+  function injectSchema(d) {
+    if (d.demo || !d.count) return;
+    var node = document.getElementById('rv-schema');
+    if (!node) { node = document.createElement('script'); node.type = 'application/ld+json'; node.id = 'rv-schema'; document.head.appendChild(node); }
+    node.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: '',
+      url: 'https://www.altaradesign.com/',
+      brand: { '@type': 'Brand', name: 'Altara' },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: d.average,
+        reviewCount: d.count,
+        bestRating: 5,
+        worstRating: 1
+      }
+    });
+  }
+
+  function render(d) {
+    renderSummaryBadge(d);
+    injectSchema(d);
+
+    var summary = document.getElementById('rv-summary');
+    var list = document.getElementById('rv-list');
+    if (!summary || !list) return;
+
+    if (!d.count) {
+      summary.innerHTML = '';
+      list.innerHTML =
+        '<div class="rv-empty">' +
+          '<p class="rv-empty-h">No reviews yet.</p>' +
+          '<p class="rv-empty-p">Reviews are written by verified customers only.<br>Once your order arrives, we will invite you to leave one.</p>' +
+        '</div>';
+      return;
+    }
+
+    var max = Math.max.apply(null, d.distribution.map(function (x) { return x.count; })) || 1;
+    summary.innerHTML =
+      '<div class="rv-avg">' + d.average.toFixed(1) + '</div>' +
+      stars(d.average) +
+      '<p class="rv-avg-sub">Based on ' + d.count + (d.count === 1 ? ' verified review' : ' verified reviews') + '</p>' +
+      '<div class="rv-dist">' + d.distribution.map(function (x) {
+        return '<div class="rv-dist-row"><span class="rv-dist-label">' + x.stars + '★</span>' +
+               '<span class="rv-bar"><span style="width:' + Math.round((x.count / max) * 100) + '%"></span></span>' +
+               '<span class="rv-dist-n">' + x.count + '</span></div>';
+      }).join('') + '</div>';
+
+    var banner = d.demo ? '<div class="rv-demo">Demo layout data — localhost only, never published</div>' : '';
+    list.innerHTML = banner + d.reviews.map(function (r) {
+      return '<article class="rv-item">' +
+        '<div class="rv-item-top">' +
+          '<span class="rv-name">' + esc(r.reviewer_name) + '</span>' +
+          (r.verified ? '<span class="rv-verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Verified purchase</span>' : '') +
+          '<span class="rv-date">' + fmtDate(r.created_at) + '</span>' +
+        '</div>' +
+        stars(r.rating) +
+        (r.title ? '<p class="rv-title">' + esc(r.title) + '</p>' : '') +
+        '<p class="rv-body">' + esc(r.body) + '</p>' +
+      '</article>';
+    }).join('');
+  }
+
+  fetch('/api/reviews?product=' + encodeURIComponent(PRODUCT))
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (d) { render(demoMode ? DEMO : d); })
+    .catch(function () { render(demoMode ? DEMO : { count: 0, average: 0, distribution: [], reviews: [] }); });
+})();
+</script>
 </body>
 </html>
