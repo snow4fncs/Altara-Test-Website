@@ -969,12 +969,17 @@
       : '';
 
     if (!list.length) {
+      // Two different empty states: a filter that excluded everything, versus a
+      // shop with no published reviews yet. Telling a first-time visitor that
+      // "nothing matches that filter" when they never set one reads as broken.
       host.innerHTML =
         '<div class="ar-empty">' +
-          '<p class="ar-empty-h">Nothing matches that filter.</p>' +
+          '<p class="ar-empty-h">' + (ALL.length
+            ? 'Nothing matches that filter.'
+            : 'No reviews yet.') + '</p>' +
           '<p class="ar-empty-p">' + (ALL.length
             ? 'Try clearing the star filter or choosing another cover.'
-            : 'No reviews have been published yet. Once orders start arriving, verified customers are invited to write one.') +
+            : 'Reviews are written by verified customers only. Once the first orders arrive, we invite those customers to write one.') +
           '</p>' +
         '</div>';
       return;
