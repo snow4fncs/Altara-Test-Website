@@ -1343,10 +1343,23 @@
       btn.style.opacity = '0.6';
 
       try {
+        // Hand Meta's own cookies to the server so the Purchase event sent from
+        // the Stripe webhook can be matched to this browser. Purchase is sent
+        // server-side because a browser event on the confirmation page is lost
+        // whenever the customer closes the tab or blocks trackers.
+        const readCookie = name => {
+          const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+          return m ? decodeURIComponent(m[2]) : '';
+        };
+
         const res = await fetch('/api/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: cart.items.map(i => ({ id: i.id, qty: i.qty })) }),
+          body: JSON.stringify({
+            items: cart.items.map(i => ({ id: i.id, qty: i.qty })),
+            fbp: readCookie('_fbp'),
+            fbc: readCookie('_fbc'),
+          }),
         });
         const data = await res.json();
         if (data.url) {

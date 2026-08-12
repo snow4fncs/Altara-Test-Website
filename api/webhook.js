@@ -1,8 +1,98 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+
+// ─── Meta Conversions API ───────────────────────────────────────────────────
+// Purchase is reported from here, not from the browser. The confirmation page
+// cannot be relied on: the customer may close the tab the moment Stripe
+// finishes, and Safari, iOS and ad blockers drop the request outright. Stripe
+// calls this webhook server to server on every completed payment, so it is the
+// only signal that always arrives.
+const META_PIXEL_ID = process.env.META_PIXEL_ID || '1907598646567033';
+const META_API_VERSION = process.env.META_API_VERSION || 'v21.0';
+
+// Meta requires customer data to be SHA-256 hashed, over a normalised value.
+const sha256 = v => crypto.createHash('sha256').update(String(v)).digest('hex');
+const hashed = v => {
+  const norm = String(v ?? '').trim().toLowerCase();
+  return norm ? sha256(norm) : undefined;
+};
+// Phone numbers normalise to digits only, keeping the country code.
+const hashedPhone = v => {
+  const digits = String(v ?? '').replace(/\D/g, '');
+  return digits ? sha256(digits) : undefined;
+};
+const dropEmpty = obj => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined && v !== ''));
+
+export function buildPurchaseEvent(session, items, shipping) {
+  const md = session.metadata || {};
+  const details = session.customer_details || {};
+  const addr = shipping?.address || details.address || {};
+  const name = (shipping?.name || details.name || '').trim();
+  const [first, ...rest] = name.split(/\s+/);
+
+  return {
+    event_name: 'Purchase',
+    // Seconds, and Meta rejects events older than 7 days.
+    event_time: session.created || Math.floor(Date.now() / 1000),
+    // Stable and derived from the session, so a Stripe retry of this webhook
+    // reports the same id and Meta discards the duplicate instead of counting
+    // the sale twice.
+    event_id: 'ord_' + session.id,
+    event_source_url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.altaradesign.com') + '/confirmation.html',
+    action_source: 'website',
+    user_data: dropEmpty({
+      em: hashed(details.email),
+      ph: hashedPhone(details.phone),
+      fn: hashed(first),
+      ln: hashed(rest.join(' ')),
+      ct: hashed(addr.city),
+      st: hashed(addr.state),
+      zp: hashed(addr.postal_code),
+      country: hashed(addr.country),
+      fbp: md.meta_fbp || undefined,
+      fbc: md.meta_fbc || undefined,
+      client_user_agent: md.meta_ua || undefined,
+      client_ip_address: md.meta_ip || undefined,
+    }),
+    custom_data: {
+      currency: String(session.currency || 'aud').toUpperCase(),
+      value: (session.amount_total || 0) / 100,
+      num_items: items.reduce((n, i) => n + (i.qty || 1), 0),
+      order_id: orderRef(session),
+      content_type: 'product',
+      contents: items.map(i => ({ id: i.name, quantity: i.qty || 1, item_price: i.price })),
+    },
+  };
+}
+
+async function sendPurchaseToMeta(session, items, shipping) {
+  if (!process.env.META_CAPI_TOKEN) {
+    console.error('META_CAPI_TOKEN not set - Purchase not reported to Meta for', orderRef(session));
+    return;
+  }
+  try {
+    const res = await fetch(`https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: [buildPurchaseEvent(session, items, shipping)],
+        access_token: process.env.META_CAPI_TOKEN,
+        ...(process.env.META_TEST_EVENT_CODE ? { test_event_code: process.env.META_TEST_EVENT_CODE } : {}),
+      }),
+    });
+    const body = await res.text();
+    if (!res.ok) console.error(`Meta CAPI error ${res.status}:`, body);
+    else console.log('Purchase reported to Meta for', orderRef(session), body);
+  } catch (err) {
+    // Never allowed to fail the webhook: Stripe would retry and we would write
+    // a duplicate order row.
+    console.error('Meta CAPI request failed:', err);
+  }
+}
 
 export const config = { api: { bodyParser: false } };
 
@@ -214,6 +304,10 @@ export default async function handler(req, res) {
     } else {
       console.error('No customer email on session', session.id, '- confirmation email skipped');
     }
+
+    // Awaited for the same reason as the email: a serverless function torn down
+    // mid-request would drop the request silently.
+    await sendPurchaseToMeta(session, items, shipping);
   }
 
   res.status(200).json({ received: true });

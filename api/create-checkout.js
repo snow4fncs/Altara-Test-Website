@@ -60,8 +60,19 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { items } = req.body;
+    const { items, fbp, fbc } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: 'No items' });
+
+    // Meta's browser cookies and the user agent, carried through Stripe so the
+    // webhook can attach them to the server-side Purchase event. Without these
+    // the event still lands but Meta matches it to a person far less often.
+    const clip = v => (v ? String(v).slice(0, 480) : '');
+    const metaContext = {
+      fbp: clip(fbp),
+      fbc: clip(fbc),
+      ua: clip(req.headers['user-agent']),
+      ip: clip((req.headers['x-forwarded-for'] || '').split(',')[0].trim()),
+    };
 
     const line_items = items.map(item => {
       const priceId = PRODUCTS[item.id];
@@ -107,6 +118,10 @@ export default async function handler(req, res) {
       metadata: {
         source: 'altara-web',
         bundle_discount_aud: String(discount),
+        meta_fbp: metaContext.fbp,
+        meta_fbc: metaContext.fbc,
+        meta_ua: metaContext.ua,
+        meta_ip: metaContext.ip,
       },
     };
 

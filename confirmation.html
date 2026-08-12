@@ -1073,20 +1073,14 @@
   </div>
 </div>
 
-  <!-- Meta Pixel — Purchase -->
-  <script>
-    (function() {
-      var order = JSON.parse(localStorage.getItem('altara-order') || '{}');
-      if (order.orderNumber) {
-        fbq('track', 'Purchase', {
-          content_ids: (order.items || []).map(function(i){ return i.id; }),
-          content_type: 'product',
-          value: order.total || 0,
-          currency: 'AUD',
-          order_id: order.orderNumber
-        });
-      }
-    })();
-  </script>
+  <!-- Meta Pixel - Purchase is NOT sent from here.
+       This page used to read localStorage key "altara-order", which nothing ever
+       wrote, so the event never fired and Meta received zero purchases. Rather
+       than repair it, Purchase is now sent from api/webhook.js when Stripe
+       confirms payment: server to server, so it survives a closed tab, Safari
+       and ad blockers, and carries the real charged total rather than a guess
+       reconstructed from the cart. Do not add a browser Purchase event here
+       without also giving it event_id "ord_<stripe_session_id>", or the same
+       sale will be counted twice. -->
 </body>
 </html>
