@@ -751,6 +751,100 @@
       .cmp-table td.cmp-us::before { content: 'Altara'; display: block; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
       .cmp-table td:nth-child(3)::before { content: 'An old towel'; display: block; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 3px; }
     }
+  
+    /* ── Cart drawer ─────────────────────────────────────────────── */
+    .cd-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 480;
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
+    .cd-overlay.open { opacity: 1; pointer-events: auto; }
+    .cd { position: fixed; top: 0; right: 0; bottom: 0; width: min(430px, 100vw); z-index: 490;
+      background: var(--bg); border-left: 1px solid var(--line);
+      transform: translateX(105%); transition: transform 0.34s cubic-bezier(0.16,1,0.3,1);
+      display: flex; flex-direction: column; }
+    .cd.open { transform: translateX(0); }
+    .cd-head { display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .cd-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--cream); }
+    .cd-title span { font-size: 14px; color: var(--muted); margin-left: 6px; }
+    .cd-close { background: none; border: none; cursor: pointer; color: var(--cream-dim);
+      font-size: 26px; line-height: 1; padding: 4px 8px; }
+    .cd-close:hover { color: var(--cream); }
+    .cd-close:focus-visible, .cd :is(button,input,a):focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .cd-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
+    /* progress to free shipping */
+    .cd-prog { margin-bottom: 18px; }
+    .cd-prog-label { font-size: 12px; color: var(--cream-dim); margin-bottom: 9px; }
+    .cd-prog-label strong { color: var(--gold); font-weight: 500; }
+    .cd-prog-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .cd-prog-fill { height: 100%; background: var(--gold); border-radius: 2px; width: 0;
+      transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .cd-prog.done .cd-prog-label { color: var(--gold); }
+    /* items */
+    .cd-item { display: grid; grid-template-columns: 62px 1fr auto; gap: 12px; padding: 14px 0;
+      border-bottom: 1px solid var(--line); align-items: center; }
+    .cd-item img { width: 62px; height: 62px; object-fit: contain; background: var(--bg-2); }
+    .cd-item-name { font-size: 13px; color: var(--cream); line-height: 1.45; margin-bottom: 7px; }
+    .cd-qty { display: inline-flex; align-items: center; border: 1px solid var(--border); }
+    .cd-qty button { width: 26px; height: 26px; background: none; border: none; color: var(--cream-dim);
+      cursor: pointer; font-size: 14px; }
+    .cd-qty span { min-width: 26px; text-align: center; font-size: 13px; color: var(--cream); }
+    .cd-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .cd-price { font-size: 14px; color: var(--cream); font-variant-numeric: tabular-nums; }
+    .cd-rm { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; padding: 0; }
+    .cd-rm:hover { color: #D98A8A; }
+    /* cross-sell */
+    .cd-x { border: 1px solid rgba(196,169,122,0.3); background: rgba(196,169,122,0.045);
+      padding: 12px 14px; margin: 16px 0 4px; display: flex; gap: 12px; align-items: center; }
+    .cd-x img { width: 46px; height: 46px; object-fit: contain; background: var(--bg-3); }
+    .cd-x-info { flex: 1; min-width: 0; }
+    .cd-x-k { display: block; font-size: 8.5px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+    .cd-x-n { font-size: 12.5px; color: var(--cream); line-height: 1.35; }
+    .cd-x-add { background: var(--gold); color: var(--bg); border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 9px 14px; }
+    /* promo */
+    .cd-promo { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 16px; }
+    .cd-promo input { font-family: 'Outfit', sans-serif; font-size: 16px; color: var(--cream);
+      background: var(--bg-2); border: 1px solid var(--border); padding: 10px 12px; text-transform: uppercase; }
+    .cd-promo input::placeholder { text-transform: none; color: var(--muted); font-size: 13px; }
+    .cd-promo button { font-family: 'Outfit', sans-serif; cursor: pointer; background: transparent;
+      color: var(--cream); border: 1px solid var(--border); font-size: 9.5px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; padding: 0 16px; }
+    .cd-promo-msg { font-size: 11.5px; margin-top: 7px; color: var(--cream-dim); }
+    .cd-promo-msg.err { color: #D98A8A; } .cd-promo-msg.ok { color: var(--gold); }
+    .cd-promo-msg a { color: var(--cream-dim); }
+    /* summary + foot */
+    .cd-rows { margin-top: 16px; display: grid; gap: 8px; }
+    .cd-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--cream-dim); }
+    .cd-row.save { color: var(--gold); }
+    .cd-row.tot { font-size: 16px; color: var(--cream); padding-top: 8px; border-top: 1px solid var(--line); }
+    .cd-foot { padding: 16px 22px calc(16px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--line); background: var(--bg); }
+    .cd-checkout { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+      background: var(--brand); color: var(--cream); border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; padding: 17px; }
+    .cd-checkout:hover { background: var(--brand-lt); }
+    .cd-checkout[disabled] { opacity: 0.5; cursor: default; }
+    .cd-checkout svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .cd-pays { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+    .cd-pays .pay { height: 22px; min-width: 38px; padding: 0 7px; border-radius: 3px; font-size: 10px;
+      display: inline-flex; align-items: center; justify-content: center; background: #f6f4ef;
+      font-family: 'Outfit', sans-serif; }
+    .cd-pays .pay-visa { color: #1434CB; font-weight: 700; font-style: italic; }
+    .cd-pays .mc-l, .cd-pays .mc-r { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .cd-pays .mc-l { background: #EB001B; margin-right: -5px; }
+    .cd-pays .mc-r { background: #F79E1B; mix-blend-mode: multiply; }
+    .cd-pays .pay-amex { background: #1F72CD; color: #fff; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; }
+    .cd-pays .pay-apple { color: #111; font-weight: 500; }
+    .cd-pays .pay-gpay { color: #3c4043; font-weight: 500; }
+    .cd-pays .pay-zip { background: #6542F4; color: #fff; font-weight: 700; text-transform: lowercase; }
+    .cd-empty { text-align: center; color: var(--cream-dim); font-size: 14px; padding: 40px 0; }
+    .cd-view-link { display: block; text-align: center; margin-top: 10px; font-size: 11px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+    .cd-view-link:hover { color: var(--gold); }
+    @media (prefers-reduced-motion: reduce) { .cd, .cd-overlay, .cd-prog-fill { transition: none; } }
   </style>
   <meta name="description" content="Black car seat towel cover with white piping and magnetic 30-second fit. Machine washable, protects against sweat, sand and spills. Twin set $89, free shipping.">
   <link rel="canonical" href="https://www.altaradesign.com/product-contrast-white.html">
@@ -1264,9 +1358,9 @@
     if (ex) ex.qty += qty; else c.items.push({ ...item, qty: qty });
     localStorage.setItem('altara-cart', JSON.stringify(c));
     if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids: [item.id], content_name: item.name, value: item.price * qty, currency: 'AUD' });
-    // Straight to the cart: that page carries the cross-sell, and every extra
-    // decision left here is a chance to wander off.
-    window.location.href = 'cart.html';
+    // Open the drawer: the buyer keeps their place on the page, and the
+    // drawer carries the cross-sell, code field and checkout itself.
+    if (window.openCartDrawer) window.openCartDrawer();
   }
   document.getElementById('add-to-cart-btn').addEventListener('click', addToCartAndGo);
 
@@ -1544,5 +1638,215 @@
     .catch(function () { render(demoMode ? DEMO : { count: 0, average: 0, distribution: [], reviews: [] }); });
 })();
 </script>
+
+<!-- CART DRAWER -->
+<div class="cd-overlay" id="cd-overlay" aria-hidden="true"></div>
+<aside class="cd" id="cd" role="dialog" aria-modal="true" aria-label="Shopping cart" aria-hidden="true">
+  <div class="cd-head">
+    <span class="cd-title">Cart <span id="cd-count"></span></span>
+    <button type="button" class="cd-close" id="cd-close" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="cd-body">
+    <div class="cd-prog" id="cd-prog">
+      <p class="cd-prog-label" id="cd-prog-label"></p>
+      <div class="cd-prog-track"><div class="cd-prog-fill" id="cd-prog-fill"></div></div>
+    </div>
+    <div id="cd-items"></div>
+    <div id="cd-x-slot"></div>
+    <div class="cd-promo">
+      <input type="text" id="cd-promo-input" placeholder="Discount code" autocomplete="off" autocapitalize="characters" aria-label="Discount code">
+      <button type="button" id="cd-promo-apply">Apply</button>
+    </div>
+    <p class="cd-promo-msg" id="cd-promo-msg" aria-live="polite"></p>
+    <div class="cd-rows" id="cd-rows"></div>
+  </div>
+  <div class="cd-foot">
+    <button type="button" class="cd-checkout" id="cd-checkout">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span id="cd-checkout-label">Checkout</span>
+    </button>
+    <span class="cd-pays" role="img" aria-label="Visa, Mastercard, American Express, Apple Pay, Google Pay, Zip">
+      <span class="pay pay-visa">VISA</span>
+      <span class="pay" aria-hidden="true"><i class="mc-l"></i><i class="mc-r"></i></span>
+      <span class="pay pay-amex">AMEX</span>
+      <span class="pay pay-apple">&#63743; Pay</span>
+      <span class="pay pay-gpay">G Pay</span>
+      <span class="pay pay-zip">zip</span>
+    </span>
+    <a class="cd-view-link" href="cart.html">View full cart</a>
+  </div>
+</aside>
+
+
+<script>
+/* Cart drawer: the whole cart without leaving the product page. */
+(function () {
+  var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 29, PROMO_KEY = 'altara-promo';
+  var $ = function (id) { return document.getElementById(id); };
+  var drawer = $('cd'), overlay = $('cd-overlay');
+  if (!drawer) return;
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function cart(){ try { return JSON.parse(localStorage.getItem('altara-cart')) || {items:[]}; } catch(e){ return {items:[]}; } }
+  function save(c){ localStorage.setItem('altara-cart', JSON.stringify(c));
+    var n=c.items.reduce(function(s,i){return s+i.qty;},0);
+    var b=document.getElementById('cart-badge'); if(b){ b.textContent=n; b.classList.toggle('show', n>0); } }
+  function fmt(n){ return '$' + n.toFixed(2); }
+  function promo(){ try { return JSON.parse(localStorage.getItem(PROMO_KEY)) || null; } catch(e){ return null; } }
+  function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);})
+    .reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE; }
+  function promoAmt(p, base){ if(!p) return 0;
+    var d = p.amount_off ? Number(p.amount_off) : base*(Number(p.percent_off)||0)/100;
+    return Math.min(Math.max(d,0), base); }
+
+  window.openCartDrawer = function () {
+    paint();
+    drawer.classList.add('open'); overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow = 'hidden';
+    $('cd-close').focus();
+  };
+  function close(){ drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow = ''; }
+  $('cd-close').addEventListener('click', close);
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.classList.contains('open')) close(); });
+
+  function paint(){
+    var c = cart();
+    var n = c.items.reduce(function(s,i){return s+i.qty;},0);
+    $('cd-count').textContent = n ? '('+n+')' : '';
+
+    if (!c.items.length) {
+      $('cd-items').innerHTML = '<p class="cd-empty">Your cart is empty.</p>';
+      $('cd-x-slot').innerHTML = ''; $('cd-rows').innerHTML = '';
+      $('cd-prog').style.display = 'none';
+      $('cd-checkout').disabled = true; $('cd-checkout-label').textContent = 'Checkout';
+      return;
+    }
+    $('cd-checkout').disabled = false;
+    $('cd-prog').style.display = '';
+
+    var subtotal = c.items.reduce(function(s,i){return s+i.price*i.qty;},0);
+    var bd = bundleDisc(c);
+    var p = bd > 0 ? null : promo();
+    var pd = promoAmt(p, subtotal);
+    var after = subtotal - bd - pd;
+    var ship = after >= FREE_SHIP ? 0 : SHIP_RATE;
+    var total = after + ship;
+
+    // progress to free shipping
+    var prog = $('cd-prog'), fill = $('cd-prog-fill'), label = $('cd-prog-label');
+    var pct = Math.min(100, after / FREE_SHIP * 100);
+    fill.style.width = pct + '%';
+    if (ship === 0) { prog.classList.add('done'); label.innerHTML = '&#10003; Free shipping unlocked'; }
+    else { prog.classList.remove('done');
+      label.innerHTML = 'Add <strong>' + fmt(FREE_SHIP - after) + '</strong> more for free shipping'; }
+
+    // items
+    $('cd-items').innerHTML = c.items.map(function(i){
+      return '<div class="cd-item">'
+        + '<img src="'+esc(i.image)+'" alt="">'
+        + '<div><p class="cd-item-name">'+esc(i.name)+'</p>'
+        + '<span class="cd-qty"><button type="button" data-d="-1" data-id="'+esc(i.id)+'" aria-label="Decrease">&minus;</button>'
+        + '<span>'+i.qty+'</span>'
+        + '<button type="button" data-d="1" data-id="'+esc(i.id)+'" aria-label="Increase">+</button></span></div>'
+        + '<div class="cd-item-right"><span class="cd-price">'+fmt(i.price*i.qty)+'</span>'
+        + '<button type="button" class="cd-rm" data-rm="'+esc(i.id)+'">Remove</button></div>'
+        + '</div>';
+    }).join('');
+
+    // cross-sell: the colourway they don't have, else back row
+    var has = function(pre){ return c.items.some(function(i){ return i.id.indexOf(pre)===0; }); };
+    var offer = null;
+    if (has('midnight-black') && !has('contrast-white'))
+      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Homepage image.png', label:'Complete the pair' };
+    else if (has('contrast-white') && !has('midnight-black'))
+      offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
+    else offer = { id: c.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
+      name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
+      price:89, image:c.items[0].image, label:'Cover the back row too' };
+    $('cd-x-slot').innerHTML = '<div class="cd-x"><img src="'+esc(offer.image)+'" alt="">'
+      + '<div class="cd-x-info"><span class="cd-x-k">'+esc(offer.label)+'</span>'
+      + '<span class="cd-x-n">'+esc(offer.name)+' &middot; $89</span></div>'
+      + '<button type="button" class="cd-x-add" id="cd-x-add">+ Add</button></div>';
+    $('cd-x-add').addEventListener('click', function(){
+      var c2=cart(); var ex=c2.items.find(function(i){return i.id===offer.id;});
+      if(ex) ex.qty++; else c2.items.push({id:offer.id,name:offer.name,price:offer.price,image:offer.image,qty:1});
+      save(c2); paint();
+      if (typeof fbq==='function') fbq('track','AddToCart',{content_ids:[offer.id],content_name:offer.name,value:offer.price,currency:'AUD'});
+    });
+
+    // promo message
+    var msg = $('cd-promo-msg');
+    if (p && pd>0) { msg.className='cd-promo-msg ok';
+      msg.innerHTML = esc(p.code)+' applied &middot; <a href="#" id="cd-promo-rm">Remove</a>';
+      var rm=$('cd-promo-rm'); rm.addEventListener('click',function(e){e.preventDefault();
+        localStorage.removeItem(PROMO_KEY); paint();});
+    } else if (bd>0 && promo()) { msg.className='cd-promo-msg';
+      msg.textContent = 'Twin Set bundle already saves more — codes don’t stack.'; }
+    else { msg.className='cd-promo-msg'; msg.textContent=''; }
+
+    // rows
+    var rows = '<div class="cd-row"><span>Subtotal</span><span>'+fmt(subtotal)+'</span></div>';
+    if (bd>0) rows += '<div class="cd-row save"><span>Twin Set bundle</span><span>-'+fmt(bd)+'</span></div>';
+    if (pd>0) rows += '<div class="cd-row save"><span>Code '+esc(p.code)+'</span><span>-'+fmt(pd)+'</span></div>';
+    rows += '<div class="cd-row"><span>Shipping</span><span>'+(ship===0?'Free':fmt(ship))+'</span></div>';
+    rows += '<div class="cd-row tot"><span>Total</span><span>'+fmt(total)+'</span></div>';
+    $('cd-rows').innerHTML = rows;
+    $('cd-checkout-label').textContent = 'Checkout · ' + fmt(total);
+  }
+
+  $('cd-items').addEventListener('click', function(e){
+    var q=e.target.closest('button[data-d]');
+    if(q){ var c2=cart(); var it=c2.items.find(function(i){return i.id===q.getAttribute('data-id');});
+      if(it){ it.qty=Math.max(1,it.qty+Number(q.getAttribute('data-d'))); save(c2); paint(); } return; }
+    var r=e.target.closest('button[data-rm]');
+    if(r){ var c3=cart(); c3.items=c3.items.filter(function(i){return i.id!==r.getAttribute('data-rm');});
+      save(c3); paint(); }
+  });
+
+  // promo apply (same endpoint as the cart page)
+  function applyPromo(){
+    var inp=$('cd-promo-input'), btn=$('cd-promo-apply'), msg=$('cd-promo-msg');
+    var code=inp.value.trim().toUpperCase();
+    if(!code){ msg.className='cd-promo-msg err'; msg.textContent='Enter a code first.'; inp.focus(); return; }
+    btn.disabled=true; msg.className='cd-promo-msg'; msg.textContent='Checking…';
+    fetch('/api/validate-code?code='+encodeURIComponent(code))
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+      .then(function(res){ btn.disabled=false;
+        if(!res.ok){ msg.className='cd-promo-msg err'; msg.textContent=res.j.error||'That code is not valid'; return; }
+        localStorage.setItem(PROMO_KEY, JSON.stringify(res.j)); inp.value=''; paint(); })
+      .catch(function(){ btn.disabled=false; msg.className='cd-promo-msg err'; msg.textContent='Could not check that code.'; });
+  }
+  $('cd-promo-apply').addEventListener('click', applyPromo);
+  $('cd-promo-input').addEventListener('keydown', function(e){ if(e.key==='Enter') applyPromo(); });
+
+  // checkout straight from the drawer
+  $('cd-checkout').addEventListener('click', function(){
+    var c=cart(); if(!c.items.length) return;
+    var btn=$('cd-checkout'); btn.disabled=true; $('cd-checkout-label').textContent='Redirecting…';
+    function readCookie(name){ var m=document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)');
+      return m?decodeURIComponent(m[2]):''; }
+    if (typeof fbq==='function') fbq('track','InitiateCheckout',{
+      content_ids:c.items.map(function(i){return i.id;}),
+      num_items:c.items.reduce(function(a,i){return a+i.qty;},0),
+      value:c.items.reduce(function(s,i){return s+i.price*i.qty;},0)-bundleDisc(c),
+      currency:'AUD'});
+    fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ items:c.items.map(function(i){return {id:i.id,qty:i.qty};}),
+        fbp:readCookie('_fbp'), fbc:readCookie('_fbc'),
+        promo_code:(bundleDisc(c)===0 && promo())?promo().code:undefined })})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d.url) window.location.href=d.url;
+        else { btn.disabled=false; $('cd-checkout-label').textContent='Checkout'; alert(d.error||'Checkout failed — try again.'); } })
+      .catch(function(){ btn.disabled=false; $('cd-checkout-label').textContent='Checkout';
+        alert('Checkout failed — check your connection and try again.'); });
+  });
+})();
+</script>
+
 </body>
 </html>
