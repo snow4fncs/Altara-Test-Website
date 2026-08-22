@@ -813,6 +813,20 @@
     @media (prefers-reduced-motion: reduce) {
       .cart-item-img, a.cart-item-name { transition: none; }
     }
+  
+    /* Cross-sell */
+    .xsell { border: 1px solid rgba(196,169,122,0.3); background: rgba(196,169,122,0.045); padding: 16px 18px; margin: 4px 0 18px; display: flex; gap: 14px; align-items: center; }
+    .xsell img { width: 56px; height: 56px; object-fit: contain; background: var(--bg-3); flex-shrink: 0; }
+    .xsell-info { flex: 1; min-width: 0; }
+    .xsell-k { font-size: 9.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 3px; }
+    .xsell-n { font-size: 13.5px; color: var(--cream); line-height: 1.4; }
+    .xsell-p { font-size: 12px; color: var(--cream-dim); }
+    .xsell-btn { background: var(--gold); color: var(--bg); border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 11px 16px; white-space: nowrap; }
+    .xsell-btn:hover { opacity: 0.9; }
+    .xsell-btn:focus-visible { outline: 1px solid var(--cream); outline-offset: 2px; }
+    .assure { display: grid; gap: 7px; margin-top: 14px; }
+    .assure span { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--cream-dim); }
+    .assure svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-width: 2; flex-shrink: 0; }
   </style>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Review your Altara seat covers and complete your order. Secure checkout with free shipping on all Australian orders.">
@@ -962,6 +976,7 @@
 
     <!-- RIGHT: ORDER SUMMARY -->
     <aside class="order-summary" aria-label="Order summary">
+      <div id="xsell-slot"></div>
       <p class="summary-heading">Order Summary</p>
 
       <div class="summary-row">
@@ -987,6 +1002,10 @@
       </div>
 
       <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()">Proceed to Checkout</button>
+      <div class="assure">
+        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &mdash; full refund if it isn't right</span>
+        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ships from NSW within 1&ndash;2 business days</span>
+      </div>
 
       <p class="secure-note">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1271,6 +1290,36 @@
         if (threshMsg) { threshMsg.innerHTML = 'Add <em>$' + (FREE_SHIP - afterDiscount).toFixed(0) + '</em> more for free shipping'; threshMsg.style.display = 'block'; }
       }
       totalEl.textContent = fmt(afterDiscount + shipping);
+
+      // Cross-sell: offer the colourway they don't have, as a twin. One product in
+      // two finishes - the natural second purchase is the other finish.
+      (function(){
+        var slot = document.getElementById('xsell-slot');
+        if (!slot) return;
+        var has = function(prefix){ return cart.items.some(function(i){ return i.id.indexOf(prefix) === 0; }); };
+        var offer = null;
+        if (has('midnight-black') && !has('contrast-white'))
+          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Homepage image.png', label:'Complete the pair' };
+        else if (has('contrast-white') && !has('midnight-black'))
+          offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
+        else if (cart.items.length)
+          offer = { id: cart.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
+                    name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
+                    price:89, image: cart.items[0].image, label:'Cover the back row too' };
+        if (!offer) { slot.innerHTML=''; return; }
+        slot.innerHTML = '<div class="xsell">'
+          + '<img src="' + offer.image + '" alt="">'
+          + '<div class="xsell-info"><span class="xsell-k">' + offer.label + '</span>'
+          + '<span class="xsell-n">' + offer.name + '</span> <span class="xsell-p">$89 &middot; free shipping</span></div>'
+          + '<button type="button" class="xsell-btn" id="xsell-add">Add</button></div>';
+        document.getElementById('xsell-add').addEventListener('click', function(){
+          var c = getCart();
+          var ex = c.items.find(function(i){ return i.id === offer.id; });
+          if (ex) ex.qty++; else c.items.push({ id:offer.id, name:offer.name, price:offer.price, image:offer.image, qty:1 });
+          saveCart(c); renderCart();
+          if (typeof fbq === 'function') fbq('track','AddToCart',{content_ids:[offer.id],content_name:offer.name,value:offer.price,currency:'AUD'});
+        });
+      })();
 
       const mcbValue = document.getElementById('mcb-value');
       if (mcbValue) mcbValue.textContent = fmt(afterDiscount + shipping);

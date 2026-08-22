@@ -679,6 +679,78 @@
     .rv-photos-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
     @media (max-width: 900px) { .rv-photos-item { width: 76px; height: 76px; } }
     @media (prefers-reduced-motion: reduce) { .rv-photos-item { transition: none; } }
+  
+    /* Offer ledger */
+    .pack-opts { display: grid; grid-template-columns: 1fr; gap: 9px; }
+    .pack-opt { position: relative; width: 100%; padding: 15px 16px 13px; }
+    .pack-opt.active { border-color: rgba(196,169,122,0.65); background: rgba(196,169,122,0.055); box-shadow: 0 1px 2px rgba(0,0,0,0.35), 0 14px 30px -22px rgba(196,169,122,0.5); }
+    .pack-badge { position: absolute; top: -8px; right: 12px; font-size: 8.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 9px; background: var(--brand); color: var(--cream); }
+    .pack-badge.gold { background: var(--gold); color: var(--bg); }
+    .pack-was { color: rgba(237,232,223,0.32); font-size: 12px; margin-right: 6px; }
+    .pack-opt .pack-opt-name { font-size: 10.5px; }
+    .pack-opt-price { font-size: 18px; }
+    .pi-guarantee-line { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(237,232,223,0.6); margin: -2px 0 14px; }
+    .pi-guarantee-line svg { width: 14px; height: 14px; stroke: var(--gold); fill: none; stroke-width: 1.6; flex-shrink: 0; }
+  
+    /* Persuasion sections */
+    .cmp, .fit3, .pfaq { padding: 84px 72px; border-top: 1px solid var(--line); }
+    .cmp-in { max-width: 1180px; margin: 0 auto; }
+    .cmp-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 46px); font-weight: 300; line-height: 1.06; letter-spacing: -0.02em; color: var(--cream); margin-bottom: 36px; }
+    .cmp-h em { font-style: italic; color: rgba(237,232,223,0.55); }
+    .cmp-scroll { overflow-x: auto; }
+    .cmp-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    .cmp-table th, .cmp-table td { text-align: left; padding: 15px 18px; border-bottom: 1px solid var(--line); font-size: 13.5px; font-weight: 300; color: rgba(237,232,223,0.55); }
+    .cmp-table th { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,223,0.4); }
+    .cmp-table th.cmp-us { color: var(--gold); }
+    .cmp-table td.cmp-us { color: var(--cream); background: rgba(196,169,122,0.05); border-left: 1px solid rgba(196,169,122,0.28); border-right: 1px solid rgba(196,169,122,0.28); }
+    .cmp-table td:first-child { color: var(--cream); font-weight: 400; }
+    .fit3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .fit3-step { background: var(--bg-2); border: 1px solid var(--line); padding: 28px; }
+    .fit3-k { display: block; font-family: 'Cormorant Garamond', serif; font-size: 30px; font-style: italic; color: var(--gold); margin-bottom: 10px; }
+    .fit3-step p { font-size: 14px; line-height: 1.75; color: rgba(237,232,223,0.6); font-weight: 300; }
+    .guar { padding: 64px 72px; border-top: 1px solid var(--line); background: rgba(196,169,122,0.04); }
+    .guar-in { max-width: 860px; margin: 0 auto; display: flex; gap: 26px; align-items: flex-start; }
+    .guar-in svg { width: 44px; height: 44px; stroke: var(--gold); fill: none; stroke-width: 1.4; flex-shrink: 0; margin-top: 4px; }
+    .guar-h { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: var(--cream); margin-bottom: 8px; }
+    .guar-p { font-size: 14.5px; line-height: 1.8; color: rgba(237,232,223,0.6); font-weight: 300; }
+    .pfaq-list { max-width: 760px; }
+    .pfaq-item { border-bottom: 1px solid var(--line); }
+    .pfaq-item summary { cursor: pointer; list-style: none; padding: 19px 0; font-size: 15.5px; font-weight: 400; color: var(--cream); display: flex; justify-content: space-between; align-items: center; }
+    .pfaq-item summary::-webkit-details-marker { display: none; }
+    .pfaq-item summary::after { content: '+'; font-size: 20px; font-weight: 300; color: var(--gold); transition: transform 0.25s ease; }
+    .pfaq-item[open] summary::after { transform: rotate(45deg); }
+    .pfaq-item p { padding: 0 0 20px; font-size: 14px; line-height: 1.85; color: rgba(237,232,223,0.58); font-weight: 300; max-width: 64ch; }
+    .pfaq-item summary:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    /* Sticky mobile ATC */
+    .satc { position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; display: none; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 18px calc(11px + env(safe-area-inset-bottom, 0px)); background: rgba(12,13,16,0.97); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); }
+    .satc.show { transform: translateY(0); }
+    .satc-info { display: flex; flex-direction: column; }
+    .satc-name { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.55); }
+    .satc-price { font-size: 18px; color: var(--cream); font-variant-numeric: tabular-nums; }
+    .satc-btn { background: var(--brand); color: var(--cream); border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 15px 28px; }
+    @media (max-width: 900px) {
+      .satc { display: flex; }
+      .cmp, .fit3, .pfaq { padding: 60px 24px; }
+      .guar { padding: 48px 24px; }
+      .guar-in { flex-direction: column; gap: 14px; }
+      .fit3-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { .satc, .pfaq-item summary::after { transition: none; } }
+    /* Money-page focus: keep Collection + Reviews, drop sightseeing links & search */
+    .nav-links a[href="index.html#features"], .nav-links a[href="index.html#craft"] { display: none; }
+    #search-open-btn { display: none; }
+  
+    /* cmp mobile stack: both columns visible, no swiping */
+    @media (max-width: 640px) {
+      .cmp-table { min-width: 0; }
+      .cmp-table thead { display: none; }
+      .cmp-table tr { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); padding: 14px 0; }
+      .cmp-table td { display: block; border-bottom: none !important; padding: 4px 10px; font-size: 12.5px; }
+      .cmp-table td:first-child { grid-column: 1 / -1; font-size: 14px; padding-bottom: 8px; }
+      .cmp-table td.cmp-us { border-left: 1px solid rgba(196,169,122,0.28); border-right: none; }
+      .cmp-table td.cmp-us::before { content: 'Altara'; display: block; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
+      .cmp-table td:nth-child(3)::before { content: 'An old towel'; display: block; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 3px; }
+    }
   </style>
   <meta name="description" content="Altara Contrast White seat cover — premium materials, precision fit for modern vehicles. Free shipping Australia-wide. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/product-contrast-white.html">
@@ -844,19 +916,34 @@
     <div class="pack-wrap">
       <p class="pi-label">Pack</p>
       <div class="pack-opts">
-        <button class="pack-opt active" id="pack-single" type="button">
-          <span class="pack-opt-name">Single</span>
-          <span class="pack-opt-price">$59 <span class="pack-opt-currency">AUD</span></span>
+        <button class="pack-opt" id="pack-single" type="button" aria-pressed="false">
+          <span>
+            <span class="pack-opt-name">Single &middot; 1 cover</span>
+            <span class="pack-opt-price">$59 <span class="pack-opt-currency">AUD</span></span>
+          </span>
+          <span class="pack-opt-meta">Front seat only &middot; + $9.95 shipping</span>
         </button>
-        <button class="pack-opt" id="pack-twin" type="button">
-          <span class="pack-opt-name">Twin Set</span>
-          <span class="pack-opt-price">$89 <span class="pack-opt-currency">AUD</span></span>
-          <span class="pack-opt-meta">Save $29 · Free Shipping</span>
+        <button class="pack-opt active" id="pack-twin" type="button" aria-pressed="true">
+          <span class="pack-badge">Most popular</span>
+          <span>
+            <span class="pack-opt-name">Twin Set &middot; 2 covers</span>
+            <span class="pack-opt-price"><s class="pack-was">$118</s> $89 <span class="pack-opt-currency">AUD</span></span>
+          </span>
+          <span class="pack-opt-meta">Both front seats &middot; save $29 &middot; free shipping</span>
+        </button>
+        <button class="pack-opt" id="pack-fullcar" type="button" aria-pressed="false">
+          <span class="pack-badge gold">Best value</span>
+          <span>
+            <span class="pack-opt-name">Full Car &middot; 4 covers</span>
+            <span class="pack-opt-price"><s class="pack-was">$236</s> $178 <span class="pack-opt-currency">AUD</span></span>
+          </span>
+          <span class="pack-opt-meta">Front + back rows &middot; save $58 &middot; free shipping</span>
         </button>
       </div>
       <p class="pack-mix">Mix and match: add <strong>any two covers</strong> and you pay the Twin Set price of <strong>$89</strong> &mdash; $29 off, applied automatically at checkout. Pair it with <a href="product-midnight-black.html">Midnight Black</a>.</p>
     </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
+    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &mdash; love it or send it back</p>
 
     <div class="pi-perks">
       <span class="pi-perk">
@@ -926,6 +1013,67 @@
 </div><!-- /product-hero -->
 
 <!-- COMPLETE -->
+
+<!-- WHY IT WINS -->
+<section class="cmp">
+  <div class="cmp-in">
+    <div class="rv-ey" style="margin-bottom:14px">Why not just use a towel?</div>
+    <h2 class="cmp-h">Built for a car seat.<br><em>Not the beach.</em></h2>
+    <div class="cmp-scroll">
+      <table class="cmp-table">
+        <thead><tr><th></th><th class="cmp-us">Altara</th><th>An old towel</th></tr></thead>
+        <tbody>
+          <tr><td>Stays put when you get in and out</td><td class="cmp-us">MagFit magnetic clips</td><td>Slides into the footwell</td></tr>
+          <tr><td>Covers headrest to seat base</td><td class="cmp-us">145cm tailored drop</td><td>Seat base, if you’re lucky</td></tr>
+          <tr><td>Grips the seat</td><td class="cmp-us">Anti-slip rubber dot base</td><td>Nothing</td></tr>
+          <tr><td>Looks factory-fitted</td><td class="cmp-us">Piped edges, embroidered script</td><td>Looks like laundry</td></tr>
+          <tr><td>After the wash</td><td class="cmp-us">Keeps its shape</td><td>Frayed and stiff</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FIT IN MINUTES -->
+<section class="fit3">
+  <div class="cmp-in">
+    <div class="rv-ey" style="margin-bottom:14px">Fitted in under two minutes</div>
+    <h2 class="cmp-h">Three moves.<br><em>No tools.</em></h2>
+    <div class="fit3-grid">
+      <div class="fit3-step"><span class="fit3-k">Drop</span><p>Over the headrest, aligned to the opening.</p></div>
+      <div class="fit3-step"><span class="fit3-k">Smooth</span><p>The base outward from the centre of the seat.</p></div>
+      <div class="fit3-step"><span class="fit3-k">Clip</span><p>MagFit magnets snap behind the seat back. Done.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guar">
+  <div class="guar-in">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+    <div>
+      <h2 class="guar-h">30-day fit guarantee</h2>
+      <p class="guar-p">Fit it, drive with it, wash it. If it isn’t right for your car, send it back within 30 days for a full refund. You pay nothing to find out.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="pfaq">
+  <div class="cmp-in">
+    <div class="rv-ey" style="margin-bottom:14px">Before you ask</div>
+    <h2 class="cmp-h">Straight answers.</h2>
+    <div class="pfaq-list">
+      <details class="pfaq-item" open><summary>Does it fit my car?</summary><p>The cover is engineered for a universal fit across the vast majority of standard passenger seats — 145cm × 70cm, with MagFit tension adjusting to seat width and depth. One size fits most, from hatchbacks to utes.</p></details>
+      <details class="pfaq-item"><summary>Will it interfere with my seat airbag?</summary><p>It is designed to be compatible with most side-impact seat airbags. If your seats have integrated side airbags, check your owner’s manual before fitting any aftermarket cover.</p></details>
+      <details class="pfaq-item"><summary>How does it stay on the seat?</summary><p>MagFit magnetic snap-on clips secure the cover behind the seat back — no tools, no straps, no modification. The magnets are tuned to hold through daily driving, hard braking included, and the anti-slip rubber base keeps the seat panel planted.</p></details>
+      <details class="pfaq-item"><summary>How long does fitting take?</summary><p>Under two minutes per seat. Drop it over the headrest, smooth the base outward from the centre, clip the MagFit magnets behind the seat back. Fully reversible — removal leaves no marks or residue.</p></details>
+      <details class="pfaq-item"><summary>Can I machine wash it?</summary><p>Yes — cold, gentle cycle. Remove the clips first, hang dry. Wash every 4–8 weeks in normal use, or more often after the gym or beach.</p></details>
+      <details class="pfaq-item"><summary>Does it work with heated seats?</summary><p>Yes. The microfibre is thin enough to let heat through with only a slight reduction in efficiency. Not recommended over integrated massage seats.</p></details>
+    </div>
+  </div>
+</section>
+
 <section class="rv" id="reviews">
   <div class="rv-head">
     <div class="rv-ey">Reviews</div>
@@ -954,6 +1102,16 @@
 </section>
 
 <!-- FOOTER -->
+
+<!-- Sticky buy bar (mobile) -->
+<div class="satc" id="satc" aria-hidden="true">
+  <div class="satc-info">
+    <span class="satc-name">Contrast White &middot; <span id="satc-tier">Twin Set</span></span>
+    <span class="satc-price" id="satc-price">$89</span>
+  </div>
+  <button type="button" class="satc-btn" id="satc-btn">Add to cart</button>
+</div>
+
 <footer>
   <div class="footer-grid">
     <div>
@@ -1069,31 +1227,69 @@
   const PROD = { id: 'contrast-white', name: 'Contrast White', price: 59, image: 'Product Photos/Altara Product Image 1.png' };
   const toast = document.getElementById('toast');
   let tt;
-  var selectedPack = 'single';
+  var selectedPack = 'twin';   // all real orders to date are twins - default to the winner
+  var TIERS = {
+    single:  { price: 59,  was: null, label: '$59 AUD' },
+    twin:    { price: 89,  was: 118,  label: '$89 AUD' },
+    fullcar: { price: 178, was: 236,  label: '$178 AUD' }
+  };
   (function(){
-    var s=document.getElementById('pack-single'),t=document.getElementById('pack-twin'),p=document.getElementById('pi-price-display');
-    if(!s||!t)return;
-    s.addEventListener('click',function(){selectedPack='single';s.classList.add('active');t.classList.remove('active');if(p)p.textContent='$59 AUD';});
-    t.addEventListener('click',function(){selectedPack='twin';t.classList.add('active');s.classList.remove('active');if(p)p.textContent='$89 AUD';});
+    var btns = { single: document.getElementById('pack-single'),
+                 twin: document.getElementById('pack-twin'),
+                 fullcar: document.getElementById('pack-fullcar') };
+    var p = document.getElementById('pi-price-display');
+    function paintPack(){
+      Object.keys(btns).forEach(function(k){
+        if(!btns[k]) return;
+        btns[k].classList.toggle('active', k===selectedPack);
+        btns[k].setAttribute('aria-pressed', String(k===selectedPack));
+      });
+      var t = TIERS[selectedPack];
+      if(p) p.innerHTML = (t.was ? '<s class="pack-was" style="font-size:0.7em">' + '$' + t.was + '</s> ' : '') + t.label;
+      var sb = document.getElementById('satc-price');
+      if(sb) sb.textContent = '$' + t.price;
+    }
+    Object.keys(btns).forEach(function(k){
+      if(btns[k]) btns[k].addEventListener('click', function(){ selectedPack = k; paintPack(); });
+    });
+    paintPack();
   })();
-  document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-    const twin = selectedPack === 'twin';
-    const item = twin
-      ? { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: PROD.image }
-      : { id: PROD.id, name: PROD.name, price: 59, image: PROD.image };
+  function addToCartAndGo() {
+    var item, qty = 1;
+    if (selectedPack === 'single')    item = { id: PROD.id, name: PROD.name, price: 59, image: PROD.image };
+    else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: PROD.image };
+    if (selectedPack === 'fullcar')   qty = 2;
     const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
     const ex = c.items.find(i => i.id === item.id);
-    if (ex) ex.qty++; else c.items.push({ ...item, qty: 1 });
+    if (ex) ex.qty += qty; else c.items.push({ ...item, qty: qty });
     localStorage.setItem('altara-cart', JSON.stringify(c));
-    const n = c.items.reduce((s, i) => s + i.qty, 0);
-    const b = document.getElementById('cart-badge');
-    if (b) { b.textContent = n; b.classList.add('show'); }
-    const sub = toast.querySelector('.toast-s');
-    if (sub) sub.textContent = item.name;
-    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids: [item.id], content_name: item.name, value: item.price, currency: 'AUD' });
-    clearTimeout(tt); toast.classList.add('show');
-    tt = setTimeout(() => toast.classList.remove('show'), 3500);
-  });
+    if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids: [item.id], content_name: item.name, value: item.price * qty, currency: 'AUD' });
+    // Straight to the cart: that page carries the cross-sell, and every extra
+    // decision left here is a chance to wander off.
+    window.location.href = 'cart.html';
+  }
+  document.getElementById('add-to-cart-btn').addEventListener('click', addToCartAndGo);
+
+  // Sticky buy bar: appears only while the real button is off-screen.
+  (function(){
+    var bar=document.getElementById('satc'), main=document.getElementById('add-to-cart-btn');
+    if(!bar||!main) return;
+    document.getElementById('satc-btn').addEventListener('click', addToCartAndGo);
+    var tierNames={single:'Single',twin:'Twin Set',fullcar:'Full Car'};
+    ['pack-single','pack-twin','pack-fullcar'].forEach(function(id){
+      var b=document.getElementById(id);
+      if(b) b.addEventListener('click', function(){
+        var el=document.getElementById('satc-tier');
+        if(el) el.textContent=tierNames[selectedPack]||'';
+      });
+    });
+    new IntersectionObserver(function(en){
+      var vis=en[0].isIntersecting;
+      bar.classList.toggle('show', !vis);
+      bar.setAttribute('aria-hidden', String(vis));
+    },{threshold:0.5}).observe(main);
+  })();
+
   try { const c=JSON.parse(localStorage.getItem('altara-cart')||'{"items":[]}'); const n=(c.items||[]).reduce((s,i)=>s+(i.qty||1),0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('show');} } catch(e){}
 
   // Inline search

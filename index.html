@@ -1423,6 +1423,11 @@
     .rvb-photos-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
     @media (max-width: 900px) { .rvb-photos-item { width: 76px; height: 76px; } }
     @media (prefers-reduced-motion: reduce) { .rvb-photos-item { transition: none; } }
+  
+    .hero-stars { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; text-decoration: none; }
+    .hero-stars .hs-row { color: var(--gold); letter-spacing: 2px; font-size: 13px; }
+    .hero-stars .hs-txt { font-size: 12px; color: rgba(237,232,223,0.55); letter-spacing: 0.04em; border-bottom: 1px solid rgba(237,232,223,0.25); padding-bottom: 1px; }
+    .hero-stars:hover .hs-txt { color: var(--gold); border-color: var(--gold); }
   </style>
   <meta name="description" content="Premium car seat covers engineered for modern life. Altara blends luxury materials with precision fit for a comfortable, stylish drive. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/">
@@ -1536,17 +1541,21 @@
         Premium Seat Covers
       </span>
       <h1 class="hero-h1">
-        Drive in<br>
-        <span class="italic">Complete</span><br>
-        Comfort.
+        Sweat. Sand.<br>
+        <span class="italic">The school run.</span><br>
+        Not your seats.
       </h1>
       <p class="hero-sub">
-        Premium microfibre seat covers, engineered for the way you move. Protect what matters — without compromising style.
+        A tailored microfibre cover that clips on in two minutes, drinks up whatever the day throws at it, and goes in the wash &mdash; while your seats stay showroom-new underneath.
       </p>
       <div class="hero-ctas">
-        <a href="collection.html" class="btn-primary">Shop the Collection</a>
-        <a href="#showcase" class="btn-ghost">Learn More</a>
+        <a href="product-midnight-black.html" class="btn-primary">Shop Midnight Black</a>
+        <a href="collection.html" class="btn-ghost">Both Colours</a>
       </div>
+      <a class="hero-stars" href="reviews.html" id="hero-stars" hidden>
+        <span class="hs-row" id="hs-row"></span>
+        <span class="hs-txt" id="hs-txt"></span>
+      </a>
     </div>
 
     <div class="hero-right" aria-hidden="true">
@@ -2102,6 +2111,15 @@
     }).join('');
   }
 
+  (function(){
+    fetch('/api/reviews?product=all').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if (!d || !d.count) return;
+      var a = document.getElementById('hero-stars');
+      document.getElementById('hs-row').textContent = '★★★★★';
+      document.getElementById('hs-txt').textContent = d.average.toFixed(1) + ' from ' + d.count + ' verified ' + (d.count === 1 ? 'review' : 'reviews');
+      a.hidden = false;
+    }).catch(function(){});
+  })();
   fetch('/api/reviews?product=all')
     .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
     .then(render)
