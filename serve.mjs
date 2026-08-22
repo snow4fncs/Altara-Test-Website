@@ -396,6 +396,12 @@ const server = http.createServer(async (req, res) => {
 
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
+  if (rawPath === '/api/validate-code') {
+    const code = String(query.get('code')||'').toUpperCase();
+    if (code === 'DEV10')  return send(res, 200, { code, name: 'Dev 10% off', percent_off: 10, amount_off: null, currency: 'aud' });
+    if (code === 'FIVER')  return send(res, 200, { code, name: 'Five off', percent_off: null, amount_off: 5, currency: 'aud' });
+    return send(res, 404, { error: 'That code is not valid' });
+  }
 
   let urlPath = rawPath;
   if (urlPath === '/') urlPath = '/index.html';

@@ -60,7 +60,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { items, fbp, fbc } = req.body;
+    const { items, fbp, fbc, promo_code } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: 'No items' });
 
     // Meta's browser cookies and the user agent, carried through Stripe so the
@@ -138,6 +138,13 @@ export default async function handler(req, res) {
     // bundle order gets the bundle, everything else can redeem a code.
     if (discount > 0) {
       params.discounts = [{ coupon: await bundleCouponId(discount) }];
+    } else if (promo_code) {
+      // The cart validated this before checkout; re-verify here because the
+      // browser is never trusted with pricing. Invalid or expired by now -> fall
+      // back to the manual code field rather than failing the checkout.
+      const found = await stripe.promotionCodes.list({ code: String(promo_code).slice(0, 50), active: true, limit: 1 });
+      if (found.data[0]) params.discounts = [{ promotion_code: found.data[0].id }];
+      else params.allow_promotion_codes = true;
     } else {
       params.allow_promotion_codes = true;
     }

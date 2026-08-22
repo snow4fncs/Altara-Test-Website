@@ -827,6 +827,40 @@
     .assure { display: grid; gap: 7px; margin-top: 14px; }
     .assure span { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--cream-dim); }
     .assure svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-width: 2; flex-shrink: 0; }
+  
+    /* Discount code */
+    .promo { display: grid; grid-template-columns: 1fr auto; gap: 9px; margin: 2px 0 6px; }
+    .promo input { font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 0.06em; color: var(--cream);
+      background: var(--bg); border: 1px solid var(--border); padding: 12px 13px; text-transform: uppercase; }
+    .promo input::placeholder { text-transform: none; letter-spacing: 0.02em; color: var(--muted); }
+    .promo input:focus-visible, .promo button:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .promo button { font-family: 'Outfit', sans-serif; cursor: pointer; background: transparent; color: var(--cream);
+      border: 1px solid var(--border); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 0 18px; }
+    .promo button:hover { border-color: rgba(196,169,122,0.5); }
+    .promo button[disabled] { opacity: 0.4; cursor: default; }
+    .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
+    .promo-msg.err { color: #D98A8A; }
+    .promo-msg.ok { color: var(--gold); }
+    .promo-msg a { color: var(--cream-dim); }
+    /* Lock in the button */
+    .btn-lock { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;
+      vertical-align: -2px; margin-right: 9px; }
+    /* Payment logos */
+    .pay-icons { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .pay { display: inline-flex; align-items: center; justify-content: center; height: 26px; min-width: 44px;
+      padding: 0 9px; background: #f6f4ef; border-radius: 4px; font-family: 'Outfit', sans-serif; user-select: none; }
+    .pay-visa { color: #1434CB; font-weight: 700; font-style: italic; font-size: 12px; letter-spacing: 0.02em; }
+    .pay-mc { gap: 0; }
+    .mc-l, .mc-r { width: 15px; height: 15px; border-radius: 50%; display: inline-block; }
+    .mc-l { background: #EB001B; margin-right: -6px; }
+    .mc-r { background: #F79E1B; mix-blend-mode: multiply; }
+    .pay-amex { background: #1F72CD; color: #fff; font-weight: 700; font-size: 10.5px; letter-spacing: 0.08em; }
+    .pay-apple { color: #111; font-weight: 500; font-size: 12.5px; }
+    .pay-gpay { color: #3c4043; font-weight: 500; font-size: 12.5px; gap: 3px; }
+    .g-G { font-weight: 700; font-style: normal;
+      background: linear-gradient(90deg,#4285F4 25%,#EA4335 25% 50%,#FBBC05 50% 75%,#34A853 75%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .pay-zip { background: #6542F4; color: #fff; font-weight: 700; font-size: 12.5px; text-transform: lowercase; }
+    @media (max-width: 900px) { .promo input { font-size: 16px; } .promo button { padding: 0 16px; } }
   </style>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Review your Altara seat covers and complete your order. Secure checkout with free shipping on all Australian orders.">
@@ -988,6 +1022,15 @@
         <span class="summary-value save" id="bundle-value"></span>
       </div>
       <p class="bundle-nudge" id="bundle-nudge" style="display:none"></p>
+      <div class="promo">
+        <input type="text" id="promo-input" placeholder="Discount code" autocomplete="off" autocapitalize="characters" aria-label="Discount code">
+        <button type="button" id="promo-apply">Apply</button>
+      </div>
+      <p class="promo-msg" id="promo-msg" aria-live="polite"></p>
+      <div class="summary-row" id="promo-row" style="display:none">
+        <span class="summary-label summary-label-save" id="promo-label">Code</span>
+        <span class="summary-value save" id="promo-value"></span>
+      </div>
       <div class="summary-row">
         <span class="summary-label">Shipping</span>
         <span class="summary-value" id="cart-shipping"></span>
@@ -1001,7 +1044,7 @@
         <span class="summary-total-value" id="total">$0.00</span>
       </div>
 
-      <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()">Proceed to Checkout</button>
+      <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()"><svg class="btn-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Proceed to Checkout</button>
       <div class="assure">
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &mdash; full refund if it isn't right</span>
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ships from NSW within 1&ndash;2 business days</span>
@@ -1019,7 +1062,14 @@
 
       <div class="payments-note">
         <strong>We accept</strong>
-        Visa &middot; Mastercard &middot; Amex &middot; Apple Pay &middot; Klarna &middot; Zip
+        <span class="pay-icons" role="img" aria-label="Visa, Mastercard, American Express, Apple Pay, Google Pay, Zip">
+          <span class="pay pay-visa">VISA</span>
+          <span class="pay pay-mc" aria-hidden="true"><i class="mc-l"></i><i class="mc-r"></i></span>
+          <span class="pay pay-amex">AMEX</span>
+          <span class="pay pay-apple">&#63743; Pay</span>
+          <span class="pay pay-gpay"><b class="g-G">G</b> Pay</span>
+          <span class="pay pay-zip">zip</span>
+        </span>
       </div>
     </aside>
 
@@ -1034,7 +1084,7 @@
       <span class="mcb-label">Total</span>
       <span class="mcb-value" id="mcb-value">$0.00</span>
     </div>
-    <button class="mcb-btn" type="button" onclick="startCheckout()">Checkout</button>
+    <button class="mcb-btn" type="button" onclick="startCheckout()"><svg class="btn-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Checkout</button>
   </div>
 
   <!-- FOOTER -->
@@ -1141,6 +1191,16 @@
 
     function getTotal(cart) {
       return cart.items.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    // ─── Discount code ────────────────────────────────────────────────────
+    var PROMO_KEY = 'altara-promo';
+    function getPromo() { try { return JSON.parse(localStorage.getItem(PROMO_KEY)) || null; } catch (e) { return null; } }
+    function setPromo(p) { if (p) localStorage.setItem(PROMO_KEY, JSON.stringify(p)); else localStorage.removeItem(PROMO_KEY); }
+    function promoAmount(promo, base) {
+      if (!promo) return 0;
+      var d = promo.amount_off ? Number(promo.amount_off) : base * (Number(promo.percent_off) || 0) / 100;
+      return Math.min(Math.max(d, 0), base);
     }
 
     // ─── Twin Set bundle ────────────────────────────────────────────────────
@@ -1253,7 +1313,29 @@
       const SHIP_RATE = 9.95;
       const subtotal = getTotal(cart);
       const bundle = bundleInfo(cart);
-      const afterDiscount = subtotal - bundle.discount;
+      // Stripe permits one discount per checkout, so the bundle and a code
+      // never stack - the bundle wins because it is automatic and usually larger.
+      const promo = bundle.discount > 0 ? null : getPromo();
+      const promoDisc = promoAmount(promo, subtotal);
+      const afterDiscount = subtotal - bundle.discount - promoDisc;
+
+      const promoRow = document.getElementById('promo-row');
+      const promoMsg = document.getElementById('promo-msg');
+      if (promo && promoDisc > 0) {
+        document.getElementById('promo-label').textContent = 'Code ' + promo.code;
+        document.getElementById('promo-value').textContent = '-' + fmt(promoDisc);
+        promoRow.style.display = '';
+        promoMsg.className = 'promo-msg ok';
+        promoMsg.innerHTML = promo.code + ' applied — confirmed at checkout. <a href="#" id="promo-remove">Remove</a>';
+      } else {
+        promoRow.style.display = 'none';
+        if (bundle.discount > 0 && getPromo()) {
+          promoMsg.className = 'promo-msg';
+          promoMsg.textContent = 'Your Twin Set bundle already saves more — codes don\'t stack with bundle pricing.';
+        }
+      }
+      var rm = document.getElementById('promo-remove');
+      if (rm) rm.addEventListener('click', function (e) { e.preventDefault(); setPromo(null); renderCart(); });
       const shipping = afterDiscount >= FREE_SHIP ? 0 : SHIP_RATE;
 
       subtotalEl.textContent = fmt(subtotal);
@@ -1324,6 +1406,25 @@
       const mcbValue = document.getElementById('mcb-value');
       if (mcbValue) mcbValue.textContent = fmt(afterDiscount + shipping);
       syncMobileBar();
+    }
+
+    document.getElementById('promo-apply').addEventListener('click', applyPromo);
+    document.getElementById('promo-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') applyPromo(); });
+    function applyPromo() {
+      var inp = document.getElementById('promo-input');
+      var btn = document.getElementById('promo-apply');
+      var msg = document.getElementById('promo-msg');
+      var code = inp.value.trim().toUpperCase();
+      if (!code) { msg.className = 'promo-msg err'; msg.textContent = 'Enter a code first.'; inp.focus(); return; }
+      btn.disabled = true; msg.className = 'promo-msg'; msg.textContent = 'Checking…';
+      fetch('/api/validate-code?code=' + encodeURIComponent(code))
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          btn.disabled = false;
+          if (!res.ok) { msg.className = 'promo-msg err'; msg.textContent = res.j.error || 'That code is not valid'; return; }
+          setPromo(res.j); inp.value = ''; renderCart();
+        })
+        .catch(function () { btn.disabled = false; msg.className = 'promo-msg err'; msg.textContent = 'Could not check that code — try again.'; });
     }
 
     // Show the sticky bar only while the real checkout button is out of view.
@@ -1409,6 +1510,7 @@
             items: cart.items.map(i => ({ id: i.id, qty: i.qty })),
             fbp: readCookie('_fbp'),
             fbc: readCookie('_fbc'),
+            promo_code: (bundleInfo(cart).discount === 0 && getPromo()) ? getPromo().code : undefined,
           }),
         });
         const data = await res.json();
