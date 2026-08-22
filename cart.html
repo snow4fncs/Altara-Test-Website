@@ -861,6 +861,16 @@
       background: linear-gradient(90deg,#4285F4 25%,#EA4335 25% 50%,#FBBC05 50% 75%,#34A853 75%); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .pay-zip { background: #6542F4; color: #fff; font-weight: 700; font-size: 12.5px; text-transform: lowercase; }
     @media (max-width: 900px) { .promo input { font-size: 16px; } .promo button { padding: 0 16px; } }
+  
+    /* Free shipping progress */
+    .cp-prog { margin-bottom: 20px; }
+    .cp-prog-label { font-size: 12.5px; color: var(--cream-dim); margin-bottom: 9px; }
+    .cp-prog-label strong { color: var(--gold); font-weight: 500; }
+    .cp-prog-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .cp-prog-fill { height: 100%; background: var(--gold); border-radius: 2px; width: 0;
+      transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .cp-prog.done .cp-prog-label { color: var(--gold); }
+    @media (prefers-reduced-motion: reduce) { .cp-prog-fill { transition: none; } }
   </style>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Review your Altara seat covers and complete your order. Secure checkout with free shipping on all Australian orders.">
@@ -1010,6 +1020,10 @@
 
     <!-- RIGHT: ORDER SUMMARY -->
     <aside class="order-summary" aria-label="Order summary">
+      <div class="cp-prog" id="cp-prog" style="display:none">
+        <p class="cp-prog-label" id="cp-prog-label"></p>
+        <div class="cp-prog-track"><div class="cp-prog-fill" id="cp-prog-fill"></div></div>
+      </div>
       <div id="xsell-slot"></div>
       <p class="summary-heading">Order Summary</p>
 
@@ -1258,6 +1272,7 @@
         colHeaders.style.display = 'none';
         continueLink.style.display = 'none';
         if (countBadge) countBadge.textContent = '';
+        var cpp = document.getElementById('cp-prog'); if (cpp) cpp.style.display = 'none';
         subtotalEl.textContent = '$0.00';
         const shipEmptyEl = document.getElementById('cart-shipping');
         shipEmptyEl.textContent = '';
@@ -1337,6 +1352,16 @@
       var rm = document.getElementById('promo-remove');
       if (rm) rm.addEventListener('click', function (e) { e.preventDefault(); setPromo(null); renderCart(); });
       const shipping = afterDiscount >= FREE_SHIP ? 0 : SHIP_RATE;
+
+      // Progress to free shipping - same bar as the drawer, same maths.
+      const prog = document.getElementById('cp-prog');
+      if (prog) {
+        prog.style.display = '';
+        document.getElementById('cp-prog-fill').style.width = Math.min(100, afterDiscount / FREE_SHIP * 100) + '%';
+        const pl = document.getElementById('cp-prog-label');
+        if (shipping === 0) { prog.classList.add('done'); pl.innerHTML = '&#10003; Free shipping unlocked'; }
+        else { prog.classList.remove('done'); pl.innerHTML = 'Add <strong>' + fmt(FREE_SHIP - afterDiscount) + '</strong> more for free shipping'; }
+      }
 
       subtotalEl.textContent = fmt(subtotal);
 
