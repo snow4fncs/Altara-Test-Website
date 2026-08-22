@@ -200,6 +200,10 @@
     .hero {
       height: 100vh;
       min-height: 700px;
+      /* The nav is fixed; without this reservation a centred hero pushes the
+         eyebrow pill underneath it on short laptop screens. */
+      padding-top: 84px;
+      box-sizing: border-box;
       display: grid;
       grid-template-columns: 52% 48%;
       position: relative;
@@ -345,7 +349,7 @@
       z-index: 1;
     }
 
-    .hero-watermark {
+    .hero-watermark { display: none; 
       position: absolute;
       bottom: -20px;
       left: 56px;
