@@ -55,8 +55,13 @@
       --thumb-h: 88px;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow-x: hidden; background: #0C0D10; }
-    body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; overflow-x: hidden; padding-top: 40px; }
+    /* min-height, not height: with overflow-x hidden, a fixed 100% height turns
+       BODY into the scroll container, so window.scrollY never moves, window scroll
+       listeners never fire and mobile scrolling misbehaves. */
+    html { min-height: 100%; overflow-x: hidden; background: #0C0D10; }
+    body { min-height: 100%; background: #0C0D10; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.65; /* no overflow-x here: it would make BODY a scroll container and stop
+       position:sticky descendants (the gallery column) from ever pinning */ padding-top: 40px; }
     body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.024; pointer-events: none; z-index: 9999; }
 
     /* ── NAV ──────────────────────────────────── */
