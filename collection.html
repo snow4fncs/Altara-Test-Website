@@ -672,6 +672,14 @@
       .product-tile-explore { font-size: 12px; }
       .collection-eyebrow, .collection-count { font-size: 11px; }
     }
+  
+    .rvb-photos { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .rvb-photos-item { display: block; width: 84px; height: 84px; overflow: hidden; background: var(--bg-3); border: 1px solid var(--line); transition: opacity 0.25s ease, border-color 0.25s ease; }
+    .rvb-photos-item:hover { opacity: 0.85; border-color: rgba(196,169,122,0.45); }
+    .rvb-photos-item:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .rvb-photos-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @media (max-width: 900px) { .rvb-photos-item { width: 76px; height: 76px; } }
+    @media (prefers-reduced-motion: reduce) { .rvb-photos-item { transition: none; } }
   </style>
   <meta name="description" content="Explore the Altara collection of premium car seat covers — Midnight Black and Contrast White. Engineered for comfort, style, and a perfect fit.">
   <link rel="canonical" href="https://www.altaradesign.com/collection.html">
@@ -1047,6 +1055,16 @@
     } catch (e) { return ''; }
   }
 
+
+  function photoStrip(r) {
+    var ph = (r && r.photos) || [];
+    if (!ph.length) return '';
+    return '<div class="rvb-photos">' + ph.slice(0, 3).map(function (u, i) {
+      return '<a class="rvb-photos-item" href="' + esc(u) + '" target="_blank" rel="noopener" aria-label="Customer photo ' + (i + 1) + ', opens full size">'
+           + '<img src="' + esc(u) + '" alt="Customer photo" loading="lazy"></a>';
+    }).join('') + '</div>';
+  }
+
   function render(d) {
     var list = (d && d.reviews) || [];
 
@@ -1082,6 +1100,7 @@
         (LABELS[r.product] ? '<span class="rvb-prod">' + esc(LABELS[r.product]) + '</span>' : '') +
         (r.title ? '<h3 class="rvb-title">' + esc(r.title) + '</h3>' : '') +
         '<p class="rvb-body">' + esc(r.body) + '</p>' +
+        photoStrip(r) +
       '</article>';
     }).join('');
   }

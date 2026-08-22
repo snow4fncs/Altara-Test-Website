@@ -573,6 +573,32 @@
     }
   
     @media (max-width: 900px) { .page-eyebrow { font-size: 11px; } }
+  
+    .photo-hint { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin: -2px 0 12px; font-weight: 300; }
+    .photo-add {
+      font-family: 'Outfit', sans-serif; cursor: pointer;
+      background: transparent; border: 1px dashed rgba(237,232,223,0.22); color: var(--cream);
+      font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 14px 26px; width: 100%;
+      transition: border-color 0.25s ease, opacity 0.25s ease;
+    }
+    .photo-add:hover { border-color: rgba(196,169,122,0.5); }
+    .photo-add:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    .photo-add[disabled] { opacity: 0.4; cursor: default; }
+    .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .photo-grid:empty { display: none; }
+    .photo-item { position: relative; aspect-ratio: 1; background: var(--bg-3); overflow: hidden; }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-del {
+      position: absolute; top: 6px; right: 6px; width: 26px; height: 26px;
+      display: grid; place-items: center; cursor: pointer;
+      background: rgba(12,13,16,0.82); border: 1px solid rgba(255,255,255,0.14);
+      color: var(--cream); font-size: 15px; line-height: 1; padding: 0;
+    }
+    .photo-del:hover { color: var(--gold); }
+    .photo-del:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    @media (max-width: 900px) { .photo-hint { font-size: 13.5px; } .photo-add { font-size: 11px; } }
+    @media (prefers-reduced-motion: reduce) { .photo-add { transition: none; } }
   </style>
   <meta name="description" content="Leave a review for your Altara seat cover. Open to verified customers.">
   <meta name="robots" content="noindex, follow">
@@ -695,6 +721,15 @@
           <label class="form-label" for="r-body">Your review</label>
           <textarea class="form-textarea" id="r-body" name="body" placeholder="How is the fit? How does it wear? Anything you would tell a friend who was considering it." maxlength="2000" required aria-describedby="r-count"></textarea>
           <p class="form-count" id="r-count" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+          <span class="form-label">Photos <span style="opacity:0.5">(optional, up to 3)</span></span>
+          <p class="photo-hint">A photo of the cover on your own seat is the most useful thing you can add &mdash; it shows the fit better than any description.</p>
+          <input type="file" id="r-photos" accept="image/jpeg,image/png,image/webp" multiple hidden>
+          <button type="button" class="photo-add" id="r-photo-btn">Add photos</button>
+          <div class="photo-grid" id="r-photo-grid"></div>
+          <p class="form-count" id="r-photo-note" aria-live="polite"></p>
         </div>
 
         <p class="form-err" id="r-err"></p>
@@ -939,6 +974,68 @@
     bodyEl.addEventListener('input', updateCount);
     updateCount();
 
+    // ── photos ──────────────────────────────────────────────────────────────
+    // Resized and re-encoded here before upload. A modern phone photo is 3-6MB;
+    // three of those would exceed the serverless request limit outright, and the
+    // detail is wasted on a 400px card anyway.
+    var MAX_PHOTOS = 3, MAX_EDGE = 1400, JPEG_Q = 0.82;
+    var photoData = [];
+    var photoInput = document.getElementById('r-photos');
+    var photoBtn = document.getElementById('r-photo-btn');
+    var photoGrid = document.getElementById('r-photo-grid');
+    var photoNote = document.getElementById('r-photo-note');
+
+    function shrink(file) {
+      return new Promise(function (resolve, reject) {
+        var img = new Image();
+        var url = URL.createObjectURL(file);
+        img.onload = function () {
+          var scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+          var c = document.createElement('canvas');
+          c.width = Math.round(img.width * scale);
+          c.height = Math.round(img.height * scale);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          resolve(c.toDataURL('image/jpeg', JPEG_Q));
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('That file could not be read as an image.')); };
+        img.src = url;
+      });
+    }
+
+    function paintPhotos() {
+      photoGrid.innerHTML = photoData.map(function (d, i) {
+        return '<div class="photo-item"><img src="' + d + '" alt="Photo ' + (i + 1) + '">' +
+               '<button type="button" class="photo-del" data-i="' + i + '" aria-label="Remove photo ' + (i + 1) + '">&times;</button></div>';
+      }).join('');
+      photoBtn.disabled = photoData.length >= MAX_PHOTOS;
+      photoBtn.textContent = photoData.length ? 'Add another' : 'Add photos';
+      var kb = Math.round(photoData.reduce(function (n, d) { return n + d.length * 0.75; }, 0) / 1024);
+      photoNote.textContent = photoData.length
+        ? photoData.length + ' of ' + MAX_PHOTOS + ' added (' + kb + ' KB)'
+        : '';
+      photoNote.className = 'form-count';
+    }
+
+    photoBtn.addEventListener('click', function () { photoInput.click(); });
+    photoGrid.addEventListener('click', function (e) {
+      var b = e.target.closest('.photo-del');
+      if (!b) return;
+      photoData.splice(Number(b.getAttribute('data-i')), 1);
+      paintPhotos();
+    });
+    photoInput.addEventListener('change', async function () {
+      var files = Array.prototype.slice.call(photoInput.files || []);
+      photoInput.value = '';
+      for (var i = 0; i < files.length; i++) {
+        if (photoData.length >= MAX_PHOTOS) { photoNote.textContent = 'Three photos is the limit.'; photoNote.className = 'form-count short'; break; }
+        if (!/^image\//.test(files[i].type)) continue;
+        try { photoData.push(await shrink(files[i])); }
+        catch (err) { photoNote.textContent = err.message; photoNote.className = 'form-count short'; }
+      }
+      paintPhotos();
+    });
+
     var form = document.getElementById('review-form');
     var err = document.getElementById('r-err');
     var btn = document.getElementById('r-submit');
@@ -969,7 +1066,8 @@
             name: document.getElementById('r-name').value.trim(),
             rating: rating,
             title: document.getElementById('r-title').value.trim(),
-            body: body
+            body: body,
+            photos: photoData
           })
         });
         var data = await res.json().catch(function () { return {}; });

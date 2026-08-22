@@ -7,7 +7,40 @@ const PRODUCTS = ['midnight-black', 'contrast-white'];
 // A twin-set buyer is still a buyer of the base product.
 const baseId = id => String(id || '').replace(/-twin$/, '');
 
-const PUBLIC_COLS = 'reviewer_name, rating, title, body, verified, created_at, product';
+const PUBLIC_COLS = 'reviewer_name, rating, title, body, verified, created_at, product, photos';
+
+// Customer photos. The browser resizes and re-encodes before sending, so these
+// arrive as small JPEG data URLs rather than raw camera files - a 12MP photo
+// would otherwise blow past the serverless request limit.
+const PHOTO_BUCKET = 'review-photos';
+const MAX_PHOTOS = 3;
+const MAX_PHOTO_BYTES = 1_500_000;
+
+async function storePhotos(dataUrls, emailForPath) {
+  const out = [];
+  const list = Array.isArray(dataUrls) ? dataUrls.slice(0, MAX_PHOTOS) : [];
+  for (const [i, url] of list.entries()) {
+    const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String(url || ''));
+    if (!m) continue;                                   // not an image we accept
+    const buf = Buffer.from(m[2], 'base64');
+    if (!buf.length || buf.length > MAX_PHOTO_BYTES) continue;
+    const ext = m[1] === 'image/png' ? 'png' : m[1] === 'image/webp' ? 'webp' : 'jpg';
+    const path = `${crypto.randomUUID()}-${i}.${ext}`;
+    const res = await fetch(`${process.env.SUPABASE_URL}/storage/v1/object/${PHOTO_BUCKET}/${path}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+        apikey: process.env.SUPABASE_SERVICE_KEY,
+        'Content-Type': m[1],
+        'cache-control': '31536000',
+      },
+      body: buf,
+    });
+    if (!res.ok) { console.error('Photo upload failed:', res.status, await res.text()); continue; }
+    out.push(`${process.env.SUPABASE_URL}/storage/v1/object/public/${PHOTO_BUCKET}/${path}`);
+  }
+  return out;
+}
 
 function summarise(rows) {
   const count = rows.length;
@@ -94,7 +127,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
-    const { product, email, name, rating, title, body } = payload;
+    const { product, email, name, rating, title, body, photos } = payload;
     const prod = baseId(product);
 
     if (!PRODUCTS.includes(prod)) return res.status(400).json({ error: 'Unknown product' });
@@ -127,6 +160,10 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: 'You have already reviewed this product.' });
     }
 
+    // Uploaded only after the purchase check passes, so a stranger cannot use
+    // the endpoint as free image hosting.
+    const photoUrls = await storePhotos(photos, cleanEmail);
+
     const { error } = await supabase.from('reviews').insert({
       product: prod,
       email: cleanEmail,
@@ -134,6 +171,7 @@ export default async function handler(req, res) {
       rating: stars,
       title: String(title || '').trim().slice(0, 120) || null,
       body: String(body).trim().slice(0, 2000),
+      photos: photoUrls,
       verified: true,
       approved: false, // you approve it before it appears
     });

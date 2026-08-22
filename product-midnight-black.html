@@ -558,7 +558,15 @@
       .toast-lnk { font-size: 10.5px; }
     }
       .rv-prod { display: block; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 2px 0 -2px; }
-</style>
+
+    .rv-photos { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .rv-photos-item { display: block; width: 84px; height: 84px; overflow: hidden; background: var(--bg-3); border: 1px solid var(--line); transition: opacity 0.25s ease, border-color 0.25s ease; }
+    .rv-photos-item:hover { opacity: 0.85; border-color: rgba(196,169,122,0.45); }
+    .rv-photos-item:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .rv-photos-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @media (max-width: 900px) { .rv-photos-item { width: 76px; height: 76px; } }
+    @media (prefers-reduced-motion: reduce) { .rv-photos-item { transition: none; } }
+  </style>
   <meta name="description" content="Altara Midnight Black seat cover — premium materials, precision fit for modern vehicles. Free shipping Australia-wide. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/product-midnight-black.html">
   <meta property="og:type" content="website">
@@ -1087,6 +1095,16 @@
     });
   }
 
+
+  function photoStrip(r) {
+    var ph = (r && r.photos) || [];
+    if (!ph.length) return '';
+    return '<div class="rv-photos">' + ph.slice(0, 3).map(function (u, i) {
+      return '<a class="rv-photos-item" href="' + esc(u) + '" target="_blank" rel="noopener" aria-label="Customer photo ' + (i + 1) + ', opens full size">'
+           + '<img src="' + esc(u) + '" alt="Customer photo" loading="lazy"></a>';
+    }).join('') + '</div>';
+  }
+
   function render(d) {
     renderSummaryBadge(d);
     injectSchema(d);
@@ -1128,6 +1146,7 @@
         (PROD_LABELS[r.product] ? '<span class="rv-prod">' + esc(PROD_LABELS[r.product]) + '</span>' : '') +
         (r.title ? '<p class="rv-title">' + esc(r.title) + '</p>' : '') +
         '<p class="rv-body">' + esc(r.body) + '</p>' +
+        photoStrip(r) +
       '</article>';
     }).join('');
   }
