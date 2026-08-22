@@ -125,6 +125,14 @@ export default async function handler(req, res) {
       },
     };
 
+    // Abandoned-checkout recovery. Stripe keeps the cart alive after the
+    // session expires and mints a recovery URL, which api/webhook.js emails to
+    // the customer on checkout.session.expired. Without this flag there is no
+    // URL to send them back to and the cart is simply lost.
+    params.after_expiration = {
+      recovery: { enabled: true, allow_promotion_codes: discount === 0 },
+    };
+
     // Stripe rejects a session that both carries an automatic discount and
     // offers the promotion code field, so the two are mutually exclusive: a
     // bundle order gets the bundle, everything else can redeem a code.

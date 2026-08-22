@@ -1,0 +1,235 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Orders &amp; fulfilment — Altara</title>
+<link rel="icon" href="favicon.png">
+<style>
+  :root {
+    --bg:#0C0D10; --bg-2:#111317; --bg-3:#181B1F;
+    --brand:#4D6272; --brand-lt:#607D8F;
+    --cream:#EDE8DF; --cream-dim:#9A9590;
+    --gold:#C4A97A; --muted:#72787F;
+    --border:rgba(255,255,255,0.065);
+    --good:#7FBF9A; --bad:#D98A8A; --warn:#D8A85E;
+  }
+  * { box-sizing:border-box; }
+  p { margin:0; }
+  body { margin:0; background:var(--bg); color:var(--cream);
+    font-family:'Outfit',-apple-system,'Avenir Next','Helvetica Neue',sans-serif;
+    font-weight:300; font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:48px 24px 96px; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+    flex-wrap:wrap; padding-bottom:20px; border-bottom:1px solid var(--border); }
+  .mark { font-family:'Cormorant Garamond',Garamond,serif; font-size:22px; letter-spacing:.34em; text-transform:uppercase; }
+  .ey { font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:'Cormorant Garamond',Garamond,serif; font-weight:300; font-size:44px;
+    line-height:1; letter-spacing:-.025em; margin:40px 0 10px; }
+  .sub { color:var(--cream-dim); max-width:64ch; margin:0 0 32px; font-size:13.5px; }
+
+  .gate { background:var(--bg-2); border:1px solid var(--border); padding:28px 30px; display:grid; gap:14px; max-width:460px; }
+  label { font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-dim); }
+  input, select { font-family:inherit; font-size:14px; color:var(--cream); background:var(--bg);
+    border:1px solid var(--border); padding:11px 13px; width:100%; }
+  input:focus-visible, select:focus-visible, button:focus-visible { outline:1px solid var(--gold); outline-offset:2px; }
+
+  button { font-family:inherit; cursor:pointer; border:1px solid var(--border); background:transparent;
+    color:var(--cream); font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; font-weight:500;
+    padding:11px 18px; transition:opacity .25s ease, transform .25s cubic-bezier(.16,1,.3,1); white-space:nowrap; }
+  button:hover { opacity:.72; } button:active { transform:scale(.98); }
+  button[disabled] { opacity:.35; cursor:default; }
+  .primary { background:var(--cream); color:var(--bg); border-color:var(--cream); }
+  .go { border-color:rgba(127,191,154,.5); color:var(--good); }
+  .soft { border-color:rgba(196,169,122,.45); color:var(--gold); }
+
+  .bar { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:36px 0 18px; }
+  .count { font-size:11px; color:var(--muted); letter-spacing:.06em; }
+  .msg { font-size:12.5px; padding:13px 16px; border-left:1px solid var(--gold); background:var(--bg-2); color:var(--cream-dim); margin-bottom:16px; }
+  .msg.err { border-left-color:var(--bad); color:var(--bad); }
+
+  .card { background:var(--bg-2); border:1px solid var(--border); padding:22px 24px; display:grid; gap:14px; margin-bottom:14px; }
+  .top { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .ref { font-size:13px; color:var(--gold); letter-spacing:.06em; }
+  .who { font-size:13px; color:var(--cream); }
+  .mail { font-size:11.5px; color:var(--muted); }
+  .when { font-size:9.5px; color:var(--muted); margin-left:auto; letter-spacing:.06em; }
+  .meta { font-size:12px; color:var(--cream-dim); }
+  .pill { display:inline-block; font-size:8.5px; letter-spacing:.14em; text-transform:uppercase;
+    padding:3px 9px; border:1px solid currentColor; }
+  .pill.pend { color:var(--warn); } .pill.ship { color:var(--good); } .pill.rev { color:var(--brand-lt); }
+  .ship-row { display:grid; grid-template-columns:1fr 190px auto; gap:10px; align-items:end; }
+  @media (max-width:760px) { .ship-row { grid-template-columns:1fr; } }
+  .field { display:grid; gap:5px; }
+  .track { font-size:12px; color:var(--cream-dim); word-break:break-all; }
+  .track a { color:var(--gold); }
+  .actions { display:flex; gap:9px; flex-wrap:wrap; }
+  .empty { background:var(--bg-2); border:1px solid var(--border); padding:52px 30px; text-align:center; color:var(--cream-dim); }
+  .hide { display:none; }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:.86em; background:var(--bg-3); padding:.1rem .35rem; }
+  a { color:var(--gold); }
+  @media (prefers-reduced-motion:reduce) { button { transition:none; } }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <span class="mark">Altara</span>
+    <span class="ey">Orders &amp; fulfilment &middot; internal</span>
+  </div>
+
+  <h1>Fulfilment</h1>
+  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock ten days after dispatch.</p>
+
+  <div id="gate" class="gate">
+    <label for="tok">Admin token</label>
+    <input type="password" id="tok" autocomplete="current-password" placeholder="Your ADMIN_TOKEN">
+    <button class="primary" id="unlock" type="button">Unlock</button>
+    <p style="font-size:11.5px;color:var(--muted);line-height:1.6">Same <code>ADMIN_TOKEN</code> as the review queue. On localhost it is <code>dev</code>.</p>
+  </div>
+
+  <div id="panel" class="hide">
+    <div class="bar">
+      <span class="count" id="count"></span>
+      <div style="display:flex;gap:9px">
+        <button type="button" class="soft" id="repeat">Email past buyers</button>
+        <button type="button" id="refresh">Refresh</button>
+        <button type="button" id="lock">Lock</button>
+      </div>
+    </div>
+    <div id="msg"></div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'altara-admin-token';
+  var gate = document.getElementById('gate'), panel = document.getElementById('panel');
+  var list = document.getElementById('list'), msgBox = document.getElementById('msg');
+  var countEl = document.getElementById('count');
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function token(){ return sessionStorage.getItem(KEY) || ''; }
+  function note(t, err){ msgBox.innerHTML = t ? '<p class="msg'+(err?' err':'')+'">'+esc(t)+'</p>' : ''; }
+  function fmt(s){ try{ var d=new Date(s); return isNaN(d)?'':d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+  function show(on){ gate.className = on?'gate hide':'gate'; panel.className = on?'':'hide'; }
+
+  function trackLink(carrier, n){
+    var e = encodeURIComponent(n);
+    if (/sendle/i.test(carrier)) return 'https://track.sendle.com/tracking?ref='+e;
+    if (/aramex|fastway/i.test(carrier)) return 'https://www.aramex.com.au/tools/track/?l='+e;
+    if (/couriers\s*please/i.test(carrier)) return 'https://www.couriersplease.com.au/tools-track/no/'+e;
+    return 'https://auspost.com.au/mypost/track/search?id='+e;
+  }
+
+  function load(){
+    return fetch('/api/fulfilment', { headers:{ 'x-admin-token': token() } })
+      .then(function(r){
+        if (r.status===401) throw new Error('That token was rejected. Check ADMIN_TOKEN on the server.');
+        if (!r.ok) throw new Error('Could not load orders ('+r.status+').');
+        return r.json();
+      })
+      .then(function(d){
+        var orders = (d && d.orders) || [];
+        var unshipped = orders.filter(function(o){ return !o.shipped_at; }).length;
+        var due = orders.filter(function(o){ return o.review_due; }).length;
+        countEl.textContent = orders.length + ' paid orders · ' + unshipped + ' awaiting dispatch'
+          + (due ? ' · ' + due + ' due a review request' : '');
+
+        if (!orders.length) { list.innerHTML = '<div class="empty">No paid orders yet.</div>'; return; }
+
+        list.innerHTML = orders.map(function(o){
+          var addr = o.shipping_address || {};
+          var where = [addr.city, addr.state, addr.postal_code].filter(Boolean).join(' ');
+          var items = (o.items||[]).map(function(i){ return esc(i.name)+' ×'+i.qty; }).join(', ');
+          var shipped = !!o.shipped_at;
+
+          var status = shipped
+            ? '<span class="pill ship">Shipped</span>'
+            : '<span class="pill pend">Awaiting dispatch</span>';
+          if (o.review_email_at) status += ' <span class="pill rev">Review asked</span>';
+
+          var body = shipped
+            ? '<p class="track">'+esc(o.carrier||'Australia Post')+' &middot; <a href="'+trackLink(o.carrier,o.tracking_number)+'" target="_blank" rel="noopener">'+esc(o.tracking_number)+'</a>'
+              + ' &middot; sent '+fmt(o.shipped_at)+(o.shipped_days_ago!=null?' ('+o.shipped_days_ago+'d ago)':'')+'</p>'
+              + '<div class="actions">'
+              + (o.review_email_at ? '' : '<button type="button" class="go" data-act="review_request" data-id="'+esc(o.id)+'"'+(o.review_due?'':' disabled title="Unlocks 10 days after dispatch"')+'>Send review request</button>')
+              + '</div>'
+            : '<div class="ship-row">'
+              + '<div class="field"><label for="t-'+esc(o.id)+'">Tracking number</label>'
+              + '<input type="text" id="t-'+esc(o.id)+'" data-track="'+esc(o.id)+'" placeholder="R2396280350..."></div>'
+              + '<div class="field"><label for="c-'+esc(o.id)+'">Carrier</label>'
+              + '<select id="c-'+esc(o.id)+'" data-carrier="'+esc(o.id)+'">'
+              + '<option>Australia Post</option><option>Sendle</option><option>Aramex</option><option>CouriersPlease</option></select></div>'
+              + '<button type="button" class="go" data-act="ship" data-id="'+esc(o.id)+'">Mark shipped &amp; email</button>'
+              + '</div>';
+
+          return '<article class="card">'
+            + '<div class="top"><span class="ref">'+esc(o.ref)+'</span>'
+            + '<span class="who">'+esc(o.customer_name||'')+'</span>'
+            + '<span class="mail">'+esc(o.customer_email)+'</span>'
+            + '<span class="when">'+fmt(o.created_at)+'</span></div>'
+            + '<p class="meta">'+items+' &middot; $'+esc(o.total)+' '+esc(String(o.currency||'').toUpperCase())+' &middot; '+esc(where)+' &nbsp; '+status+'</p>'
+            + body + '</article>';
+        }).join('');
+      });
+  }
+
+  list.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-act'), id = btn.getAttribute('data-id');
+    var payload = { action: act, id: id };
+
+    if (act === 'ship') {
+      var t = document.querySelector('[data-track="'+id+'"]');
+      var c = document.querySelector('[data-carrier="'+id+'"]');
+      if (!t || !t.value.trim()) { note('Enter the tracking number first.', true); t && t.focus(); return; }
+      payload.tracking_number = t.value.trim();
+      payload.carrier = c ? c.value : 'Australia Post';
+    }
+    if (act === 'review_request' && !confirm('Email this customer asking for a review?')) return;
+
+    btn.disabled = true; note('');
+    fetch('/api/fulfilment', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-admin-token': token() },
+      body: JSON.stringify(payload)
+    })
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||('Failed ('+r.status+')')); return j; }); })
+      .then(function(j){ return load().then(function(){
+        note(act==='ship'
+          ? (j.emailed ? 'Marked shipped and the tracking email is away.' : 'Tracking saved, but the email did not send: '+(j.reason||'unknown'))
+          : (j.emailed ? 'Review request sent.' : 'Review request not sent: '+(j.reason||'unknown')));
+      }); })
+      .catch(function(err){ btn.disabled = false; note(err.message, true); });
+  });
+
+  document.getElementById('repeat').addEventListener('click', function(){
+    if (!confirm('Email every past buyer once with the back-seat offer?')) return;
+    var b = this; b.disabled = true; note('');
+    fetch('/api/fulfilment', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-admin-token': token() },
+      body: JSON.stringify({ action:'repeat_offer' })
+    })
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||('Failed ('+r.status+')')); return j; }); })
+      .then(function(j){ return load().then(function(){
+        note(j.recipients ? ('Sent to '+j.sent+' of '+j.recipients+' past buyers.') : 'No past buyers left to email.');
+        b.disabled = false;
+      }); })
+      .catch(function(err){ b.disabled = false; note(err.message, true); });
+  });
+
+  document.getElementById('unlock').addEventListener('click', function(){
+    var v = document.getElementById('tok').value.trim();
+    if (!v) return;
+    sessionStorage.setItem(KEY, v); show(true);
+    load().catch(function(e){ note(e.message, true); });
+  });
+  document.getElementById('tok').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('unlock').click(); });
+  document.getElementById('refresh').addEventListener('click', function(){ note(''); load().catch(function(e){ note(e.message,true); }); });
+  document.getElementById('lock').addEventListener('click', function(){ sessionStorage.removeItem(KEY); show(false); });
+
+  if (token()) { show(true); load().catch(function(e){ note(e.message,true); }); } else { show(false); }
+})();
+</script>

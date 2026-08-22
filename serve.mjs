@@ -274,11 +274,104 @@ async function handleReviews(req, res, query) {
   return send(res, 405, { error: 'Method not allowed' });
 }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Local mock of /api/fulfilment, mirroring the real orders in shape so the
+// admin page can be driven end to end without Supabase or Resend. Emails are
+// not sent here - they are logged, so you can see exactly what would go out.
+// ─────────────────────────────────────────────────────────────────────────────
+let mockOrders = [
+  { id:'o1', created_at:'2026-08-13T03:43:00Z', customer_email:'yahyashahid99@gmail.com', customer_name:'Yahya Shahid',
+    shipping_address:{ line1:'22 Primrose Loop', city:'Byford', state:'WA', postal_code:'6122', country:'AU' },
+    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    stripe_payment_intent:'pi_xxxx0TCIUW8W', tracking_number:'R245358034873445006120909', carrier:'Australia Post',
+    shipped_at:'2026-08-21T02:00:00Z', review_email_at:null, repeat_email_at:null },
+  { id:'o2', created_at:'2026-08-13T11:53:00Z', customer_email:'brucecrayton@hotmail.com', customer_name:'Bruce Crayton',
+    shipping_address:{ line1:'187 Lucas Rd', city:'Lalor Park', state:'NSW', postal_code:'2147', country:'AU' },
+    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    stripe_payment_intent:'pi_xxxx1MWYZMTM', tracking_number:'R245358034873467006120901', carrier:'Australia Post',
+    shipped_at:'2026-08-08T02:00:00Z', review_email_at:null, repeat_email_at:null },
+  { id:'o3', created_at:'2026-08-17T22:10:00Z', customer_email:'tommym20iphone@icloud.com', customer_name:'Tommy Martin',
+    shipping_address:{ line1:'4 Example St', city:'Narraweena', state:'NSW', postal_code:'2099', country:'AU' },
+    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    stripe_payment_intent:'pi_xxxxTOMMY001', tracking_number:null, carrier:null,
+    shipped_at:null, review_email_at:null, repeat_email_at:null },
+  { id:'o4', created_at:'2026-08-18T05:20:00Z', customer_email:'gjdouglas71@gmail.com', customer_name:'Gary Douglas',
+    shipping_address:{ line1:'9 Example Rd', city:'Eungai Rail', state:'NSW', postal_code:'2441', country:'AU' },
+    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    stripe_payment_intent:'pi_xxxxGARY0001', tracking_number:null, carrier:null,
+    shipped_at:null, review_email_at:null, repeat_email_at:null },
+  { id:'o5', created_at:'2026-08-21T09:05:00Z', customer_email:'yahyashahid99@gmail.com', customer_name:'Yahya Shahid',
+    shipping_address:{ line1:'22 Primrose Loop', city:'Byford', state:'WA', postal_code:'6122', country:'AU' },
+    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    stripe_payment_intent:'pi_xxxxYAHYA002', tracking_number:null, carrier:null,
+    shipped_at:null, review_email_at:null, repeat_email_at:null },
+];
+
+const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
+
+async function handleFulfilment(req, res) {
+  if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
+
+  if (req.method === 'GET') {
+    const now = Date.now();
+    const orders = mockOrders.filter(o => o.status === 'paid')
+      .slice().sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+      .map(o => {
+        const days = o.shipped_at ? Math.floor((now - new Date(o.shipped_at)) / 86400000) : null;
+        return { ...o, ref: orderRefFrom(o.stripe_payment_intent),
+                 review_due: !!o.shipped_at && !o.review_email_at && days >= 10, shipped_days_ago: days };
+      });
+    return send(res, 200, { orders });
+  }
+
+  if (req.method === 'POST') {
+    const body = await readBody(req);
+    if (!body) return send(res, 400, { error: 'Malformed request' });
+    const { action, id, tracking_number, carrier } = body;
+
+    if (action === 'repeat_offer') {
+      const seen = new Set(); const targets = [];
+      for (const o of mockOrders.filter(o => o.status==='paid' && !o.repeat_email_at)) {
+        const k = o.customer_email.toLowerCase();
+        if (seen.has(k)) continue; seen.add(k); targets.push(o);
+      }
+      targets.forEach(t => { mockOrders.filter(o => o.customer_email === t.customer_email)
+        .forEach(o => o.repeat_email_at = new Date().toISOString()); });
+      targets.forEach(t => console.log('  [email] repeat_offer -> ' + t.customer_email));
+      return send(res, 200, { success: true, recipients: targets.length, sent: targets.length });
+    }
+
+    const o = mockOrders.find(x => x.id === id);
+    if (!o) return send(res, 404, { error: 'Order not found' });
+
+    if (action === 'ship') {
+      const num = String(tracking_number || '').trim();
+      if (!num) return send(res, 400, { error: 'tracking_number is required' });
+      o.tracking_number = num;
+      o.carrier = carrier || 'Australia Post';
+      o.shipped_at = new Date().toISOString();
+      console.log('  [email] shipped -> ' + o.customer_email + '  tracking ' + num + ' via ' + o.carrier);
+      return send(res, 200, { success: true, emailed: true });
+    }
+
+    if (action === 'review_request') {
+      if (o.review_email_at) return send(res, 409, { error: 'Review request already sent for this order' });
+      o.review_email_at = new Date().toISOString();
+      console.log('  [email] review_request -> ' + o.customer_email);
+      return send(res, 200, { success: true, emailed: true });
+    }
+    return send(res, 400, { error: 'Unknown action' });
+  }
+  return send(res, 405, { error: 'Method not allowed' });
+}
+
 const server = http.createServer(async (req, res) => {
   const [rawPath, rawQuery] = req.url.split('?');
   const query = new URLSearchParams(rawQuery || '');
 
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
+  if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
 
   let urlPath = rawPath;
   if (urlPath === '/') urlPath = '/index.html';
@@ -302,4 +395,5 @@ server.listen(PORT, () => {
   console.log(`Serving at http://localhost:${PORT}`);
   console.log(`Mock reviews API active — ${reviews.filter(r => r.approved).length} published, ${reviews.filter(r => !r.approved).length} pending`);
   console.log(`Moderation queue: http://localhost:${PORT}/admin-reviews.html  (token: ${DEV_ADMIN_TOKEN})`);
+  console.log(`Fulfilment:       http://localhost:${PORT}/admin-orders.html   (token: ${DEV_ADMIN_TOKEN})`);
 });

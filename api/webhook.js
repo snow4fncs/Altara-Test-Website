@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
+import { recoveryEmailHtml, sendEmail } from './_emails.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
@@ -308,6 +309,55 @@ export default async function handler(req, res) {
     // Awaited for the same reason as the email: a serverless function torn down
     // mid-request would drop the request silently.
     await sendPurchaseToMeta(session, items, shipping);
+  }
+
+  // ── abandoned checkout ──
+  // Fires ~24h after a session is created and never paid. Stripe hands us a
+  // recovery URL that restores the exact cart, so the customer resumes rather
+  // than rebuilding it. Only reachable when after_expiration.recovery was set
+  // on the session in api/create-checkout.js.
+  if (event.type === 'checkout.session.expired') {
+    const session = event.data.object;
+    const email = session.customer_details?.email;
+    const recoveryUrl = session.after_expiration?.recovery?.url;
+
+    if (!email) {
+      console.log('Expired session', session.id, '- no email captured, nothing to recover');
+    } else if (!recoveryUrl) {
+      console.log('Expired session', session.id, '- no recovery URL, cart cannot be restored');
+    } else {
+      // Recorded first, with the session id unique, so a Stripe redelivery of
+      // this event cannot email the same person twice.
+      const { error: insErr } = await supabase.from('abandoned_carts').insert({
+        stripe_session_id: session.id,
+        email,
+        recovery_url: recoveryUrl,
+        amount: (session.amount_total || 0) / 100,
+        currency: session.currency,
+      });
+
+      if (insErr) {
+        // 23505 = unique violation: we have already handled this session.
+        if (insErr.code === '23505') console.log('Abandoned cart already emailed for', session.id);
+        else console.error('Abandoned cart insert error:', insErr);
+      } else {
+        const result = await sendEmail({
+          to: email,
+          subject: 'You left something in your cart',
+          html: recoveryEmailHtml({
+            recoveryUrl,
+            amount: (session.amount_total || 0) / 100,
+            currency: session.currency,
+          }),
+          tag: 'cart_recovery',
+        });
+        if (result.sent) {
+          await supabase.from('abandoned_carts')
+            .update({ emailed_at: new Date().toISOString() })
+            .eq('stripe_session_id', session.id);
+        }
+      }
+    }
   }
 
   res.status(200).json({ received: true });
