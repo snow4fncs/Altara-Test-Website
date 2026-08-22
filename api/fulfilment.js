@@ -15,6 +15,11 @@ function isAdmin(req) {
   return crypto.timingSafeEqual(a, b);
 }
 
+// How long after dispatch a review request unlocks. Long enough that the
+// customer has actually used the thing, short enough that the purchase is
+// still fresh in mind.
+const REVIEW_UNLOCK_DAYS = 5;
+
 const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
 const firstName = name => (String(name || '').trim().split(/\s+/)[0] || 'there');
 
@@ -39,19 +44,34 @@ export default async function handler(req, res) {
       .order('created_at', { ascending: false }).limit(200);
     if (error) { console.error('Fulfilment list error:', error); return res.status(500).json({ error: 'Could not load orders' }); }
 
+    // Who has already written a review. Matched by email rather than by order,
+    // because a repeat customer reviews the product once, not once per order -
+    // and nobody should be asked again after they have already obliged.
+    const { data: reviewRows } = await supabase
+      .from('reviews').select('email, rating, approved');
+    const reviewsByEmail = new Map();
+    for (const r of reviewRows || []) {
+      const key = String(r.email || '').toLowerCase();
+      if (key && !reviewsByEmail.has(key)) reviewsByEmail.set(key, r);
+    }
+
     const now = Date.now();
     const orders = (data || []).map(o => {
       const shippedDaysAgo = o.shipped_at ? Math.floor((now - new Date(o.shipped_at)) / 86400000) : null;
+      const review = reviewsByEmail.get(String(o.customer_email || '').toLowerCase()) || null;
       return {
         ...o,
         ref: orderRefFrom(o.stripe_payment_intent),
-        // A review nudge only makes sense once the parcel has had time to land
-        // and be used - 10 days after dispatch, and only once.
-        review_due: !!o.shipped_at && !o.review_email_at && shippedDaysAgo >= 10,
+        has_review: !!review,
+        review_rating: review ? review.rating : null,
+        review_published: review ? !!review.approved : null,
+        // A review nudge only makes sense once the parcel has landed and been
+        // used, only once per order, and never once they have already written one.
+        review_due: !!o.shipped_at && !o.review_email_at && !review && shippedDaysAgo >= REVIEW_UNLOCK_DAYS,
         shipped_days_ago: shippedDaysAgo,
       };
     });
-    return res.status(200).json({ orders });
+    return res.status(200).json({ orders, review_unlock_days: REVIEW_UNLOCK_DAYS });
   }
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -129,6 +149,13 @@ export default async function handler(req, res) {
   // ── review request ──
   if (action === 'review_request') {
     if (order.review_email_at) return res.status(409).json({ error: 'Review request already sent for this order' });
+    // The UI hides the button, but the endpoint must refuse independently -
+    // asking someone who has already reviewed is the one thing this must not do.
+    const { data: existing } = await supabase
+      .from('reviews').select('id').ilike('email', order.customer_email || '').limit(1);
+    if (existing && existing.length) {
+      return res.status(409).json({ error: 'This customer has already left a review' });
+    }
     const result = await sendEmail({
       to: order.customer_email,
       subject: "How's your Altara cover holding up?",

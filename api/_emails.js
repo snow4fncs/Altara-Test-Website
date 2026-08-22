@@ -63,7 +63,7 @@ export function reviewRequestEmailHtml({ first, ref }) {
     eyebrow: 'A small favour',
     heading: `How's it<br>holding up?`,
     blocks:
-      para(`Hi ${esc(first)} &mdash; your Altara cover should have had a week or so in the car by now.`)
+      para(`Hi ${esc(first)} &mdash; your Altara cover should have had a few days in the car by now.`)
       + para(`We're a new brand, so an honest review genuinely matters more than you'd think. Critical ones are welcome too: we publish those as readily as the good ones, because a page of nothing but five stars helps nobody decide.`)
       + para(`It takes about a minute, and only verified customers can write one &mdash; so yours carries weight.`)
       + rule()

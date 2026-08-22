@@ -57,6 +57,7 @@
   .pill { display:inline-block; font-size:10.5px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
     padding:4px 10px; border:1px solid currentColor; }
   .pill.pend { color:var(--warn); } .pill.ship { color:var(--good); } .pill.rev { color:var(--brand-lt); }
+  .pill.rev-got { color:var(--gold); }
   .ship-row { display:grid; grid-template-columns:1fr 210px auto; gap:12px; align-items:end; }
   @media (max-width:760px) { .ship-row { grid-template-columns:1fr; } }
   .field { display:grid; gap:5px; }
@@ -77,7 +78,7 @@
   </div>
 
   <h1>Fulfilment</h1>
-  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock ten days after dispatch.</p>
+  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch.</p>
 
   <div id="gate" class="gate">
     <label for="tok">Admin token</label>
@@ -131,10 +132,13 @@
       })
       .then(function(d){
         var orders = (d && d.orders) || [];
+        var unlockDays = (d && d.review_unlock_days) || 5;
         var unshipped = orders.filter(function(o){ return !o.shipped_at; }).length;
         var due = orders.filter(function(o){ return o.review_due; }).length;
+        var reviewed = orders.filter(function(o){ return o.has_review; }).length;
         countEl.textContent = orders.length + ' paid orders · ' + unshipped + ' awaiting dispatch'
-          + (due ? ' · ' + due + ' due a review request' : '');
+          + (due ? ' · ' + due + ' due a review request' : '')
+          + (reviewed ? ' · ' + reviewed + ' with a review' : '');
 
         if (!orders.length) { list.innerHTML = '<div class="empty">No paid orders yet.</div>'; return; }
 
@@ -147,13 +151,19 @@
           var status = shipped
             ? '<span class="pill ship">Shipped</span>'
             : '<span class="pill pend">Awaiting dispatch</span>';
-          if (o.review_email_at) status += ' <span class="pill rev">Review asked</span>';
+          if (o.has_review) {
+            status += ' <span class="pill rev-got">Review received'
+              + (o.review_rating ? ' ' + o.review_rating + '\u2605' : '')
+              + (o.review_published === false ? ' &middot; unpublished' : '') + '</span>';
+          } else if (o.review_email_at) {
+            status += ' <span class="pill rev">Review asked</span>';
+          }
 
           var body = shipped
             ? '<p class="track">'+esc(o.carrier||'Australia Post')+' &middot; <a href="'+trackLink(o.carrier,o.tracking_number)+'" target="_blank" rel="noopener">'+esc(o.tracking_number)+'</a>'
               + ' &middot; sent '+fmt(o.shipped_at)+(o.shipped_days_ago!=null?' ('+o.shipped_days_ago+'d ago)':'')+'</p>'
               + '<div class="actions">'
-              + (o.review_email_at ? '' : '<button type="button" class="go" data-act="review_request" data-id="'+esc(o.id)+'"'+(o.review_due?'':' disabled title="Unlocks 10 days after dispatch"')+'>Send review request</button>')
+              + (o.has_review || o.review_email_at ? '' : '<button type="button" class="go" data-act="review_request" data-id="'+esc(o.id)+'"'+(o.review_due?'':' disabled title="Unlocks '+unlockDays+' days after dispatch"')+'>Send review request</button>')
               + '</div>'
             : '<div class="ship-row">'
               + '<div class="field"><label for="t-'+esc(o.id)+'">Tracking number</label>'

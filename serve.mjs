@@ -39,6 +39,9 @@ const MIME = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const DEV_ADMIN_TOKEN = 'dev';
+const REVIEW_UNLOCK_DAYS = 5;   // mirrors api/fulfilment.js
+// Stands in for the reviews table: who has already written one.
+const mockReviewEmails = new Map([['yahyashahid99@gmail.com', { rating: 5, approved: true }]]);
 const PRODUCTS = ['midnight-black', 'contrast-white'];
 const baseId = id => String(id || '').replace(/-twin$/, '');
 
@@ -319,10 +322,12 @@ async function handleFulfilment(req, res) {
       .slice().sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
       .map(o => {
         const days = o.shipped_at ? Math.floor((now - new Date(o.shipped_at)) / 86400000) : null;
+        const rv = mockReviewEmails.get(String(o.customer_email||'').toLowerCase()) || null;
         return { ...o, ref: orderRefFrom(o.stripe_payment_intent),
-                 review_due: !!o.shipped_at && !o.review_email_at && days >= 10, shipped_days_ago: days };
+                 has_review: !!rv, review_rating: rv?rv.rating:null, review_published: rv?rv.approved:null,
+                 review_due: !!o.shipped_at && !o.review_email_at && !rv && days >= REVIEW_UNLOCK_DAYS, shipped_days_ago: days };
       });
-    return send(res, 200, { orders });
+    return send(res, 200, { orders, review_unlock_days: REVIEW_UNLOCK_DAYS });
   }
 
   if (req.method === 'POST') {
@@ -357,6 +362,7 @@ async function handleFulfilment(req, res) {
 
     if (action === 'review_request') {
       if (o.review_email_at) return send(res, 409, { error: 'Review request already sent for this order' });
+      if (mockReviewEmails.has(String(o.customer_email||'').toLowerCase())) return send(res, 409, { error: 'This customer has already left a review' });
       o.review_email_at = new Date().toISOString();
       console.log('  [email] review_request -> ' + o.customer_email);
       return send(res, 200, { success: true, emailed: true });
