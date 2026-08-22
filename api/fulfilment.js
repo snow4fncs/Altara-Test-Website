@@ -76,7 +76,9 @@ export default async function handler(req, res) {
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { action, id, tracking_number, carrier } = req.body || {};
+  const { action, id, tracking_number, carrier, shipped_at, notify } = req.body || {};
+  // Default to notifying: the normal case is a parcel the customer is waiting on.
+  const shouldNotify = notify !== false;
   if (!action) return res.status(400).json({ error: 'action is required' });
 
   // ── repeat-purchase offer: past buyers, one email each ──
@@ -126,13 +128,22 @@ export default async function handler(req, res) {
     const num = String(tracking_number || '').trim();
     if (!num) return res.status(400).json({ error: 'tracking_number is required' });
     const car = String(carrier || 'Australia Post').trim();
+    // A parcel posted days ago should carry its real dispatch date, otherwise
+    // the review-request clock restarts from whenever it was keyed in.
+    let when = new Date().toISOString();
+    if (shipped_at) {
+      const d = new Date(shipped_at);
+      if (isNaN(d)) return res.status(400).json({ error: 'shipped_at is not a valid date' });
+      if (d.getTime() > Date.now() + 864e5) return res.status(400).json({ error: 'shipped_at cannot be in the future' });
+      when = d.toISOString();
+    }
 
     const { error: upErr } = await supabase.from('orders')
-      .update({ tracking_number: num, carrier: car, shipped_at: new Date().toISOString() })
+      .update({ tracking_number: num, carrier: car, shipped_at: when })
       .eq('id', id);
     if (upErr) { console.error('Ship update error:', upErr); return res.status(500).json({ error: 'Could not save tracking' }); }
 
-    const result = await sendEmail({
+    const result = shouldNotify ? await sendEmail({
       to: order.customer_email,
       subject: `Your Altara order has shipped - ${ref}`,
       html: shippedEmailHtml({
@@ -141,9 +152,37 @@ export default async function handler(req, res) {
         trackUrl: trackUrl(car, num),
       }),
       tag: 'shipped',
-    });
+    }) : { sent: false, reason: 'not_requested' };
     // Tracking is saved either way; the email is best-effort.
-    return res.status(200).json({ success: true, emailed: result.sent, reason: result.reason });
+    return res.status(200).json({ success: true, notified: shouldNotify, emailed: result.sent, reason: result.reason });
+  }
+
+  // ── correct a tracking number without re-dating the dispatch ──
+  if (action === 'edit_tracking') {
+    if (!order.shipped_at) return res.status(409).json({ error: 'That order has not been marked shipped yet' });
+    const num = String(tracking_number || '').trim();
+    if (!num) return res.status(400).json({ error: 'tracking_number is required' });
+    const car = String(carrier || order.carrier || 'Australia Post').trim();
+
+    // shipped_at is deliberately untouched - the parcel left when it left, and
+    // the review-request clock runs from that, not from when a typo was fixed.
+    const { error: upErr } = await supabase.from('orders')
+      .update({ tracking_number: num, carrier: car }).eq('id', id);
+    if (upErr) { console.error('Edit tracking error:', upErr); return res.status(500).json({ error: 'Could not save tracking' }); }
+
+    // Re-notifying is opt-in here: most edits are correcting a typo, and the
+    // customer has already had one email.
+    const result = shouldNotify ? await sendEmail({
+      to: order.customer_email,
+      subject: `Updated tracking for your Altara order - ${ref}`,
+      html: shippedEmailHtml({
+        first, ref, trackingNumber: num, carrier: car,
+        suburb: order.shipping_address?.city || '',
+        trackUrl: trackUrl(car, num),
+      }),
+      tag: 'tracking_updated',
+    }) : { sent: false, reason: 'not_requested' };
+    return res.status(200).json({ success: true, notified: shouldNotify, emailed: result.sent, reason: result.reason });
   }
 
   // ── review request ──

@@ -333,7 +333,8 @@ async function handleFulfilment(req, res) {
   if (req.method === 'POST') {
     const body = await readBody(req);
     if (!body) return send(res, 400, { error: 'Malformed request' });
-    const { action, id, tracking_number, carrier } = body;
+    const { action, id, tracking_number, carrier, shipped_at, notify } = body;
+    const shouldNotify = notify !== false;
 
     if (action === 'repeat_offer') {
       const seen = new Set(); const targets = [];
@@ -355,9 +356,21 @@ async function handleFulfilment(req, res) {
       if (!num) return send(res, 400, { error: 'tracking_number is required' });
       o.tracking_number = num;
       o.carrier = carrier || 'Australia Post';
-      o.shipped_at = new Date().toISOString();
-      console.log('  [email] shipped -> ' + o.customer_email + '  tracking ' + num + ' via ' + o.carrier);
-      return send(res, 200, { success: true, emailed: true });
+      o.shipped_at = shipped_at ? new Date(shipped_at).toISOString() : new Date().toISOString();
+      if (shouldNotify) console.log('  [email] shipped -> ' + o.customer_email + '  tracking ' + num + ' via ' + o.carrier);
+      else console.log('  [no email] shipped recorded -> ' + o.customer_email + '  ' + num);
+      return send(res, 200, { success: true, notified: shouldNotify, emailed: shouldNotify });
+    }
+
+    if (action === 'edit_tracking') {
+      if (!o.shipped_at) return send(res, 409, { error: 'That order has not been marked shipped yet' });
+      const num = String(tracking_number || '').trim();
+      if (!num) return send(res, 400, { error: 'tracking_number is required' });
+      o.tracking_number = num;
+      o.carrier = carrier || o.carrier || 'Australia Post';
+      if (shouldNotify) console.log('  [email] tracking_updated -> ' + o.customer_email + '  ' + num);
+      else console.log('  [no email] tracking corrected -> ' + o.customer_email + '  ' + num);
+      return send(res, 200, { success: true, notified: shouldNotify, emailed: shouldNotify });
     }
 
     if (action === 'review_request') {

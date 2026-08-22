@@ -63,6 +63,10 @@
   .field { display:grid; gap:5px; }
   .track { font-size:14px; color:var(--cream-dim); word-break:break-all; }
   .track a { color:var(--gold); }
+  .notify { display:flex; align-items:center; gap:9px; font-size:13.5px; color:var(--cream-dim); white-space:nowrap; }
+  .notify input { width:auto; margin:0; accent-color:var(--gold); width:17px; height:17px; }
+  .edit-row { display:grid; grid-template-columns:1fr 210px auto auto; gap:12px; align-items:end; }
+  @media (max-width:900px) { .edit-row { grid-template-columns:1fr; } }
   .actions { display:flex; gap:9px; flex-wrap:wrap; }
   .empty { background:var(--bg-2); border:1px solid var(--border); padding:52px 30px; text-align:center; font-size:15.5px; color:var(--cream-dim); }
   .hide { display:none; }
@@ -113,6 +117,7 @@
   function token(){ return sessionStorage.getItem(KEY) || ''; }
   function note(t, err){ msgBox.innerHTML = t ? '<p class="msg'+(err?' err':'')+'">'+esc(t)+'</p>' : ''; }
   function fmt(s){ try{ var d=new Date(s); return isNaN(d)?'':d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function show(on){ gate.className = on?'gate hide':'gate'; panel.className = on?'':'hide'; }
 
   function trackLink(carrier, n){
@@ -164,6 +169,18 @@
               + ' &middot; sent '+fmt(o.shipped_at)+(o.shipped_days_ago!=null?' ('+o.shipped_days_ago+'d ago)':'')+'</p>'
               + '<div class="actions">'
               + (o.has_review || o.review_email_at ? '' : '<button type="button" class="go" data-act="review_request" data-id="'+esc(o.id)+'"'+(o.review_due?'':' disabled title="Unlocks '+unlockDays+' days after dispatch"')+'>Send review request</button>')
+              + '<button type="button" data-toggle-edit="'+esc(o.id)+'">Edit tracking</button>'
+              + '</div>'
+              + '<div class="edit-row hide" data-editrow="'+esc(o.id)+'">'
+              + '<div class="field"><label for="et-'+esc(o.id)+'">Tracking number</label>'
+              + '<input type="text" id="et-'+esc(o.id)+'" data-track="'+esc(o.id)+'" value="'+esc(o.tracking_number||'')+'"></div>'
+              + '<div class="field"><label for="ec-'+esc(o.id)+'">Carrier</label>'
+              + '<select id="ec-'+esc(o.id)+'" data-carrier="'+esc(o.id)+'">'
+              + ['Australia Post','Sendle','Aramex','CouriersPlease'].map(function(c){
+                  return '<option'+(c===(o.carrier||'Australia Post')?' selected':'')+'>'+c+'</option>'; }).join('')
+              + '</select></div>'
+              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'"> Re-email the customer</label>'
+              + '<button type="button" class="go" data-act="edit_tracking" data-id="'+esc(o.id)+'">Save</button>'
               + '</div>'
             : '<div class="ship-row">'
               + '<div class="field"><label for="t-'+esc(o.id)+'">Tracking number</label>'
@@ -171,7 +188,12 @@
               + '<div class="field"><label for="c-'+esc(o.id)+'">Carrier</label>'
               + '<select id="c-'+esc(o.id)+'" data-carrier="'+esc(o.id)+'">'
               + '<option>Australia Post</option><option>Sendle</option><option>Aramex</option><option>CouriersPlease</option></select></div>'
-              + '<button type="button" class="go" data-act="ship" data-id="'+esc(o.id)+'">Mark shipped &amp; email</button>'
+              + '<button type="button" class="go" data-act="ship" data-id="'+esc(o.id)+'">Mark shipped</button>'
+              + '</div>'
+              + '<div class="edit-row">'
+              + '<div class="field"><label for="d-'+esc(o.id)+'">Date posted</label>'
+              + '<input type="date" id="d-'+esc(o.id)+'" data-date="'+esc(o.id)+'" value="'+today()+'" max="'+today()+'"></div>'
+              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'" checked> Email the customer</label>'
               + '</div>';
 
           return '<article class="card">'
@@ -186,17 +208,28 @@
   }
 
   list.addEventListener('click', function(e){
+    var tog = e.target.closest('button[data-toggle-edit]');
+    if (tog) {
+      var row = list.querySelector('[data-editrow="'+tog.getAttribute('data-toggle-edit')+'"]');
+      if (row) { row.classList.toggle('hide'); if(!row.classList.contains('hide')) row.querySelector('input[type="text"]').focus(); }
+      return;
+    }
     var btn = e.target.closest('button[data-act]');
     if (!btn) return;
     var act = btn.getAttribute('data-act'), id = btn.getAttribute('data-id');
     var payload = { action: act, id: id };
 
-    if (act === 'ship') {
-      var t = document.querySelector('[data-track="'+id+'"]');
-      var c = document.querySelector('[data-carrier="'+id+'"]');
+    if (act === 'ship' || act === 'edit_tracking') {
+      var scope = act === 'edit_tracking' ? list.querySelector('[data-editrow="'+id+'"]') : list;
+      var t = scope.querySelector('[data-track="'+id+'"]') || document.querySelector('[data-track="'+id+'"]');
+      var c = scope.querySelector('[data-carrier="'+id+'"]') || document.querySelector('[data-carrier="'+id+'"]');
+      var n = scope.querySelector('[data-notify="'+id+'"]') || document.querySelector('[data-notify="'+id+'"]');
+      var dt = document.querySelector('[data-date="'+id+'"]');
       if (!t || !t.value.trim()) { note('Enter the tracking number first.', true); t && t.focus(); return; }
       payload.tracking_number = t.value.trim();
       payload.carrier = c ? c.value : 'Australia Post';
+      payload.notify = n ? n.checked : true;
+      if (act === 'ship' && dt && dt.value) payload.shipped_at = dt.value;
     }
     if (act === 'review_request' && !confirm('Email this customer asking for a review?')) return;
 
@@ -208,9 +241,14 @@
     })
       .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||('Failed ('+r.status+')')); return j; }); })
       .then(function(j){ return load().then(function(){
-        note(act==='ship'
-          ? (j.emailed ? 'Marked shipped and the tracking email is away.' : 'Tracking saved, but the email did not send: '+(j.reason||'unknown'))
-          : (j.emailed ? 'Review request sent.' : 'Review request not sent: '+(j.reason||'unknown')));
+        if (act === 'review_request') {
+          note(j.emailed ? 'Review request sent.' : 'Review request not sent: '+(j.reason||'unknown'));
+        } else {
+          var what = act === 'ship' ? 'Marked shipped' : 'Tracking updated';
+          note(!j.notified ? (what + ', no email sent.')
+             : (j.emailed ? (what + ' and the email is away.')
+                          : (what + ', but the email did not send: '+(j.reason||'unknown'))));
+        }
       }); })
       .catch(function(err){ btn.disabled = false; note(err.message, true); });
   });

@@ -557,7 +557,8 @@
       .toast-t { font-size: 11px; }
       .toast-lnk { font-size: 10.5px; }
     }
-  </style>
+      .rv-prod { display: block; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 2px 0 -2px; }
+</style>
   <meta name="description" content="Altara Midnight Black seat cover — premium materials, precision fit for modern vehicles. Free shipping Australia-wide. Shop now.">
   <link rel="canonical" href="https://www.altaradesign.com/product-midnight-black.html">
   <meta property="og:type" content="website">
@@ -603,6 +604,7 @@
       <li><a href="collection.html">Collection</a></li>
       <li><a href="index.html#features">Features</a></li>
       <li><a href="index.html#craft">Materials</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
     </ul>
     <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
       <span class="nav-search-icon" aria-hidden="true">
@@ -823,6 +825,7 @@
       <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
       <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
       <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
+      <a href="reviews.html" class="mob-main-link">Reviews <span class="mob-main-arr">→</span></a>
     </div>
     <div class="mob-ol-section">
       <div class="mob-ol-label">Support</div>
@@ -978,6 +981,7 @@
 <script>
 (function () {
   var PRODUCT = document.body.dataset.product;
+  var PROD_LABELS = { 'midnight-black': 'Midnight Black', 'contrast-white': 'Contrast White' };
   if (!PRODUCT) return;
 
   var STAR = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
@@ -1105,7 +1109,7 @@
     summary.innerHTML =
       '<div class="rv-avg">' + d.average.toFixed(1) + '</div>' +
       stars(d.average) +
-      '<p class="rv-avg-sub">Based on ' + d.count + (d.count === 1 ? ' verified review' : ' verified reviews') + '</p>' +
+      '<p class="rv-avg-sub">Based on ' + d.count + (d.count === 1 ? ' verified review' : ' verified reviews') + ' across both covers</p>' +
       '<div class="rv-dist">' + d.distribution.map(function (x) {
         return '<div class="rv-dist-row"><span class="rv-dist-label">' + x.stars + '★</span>' +
                '<span class="rv-bar"><span style="width:' + Math.round((x.count / max) * 100) + '%"></span></span>' +
@@ -1121,13 +1125,16 @@
           '<span class="rv-date">' + fmtDate(r.created_at) + '</span>' +
         '</div>' +
         stars(r.rating) +
+        (PROD_LABELS[r.product] ? '<span class="rv-prod">' + esc(PROD_LABELS[r.product]) + '</span>' : '') +
         (r.title ? '<p class="rv-title">' + esc(r.title) + '</p>' : '') +
         '<p class="rv-body">' + esc(r.body) + '</p>' +
       '</article>';
     }).join('');
   }
 
-  fetch('/api/reviews?product=' + encodeURIComponent(PRODUCT))
+  // Reviews are pooled across both colourways: it is one product in two
+  // finishes, and splitting them would show each page half the proof.
+  fetch('/api/reviews?product=all')
     .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
     .then(function (d) { render(demoMode ? DEMO : d); })
     .catch(function () { render(demoMode ? DEMO : { count: 0, average: 0, distribution: [], reviews: [] }); });
