@@ -7,7 +7,14 @@ const PRODUCTS = ['midnight-black', 'contrast-white'];
 // A twin-set buyer is still a buyer of the base product.
 const baseId = id => String(id || '').replace(/-twin$/, '');
 
-const PUBLIC_COLS = 'reviewer_name, rating, title, body, verified, created_at, product, photos';
+const PUBLIC_COLS_BASE = 'reviewer_name, rating, title, body, verified, created_at, product';
+const PUBLIC_COLS = PUBLIC_COLS_BASE + ', photos';
+
+// Postgres "undefined column". The photos column ships in a migration, so a
+// deploy can land before the SQL is run - in which case reviews must still be
+// served, just without photos, rather than 500ing the whole page.
+const MISSING_COLUMN = '42703';
+const withoutPhotos = rows => (rows || []).map(r => ({ ...r, photos: [] }));
 
 // Customer photos. The browser resizes and re-encodes before sending, so these
 // arrive as small JPEG data URLs rather than raw camera files - a 12MP photo
@@ -75,6 +82,12 @@ export default async function handler(req, res) {
         .order('created_at', { ascending: false })
         .limit(200);
 
+      if (error && error.code === MISSING_COLUMN) {
+        const second = await supabase.from('reviews').select(`id, ${PUBLIC_COLS_BASE}`)
+          .eq('approved', false).order('created_at', { ascending: false }).limit(200);
+        if (second.error) { console.error('Pending reviews fetch error:', second.error); return res.status(500).json({ error: 'Could not load the queue' }); }
+        return res.status(200).json({ reviews: withoutPhotos(second.data) });
+      }
       if (error) {
         console.error('Pending reviews fetch error:', error);
         return res.status(500).json({ error: 'Could not load the queue' });
@@ -97,8 +110,17 @@ export default async function handler(req, res) {
       query = query.eq('product', product);
     }
 
-    const { data, error } = await query;
+    let { data, error } = await query;
 
+    if (error && error.code === MISSING_COLUMN) {
+      console.error('reviews.photos missing - run supabase-review-photos.sql. Serving without photos.');
+      let retry = supabase.from('reviews').select(PUBLIC_COLS_BASE)
+        .eq('approved', true).order('created_at', { ascending: false }).limit(200);
+      if (requested !== 'all') retry = retry.eq('product', baseId(requested));
+      const second = await retry;
+      if (second.error) { console.error('Reviews fetch error:', second.error); return res.status(500).json({ error: 'Could not load reviews' }); }
+      data = withoutPhotos(second.data); error = null;
+    }
     if (error) {
       console.error('Reviews fetch error:', error);
       return res.status(500).json({ error: 'Could not load reviews' });
@@ -164,7 +186,7 @@ export default async function handler(req, res) {
     // the endpoint as free image hosting.
     const photoUrls = await storePhotos(photos, cleanEmail);
 
-    const { error } = await supabase.from('reviews').insert({
+    const row = {
       product: prod,
       email: cleanEmail,
       reviewer_name: String(name || '').trim().slice(0, 60) || 'Altara customer',
@@ -174,7 +196,14 @@ export default async function handler(req, res) {
       photos: photoUrls,
       verified: true,
       approved: false, // you approve it before it appears
-    });
+    };
+
+    let { error } = await supabase.from('reviews').insert(row);
+    if (error && error.code === MISSING_COLUMN) {
+      console.error('reviews.photos missing - saving the review without photos.');
+      const { photos: _drop, ...withoutCol } = row;
+      ({ error } = await supabase.from('reviews').insert(withoutCol));
+    }
 
     if (error) {
       console.error('Review insert error:', error);
