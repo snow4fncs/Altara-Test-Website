@@ -47,6 +47,7 @@ export function buildPurchaseEvent(session, items, shipping) {
     action_source: 'website',
     user_data: dropEmpty({
       em: hashed(details.email),
+      external_id: hashed(details.email),
       ph: hashedPhone(details.phone),
       fn: hashed(first),
       ln: hashed(rest.join(' ')),

@@ -112,6 +112,9 @@ export default async function handler(req, res) {
       line_items,
       currency: 'aud',
       shipping_address_collection: { allowed_countries: ['AU'] },
+      // Phone doubles as a courier contact and one of Meta's strongest match
+      // keys - it was the notable absence from the pixel's match quality score.
+      phone_number_collection: { enabled: true },
       shipping_options: [orderTotal >= FREE_SHIP_THRESHOLD ? freeShipping : standardShipping],
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart.html`,
