@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+<channel>
+  <title>Altara</title>
+  <link>https://www.altaradesign.com/</link>
+  <description>Premium towelling car seat covers, made for Australian conditions.</description>
+
+  <item>
+    <g:id>altara-midnight-black</g:id>
+    <g:title>Altara Car Seat Towel Cover — Midnight Black</g:title>
+    <g:description>Premium towelling car seat cover in Midnight Black. Fits any seat in under 30 seconds, protects fabric and leather from sweat, sand and dog hair, and goes straight into the washing machine. 30-day fit guarantee.</g:description>
+    <g:link>https://www.altaradesign.com/product-midnight-black.html</g:link>
+    <g:image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%207.png</g:image_link>
+    <g:additional_image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%209.png</g:additional_image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>59.00 AUD</g:price>
+    <g:brand>Altara</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>false</g:identifier_exists>
+    <g:google_product_category>8378</g:google_product_category>
+    <g:product_type>Vehicles &amp; Parts &gt; Vehicle Parts &amp; Accessories &gt; Seat Covers</g:product_type>
+    <g:color>Black</g:color>
+    <g:shipping>
+      <g:country>AU</g:country>
+      <g:price>9.95 AUD</g:price>
+    </g:shipping>
+  </item>
+
+  <item>
+    <g:id>altara-midnight-black-twin</g:id>
+    <g:title>Altara Car Seat Towel Covers — Midnight Black Twin Set (2 Covers)</g:title>
+    <g:description>Two premium towelling car seat covers in Midnight Black — both front seats covered for $89, delivered free. Fits any seat in under 30 seconds, machine washable, 60-day fit guarantee on Twin Sets.</g:description>
+    <g:link>https://www.altaradesign.com/product-midnight-black.html</g:link>
+    <g:image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%207.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>118.00 AUD</g:price>
+    <g:sale_price>89.00 AUD</g:sale_price>
+    <g:brand>Altara</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>false</g:identifier_exists>
+    <g:google_product_category>8378</g:google_product_category>
+    <g:product_type>Vehicles &amp; Parts &gt; Vehicle Parts &amp; Accessories &gt; Seat Covers</g:product_type>
+    <g:color>Black</g:color>
+    <g:item_group_id>altara-midnight-black</g:item_group_id>
+    <g:shipping>
+      <g:country>AU</g:country>
+      <g:price>0.00 AUD</g:price>
+    </g:shipping>
+  </item>
+
+  <item>
+    <g:id>altara-contrast-white</g:id>
+    <g:title>Altara Car Seat Towel Cover — Contrast White</g:title>
+    <g:description>Premium towelling car seat cover in Contrast White. Fits any seat in under 30 seconds, protects fabric and leather from sweat, sand and dog hair, and goes straight into the washing machine. 30-day fit guarantee.</g:description>
+    <g:link>https://www.altaradesign.com/product-contrast-white.html</g:link>
+    <g:image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%201.png</g:image_link>
+    <g:additional_image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png</g:additional_image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>59.00 AUD</g:price>
+    <g:brand>Altara</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>false</g:identifier_exists>
+    <g:google_product_category>8378</g:google_product_category>
+    <g:product_type>Vehicles &amp; Parts &gt; Vehicle Parts &amp; Accessories &gt; Seat Covers</g:product_type>
+    <g:color>White</g:color>
+    <g:shipping>
+      <g:country>AU</g:country>
+      <g:price>9.95 AUD</g:price>
+    </g:shipping>
+  </item>
+
+  <item>
+    <g:id>altara-contrast-white-twin</g:id>
+    <g:title>Altara Car Seat Towel Covers — Contrast White Twin Set (2 Covers)</g:title>
+    <g:description>Two premium towelling car seat covers in Contrast White — both front seats covered for $89, delivered free. Fits any seat in under 30 seconds, machine washable, 60-day fit guarantee on Twin Sets.</g:description>
+    <g:link>https://www.altaradesign.com/product-contrast-white.html</g:link>
+    <g:image_link>https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%201.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>118.00 AUD</g:price>
+    <g:sale_price>89.00 AUD</g:sale_price>
+    <g:brand>Altara</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>false</g:identifier_exists>
+    <g:google_product_category>8378</g:google_product_category>
+    <g:product_type>Vehicles &amp; Parts &gt; Vehicle Parts &amp; Accessories &gt; Seat Covers</g:product_type>
+    <g:color>White</g:color>
+    <g:item_group_id>altara-contrast-white</g:item_group_id>
+    <g:shipping>
+      <g:country>AU</g:country>
+      <g:price>0.00 AUD</g:price>
+    </g:shipping>
+  </item>
+
+</channel>
+</rss>
