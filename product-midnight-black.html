@@ -732,6 +732,20 @@
       text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
     .cd-view-link:hover { color: var(--gold); }
     @media (prefers-reduced-motion: reduce) { .cd, .cd-overlay, .cd-prog-fill { transition: none; } }
+  
+    /* Twin Set Advantage stack */
+    .adv { border: 1px solid rgba(196,169,122,0.35); background: rgba(196,169,122,0.05);
+      padding: 16px 18px 14px; margin: 14px 0 4px; }
+    .adv-h { font-size: 9.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px; }
+    .adv ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+    .adv li { display: flex; gap: 9px; font-size: 12.5px; line-height: 1.55; color: rgba(237,232,223,0.72); font-weight: 300; }
+    .adv li svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-width: 2.2; flex-shrink: 0; margin-top: 3px; }
+    .adv li strong { color: var(--cream); font-weight: 500; }
+    .adv-compare { margin-top: 11px; padding-top: 11px; border-top: 1px solid rgba(196,169,122,0.2);
+      font-size: 12px; color: rgba(237,232,223,0.55); }
+    .adv-compare strong { color: var(--gold); font-weight: 600; }
+    @media (max-width: 900px) { .adv li { font-size: 13.5px; } .adv-compare { font-size: 13px; } }
   </style>
   <meta name="description" content="Machine-washable black car seat towel cover with magnetic 30-second fit. Protects against gym sweat, beach sand and spills. Twin set $89, free shipping Australia-wide.">
   <link rel="canonical" href="https://www.altaradesign.com/product-midnight-black.html">
@@ -892,8 +906,20 @@
       </div>
       <p class="pack-mix">Mix and match: add <strong>any two covers</strong> and you pay the Twin Set price of <strong>$89</strong> &mdash; $29 off, applied automatically at checkout. Pair it with <a href="product-contrast-white.html">Contrast White</a>.</p>
     </div>
+
+    <div class="adv" id="adv">
+      <p class="adv-h">The Twin Set advantage</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$29 pair saving</strong> — applied automatically, no code</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Free shipping</strong> — no $150 minimum like the other guys</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>60-day fit guarantee</strong> on Twin Sets — double the standard</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$15 Back-Row Credit</strong> emailed after your order</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$10 review reward</strong> when you share a photo of the fit</span></li>
+      </ul>
+      <p class="adv-compare">A pair, delivered: <strong>Altara $89</strong> &middot; comparable covers elsewhere $128+</p>
+    </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
-    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &mdash; love it or send it back</p>
+    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &mdash; <strong style="color:var(--gold);font-weight:500">60 days on Twin Sets</strong></p>
     <div class="pi-perks">
       <span class="pi-perk"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Free shipping on orders $80+</span>
       <span class="pi-perk"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>30-Day Returns</span>
@@ -975,8 +1001,8 @@
   <div class="guar-in">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
     <div>
-      <h2 class="guar-h">30-day fit guarantee</h2>
-      <p class="guar-p">Fit it, drive with it, wash it. If it isn’t right for your car, send it back within 30 days for a full refund. You pay nothing to find out.</p>
+      <h2 class="guar-h">30-day fit guarantee &mdash; 60 days on Twin Sets</h2>
+      <p class="guar-p">Fit it, drive with it, wash it. If it isn’t right for your car, send it back for a full refund — 30 days on singles, 60 days on Twin Sets. You pay nothing to find out.</p>
     </div>
   </div>
 </section>
@@ -1552,7 +1578,9 @@
     var prog = $('cd-prog'), fill = $('cd-prog-fill'), label = $('cd-prog-label');
     var pct = Math.min(100, after / FREE_SHIP * 100);
     fill.style.width = pct + '%';
-    if (ship === 0) { prog.classList.add('done'); label.innerHTML = '&#10003; Free shipping unlocked'; }
+    var hasTwin = c.items.some(function(i){ return /-twin$/.test(i.id); });
+    if (ship === 0) { prog.classList.add('done');
+      label.innerHTML = '&#10003; Free shipping unlocked' + (hasTwin ? ' &middot; 60-day guarantee' : ''); }
     else { prog.classList.remove('done');
       label.innerHTML = 'Add <strong>' + fmt(FREE_SHIP - after) + '</strong> more for free shipping'; }
 
