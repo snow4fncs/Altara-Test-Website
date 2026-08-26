@@ -1758,8 +1758,8 @@
 
     var subtotal = c.items.reduce(function(s,i){return s+i.price*i.qty;},0);
     var bd = bundleDisc(c);
-    var p = bd > 0 ? null : promo();
-    var pd = promoAmt(p, subtotal);
+    var p = promo();
+    var pd = promoAmt(p, subtotal - bd);
     var after = subtotal - bd - pd;
     var ship = after >= FREE_SHIP ? 0 : SHIP_RATE;
     var total = after + ship;
@@ -1814,10 +1814,8 @@
       msg.innerHTML = esc(p.code)+' applied &middot; <a href="#" id="cd-promo-rm">Remove</a>';
       var rm=$('cd-promo-rm'); rm.addEventListener('click',function(e){e.preventDefault();
         localStorage.removeItem(PROMO_KEY); paint();});
-    } else if (bd>0 && promo()) { msg.className='cd-promo-msg';
-      msg.textContent = 'Twin Set bundle already saves more — codes don’t stack.'; }
-    else if (p && p.minimum && subtotal < p.minimum) { msg.className='cd-promo-msg err';
-      msg.innerHTML = esc(p.code)+' needs an order of '+fmt(p.minimum)+'+ — add '+fmt(p.minimum-subtotal)+' more to use it. <a href="#" id="cd-promo-rm">Remove</a>';
+    } else if (p && p.minimum && subtotal - bd < p.minimum) { msg.className='cd-promo-msg err';
+      msg.innerHTML = esc(p.code)+' needs an order of '+fmt(p.minimum)+'+ — add '+fmt(p.minimum-(subtotal-bd))+' more to use it. <a href="#" id="cd-promo-rm">Remove</a>';
       var rm2=$('cd-promo-rm'); rm2.addEventListener('click',function(e){e.preventDefault();
         localStorage.removeItem(PROMO_KEY); paint();}); }
     else { msg.className='cd-promo-msg'; msg.textContent=''; }
@@ -1873,7 +1871,7 @@
       body:JSON.stringify({ items:c.items.map(function(i){return {id:i.id,qty:i.qty};}),
         fbp:readCookie('_fbp'), fbc:readCookie('_fbc'),
         promo_code:(function(){ var pr=promo(); var base=c.items.reduce(function(s,i){return s+i.price*i.qty;},0)-bundleDisc(c);
-          return (bundleDisc(c)===0 && pr && promoAmt(pr,base)>0)?pr.code:undefined; })() })})
+          return (pr && promoAmt(pr,base)>0)?pr.code:undefined; })() })})
       .then(function(r){ return r.json(); })
       .then(function(d){ if(d.url) window.location.href=d.url;
         else { btn.disabled=false; $('cd-checkout-label').textContent='Checkout'; alert(d.error||'Checkout failed — try again.'); } })

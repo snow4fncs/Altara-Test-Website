@@ -38,8 +38,7 @@ export function bundleDiscount(items) {
 // Coupons are reused by deterministic id so we do not litter the account with a
 // new object per checkout. Created on first use, so there is nothing to set up
 // in the Stripe dashboard.
-async function bundleCouponId(amountAud) {
-  const id = `altara-twin-bundle-${amountAud}`;
+async function getOrCreateCoupon(id, amountCents, name) {
   try {
     const existing = await stripe.coupons.retrieve(id);
     return existing.id;
@@ -47,13 +46,29 @@ async function bundleCouponId(amountAud) {
     if (err?.raw?.code !== 'resource_missing' && err?.statusCode !== 404) throw err;
     const created = await stripe.coupons.create({
       id,
-      amount_off: amountAud * 100,
+      amount_off: amountCents,
       currency: 'aud',
       duration: 'once',
-      name: `Twin Set bundle (-$${amountAud})`,
+      name,
     });
     return created.id;
   }
+}
+
+function bundleCouponId(amountAud) {
+  return getOrCreateCoupon(`altara-twin-bundle-${amountAud}`, amountAud * 100, `Twin Set bundle (-$${amountAud})`);
+}
+
+// Bundle saving and a promotion code, folded into one coupon because Stripe
+// permits a single discount per checkout session.
+function comboCouponId(bundleAud, promoCode, promoCents) {
+  const code = String(promoCode).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 20);
+  const total = bundleAud * 100 + promoCents;
+  return getOrCreateCoupon(
+    `altara-combo-${bundleAud}-${code}-${promoCents}`,
+    total,
+    `Twin Set bundle + ${code} (-$${(total / 100).toFixed(2).replace(/\.00$/, '')})`,
+  );
 }
 
 export default async function handler(req, res) {
@@ -128,34 +143,47 @@ export default async function handler(req, res) {
       },
     };
 
-    // Abandoned-checkout recovery. Stripe keeps the cart alive after the
-    // session expires and mints a recovery URL, which api/webhook.js emails to
-    // the customer on checkout.session.expired. Without this flag there is no
-    // URL to send them back to and the cart is simply lost.
-    params.after_expiration = {
-      recovery: { enabled: true, allow_promotion_codes: discount === 0 },
-    };
-
-    // Stripe rejects a session that both carries an automatic discount and
-    // offers the promotion code field, so the two are mutually exclusive: a
-    // bundle order gets the bundle, everything else can redeem a code.
-    if (discount > 0) {
-      params.discounts = [{ coupon: await bundleCouponId(discount) }];
-    } else if (promo_code) {
-      // The cart validated this before checkout; re-verify here because the
-      // browser is never trusted with pricing. Invalid, expired, or below the
-      // code's minimum order by now -> fall back to the manual code field
-      // rather than failing the checkout.
-      const found = await stripe.promotionCodes.list({ code: String(promo_code).slice(0, 50), active: true, limit: 1 });
+    // The cart validated this before checkout; re-verify here because the
+    // browser is never trusted with pricing. Minimums are judged on what the
+    // customer actually pays after the bundle saving. Invalid, expired, or
+    // below the minimum by now -> the code is simply dropped.
+    let promoPc = null;
+    if (promo_code) {
+      const found = await stripe.promotionCodes.list({
+        code: String(promo_code).slice(0, 50), active: true, limit: 1, expand: ['data.coupon'],
+      });
       const pc = found.data[0];
       const belowMinimum = pc?.restrictions?.minimum_amount
         ? orderTotal * 100 < pc.restrictions.minimum_amount
         : false;
-      if (pc && !belowMinimum) params.discounts = [{ promotion_code: pc.id }];
-      else params.allow_promotion_codes = true;
+      if (pc?.coupon?.valid && !belowMinimum) promoPc = pc;
+    }
+
+    // Stripe allows exactly ONE discount per session, so a bundle order that
+    // also carries a valid code gets both merged into a single combined coupon
+    // rather than losing one of them.
+    if (discount > 0 && promoPc) {
+      const promoCents = promoPc.coupon.amount_off
+        ? promoPc.coupon.amount_off
+        : Math.round(orderTotal * 100 * (promoPc.coupon.percent_off || 0) / 100);
+      params.discounts = [{ coupon: await comboCouponId(discount, promoPc.code, promoCents) }];
+    } else if (discount > 0) {
+      params.discounts = [{ coupon: await bundleCouponId(discount) }];
+    } else if (promoPc) {
+      params.discounts = [{ promotion_code: promoPc.id }];
     } else {
       params.allow_promotion_codes = true;
     }
+
+    // Abandoned-checkout recovery. Stripe keeps the cart alive after the
+    // session expires and mints a recovery URL, which api/webhook.js emails to
+    // the customer on checkout.session.expired. Recovery's own promo-code
+    // field is mutually exclusive with the discounts parameter - Stripe
+    // rejects the whole session if both are sent - so it is only offered when
+    // no discount is attached.
+    params.after_expiration = {
+      recovery: { enabled: true, allow_promotion_codes: !params.discounts },
+    };
 
     // A promotion code must never cost a sale. If Stripe rejects the session
     // because of the attached code (restriction changed, redemptions exhausted,

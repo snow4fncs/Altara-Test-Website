@@ -1329,10 +1329,10 @@
       const SHIP_RATE = 9.95;
       const subtotal = getTotal(cart);
       const bundle = bundleInfo(cart);
-      // Stripe permits one discount per checkout, so the bundle and a code
-      // never stack - the bundle wins because it is automatic and usually larger.
-      const promo = bundle.discount > 0 ? null : getPromo();
-      const promoDisc = promoAmount(promo, subtotal);
+      // Codes stack with the bundle (the server folds both into one Stripe
+      // coupon). Minimums are judged on what the customer actually pays.
+      const promo = getPromo();
+      const promoDisc = promoAmount(promo, subtotal - bundle.discount);
       const afterDiscount = subtotal - bundle.discount - promoDisc;
 
       const promoRow = document.getElementById('promo-row');
@@ -1345,12 +1345,9 @@
         promoMsg.innerHTML = promo.code + ' applied — confirmed at checkout. <a href="#" id="promo-remove">Remove</a>';
       } else {
         promoRow.style.display = 'none';
-        if (bundle.discount > 0 && getPromo()) {
-          promoMsg.className = 'promo-msg';
-          promoMsg.textContent = 'Your Twin Set bundle already saves more — codes don\'t stack with bundle pricing.';
-        } else if (promo && promo.minimum && subtotal < promo.minimum) {
+        if (promo && promo.minimum && subtotal - bundle.discount < promo.minimum) {
           promoMsg.className = 'promo-msg err';
-          promoMsg.innerHTML = promo.code + ' needs an order of ' + fmt(promo.minimum) + '+ — add ' + fmt(promo.minimum - subtotal) + ' more to use it. <a href="#" id="promo-remove">Remove code</a>';
+          promoMsg.innerHTML = promo.code + ' needs an order of ' + fmt(promo.minimum) + '+ — add ' + fmt(promo.minimum - (subtotal - bundle.discount)) + ' more to use it. <a href="#" id="promo-remove">Remove code</a>';
         }
       }
       var rm = document.getElementById('promo-remove');
@@ -1544,7 +1541,7 @@
             promo_code: (function () {
               var pr = getPromo();
               var base = getTotal(cart) - bundleInfo(cart).discount;
-              return (bundleInfo(cart).discount === 0 && pr && promoAmount(pr, base) > 0) ? pr.code : undefined;
+              return (pr && promoAmount(pr, base) > 0) ? pr.code : undefined;
             })(),
           }),
         });
