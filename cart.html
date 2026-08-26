@@ -1213,6 +1213,7 @@
     function setPromo(p) { if (p) localStorage.setItem(PROMO_KEY, JSON.stringify(p)); else localStorage.removeItem(PROMO_KEY); }
     function promoAmount(promo, base) {
       if (!promo) return 0;
+      if (promo.minimum && base < promo.minimum) return 0;
       var d = promo.amount_off ? Number(promo.amount_off) : base * (Number(promo.percent_off) || 0) / 100;
       return Math.min(Math.max(d, 0), base);
     }
@@ -1347,6 +1348,9 @@
         if (bundle.discount > 0 && getPromo()) {
           promoMsg.className = 'promo-msg';
           promoMsg.textContent = 'Your Twin Set bundle already saves more — codes don\'t stack with bundle pricing.';
+        } else if (promo && promo.minimum && subtotal < promo.minimum) {
+          promoMsg.className = 'promo-msg err';
+          promoMsg.innerHTML = promo.code + ' needs an order of ' + fmt(promo.minimum) + '+ — add ' + fmt(promo.minimum - subtotal) + ' more to use it. <a href="#" id="promo-remove">Remove code</a>';
         }
       }
       var rm = document.getElementById('promo-remove');
@@ -1442,7 +1446,9 @@
       var code = inp.value.trim().toUpperCase();
       if (!code) { msg.className = 'promo-msg err'; msg.textContent = 'Enter a code first.'; inp.focus(); return; }
       btn.disabled = true; msg.className = 'promo-msg'; msg.textContent = 'Checking…';
-      fetch('/api/validate-code?code=' + encodeURIComponent(code))
+      var cNow = getCart();
+      var payable = getTotal(cNow) - bundleInfo(cNow).discount;
+      fetch('/api/validate-code?code=' + encodeURIComponent(code) + '&subtotal=' + payable)
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
           btn.disabled = false;
@@ -1535,7 +1541,11 @@
             items: cart.items.map(i => ({ id: i.id, qty: i.qty })),
             fbp: readCookie('_fbp'),
             fbc: readCookie('_fbc'),
-            promo_code: (bundleInfo(cart).discount === 0 && getPromo()) ? getPromo().code : undefined,
+            promo_code: (function () {
+              var pr = getPromo();
+              var base = getTotal(cart) - bundleInfo(cart).discount;
+              return (bundleInfo(cart).discount === 0 && pr && promoAmount(pr, base) > 0) ? pr.code : undefined;
+            })(),
           }),
         });
         const data = await res.json();

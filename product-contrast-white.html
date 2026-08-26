@@ -1723,6 +1723,7 @@
   function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);})
     .reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE; }
   function promoAmt(p, base){ if(!p) return 0;
+    if (p.minimum && base < p.minimum) return 0;
     var d = p.amount_off ? Number(p.amount_off) : base*(Number(p.percent_off)||0)/100;
     return Math.min(Math.max(d,0), base); }
 
@@ -1815,6 +1816,10 @@
         localStorage.removeItem(PROMO_KEY); paint();});
     } else if (bd>0 && promo()) { msg.className='cd-promo-msg';
       msg.textContent = 'Twin Set bundle already saves more — codes don’t stack.'; }
+    else if (p && p.minimum && subtotal < p.minimum) { msg.className='cd-promo-msg err';
+      msg.innerHTML = esc(p.code)+' needs an order of '+fmt(p.minimum)+'+ — add '+fmt(p.minimum-subtotal)+' more to use it. <a href="#" id="cd-promo-rm">Remove</a>';
+      var rm2=$('cd-promo-rm'); rm2.addEventListener('click',function(e){e.preventDefault();
+        localStorage.removeItem(PROMO_KEY); paint();}); }
     else { msg.className='cd-promo-msg'; msg.textContent=''; }
 
     // rows
@@ -1842,7 +1847,8 @@
     var code=inp.value.trim().toUpperCase();
     if(!code){ msg.className='cd-promo-msg err'; msg.textContent='Enter a code first.'; inp.focus(); return; }
     btn.disabled=true; msg.className='cd-promo-msg'; msg.textContent='Checking…';
-    fetch('/api/validate-code?code='+encodeURIComponent(code))
+    var c0=cart(); var payable=c0.items.reduce(function(s,i){return s+i.price*i.qty;},0)-bundleDisc(c0);
+    fetch('/api/validate-code?code='+encodeURIComponent(code)+'&subtotal='+payable)
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ btn.disabled=false;
         if(!res.ok){ msg.className='cd-promo-msg err'; msg.textContent=res.j.error||'That code is not valid'; return; }
@@ -1866,7 +1872,8 @@
     fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ items:c.items.map(function(i){return {id:i.id,qty:i.qty};}),
         fbp:readCookie('_fbp'), fbc:readCookie('_fbc'),
-        promo_code:(bundleDisc(c)===0 && promo())?promo().code:undefined })})
+        promo_code:(function(){ var pr=promo(); var base=c.items.reduce(function(s,i){return s+i.price*i.qty;},0)-bundleDisc(c);
+          return (bundleDisc(c)===0 && pr && promoAmt(pr,base)>0)?pr.code:undefined; })() })})
       .then(function(r){ return r.json(); })
       .then(function(d){ if(d.url) window.location.href=d.url;
         else { btn.disabled=false; $('cd-checkout-label').textContent='Checkout'; alert(d.error||'Checkout failed — try again.'); } })

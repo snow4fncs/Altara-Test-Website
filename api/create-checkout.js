@@ -143,16 +143,37 @@ export default async function handler(req, res) {
       params.discounts = [{ coupon: await bundleCouponId(discount) }];
     } else if (promo_code) {
       // The cart validated this before checkout; re-verify here because the
-      // browser is never trusted with pricing. Invalid or expired by now -> fall
-      // back to the manual code field rather than failing the checkout.
+      // browser is never trusted with pricing. Invalid, expired, or below the
+      // code's minimum order by now -> fall back to the manual code field
+      // rather than failing the checkout.
       const found = await stripe.promotionCodes.list({ code: String(promo_code).slice(0, 50), active: true, limit: 1 });
-      if (found.data[0]) params.discounts = [{ promotion_code: found.data[0].id }];
+      const pc = found.data[0];
+      const belowMinimum = pc?.restrictions?.minimum_amount
+        ? orderTotal * 100 < pc.restrictions.minimum_amount
+        : false;
+      if (pc && !belowMinimum) params.discounts = [{ promotion_code: pc.id }];
       else params.allow_promotion_codes = true;
     } else {
       params.allow_promotion_codes = true;
     }
 
-    const session = await stripe.checkout.sessions.create(params);
+    // A promotion code must never cost a sale. If Stripe rejects the session
+    // because of the attached code (restriction changed, redemptions exhausted,
+    // deactivated between validation and now), retry once without it and let
+    // the customer enter a code on the Stripe page instead.
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(params);
+    } catch (err) {
+      if (params.discounts?.[0]?.promotion_code) {
+        console.error('Promo rejected at session create, retrying without it:', err.message);
+        delete params.discounts;
+        params.allow_promotion_codes = true;
+        session = await stripe.checkout.sessions.create(params);
+      } else {
+        throw err;
+      }
+    }
 
     res.status(200).json({ url: session.url });
   } catch (err) {

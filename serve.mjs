@@ -398,8 +398,17 @@ const server = http.createServer(async (req, res) => {
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
   if (rawPath === '/api/validate-code') {
     const code = String(query.get('code')||'').toUpperCase();
-    if (code === 'DEV10')  return send(res, 200, { code, name: 'Dev 10% off', percent_off: 10, amount_off: null, currency: 'aud' });
-    if (code === 'FIVER')  return send(res, 200, { code, name: 'Five off', percent_off: null, amount_off: 5, currency: 'aud' });
+    const subtotal = Number(query.get('subtotal'));
+    if (code === 'DEV10')  return send(res, 200, { code, name: 'Dev 10% off', percent_off: 10, amount_off: null, currency: 'aud', minimum: null });
+    if (code === 'FIVER')  return send(res, 200, { code, name: 'Five off', percent_off: null, amount_off: 5, currency: 'aud', minimum: null });
+    if (code === 'SELLOUT10') {
+      const minimum = 150;
+      if (Number.isFinite(subtotal) && subtotal < minimum) {
+        const short = (minimum - subtotal).toFixed(2).replace(/\.00$/, '');
+        return send(res, 400, { error: `SELLOUT10 needs an order of $${minimum} or more — add $${short} to use it.`, minimum });
+      }
+      return send(res, 200, { code, name: '$10 off — Sell-Out', percent_off: null, amount_off: 10, currency: 'aud', minimum });
+    }
     return send(res, 404, { error: 'That code is not valid' });
   }
 
