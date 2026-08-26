@@ -69,6 +69,10 @@
   @media (max-width:900px) { .edit-row { grid-template-columns:1fr; } }
   .actions { display:flex; gap:9px; flex-wrap:wrap; }
   .empty { background:var(--bg-2); border:1px solid var(--border); padding:52px 30px; text-align:center; font-size:15.5px; color:var(--cream-dim); }
+  .sec { font-family:'Cormorant Garamond',Garamond,serif; font-size:27px; font-weight:300; letter-spacing:-.01em; margin:34px 0 14px; display:flex; align-items:baseline; gap:12px; }
+  .sec small { font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:500; color:var(--cream-dim); letter-spacing:.14em; text-transform:uppercase; }
+  .mini { padding:6px 11px; font-size:9.5px; letter-spacing:.1em; }
+  .addr { font-size:13.5px; color:var(--cream-dim); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .hide { display:none; }
   code { font-family:ui-monospace,Menlo,monospace; font-size:.86em; background:var(--bg-3); padding:.1rem .35rem; }
   a { color:var(--gold); }
@@ -82,7 +86,7 @@
   </div>
 
   <h1>Fulfilment</h1>
-  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch.</p>
+  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch. <strong style="color:var(--cream)">Export to-ship CSV</strong> downloads every unshipped order ready for MyPost Business &rarr; Import orders, so you can print all labels at home and just drop the satchels off.</p>
 
   <div id="gate" class="gate">
     <label for="tok">Admin token</label>
@@ -94,7 +98,8 @@
   <div id="panel" class="hide">
     <div class="bar">
       <span class="count" id="count"></span>
-      <div style="display:flex;gap:9px">
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button type="button" class="soft" id="export-csv">Export to-ship CSV</button>
         <button type="button" class="soft" id="repeat">Email past buyers</button>
         <button type="button" id="refresh">Refresh</button>
         <button type="button" id="lock">Lock</button>
@@ -137,6 +142,7 @@
       })
       .then(function(d){
         var orders = (d && d.orders) || [];
+        lastOrders = orders;
         var unlockDays = (d && d.review_unlock_days) || 5;
         var unshipped = orders.filter(function(o){ return !o.shipped_at; }).length;
         var due = orders.filter(function(o){ return o.review_due; }).length;
@@ -147,7 +153,7 @@
 
         if (!orders.length) { list.innerHTML = '<div class="empty">No paid orders yet.</div>'; return; }
 
-        list.innerHTML = orders.map(function(o){
+        var renderCard = function(o){
           var addr = o.shipping_address || {};
           var where = [addr.city, addr.state, addr.postal_code].filter(Boolean).join(' ');
           var items = (o.items||[]).map(function(i){ return esc(i.name)+' ×'+i.qty; }).join(', ');
@@ -179,7 +185,7 @@
               + ['Australia Post','Sendle','Aramex','CouriersPlease'].map(function(c){
                   return '<option'+(c===(o.carrier||'Australia Post')?' selected':'')+'>'+c+'</option>'; }).join('')
               + '</select></div>'
-              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'"> Re-email the customer</label>'
+              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'"> Email the customer this tracking</label>'
               + '<button type="button" class="go" data-act="edit_tracking" data-id="'+esc(o.id)+'">Save</button>'
               + '</div>'
             : '<div class="ship-row">'
@@ -196,18 +202,61 @@
               + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'" checked> Email the customer</label>'
               + '</div>';
 
+          var fullAddr = [o.customer_name, addr.line1, addr.line2, where].filter(Boolean).join('\n');
           return '<article class="card">'
             + '<div class="top"><span class="ref">'+esc(o.ref)+'</span>'
             + '<span class="who">'+esc(o.customer_name||'')+'</span>'
             + '<span class="mail">'+esc(o.customer_email)+'</span>'
             + '<span class="when">'+fmt(o.created_at)+'</span></div>'
-            + '<p class="meta">'+items+' &middot; $'+esc(o.total)+' '+esc(String(o.currency||'').toUpperCase())+' &middot; '+esc(where)+' &nbsp; '+status+'</p>'
+            + '<p class="meta">'+items+' &middot; $'+esc(o.total)+' '+esc(String(o.currency||'').toUpperCase())+' &nbsp; '+status+'</p>'
+            + '<p class="addr">'+esc([addr.line1, addr.line2].filter(Boolean).join(', '))+' &middot; '+esc(where)
+            + ' <button type="button" class="mini" data-copy="'+esc(fullAddr)+'">Copy address</button>'
+            + (o.tracking_number ? ' <button type="button" class="mini" data-copy="'+esc(o.tracking_number)+'">Copy tracking</button>' : '')
+            + '</p>'
             + body + '</article>';
-        }).join('');
+        };
+
+        var toShip = orders.filter(function(o){ return !o.shipped_at; });
+        var done = orders.filter(function(o){ return !!o.shipped_at; });
+        list.innerHTML =
+          (toShip.length ? '<h2 class="sec">To ship <small>'+toShip.length+' order'+(toShip.length===1?'':'s')+'</small></h2>' + toShip.map(renderCard).join('') : '')
+          + (done.length ? '<h2 class="sec">Shipped <small>'+done.length+' order'+(done.length===1?'':'s')+'</small></h2>' + done.map(renderCard).join('') : '');
       });
   }
 
+  var lastOrders = [];
+
+  function csvCell(v){ v = String(v==null?'':v); return '"' + v.replace(/"/g,'""') + '"'; }
+  function exportCsv(){
+    var rows = lastOrders.filter(function(o){ return !o.shipped_at; });
+    if (!rows.length) { note('Nothing to export \u2014 every order is shipped.'); return; }
+    var head = ['Order reference','Recipient name','Email','Address line 1','Address line 2','Suburb','State','Postcode','Country','Items','Order total'];
+    var lines = [head.map(csvCell).join(',')].concat(rows.map(function(o){
+      var a = o.shipping_address || {};
+      return [
+        o.ref, o.customer_name || '', o.customer_email || '',
+        a.line1 || '', a.line2 || '', a.city || '', a.state || '', a.postal_code || '', a.country || 'AU',
+        (o.items||[]).map(function(i){ return i.name+' x'+i.qty; }).join('; '),
+        o.total,
+      ].map(csvCell).join(',');
+    }));
+    var blob = new Blob(["\ufeff" + lines.join('\r\n')], { type:'text/csv;charset=utf-8' });
+    var aEl = document.createElement('a');
+    aEl.href = URL.createObjectURL(blob);
+    aEl.download = 'altara-to-ship-' + today() + '.csv';
+    document.body.appendChild(aEl); aEl.click(); aEl.remove();
+    URL.revokeObjectURL(aEl.href);
+    note('Downloaded ' + rows.length + ' order' + (rows.length===1?'':'s') + '. In MyPost Business: Send \u2192 Import orders \u2192 upload this file and map the columns.');
+  }
+  document.getElementById('export-csv').addEventListener('click', exportCsv);
+
   list.addEventListener('click', function(e){
+    var cp = e.target.closest('button[data-copy]');
+    if (cp) {
+      navigator.clipboard.writeText(cp.getAttribute('data-copy')).then(
+        function(){ note('Copied.'); }, function(){ note('Could not copy \u2014 select it manually.', true); });
+      return;
+    }
     var tog = e.target.closest('button[data-toggle-edit]');
     if (tog) {
       var row = list.querySelector('[data-editrow="'+tog.getAttribute('data-toggle-edit')+'"]');
