@@ -32,16 +32,32 @@ function trackUrl(carrier, number) {
   return `https://auspost.com.au/mypost/track/search?id=${n}`;
 }
 
-const COLS = 'id, created_at, customer_email, customer_name, shipping_address, items, total, currency, status, stripe_payment_intent, tracking_number, carrier, shipped_at, review_email_at, repeat_email_at';
+const COLS = 'id, created_at, customer_email, customer_name, shipping_address, items, total, currency, status, stripe_payment_intent, tracking_number, carrier, shipped_at, shipped_email_at, review_email_at, repeat_email_at';
+
+// The shipped_email_at column ships in a migration (supabase-shipped-email.sql).
+// Until it is run, orders must still be served and updated - just without the
+// emailed-state - rather than 500ing the console.
+const MISSING_COLUMN = '42703';
+const COLS_LEGACY = COLS.replace(' shipped_email_at,', '');
+async function stampShippedEmail(id) {
+  const { error } = await supabase.from('orders')
+    .update({ shipped_email_at: new Date().toISOString() }).eq('id', id);
+  if (error && error.code !== MISSING_COLUMN) console.error('shipped_email_at stamp error:', error);
+}
 
 export default async function handler(req, res) {
   if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 
   // ── list orders with fulfilment state ──
   if (req.method === 'GET') {
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('orders').select(COLS).eq('status', 'paid')
       .order('created_at', { ascending: false }).limit(200);
+    if (error && error.code === MISSING_COLUMN) {
+      console.error('orders.shipped_email_at missing - run supabase-shipped-email.sql. Serving without it.');
+      ({ data, error } = await supabase.from('orders').select(COLS_LEGACY).eq('status', 'paid')
+        .order('created_at', { ascending: false }).limit(200));
+    }
     if (error) { console.error('Fulfilment list error:', error); return res.status(500).json({ error: 'Could not load orders' }); }
 
     // Who has already written a review. Matched by email rather than by order,
@@ -116,8 +132,11 @@ export default async function handler(req, res) {
 
   if (!id) return res.status(400).json({ error: 'id is required' });
 
-  const { data: order, error: findErr } = await supabase
+  let { data: order, error: findErr } = await supabase
     .from('orders').select(COLS).eq('id', id).single();
+  if (findErr && findErr.code === MISSING_COLUMN) {
+    ({ data: order, error: findErr } = await supabase.from('orders').select(COLS_LEGACY).eq('id', id).single());
+  }
   if (findErr || !order) return res.status(404).json({ error: 'Order not found' });
 
   const ref = orderRefFrom(order.stripe_payment_intent);
@@ -153,6 +172,7 @@ export default async function handler(req, res) {
       }),
       tag: 'shipped',
     }) : { sent: false, reason: 'not_requested' };
+    if (result.sent) await stampShippedEmail(id);
     // Tracking is saved either way; the email is best-effort.
     return res.status(200).json({ success: true, notified: shouldNotify, emailed: result.sent, reason: result.reason });
   }
@@ -182,6 +202,7 @@ export default async function handler(req, res) {
       }),
       tag: 'tracking_updated',
     }) : { sent: false, reason: 'not_requested' };
+    if (result.sent) await stampShippedEmail(id);
     return res.status(200).json({ success: true, notified: shouldNotify, emailed: result.sent, reason: result.reason });
   }
 

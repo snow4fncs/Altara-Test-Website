@@ -162,6 +162,11 @@
           var status = shipped
             ? '<span class="pill ship">Shipped</span>'
             : '<span class="pill pend">Awaiting dispatch</span>';
+          if (shipped) {
+            status += o.shipped_email_at
+              ? ' <span class="pill ship">Emailed '+fmt(o.shipped_email_at)+'</span>'
+              : ' <span class="pill pend">No email sent</span>';
+          }
           if (o.has_review) {
             status += ' <span class="pill rev-got">Review received'
               + (o.review_rating ? ' ' + o.review_rating + '\u2605' : '')
@@ -185,7 +190,8 @@
               + ['Australia Post','Sendle','Aramex','CouriersPlease'].map(function(c){
                   return '<option'+(c===(o.carrier||'Australia Post')?' selected':'')+'>'+c+'</option>'; }).join('')
               + '</select></div>'
-              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'"> Email the customer this tracking</label>'
+              + '<label class="notify"><input type="checkbox" data-notify="'+esc(o.id)+'"'+(o.shipped_email_at?'':' checked')+'> '
+              + (o.shipped_email_at ? 'Email again' : 'Email the customer this tracking (none sent yet)')+'</label>'
               + '<button type="button" class="go" data-act="edit_tracking" data-id="'+esc(o.id)+'">Save</button>'
               + '</div>'
             : '<div class="ship-row">'
