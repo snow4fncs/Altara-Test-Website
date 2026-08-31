@@ -249,11 +249,13 @@
     }, 0);
   }
   function trunc(v, n){ return String(v==null?'':v).slice(0, n); }
+  var SENDER_DEFAULT = { name:'Altara', line1:'PO Box 730', suburb:'Bankstown', state:'NSW', postcode:'1885' };
   function getSender(forceEdit){
     var saved = null;
     try { saved = JSON.parse(localStorage.getItem(SENDER_KEY)); } catch(e){}
     if (saved && saved.name && saved.line1 && saved.suburb && saved.state && saved.postcode && !forceEdit) return saved;
-    var d = saved || {};
+    if (!saved && !forceEdit) { localStorage.setItem(SENDER_KEY, JSON.stringify(SENDER_DEFAULT)); return SENDER_DEFAULT; }
+    var d = saved || SENDER_DEFAULT;
     var name = prompt('Sender name (goes on every label):', d.name || 'Altara');
     if (name == null) return null;
     var line1 = prompt('Sender street address:', d.line1 || '');
