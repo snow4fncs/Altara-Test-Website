@@ -86,7 +86,7 @@
   </div>
 
   <h1>Fulfilment</h1>
-  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch. <strong style="color:var(--cream)">Export to-ship CSV</strong> downloads every unshipped order ready for MyPost Business &rarr; Import orders, so you can print all labels at home and just drop the satchels off.</p>
+  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch. <strong style="color:var(--cream)">Export to-ship CSV</strong> downloads every unshipped order in Australia Post's own Parcel Send import format downloads every unshipped order ready for MyPost Business &rarr; Import orders, so you can print all labels at home and just drop the satchels off.mdash; upload it, review, print labels at home, drop the satchels off.</p>
 
   <div id="gate" class="gate">
     <label for="tok">Admin token</label>
@@ -232,27 +232,60 @@
 
   var lastOrders = [];
 
-  function csvCell(v){ v = String(v==null?'':v); return '"' + v.replace(/"/g,'""') + '"'; }
+  function csvCell(v){
+    v = String(v==null?'':v);
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v;
+  }
+  // Australia Post Parcel Send bulk-import format - the header below is
+  // byte-for-byte from AusPost's own template (including the trailing spaces
+  // in "Sender reference 1 " and "Safe drop "), so the file uploads without
+  // any column mapping. Service/packaging are left for the review screen.
+  var AP_HEADER = 'Row type,Sender account,Payer account,Recipient contact name,Recipient business name,Recipient address line 1,Recipient address line 2,Recipient address line 3,Recipient suburb,Recipient state,Recipient postcode,Send tracking email to recipient,Recipient email address,Recipient phone number,Delivery/special instruction 1,Special instruction 2,Special instruction 3,Sender reference 1 ,Sender reference 2,Product id,Authority to leave,Safe drop ,Quantity,Packaging type,Weight,Length,Width,Height,Parcel contents,Transit cover value,Deliver wine to addressee only,Schedule 8 or medicinal cannabis';
+  function coverCount(o){
+    return (o.items||[]).reduce(function(n,i){
+      return n + (/-twin$/.test(String(i.id)) ? 2 : 1) * (i.qty||1);
+    }, 0);
+  }
   function exportCsv(){
     var rows = lastOrders.filter(function(o){ return !o.shipped_at; });
     if (!rows.length) { note('Nothing to export \u2014 every order is shipped.'); return; }
-    var head = ['Order reference','Recipient name','Email','Address line 1','Address line 2','Suburb','State','Postcode','Country','Items','Order total'];
-    var lines = [head.map(csvCell).join(',')].concat(rows.map(function(o){
+    var lines = [AP_HEADER].concat(rows.map(function(o){
       var a = o.shipping_address || {};
+      var covers = coverCount(o);
+      var xl = covers >= 4;                    // full-car orders go in the XLarge satchel
       return [
-        o.ref, o.customer_name || '', o.customer_email || '',
-        a.line1 || '', a.line2 || '', a.city || '', a.state || '', a.postal_code || '', a.country || 'AU',
+        'Parcel',                              // Row type
+        '', '',                                // Sender / Payer account (yours is applied on upload)
+        o.customer_name || '',
+        '',                                    // business name
+        a.line1 || '', a.line2 || '', '',
+        a.city || '', a.state || '', a.postal_code || '',
+        'NO',                                  // AusPost tracking email off - the store sends its own
+        o.customer_email || '',
+        '',                                    // phone (not stored)
+        '', '', '',                            // instructions
+        o.ref,                                 // Sender reference 1 - matches the fulfilment console
+        '',                                    // Sender reference 2
+        '',                                    // Product id - pick the service on the review screen
+        'NO',                                  // Authority to leave
+        'NO',                                  // Safe drop
+        '1',                                   // Quantity
+        '',                                    // Packaging type - set on review
+        xl ? '3' : '1',                        // Weight kg
+        xl ? '40' : '39',                      // Length cm
+        xl ? '31' : '27',                      // Width cm
+        xl ? '15' : '12',                      // Height cm
         (o.items||[]).map(function(i){ return i.name+' x'+i.qty; }).join('; '),
-        o.total,
+        '', '', '',                            // transit cover / wine / schedule 8
       ].map(csvCell).join(',');
     }));
-    var blob = new Blob(["\ufeff" + lines.join('\r\n')], { type:'text/csv;charset=utf-8' });
+    var blob = new Blob([lines.join('\r\n')], { type:'text/csv;charset=utf-8' });
     var aEl = document.createElement('a');
     aEl.href = URL.createObjectURL(blob);
-    aEl.download = 'altara-to-ship-' + today() + '.csv';
+    aEl.download = 'parcel-send-' + today() + '.csv';
     document.body.appendChild(aEl); aEl.click(); aEl.remove();
     URL.revokeObjectURL(aEl.href);
-    note('Downloaded ' + rows.length + ' order' + (rows.length===1?'':'s') + '. In MyPost Business: Send \u2192 Import orders \u2192 upload this file and map the columns.');
+    note('Downloaded ' + rows.length + ' shipment' + (rows.length===1?'':'s') + ' in AusPost Parcel Send format. Upload: Parcel Send \u2192 Import \u2192 choose file \u2014 then review each shipment, pick Medium Satchel (or XLarge for full-car), and print labels.');
   }
   document.getElementById('export-csv').addEventListener('click', exportCsv);
 
