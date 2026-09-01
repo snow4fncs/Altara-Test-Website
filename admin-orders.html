@@ -365,8 +365,13 @@
       var c = scope.querySelector('[data-carrier="'+id+'"]') || document.querySelector('[data-carrier="'+id+'"]');
       var n = scope.querySelector('[data-notify="'+id+'"]') || document.querySelector('[data-notify="'+id+'"]');
       var dt = document.querySelector('[data-date="'+id+'"]');
-      if (!t || !t.value.trim()) { note('Enter the tracking number first.', true); t && t.focus(); return; }
-      payload.tracking_number = t.value.trim();
+      var trackVal = (t ? t.value : '').replace(/\s+/g, '');
+      if (!trackVal) { note('Enter the tracking number first.', true); t && t.focus(); return; }
+      if (!/^[A-Za-z0-9-]{8,40}$/.test(trackVal)) {
+        note('That tracking number does not look right (8\u201340 letters and digits, no symbols) \u2014 nothing was saved and no email was sent.', true);
+        t.focus(); return;
+      }
+      payload.tracking_number = trackVal;
       payload.carrier = c ? c.value : 'Australia Post';
       payload.notify = n ? n.checked : true;
       if (act === 'ship' && dt && dt.value) payload.shipped_at = dt.value;

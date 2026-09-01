@@ -21,6 +21,12 @@ function isAdmin(req) {
 const REVIEW_UNLOCK_DAYS = 5;
 
 const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
+
+// A customer email must never carry a junk tracking link. Carriers here use
+// 8-40 letters/digits (AusPost: 99722... or R...; Sendle/Aramex similar);
+// anything else is a typo and the whole action is refused before any email.
+const cleanTracking = s => String(s || '').replace(/\s+/g, '');
+const looksLikeTracking = s => /^[A-Za-z0-9-]{8,40}$/.test(s);
 const firstName = name => (String(name || '').trim().split(/\s+/)[0] || 'there');
 
 // Australia Post is the default; the link shape is carrier-specific.
@@ -176,8 +182,9 @@ export default async function handler(req, res) {
 
   // ── mark shipped + send tracking ──
   if (action === 'ship') {
-    const num = String(tracking_number || '').trim();
+    const num = cleanTracking(tracking_number);
     if (!num) return res.status(400).json({ error: 'tracking_number is required' });
+    if (!looksLikeTracking(num)) return res.status(400).json({ error: 'That tracking number does not look valid (8-40 letters/digits) - nothing saved, no email sent' });
     const car = String(carrier || 'Australia Post').trim();
     // A parcel posted days ago should carry its real dispatch date, otherwise
     // the review-request clock restarts from whenever it was keyed in.
@@ -212,8 +219,9 @@ export default async function handler(req, res) {
   // ── correct a tracking number without re-dating the dispatch ──
   if (action === 'edit_tracking') {
     if (!order.shipped_at) return res.status(409).json({ error: 'That order has not been marked shipped yet' });
-    const num = String(tracking_number || '').trim();
+    const num = cleanTracking(tracking_number);
     if (!num) return res.status(400).json({ error: 'tracking_number is required' });
+    if (!looksLikeTracking(num)) return res.status(400).json({ error: 'That tracking number does not look valid (8-40 letters/digits) - nothing saved, no email sent' });
     const car = String(carrier || order.carrier || 'Australia Post').trim();
 
     // shipped_at is deliberately untouched - the parcel left when it left, and
