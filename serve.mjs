@@ -311,7 +311,7 @@ let mockOrders = [
     shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
   { id:'o5', created_at:'2026-08-21T09:05:00Z', customer_email:'yahyashahid99@gmail.com', customer_name:'Yahya Shahid',
     shipping_address:{ line1:'22 Primrose Loop', city:'Byford', state:'WA', postal_code:'6122', country:'AU' },
-    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    items:[{name:'Contrast White - Twin Set',qty:2,price:178}], total:178, currency:'aud', status:'paid',
     stripe_payment_intent:'pi_xxxxYAHYA002', tracking_number:null, carrier:null,
     shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
 ];

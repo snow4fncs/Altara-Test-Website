@@ -247,9 +247,12 @@
   // no dimensions; sender details are mandatory on every row.
   var AP_HEADER = ['Send From Name','Send From Business Name','Send From Address Line 1','Send From Suburb','Send From State','Send From Postcode','Deliver To Name','Deliver To Address Line 1','Deliver to Address Line 2','Deliver To Suburb','Deliver To State','Deliver To Postcode','Deliver to Email Address','Send Tracking Notifications','Item Packaging Type','Item Delivery Service','Item weight','Item Description','Additional Label Information 1','Signature on Delivery','Item Dangerous Goods Flag'];
   var SENDER_KEY = 'altara-sender';
+  // Stored order items carry only {qty, name, price} - no product id - so
+  // twin detection must read the name. A Twin Set is two covers.
   function coverCount(o){
     return (o.items||[]).reduce(function(n,i){
-      return n + (/-twin$/.test(String(i.id)) ? 2 : 1) * (i.qty||1);
+      var twin = /-twin$/.test(String(i.id||'')) || /twin/i.test(String(i.name||''));
+      return n + (twin ? 2 : 1) * (i.qty||1);
     }, 0);
   }
   function trunc(v, n){ return String(v==null?'':v).slice(0, n); }
@@ -290,7 +293,7 @@
     }
     var lines = [AP_HEADER.join(',')].concat(rows.map(function(o){
       var a = o.shipping_address || {};
-      var xl = coverCount(o) >= 4;             // full-car orders ship in the XLarge satchel
+      var xl = coverCount(o) >= 3;             // anything beyond one twin set ships XLarge
       return [
         trunc(sender.name, 35),
         'Altara',
