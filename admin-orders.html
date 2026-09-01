@@ -166,6 +166,10 @@
             status += o.shipped_email_at
               ? ' <span class="pill ship">Emailed '+fmt(o.shipped_email_at)+'</span>'
               : ' <span class="pill pend">No email sent</span>';
+          } else {
+            status += o.label_printed_at
+              ? ' <span class="pill rev-got">Label printed '+fmt(o.label_printed_at)+'</span> <button type="button" class="mini" data-act="label_reset" data-id="'+esc(o.id)+'" title="Put this order back into the next CSV export">Undo</button>'
+              : ' <span class="pill pend">Awaiting label</span>';
           }
           if (o.has_review) {
             status += ' <span class="pill rev-got">Review received'
@@ -275,8 +279,15 @@
   function exportCsv(e){
     var sender = getSender(e && e.shiftKey);   // shift-click the button to edit sender details
     if (!sender) return;
-    var rows = lastOrders.filter(function(o){ return !o.shipped_at; });
-    if (!rows.length) { note('Nothing to export \u2014 every order is shipped.'); return; }
+    var everything = e && e.altKey;            // alt-click: include already-exported orders
+    var unshipped = lastOrders.filter(function(o){ return !o.shipped_at; });
+    var rows = everything ? unshipped : unshipped.filter(function(o){ return !o.label_printed_at; });
+    if (!rows.length) {
+      note(unshipped.length
+        ? 'Nothing new to export \u2014 all ' + unshipped.length + ' unshipped order' + (unshipped.length===1?'':'s') + ' already have labels. Hold Alt while clicking to re-export everything, or use Undo on an order.'
+        : 'Nothing to export \u2014 every order is shipped.');
+      return;
+    }
     var lines = [AP_HEADER.join(',')].concat(rows.map(function(o){
       var a = o.shipping_address || {};
       var xl = coverCount(o) >= 4;             // full-car orders ship in the XLarge satchel
@@ -310,7 +321,20 @@
     aEl.download = 'mypost-orders-' + today() + '.csv';
     document.body.appendChild(aEl); aEl.click(); aEl.remove();
     URL.revokeObjectURL(aEl.href);
-    note('Downloaded ' + rows.length + ' order' + (rows.length===1?'':'s') + ' in MyPost Business format. Upload via Send \u2192 Import orders. Shift-click this button to change your sender details.');
+    fetch('/api/fulfilment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token() },
+      body: JSON.stringify({ action: 'mark_labels', ids: rows.map(function(o){ return o.id; }) })
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ return load().then(function(){
+        if (j && j.migration_required) {
+          note('Downloaded ' + rows.length + ' order' + (rows.length===1?'':'s') + '. Could not mark them as exported \u2014 run supabase-label-printed.sql in Supabase first, or the next export will include them again.', true);
+        } else {
+          note('Downloaded ' + rows.length + ' order' + (rows.length===1?'':'s') + ' and marked them \u201cLabel printed\u201d \u2014 the next export only includes new orders. Exported by mistake? Use Undo on the order.');
+        }
+      }); })
+      .catch(function(){ note('Downloaded, but could not mark the orders as exported \u2014 they will appear in the next export too.', true); });
   }
   document.getElementById('export-csv').addEventListener('click', exportCsv);
 
@@ -345,6 +369,7 @@
       if (act === 'ship' && dt && dt.value) payload.shipped_at = dt.value;
     }
     if (act === 'review_request' && !confirm('Email this customer asking for a review?')) return;
+    if (act === 'label_reset') { payload.id = id; }
 
     btn.disabled = true; note('');
     fetch('/api/fulfilment', {

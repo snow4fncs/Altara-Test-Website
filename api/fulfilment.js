@@ -32,13 +32,14 @@ function trackUrl(carrier, number) {
   return `https://auspost.com.au/mypost/track/search?id=${n}`;
 }
 
-const COLS = 'id, created_at, customer_email, customer_name, shipping_address, items, total, currency, status, stripe_payment_intent, tracking_number, carrier, shipped_at, shipped_email_at, review_email_at, repeat_email_at';
+const COLS = 'id, created_at, customer_email, customer_name, shipping_address, items, total, currency, status, stripe_payment_intent, tracking_number, carrier, shipped_at, shipped_email_at, label_printed_at, review_email_at, repeat_email_at';
 
 // The shipped_email_at column ships in a migration (supabase-shipped-email.sql).
 // Until it is run, orders must still be served and updated - just without the
 // emailed-state - rather than 500ing the console.
 const MISSING_COLUMN = '42703';
-const COLS_LEGACY = COLS.replace(' shipped_email_at,', '');
+const COLS_NO_LABEL = COLS.replace(' label_printed_at,', '');
+const COLS_LEGACY = COLS_NO_LABEL.replace(' shipped_email_at,', '');
 async function stampShippedEmail(id) {
   const { error } = await supabase.from('orders')
     .update({ shipped_email_at: new Date().toISOString() }).eq('id', id);
@@ -53,6 +54,11 @@ export default async function handler(req, res) {
     let { data, error } = await supabase
       .from('orders').select(COLS).eq('status', 'paid')
       .order('created_at', { ascending: false }).limit(200);
+    if (error && error.code === MISSING_COLUMN) {
+      console.error('orders.label_printed_at missing - run supabase-label-printed.sql. Trying without it.');
+      ({ data, error } = await supabase.from('orders').select(COLS_NO_LABEL).eq('status', 'paid')
+        .order('created_at', { ascending: false }).limit(200));
+    }
     if (error && error.code === MISSING_COLUMN) {
       console.error('orders.shipped_email_at missing - run supabase-shipped-email.sql. Serving without it.');
       ({ data, error } = await supabase.from('orders').select(COLS_LEGACY).eq('status', 'paid')
@@ -130,10 +136,36 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, recipients: targets.length, sent });
   }
 
+  // -- mark a batch of orders as exported / postage bought --
+  if (action === 'mark_labels') {
+    const ids = Array.isArray(req.body.ids) ? req.body.ids.filter(Boolean).slice(0, 200) : [];
+    if (!ids.length) return res.status(400).json({ error: 'ids are required' });
+    const { error } = await supabase.from('orders')
+      .update({ label_printed_at: new Date().toISOString() })
+      .in('id', ids).is('shipped_at', null);
+    if (error && error.code === MISSING_COLUMN) {
+      return res.status(200).json({ success: false, migration_required: true });
+    }
+    if (error) { console.error('mark_labels error:', error); return res.status(500).json({ error: 'Could not mark labels' }); }
+    return res.status(200).json({ success: true, marked: ids.length });
+  }
+
+  // -- undo a label mark on one order --
+  if (action === 'label_reset') {
+    if (!req.body.id) return res.status(400).json({ error: 'id is required' });
+    const { error } = await supabase.from('orders')
+      .update({ label_printed_at: null }).eq('id', req.body.id);
+    if (error) { console.error('label_reset error:', error); return res.status(500).json({ error: 'Could not reset the label mark' }); }
+    return res.status(200).json({ success: true });
+  }
+
   if (!id) return res.status(400).json({ error: 'id is required' });
 
   let { data: order, error: findErr } = await supabase
     .from('orders').select(COLS).eq('id', id).single();
+  if (findErr && findErr.code === MISSING_COLUMN) {
+    ({ data: order, error: findErr } = await supabase.from('orders').select(COLS_NO_LABEL).eq('id', id).single());
+  }
   if (findErr && findErr.code === MISSING_COLUMN) {
     ({ data: order, error: findErr } = await supabase.from('orders').select(COLS_LEGACY).eq('id', id).single());
   }

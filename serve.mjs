@@ -303,17 +303,17 @@ let mockOrders = [
     shipping_address:{ line1:'4 Example St', city:'Narraweena', state:'NSW', postal_code:'2099', country:'AU' },
     items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
     stripe_payment_intent:'pi_xxxxTOMMY001', tracking_number:null, carrier:null,
-    shipped_at:null, review_email_at:null, repeat_email_at:null },
+    shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
   { id:'o4', created_at:'2026-08-18T05:20:00Z', customer_email:'gjdouglas71@gmail.com', customer_name:'Gary Douglas',
     shipping_address:{ line1:'9 Example Rd', city:'Eungai Rail', state:'NSW', postal_code:'2441', country:'AU' },
     items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
     stripe_payment_intent:'pi_xxxxGARY0001', tracking_number:null, carrier:null,
-    shipped_at:null, review_email_at:null, repeat_email_at:null },
+    shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
   { id:'o5', created_at:'2026-08-21T09:05:00Z', customer_email:'yahyashahid99@gmail.com', customer_name:'Yahya Shahid',
     shipping_address:{ line1:'22 Primrose Loop', city:'Byford', state:'WA', postal_code:'6122', country:'AU' },
     items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
     stripe_payment_intent:'pi_xxxxYAHYA002', tracking_number:null, carrier:null,
-    shipped_at:null, review_email_at:null, repeat_email_at:null },
+    shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
 ];
 
 const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
@@ -339,6 +339,16 @@ async function handleFulfilment(req, res) {
     const body = await readBody(req);
     if (!body) return send(res, 400, { error: 'Malformed request' });
     const { action, id, tracking_number, carrier, shipped_at, notify } = body;
+    if (action === 'mark_labels') {
+      const now = new Date().toISOString();
+      (body.ids || []).forEach(x => { const o = mockOrders.find(o => o.id === x && !o.shipped_at); if (o) o.label_printed_at = now; });
+      return send(res, 200, { success: true, marked: (body.ids || []).length });
+    }
+    if (action === 'label_reset') {
+      const o = mockOrders.find(o => o.id === id);
+      if (o) o.label_printed_at = null;
+      return send(res, 200, { success: true });
+    }
     const shouldNotify = notify !== false;
 
     if (action === 'repeat_offer') {
