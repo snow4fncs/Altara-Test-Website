@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Outfit:wght@300;400;500;600;700&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;font-family:Outfit,sans-serif;background:#0c0d10}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center 30%}
+.gradT{position:absolute;top:0;left:0;right:0;height:300px;background:linear-gradient(to bottom,rgba(10,11,13,.55),rgba(10,11,13,0))}
+.grad{position:absolute;left:0;right:0;bottom:0;height:700px;background:linear-gradient(to top,rgba(10,11,13,.9) 0%,rgba(10,11,13,.4) 60%,rgba(10,11,13,0) 100%)}
+.brand{position:absolute;top:100px;left:0;right:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:40px;letter-spacing:.44em;color:#EDE8DF;text-transform:uppercase;text-shadow:0 1px 14px rgba(0,0,0,.5)}
+h1{position:absolute;left:64px;right:64px;bottom:360px;text-align:center;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:96px;line-height:1.05;color:#EDE8DF;text-shadow:0 2px 26px rgba(0,0,0,.55)}
+h1 em{font-style:italic;color:#C4A97A}
+.chips{position:absolute;left:0;right:0;bottom:200px;display:flex;justify-content:center}
+.chip{background:#C4A97A;color:#141518;font-weight:700;font-size:36px;padding:23px 36px}
+.chip2{background:rgba(237,232,223,.13);border:1px solid rgba(237,232,223,.4);color:#EDE8DF;font-weight:500;font-size:32px;padding:24px 34px;backdrop-filter:blur(4px)}
+</style>
+<div class="ph" id="ph"></div><div class="gradT"></div><div class="grad"></div>
+<div class="brand">Altara</div>
+<h1 id="hl"></h1>
+<div class="chips"><div class="chip" id="t1"></div><div class="chip2" id="t2"></div></div>
+<script>
+const q=new URLSearchParams(location.search);
+document.getElementById('ph').style.backgroundImage="url('"+q.get('img')+"')";
+document.getElementById('hl').innerHTML=q.get('hl');
+document.getElementById('t1').textContent=q.get('a');
+document.getElementById('t2').textContent=q.get('b');
+</script>

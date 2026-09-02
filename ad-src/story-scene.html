@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;font-family:Outfit,sans-serif;background:#0c0d10}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.gradT{position:absolute;top:0;left:0;right:0;height:280px;background:linear-gradient(to bottom,rgba(10,11,13,.5),rgba(10,11,13,0))}
+.grad{position:absolute;left:0;right:0;bottom:0;height:520px;background:linear-gradient(to top,rgba(10,11,13,.72),rgba(10,11,13,0))}
+.brand{position:absolute;top:96px;left:0;right:0;text-align:center;font-weight:500;font-size:34px;letter-spacing:.5em;color:rgba(242,237,228,.95);text-transform:uppercase;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.hook{position:absolute;left:70px;right:70px;bottom:300px;text-align:center;font-weight:700;font-size:64px;line-height:1.15;color:#F2EDE4;text-shadow:0 2px 22px rgba(0,0,0,.55)}
+.chips{position:absolute;left:0;right:0;bottom:170px;display:flex;justify-content:center}
+.chip{background:rgba(196,169,122,.96);color:#16130e;font-weight:700;font-size:34px;padding:21px 32px}
+.chip2{background:rgba(17,18,21,.85);backdrop-filter:blur(6px);color:#F2EDE4;font-weight:600;font-size:34px;padding:21px 32px}
+</style>
+<div class="ph" id="ph"></div><div class="gradT"></div><div class="grad"></div>
+<div class="brand">ALTARA</div>
+<div class="hook" id="hook"></div>
+<div class="chips"><div class="chip" id="t1"></div><div class="chip2" id="t2"></div></div>
+<script>
+const q=new URLSearchParams(location.search);
+document.getElementById('ph').style.backgroundImage="url('"+q.get('img')+"')";
+document.getElementById('hook').textContent=q.get('hook');
+document.getElementById('t1').textContent=q.get('a');
+document.getElementById('t2').textContent=q.get('b');
+</script>
