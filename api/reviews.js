@@ -75,15 +75,17 @@ export default async function handler(req, res) {
     if (req.query.pending === '1') {
       if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 
+      // The queue also shows the submitter's email (never rendered publicly) so
+      // you can check it against the orders database before deciding the badge.
       const { data, error } = await supabase
         .from('reviews')
-        .select(`id, ${PUBLIC_COLS}`)
+        .select(`id, email, ${PUBLIC_COLS}`)
         .eq('approved', false)
         .order('created_at', { ascending: false })
         .limit(200);
 
       if (error && error.code === MISSING_COLUMN) {
-        const second = await supabase.from('reviews').select(`id, ${PUBLIC_COLS_BASE}`)
+        const second = await supabase.from('reviews').select(`id, email, ${PUBLIC_COLS_BASE}`)
           .eq('approved', false).order('created_at', { ascending: false }).limit(200);
         if (second.error) { console.error('Pending reviews fetch error:', second.error); return res.status(500).json({ error: 'Could not load the queue' }); }
         return res.status(200).json({ reviews: withoutPhotos(second.data) });
@@ -138,8 +140,15 @@ export default async function handler(req, res) {
       if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
       if (!payload.id) return res.status(400).json({ error: 'Review id is required' });
 
+      // Approve can carry a manual verified decision: after checking the
+      // submitter against the orders database, the admin publishes the review
+      // with or without the Verified badge. Omitted → the automatic email
+      // match from submission time stands.
+      const patch = { approved: true };
+      if (typeof payload.verified === 'boolean') patch.verified = payload.verified;
+
       const { error } = payload.action === 'approve'
-        ? await supabase.from('reviews').update({ approved: true }).eq('id', payload.id)
+        ? await supabase.from('reviews').update(patch).eq('id', payload.id)
         : await supabase.from('reviews').delete().eq('id', payload.id);
 
       if (error) {
@@ -160,7 +169,8 @@ export default async function handler(req, res) {
 
     const cleanEmail = String(email).toLowerCase().trim();
 
-    // Verified purchase: this email must have an order containing this product.
+    // Anyone can review. If the email matches a paid order for this product,
+    // the review carries the "Verified" badge; otherwise it posts without one.
     const { data: orders } = await supabase
       .from('orders')
       .select('items')
@@ -171,10 +181,6 @@ export default async function handler(req, res) {
       (o.items || []).some(i => baseId(i.id) === prod || String(i.name || '').toLowerCase().includes(prod.replace('-', ' ')))
     );
 
-    if (!purchased) {
-      return res.status(403).json({ error: 'We could not find an order for this email. Reviews are open to verified customers only.' });
-    }
-
     // One review per customer per product.
     const { data: existing } = await supabase
       .from('reviews').select('id').eq('product', prod).eq('email', cleanEmail).limit(1);
@@ -182,8 +188,8 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: 'You have already reviewed this product.' });
     }
 
-    // Uploaded only after the purchase check passes, so a stranger cannot use
-    // the endpoint as free image hosting.
+    // Uploaded only after the duplicate check passes; unapproved reviews (and
+    // their photos) never render publicly, so moderation is the abuse gate.
     const photoUrls = await storePhotos(photos, cleanEmail);
 
     const row = {
@@ -194,7 +200,7 @@ export default async function handler(req, res) {
       title: String(title || '').trim().slice(0, 120) || null,
       body: String(body).trim().slice(0, 2000),
       photos: photoUrls,
-      verified: true,
+      verified: purchased,
       approved: false, // you approve it before it appears
     };
 

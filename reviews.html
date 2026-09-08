@@ -846,8 +846,8 @@
 
   <aside class="ar-note">
     <p class="ar-note-h">How reviews work here</p>
-    <p class="ar-note-p">Only verified customers can write one. We match the email you ordered with against your purchase, so there is no way to post a review for a product you have not bought. Reviews are read before publication &mdash; we remove abuse and off-topic content, never criticism.</p>
-    <p class="ar-note-p">Bought one already? <a href="review.html">Write your review</a>.</p>
+    <p class="ar-note-p">Anyone can write one. When a review is posted with the same email as an order, it carries the Verified badge &mdash; so you can always tell which reviews come from confirmed buyers. Reviews are read before publication &mdash; we remove abuse and off-topic content, never criticism.</p>
+    <p class="ar-note-p">Tried one? <a href="review.html">Write your review</a>.</p>
   </aside>
 
 </main>
@@ -953,7 +953,7 @@
       '<div class="ar-score">' +
         '<span class="ar-score-n">' + avg.toFixed(1) + '<em>/5</em></span>' +
         starRow(avg) +
-        '<span class="ar-score-sub">Based on ' + count + (count === 1 ? ' verified review' : ' verified reviews') + '</span>' +
+        '<span class="ar-score-sub">Based on ' + count + (count === 1 ? ' review' : ' reviews') + '</span>' +
       '</div>' +
       '<div class="ar-dist">' + dist.map(function (d) {
         var pressed = state.stars === d.stars;
@@ -998,7 +998,7 @@
             : 'No reviews yet.') + '</p>' +
           '<p class="ar-empty-p">' + (ALL.length
             ? 'Try clearing the star filter or choosing another cover.'
-            : 'Reviews are written by verified customers only. Once the first orders arrive, we invite those customers to write one.') +
+            : 'Be the first &mdash; anyone can <a href="review.html">write a review</a>. Reviews posted with an order email carry the Verified badge.') +
           '</p>' +
         '</div>';
       return;

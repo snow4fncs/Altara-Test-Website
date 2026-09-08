@@ -66,6 +66,10 @@
   .body { color: var(--cream-dim); font-size: 13.5px; }
   .actions { display: flex; gap: 10px; padding-top: 4px; }
 
+  .mail { font-size: 12px; color: var(--cream-dim); }
+  .match { font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; }
+  .match.hit { color: var(--good); border-color: rgba(127,191,154,0.4); }
+  .match.miss { color: var(--muted); border-color: var(--border); }
   .msg { font-size: 12.5px; padding: 14px 16px; border-left: 1px solid var(--gold); background: var(--bg-2); color: var(--cream-dim); }
   .msg.err { border-left-color: var(--bad); color: var(--bad); }
   .empty { background: var(--bg-2); border: 1px solid var(--border); padding: 56px 30px; text-align: center; color: var(--cream-dim); }
@@ -86,7 +90,7 @@
   </div>
 
   <h1>Publish reviews</h1>
-  <p class="sub">Submitted reviews wait here until you approve them. Nothing a customer writes appears on the site until you publish it from this page.</p>
+  <p class="sub">Submitted reviews wait here until you approve them. Nothing a customer writes appears on the site until you publish it from this page. The email match against orders runs automatically &mdash; if a real customer reviewed with a different email, check them against the orders database and use &ldquo;Publish &middot; Verified&rdquo; to award the badge manually. Only publish as Verified when you have confirmed the purchase.</p>
 
   <div id="gate" class="gate">
     <label for="tok">Admin token</label>
@@ -170,12 +174,19 @@
               '<span class="prod">' + esc(LABELS[r.product] || r.product) + '</span>' +
               '<span class="when">' + fmt(r.created_at) + '</span>' +
             '</div>' +
+            '<div class="card-top">' +
+              '<span class="mail">' + esc(r.email || '') + '</span>' +
+              (r.verified
+                ? '<span class="match hit">Email matches a paid order</span>'
+                : '<span class="match miss">No order under this email &mdash; check before verifying</span>') +
+            '</div>' +
             (r.title ? '<p class="title">' + esc(r.title) + '</p>' : '') +
             '<p class="body">' + esc(r.body) + '</p>' +
             (((r.photos||[]).length) ? '<div class="mod-photos">' + r.photos.slice(0,3).map(function(u){
                return '<a href="'+esc(u)+'" target="_blank" rel="noopener"><img src="'+esc(u)+'" alt="Customer photo" loading="lazy"></a>'; }).join('') + '</div>' : '') +
             '<div class="actions">' +
-              '<button type="button" class="approve" data-act="approve">Publish</button>' +
+              '<button type="button" class="approve" data-act="approve" data-verified="true">Publish &middot; Verified</button>' +
+              '<button type="button" class="approve" data-act="approve" data-verified="false">Publish &middot; No badge</button>' +
               '<button type="button" class="reject" data-act="reject">Reject</button>' +
             '</div>' +
           '</article>';
@@ -188,22 +199,25 @@
       });
   }
 
-  function act(card, action) {
+  function act(card, action, verified) {
     var id = card.getAttribute('data-id');
     var btns = card.querySelectorAll('button');
     Array.prototype.forEach.call(btns, function (b) { b.disabled = true; });
     note('');
 
+    var payload = { action: action, id: id };
+    if (action === 'approve') payload.verified = verified;
+
     fetch('/api/reviews', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-admin-token': token() },
-      body: JSON.stringify({ action: action, id: id })
+      body: JSON.stringify(payload)
     })
       .then(function (r) { if (!r.ok) throw new Error('That did not save (' + r.status + ').'); return r.json(); })
       .then(function () { return load(); })
       .then(function () {
         note(action === 'approve'
-          ? 'Published. It is live on the product page and the reviews page.'
+          ? (verified ? 'Published with the Verified badge.' : 'Published without a badge.')
           : 'Rejected and removed.');
       })
       .catch(function (e) {
@@ -218,7 +232,7 @@
     var card = btn.closest('.card');
     if (btn.getAttribute('data-act') === 'reject' &&
         !confirm('Reject and permanently delete this review?')) return;
-    act(card, btn.getAttribute('data-act'));
+    act(card, btn.getAttribute('data-act'), btn.getAttribute('data-verified') === 'true');
   });
 
   document.getElementById('unlock').addEventListener('click', function () {

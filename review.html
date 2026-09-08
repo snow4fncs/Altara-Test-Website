@@ -673,7 +673,7 @@
     <span style="color:rgba(237,232,223,0.65)">Write a Review</span>
   </div>
   <h1 class="page-h1">Write<br><em>a Review</em></h1>
-  <p class="page-desc">Reviews are open to verified customers only. Use the email address you ordered with and we will match it to your purchase automatically.</p>
+  <p class="page-desc">Anyone can leave a review. If you use the email address you ordered with, your review will carry the Verified badge automatically.</p>
 </header>
 
 <main class="contact-wrap">
@@ -691,7 +691,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="r-email">Email used for your order</label>
+          <label class="form-label" for="r-email">Email <span style="opacity:0.5">(use your order email for the Verified badge)</span></label>
           <input class="form-input" type="email" id="r-email" name="email" placeholder="you@example.com" autocomplete="email" required>
         </div>
 
@@ -734,7 +734,7 @@
 
         <p class="form-err" id="r-err"></p>
         <button type="submit" class="form-submit" id="r-submit">Submit Review</button>
-        <p class="form-note">Your email is only used to match your order and is never published. Only your display name appears.</p>
+        <p class="form-note">Your email is never published &mdash; only your display name appears. If it matches the email you ordered with, your review shows a Verified badge.</p>
         <p class="form-foot-link"><a class="ci-link" href="reviews.html">Read what other owners wrote &rarr;</a></p>
       </form>
 
@@ -1051,7 +1051,7 @@
       err.style.display = 'none';
       var email = document.getElementById('r-email').value.trim();
       var body = document.getElementById('r-body').value.trim();
-      if (!email || email.indexOf('@') === -1) return fail('Please enter the email address you ordered with.', document.getElementById('r-email'));
+      if (!email || email.indexOf('@') === -1) return fail('Please enter a valid email address.', document.getElementById('r-email'));
       if (!rating) return fail('Please choose a star rating.', stars[4]);
       if (body.length < 10) return fail('Please write at least a sentence about the product.', bodyEl);
 

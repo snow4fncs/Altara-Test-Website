@@ -1545,7 +1545,7 @@
   }
 
   // Layout preview data. Gated to localhost so it can never reach production -
-  // altaradesign.com only ever renders verified reviews from the database.
+  // altaradesign.com only ever renders approved reviews from the database.
   var DEMO = {
     count: 3,
     average: 4.7,
@@ -1623,7 +1623,7 @@
       list.innerHTML =
         '<div class="rv-empty">' +
           '<p class="rv-empty-h">No reviews yet.</p>' +
-          '<p class="rv-empty-p">Reviews are written by verified customers only.<br>Once your order arrives, we will invite you to leave one.</p>' +
+          '<p class="rv-empty-p">Be the first to review this cover.<br>If you use your order email, your review carries the Verified badge.</p>' +
         '</div>';
       return;
     }
@@ -1632,7 +1632,7 @@
     summary.innerHTML =
       '<div class="rv-avg">' + d.average.toFixed(1) + '</div>' +
       stars(d.average) +
-      '<p class="rv-avg-sub">Based on ' + d.count + (d.count === 1 ? ' verified review' : ' verified reviews') + ' across both covers</p>' +
+      '<p class="rv-avg-sub">Based on ' + d.count + (d.count === 1 ? ' review' : ' reviews') + ' across both covers</p>' +
       '<div class="rv-dist">' + d.distribution.map(function (x) {
         return '<div class="rv-dist-row"><span class="rv-dist-label">' + x.stars + '★</span>' +
                '<span class="rv-bar"><span style="width:' + Math.round((x.count / max) * 100) + '%"></span></span>' +

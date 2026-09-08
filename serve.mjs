@@ -34,7 +34,8 @@ const MIME = {
 //
 // Differences from production, deliberately:
 //   - reviews live in memory, so a restart returns to the seed set below
-//   - purchase verification accepts any valid email (there is no orders table)
+//   - anyone can post; the Verified badge comes from MOCK_ORDER_EMAILS below
+//     (production matches the email against real paid orders instead)
 //   - the admin token is the literal string "dev"
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -42,6 +43,8 @@ const DEV_ADMIN_TOKEN = 'dev';
 const REVIEW_UNLOCK_DAYS = 5;   // mirrors api/fulfilment.js
 // Stands in for the reviews table: who has already written one.
 const mockReviewEmails = new Map([['yahyashahid99@gmail.com', { rating: 5, approved: true }]]);
+// Stands in for the orders table: these emails get the Verified badge.
+const MOCK_ORDER_EMAILS = new Set(['yahyashahid99@gmail.com', 'buyer@test.com']);
 const PRODUCTS = ['midnight-black', 'contrast-white'];
 const baseId = id => String(id || '').replace(/-twin$/, '');
 
@@ -215,7 +218,7 @@ async function handleReviews(req, res, query) {
       if (!isAdmin) return send(res, 401, { error: 'Admin token required' });
       const pending = reviews.filter(r => !r.approved)
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      return send(res, 200, { reviews: pending.map(r => ({ ...publicShape(r), id: r.id })) });
+      return send(res, 200, { reviews: pending.map(r => ({ ...publicShape(r), id: r.id, email: r.email })) });
     }
 
     const requested = query.get('product') || 'all';
@@ -240,8 +243,10 @@ async function handleReviews(req, res, query) {
       if (!isAdmin) return send(res, 401, { error: 'Admin token required' });
       const idx = reviews.findIndex(r => r.id === payload.id);
       if (idx === -1) return send(res, 404, { error: 'Review not found' });
-      if (payload.action === 'approve') reviews[idx].approved = true;
-      else reviews.splice(idx, 1);
+      if (payload.action === 'approve') {
+        reviews[idx].approved = true;
+        if (typeof payload.verified === 'boolean') reviews[idx].verified = payload.verified;
+      } else reviews.splice(idx, 1);
       return send(res, 200, { success: true });
     }
 
@@ -269,7 +274,7 @@ async function handleReviews(req, res, query) {
       // Kept as data URLs locally: no bucket on the dev server, and it proves the
       // browser-side resize produced something displayable.
       photos: (Array.isArray(photos) ? photos.slice(0, 3) : []),
-      verified: true,
+      verified: MOCK_ORDER_EMAILS.has(cleanEmail),
       approved: false,
       created_at: new Date().toISOString(),
     });
