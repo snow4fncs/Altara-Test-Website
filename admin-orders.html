@@ -99,6 +99,7 @@
     <div class="bar">
       <span class="count" id="count"></span>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button type="button" class="soft" id="ask-reviews" disabled>No reviews due</button>
         <button type="button" class="soft" id="export-csv">Export to-ship CSV</button>
         <button type="button" class="soft" id="repeat">Email past buyers</button>
         <button type="button" id="refresh">Refresh</button>
@@ -150,6 +151,10 @@
         countEl.textContent = orders.length + ' paid orders · ' + unshipped + ' awaiting dispatch'
           + (due ? ' · ' + due + ' due a review request' : '')
           + (reviewed ? ' · ' + reviewed + ' with a review' : '');
+
+        var askBtn = document.getElementById('ask-reviews');
+        askBtn.disabled = !due;
+        askBtn.textContent = due ? 'Send ' + due + ' review request' + (due > 1 ? 's' : '') : 'No reviews due';
 
         if (!orders.length) { list.innerHTML = '<div class="empty">No paid orders yet.</div>'; return; }
 
@@ -413,6 +418,34 @@
         b.disabled = false;
       }); })
       .catch(function(err){ b.disabled = false; note(err.message, true); });
+  });
+
+  document.getElementById('ask-reviews').addEventListener('click', function(){
+    var due = lastOrders.filter(function(o){ return o.review_due; });
+    if (!due.length) { note('No orders are due a review request.'); return; }
+    if (!confirm('Email '+due.length+' customer'+(due.length>1?'s':'')+' who '+(due.length>1?'haven’t':'hasn’t')+' been asked for a review yet?')) return;
+    var b = this; b.disabled = true;
+    var sent = 0, skipped = 0, failed = 0;
+    var chain = Promise.resolve();
+    due.forEach(function(o, i){
+      chain = chain.then(function(){
+        note('Sending '+(i+1)+' of '+due.length+'…');
+        return fetch('/api/fulfilment', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'x-admin-token': token() },
+          body: JSON.stringify({ action:'review_request', id:o.id })
+        }).then(function(r){
+          // 409 means the server already covered this one (asked before, or a
+          // review exists) - that is success from the shop's point of view.
+          if (r.ok) sent++; else if (r.status===409) skipped++; else failed++;
+        }).catch(function(){ failed++; });
+      });
+    });
+    chain.then(function(){ return load(); }).then(function(){
+      note('Review requests: '+sent+' sent'
+        +(skipped?', '+skipped+' already covered':'')
+        +(failed?', '+failed+' failed':'')+'.', !!failed);
+    }).catch(function(err){ note(err.message, true); });
   });
 
   document.getElementById('unlock').addEventListener('click', function(){
