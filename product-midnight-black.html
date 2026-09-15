@@ -614,6 +614,8 @@
     .satc-info { display: flex; flex-direction: column; }
     .satc-name { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.55); }
     .satc-price { font-size: 18px; color: var(--cream); font-variant-numeric: tabular-nums; }
+    .satc-save { display:inline-block; background: var(--gold); color: #141518; font-weight: 700; font-size: 10px; letter-spacing: .08em; padding: 3px 8px; margin-right: 8px; vertical-align: 1px; }
+
     .satc-btn { background: var(--brand); color: var(--cream); border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 15px 28px; }
     @media (max-width: 900px) {
       .satc { display: flex; }
@@ -1182,7 +1184,9 @@
       var t = TIERS[selectedPack];
       if(p) p.innerHTML = (t.was ? '<s class="pack-was" style="font-size:0.7em">' + '$' + t.was + '</s> ' : '') + t.label;
       var sb = document.getElementById('satc-price');
-      if(sb) sb.innerHTML = (t.was ? '<s style="opacity:.55;font-size:0.85em">$' + t.was + '</s> ' : '') + '$' + t.price;
+      if(sb) sb.innerHTML = (t.was
+        ? '<span class="satc-save">SAVE $' + (t.was - t.price) + '</span><s style="opacity:.6;font-size:0.85em">$' + t.was + '</s> <strong style="color:var(--gold)">$' + t.price + '</strong>'
+        : '$' + t.price);
       var atc = document.getElementById('add-to-cart-btn');
       if(atc) atc.innerHTML = t.was
         ? 'Add to Cart &mdash; $' + t.price + ' <span style="opacity:.75">&middot; save $' + (t.was - t.price) + '</span>'
