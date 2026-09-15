@@ -884,13 +884,13 @@
       <div class="announce-track">
         <div class="announce-seq">
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
@@ -1367,7 +1367,11 @@
       var t = TIERS[selectedPack];
       if(p) p.innerHTML = (t.was ? '<s class="pack-was" style="font-size:0.7em">' + '$' + t.was + '</s> ' : '') + t.label;
       var sb = document.getElementById('satc-price');
-      if(sb) sb.textContent = '$' + t.price;
+      if(sb) sb.innerHTML = (t.was ? '<s style="opacity:.55;font-size:0.85em">$' + t.was + '</s> ' : '') + '$' + t.price;
+      var atc = document.getElementById('add-to-cart-btn');
+      if(atc) atc.innerHTML = t.was
+        ? 'Add to Cart &mdash; $' + t.price + ' <span style="opacity:.75">&middot; save $' + (t.was - t.price) + '</span>'
+        : 'Add to Cart &mdash; $' + t.price;
     }
     Object.keys(btns).forEach(function(k){
       if(btns[k]) btns[k].addEventListener('click', function(){ selectedPack = k; paintPack(); });
@@ -1757,6 +1761,7 @@
     $('cd-prog').style.display = '';
 
     var subtotal = c.items.reduce(function(s,i){return s+i.price*i.qty;},0);
+    var twinSave = c.items.reduce(function(s,i){ return s + (/-twin$/.test(String(i.id)) ? 29*i.qty : 0); }, 0);
     var bd = bundleDisc(c);
     var p = promo();
     var pd = promoAmt(p, subtotal - bd);
@@ -1822,6 +1827,7 @@
 
     // rows
     var rows = '<div class="cd-row"><span>Subtotal</span><span>'+fmt(subtotal)+'</span></div>';
+    if (twinSave>0) rows += '<div class="cd-row save"><span>You\u2019re saving vs singles</span><span>'+fmt(twinSave)+'</span></div>';
     if (bd>0) rows += '<div class="cd-row save"><span>Twin Set bundle</span><span>-'+fmt(bd)+'</span></div>';
     if (pd>0) rows += '<div class="cd-row save"><span>Code '+esc(p.code)+'</span><span>-'+fmt(pd)+'</span></div>';
     rows += '<div class="cd-row"><span>Shipping</span><span>'+(ship===0?'Free':fmt(ship))+'</span></div>';
