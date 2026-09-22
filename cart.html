@@ -1431,7 +1431,7 @@
         if (has('midnight-black') && !has('contrast-white'))
           offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Twin Set Contrast White.png', label:'Complete the pair' };
         else if (has('contrast-white') && !has('midnight-black'))
-          offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
+          offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Twin Set Midnight Black.png', label:'Complete the pair' };
         else if (cart.items.length)
           offer = { id: cart.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
                     name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
