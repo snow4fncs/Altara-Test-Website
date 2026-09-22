@@ -227,7 +227,7 @@
     .pack-opt.active .pack-opt-name { color: rgba(237,232,223,0.6); }
     .pack-opt-price { display: block; font-size: 16px; font-weight: 400; color: var(--cream); letter-spacing: 0.01em; font-variant-numeric: tabular-nums lining-nums; }
     .pack-opt-currency { font-size: 11px; opacity: 0.5; }
-    .pack-opt-meta { display: block; font-size: 10px; color: var(--gold); margin-top: 6px; letter-spacing: 0.04em; }
+    .pack-opt-meta { display: block; font-size: 12.5px; color: var(--gold); margin-top: 7px; letter-spacing: 0.04em; }
 
     .pi-label {
       font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
@@ -502,10 +502,10 @@
       z-index: 201;
       background: var(--brand);
       color: var(--cream);
-      padding: 11px 0;
+      padding: 12px 0;
       font-family: 'Outfit', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.2em;
+      font-size: 12px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       overflow: hidden;
     }
@@ -637,18 +637,18 @@
       margin-top: 12px; padding: 11px 14px;
       background: rgba(196,169,122,0.05);
       border-left: 1px solid var(--gold);
-      font-size: 12px; font-weight: 300; line-height: 1.65;
+      font-size: 14px; font-weight: 300; line-height: 1.7;
       color: var(--cream-dim);
     }
     .pack-mix strong { font-weight: 500; color: var(--gold); }
     .pack-mix a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(237,232,223,0.3); }
     .pack-mix a:hover { color: var(--gold); border-bottom-color: var(--gold); }
     .pack-mix a:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
-    @media (max-width: 900px) { .pack-mix { font-size: 13px; } }
+    @media (max-width: 900px) { .pack-mix { font-size: 14px; } }
   
     @media (max-width: 900px) {
       .pack-opt-name { font-size: 10.5px; }
-      .pack-opt-meta { font-size: 11px; }
+      .pack-opt-meta { font-size: 12.5px; }
       .pack-opt-price { font-size: 17px; }
       .pi-perk { font-size: 12.5px; }
       .pi-rating-count { font-size: 12.5px; }
@@ -686,7 +686,7 @@
     .pack-opt.active { border-color: rgba(196,169,122,0.65); background: rgba(196,169,122,0.055); box-shadow: 0 1px 2px rgba(0,0,0,0.35), 0 14px 30px -22px rgba(196,169,122,0.5); }
     .pack-badge { position: absolute; top: -8px; right: 12px; font-size: 8.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 9px; background: var(--brand); color: var(--cream); }
     .pack-badge.gold { background: var(--gold); color: var(--bg); }
-    .pack-was { color: rgba(237,232,223,0.32); font-size: 12px; margin-right: 6px; }
+    .pack-was { color: rgba(237,232,223,0.38); font-size: 14px; margin-right: 6px; }
     .pack-opt .pack-opt-name { font-size: 10.5px; }
     .pack-opt-price { font-size: 18px; }
     .pi-guarantee-line { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(237,232,223,0.6); margin: -2px 0 14px; }
@@ -728,13 +728,14 @@
     @media (prefers-reduced-motion: reduce){ .pi-dispatch-dot{ animation:none } }
     .pi-proof { font-size:12.5px; letter-spacing:.04em; color:rgba(237,232,223,.55); margin:6px 0 0; }
     .pi-fineprint { font-size:12px; letter-spacing:.03em; color:rgba(237,232,223,.45); margin:12px 0 0; }
+    .pi-includes { font-size:12.5px; letter-spacing:.04em; color:var(--gold); opacity:.85; margin:4px 0 0; }
     /* Sticky mobile ATC */
     .satc { position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; display: none; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 18px calc(11px + env(safe-area-inset-bottom, 0px)); background: rgba(12,13,16,0.97); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); }
     .satc.show { transform: translateY(0); }
     .satc-info { display: flex; flex-direction: column; }
     .satc-name { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,232,223,0.55); }
     .satc-price { font-size: 18px; color: var(--cream); font-variant-numeric: tabular-nums; }
-    .satc-save { display:inline-block; background: var(--gold); color: #141518; font-weight: 700; font-size: 10px; letter-spacing: .08em; padding: 3px 8px; margin-right: 8px; vertical-align: 1px; }
+    .satc-save { display:inline-block; background: var(--gold); color: #141518; font-weight: 700; font-size: 12px; letter-spacing: .08em; padding: 4px 9px; margin-right: 8px; vertical-align: 1px; }
 
     .satc-btn { background: var(--brand); color: var(--cream); border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 15px 28px; }
     @media (max-width: 900px) {
@@ -894,14 +895,14 @@
         <div class="announce-seq">
           <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
           <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
@@ -1009,9 +1010,10 @@
 
     <p class="pi-cat">Seat Cover &nbsp;·&nbsp; MagFit™</p>
     <h1 class="pi-name">Contrast<br><em>White</em></h1>
-    <p class="pi-price" id="pi-price-display">$59 AUD</p>
+    <p class="pi-price" id="pi-price-display"><s class="pack-was" style="font-size:0.7em">$138</s> $89 AUD</p>
     <div class="pi-rating" id="pi-rating" hidden></div>
     <p class="pi-proof">Delivered to drivers in every Australian state. 70+ orders and counting.</p>
+    <p class="pi-includes">Each set: two tailored covers, MagFit clips built in, machine washable.</p>
 
     <div class="pi-sep"></div>
 
@@ -1039,7 +1041,7 @@
         <button class="pack-opt" id="pack-single" type="button" aria-pressed="false">
           <span>
             <span class="pack-opt-name">Single &middot; 1 cover</span>
-            <span class="pack-opt-price">$59 <span class="pack-opt-currency">AUD</span></span>
+            <span class="pack-opt-price">$69 <span class="pack-opt-currency">AUD</span></span>
           </span>
           <span class="pack-opt-meta">Front seat only &middot; + $9.95 shipping</span>
         </button>
@@ -1047,17 +1049,17 @@
           <span class="pack-badge">Most popular</span>
           <span>
             <span class="pack-opt-name">Twin Set &middot; 2 covers</span>
-            <span class="pack-opt-price"><s class="pack-was">$118</s> $89 <span class="pack-opt-currency">AUD</span></span>
+            <span class="pack-opt-price"><s class="pack-was">$138</s> $89 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Both front seats &middot; save $29 &middot; free shipping</span>
+          <span class="pack-opt-meta">Both front seats &middot; save $49 &middot; free shipping</span>
         </button>
         <button class="pack-opt" id="pack-fullcar" type="button" aria-pressed="false">
           <span class="pack-badge gold">Best value</span>
           <span>
             <span class="pack-opt-name">Full Car &middot; 4 covers</span>
-            <span class="pack-opt-price"><s class="pack-was">$236</s> $178 <span class="pack-opt-currency">AUD</span></span>
+            <span class="pack-opt-price"><s class="pack-was">$276</s> $178 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Two Twin Sets &middot; save $58 &middot; free shipping</span>
+          <span class="pack-opt-meta">Two Twin Sets &middot; save $98 &middot; free shipping</span>
         </button>
       </div>
       <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set. Every order over $80 also earns a <strong>$15 credit</strong> toward your next one.</p>
@@ -1332,14 +1334,14 @@
   });
 
   // Cart
-  const PROD = { id: 'contrast-white', name: 'Contrast White', price: 59, image: 'Product Photos/Altara Product Image 1.png' };
+  const PROD = { id: 'contrast-white', name: 'Contrast White', price: 69, image: 'Product Photos/Altara Product Image 1.png' };
   const toast = document.getElementById('toast');
   let tt;
   var selectedPack = 'twin';   // all real orders to date are twins - default to the winner
   var TIERS = {
-    single:  { price: 59,  was: null, label: '$59 AUD' },
-    twin:    { price: 89,  was: 118,  label: '$89 AUD' },
-    fullcar: { price: 178, was: 236,  label: '$178 AUD' }
+    single:  { price: 69,  was: null, label: '$69 AUD' },
+    twin:    { price: 89,  was: 138,  label: '$89 AUD' },
+    fullcar: { price: 178, was: 276,  label: '$178 AUD' }
   };
   (function(){
     var btns = { single: document.getElementById('pack-single'),
@@ -1370,7 +1372,7 @@
   })();
   function addToCartAndGo() {
     var item, qty = 1;
-    if (selectedPack === 'single')    item = { id: PROD.id, name: PROD.name, price: 59, image: PROD.image };
+    if (selectedPack === 'single')    item = { id: PROD.id, name: PROD.name, price: 69, image: PROD.image };
     else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: PROD.image };
     if (selectedPack === 'fullcar')   qty = 2;
     const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');

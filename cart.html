@@ -723,10 +723,10 @@
       z-index: 201;
       background: var(--brand);
       color: var(--cream);
-      padding: 11px 0;
+      padding: 12px 0;
       font-family: 'Outfit', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.2em;
+      font-size: 12px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       overflow: hidden;
     }
@@ -899,14 +899,14 @@
         <div class="announce-seq">
           <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
           <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
@@ -1226,14 +1226,14 @@
     }
 
     // ─── Twin Set bundle ────────────────────────────────────────────────────
-    // Any two single covers are priced as a Twin Set: 2 x $59 = $118 becomes
-    // $89, so $29 comes off per pair. Mix or match - one black and one white
+    // Any two single covers are priced as a Twin Set: 2 x $69 = $138 becomes
+    // $89, so $49 comes off per pair. Mix or match - one black and one white
     // qualifies, and so does two of the same. Without the "two of the same"
     // case, two singles of one colour would cost $29 MORE than that colour's
     // Twin Set, which is the same goods.
     // This display is convenience only; api/create-checkout.js recomputes it
     // from the cart and is the figure the customer is actually charged.
-    const BUNDLE_PAIR_SAVING = 29;
+    const BUNDLE_PAIR_SAVING = 49;
 
     function bundleInfo(cart) {
       const singles = cart.items
