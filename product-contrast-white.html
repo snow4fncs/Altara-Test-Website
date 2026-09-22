@@ -1373,7 +1373,7 @@
   function addToCartAndGo() {
     var item, qty = 1;
     if (selectedPack === 'single')    item = { id: PROD.id, name: PROD.name, price: 69, image: PROD.image };
-    else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: PROD.image };
+    else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: 'Product Photos/Twin Set Contrast White.png' };
     if (selectedPack === 'fullcar')   qty = 2;
     const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
     const ex = c.items.find(i => i.id === item.id);

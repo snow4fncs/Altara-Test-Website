@@ -1034,7 +1034,7 @@
         <span class="summary-value" id="subtotal">$0.00</span>
       </div>
       <div class="summary-row" id="twinsave-row" style="display:none">
-        <span class="summary-label summary-label-save">Twin Set saving</span>
+        <span class="summary-label summary-label-save">Savings</span>
         <span class="summary-value save" id="twinsave-value"></span>
       </div>
       <div class="summary-row" id="bundle-row" style="display:none">
@@ -1066,7 +1066,7 @@
 
       <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()"><svg class="btn-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Proceed to Checkout</button>
       <div class="assure">
-        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &mdash; full refund if it isn't right</span>
+        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &middot; full refund if it isn't right</span>
         <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="cart-dispatch">Order by 2pm AEST for same-day dispatch &middot; Australia Post tracked</span></span>
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Adding a second pair? Any two covers price-match to $89 the pair, automatically</span>
       </div>
@@ -1301,9 +1301,15 @@
       const totalQty = cart.items.reduce((s, i) => s + i.qty, 0);
       if (countBadge) countBadge.textContent = '(' + totalQty + ')';
 
-      const canonImg = id => String(id).indexOf('contrast-white') === 0
-        ? 'Product Photos/Altara Product Image 1.png'
-        : 'Product Photos/Altara Product Image 7.png';
+      const canonImg = id => {
+        id = String(id);
+        if (/-twin$/.test(id)) return id.indexOf('contrast-white') === 0
+          ? 'Product Photos/Twin Set Contrast White.png'
+          : 'Product Photos/Twin Set Midnight Black.png';
+        return id.indexOf('contrast-white') === 0
+          ? 'Product Photos/Altara Product Image 1.png'
+          : 'Product Photos/Altara Product Image 7.png';
+      };
       cart.items.forEach(item => {
         const article = document.createElement('article');
         article.className = 'cart-item';
@@ -1397,7 +1403,7 @@
 
       if (bundleNudge) {
         if (bundle.oneAwayFromPair) {
-          bundleNudge.innerHTML = 'Add one more cover and save <em>$' + BUNDLE_PAIR_SAVING + '</em> — any two count as a Twin Set';
+          bundleNudge.innerHTML = 'Add one more cover and save <em>$' + BUNDLE_PAIR_SAVING + '</em> &middot; any two count as a Twin Set';
           bundleNudge.style.display = 'block';
         } else {
           bundleNudge.style.display = 'none';
@@ -1423,13 +1429,13 @@
         var has = function(prefix){ return cart.items.some(function(i){ return i.id.indexOf(prefix) === 0; }); };
         var offer = null;
         if (has('midnight-black') && !has('contrast-white'))
-          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Altara Product Image 1.png', label:'Complete the pair' };
+          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Twin Set Contrast White.png', label:'Complete the pair' };
         else if (has('contrast-white') && !has('midnight-black'))
           offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
         else if (cart.items.length)
           offer = { id: cart.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
                     name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
-                    price:89, image: (cart.items[0].id.indexOf('midnight')===0 ? 'Product Photos/Altara Product Image 7.png' : 'Product Photos/Altara Product Image 1.png'), label:'Add a second pair — Twin Set price' };
+                    price:89, image: (cart.items[0].id.indexOf('midnight')===0 ? 'Product Photos/Twin Set Midnight Black.png' : 'Product Photos/Twin Set Contrast White.png'), label:'Add a second pair — Twin Set price' };
         if (!offer) { slot.innerHTML=''; return; }
         slot.innerHTML = '<div class="xsell">'
           + '<img src="' + offer.image + '" alt="">'
