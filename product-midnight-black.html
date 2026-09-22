@@ -132,6 +132,10 @@
     .pack-opt-price { display: block; font-size: 16px; font-weight: 400; color: var(--cream); letter-spacing: 0.01em; font-variant-numeric: tabular-nums lining-nums; }
     .pack-opt-currency { font-size: 11px; opacity: 0.5; }
     .pack-opt-meta { display: block; font-size: 12.5px; color: var(--gold); margin-top: 7px; letter-spacing: 0.04em; }
+    .pack-opt-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; font-size: 12.5px; color: var(--gold); letter-spacing: 0.04em; }
+    .pack-opt-list li { display: flex; gap: 8px; align-items: baseline; }
+    .pack-opt-list li::before { content: '\2022'; flex-shrink: 0; opacity: 0.7; }
+    .pack-opt-list strong { font-weight: 600; }
     .pi-label { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.38); margin-bottom: 12px; }
     .pi-colorway-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .pi-viewing-indicator { display: flex; align-items: center; gap: 7px; }
@@ -899,7 +903,10 @@
             <span class="pack-opt-name">Single &middot; 1 cover</span>
             <span class="pack-opt-price">$69 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Front seat only &middot; + $9.95 shipping</span>
+          <ul class="pack-opt-list">
+            <li>One cover, front seat</li>
+            <li>+ $9.95 shipping</li>
+          </ul>
         </button>
         <button class="pack-opt active" id="pack-twin" type="button" aria-pressed="true">
           <span class="pack-badge">Most popular</span>
@@ -907,7 +914,10 @@
             <span class="pack-opt-name">Twin Set &middot; 2 covers</span>
             <span class="pack-opt-price"><s class="pack-was">$138</s> $89 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Both front seats &middot; save $49 &middot; free shipping</span>
+          <ul class="pack-opt-list">
+            <li>Both front seats covered</li>
+            <li>Save $49 &middot; free shipping</li>
+          </ul>
         </button>
         <button class="pack-opt" id="pack-fullcar" type="button" aria-pressed="false">
           <span class="pack-badge gold">Best value</span>
@@ -915,7 +925,11 @@
             <span class="pack-opt-name">Full Car &middot; 4 covers</span>
             <span class="pack-opt-price"><s class="pack-was">$276</s> $178 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Two Twin Sets &middot; save $98 &middot; free shipping</span>
+          <ul class="pack-opt-list">
+            <li>Two Twin Sets, four covers</li>
+            <li>Save $98 &middot; free shipping</li>
+            <li>Extra $10 off with code <strong>SELLOUT10</strong></li>
+          </ul>
         </button>
       </div>
       <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set. Every order over $80 also earns a <strong>$15 credit</strong> toward your next one.</p>
