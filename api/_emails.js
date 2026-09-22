@@ -49,6 +49,7 @@ export function shippedEmailHtml({ first, ref, trackingNumber, carrier, suburb, 
     heading: `It's shipped,<br>${esc(first)}.`,
     blocks:
       para(`Your Altara cover is on its way${suburb ? ' to ' + esc(suburb) : ''} with ${esc(carrier)}. Delivery is usually 3&ndash;7 business days.`)
+      + para(`A thank you from us: <strong style="color:#EDE8DF">$15 off your next order</strong>. Use code <strong style="color:#EDE8DF">BACKROW15</strong> at checkout on any order over $80.`)
       + rule()
       + row('Tracking number', esc(trackingNumber))
       + row('Order reference', esc(ref)),
@@ -89,12 +90,12 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency }) {
 }
 
 // ── 4. Repeat purchase ───────────────────────────────────────────────────────
-export function repeatOfferEmailHtml({ first, code = 'BACKROW15', discountLabel = '$15 off your next set' }) {
+export function repeatOfferEmailHtml({ first, code = 'BACKROW15', discountLabel = '$15 off your next order' }) {
   return shell({
-    eyebrow: 'For the other seats',
-    heading: `Cover the<br>back too.`,
+    eyebrow: 'Round two',
+    heading: `Ready for<br>a second pair?`,
     blocks:
-      para(`Hi ${esc(first)} &mdash; most people start with the front seats and come back for the rest once they see how much mess it catches.`)
+      para(`Hi ${esc(first)} &mdash; most people start with one pair and come back for another once they see how much mess it catches &mdash; a spare for wash day, or covers for the other car.`)
       + para(`Any two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, mix or match: one Midnight Black and one Contrast White qualifies just the same.`)
       + (code ? rule() + row('Your code', esc(code) + (discountLabel ? ' &mdash; ' + esc(discountLabel) : '')) : ''),
     cta: { href: `${SITE}/collection.html`, label: 'Shop the collection',

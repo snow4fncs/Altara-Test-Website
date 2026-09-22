@@ -721,6 +721,13 @@
     .pfaq-item[open] summary::after { transform: rotate(45deg); }
     .pfaq-item p { padding: 0 0 20px; font-size: 14px; line-height: 1.85; color: rgba(237,232,223,0.58); font-weight: 300; max-width: 64ch; }
     .pfaq-item summary:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+    .pi-dispatch { display:flex; align-items:center; gap:10px; margin:14px 0 2px; font-size:13.5px; letter-spacing:.02em; color:rgba(237,232,223,.72); }
+    .pi-dispatch strong { color:var(--gold); font-weight:600; font-variant-numeric:tabular-nums; }
+    .pi-dispatch-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:dispatchPulse 2.4s ease-out infinite; flex-shrink:0; }
+    @keyframes dispatchPulse { 0%{box-shadow:0 0 0 0 rgba(196,169,122,.45)} 70%{box-shadow:0 0 0 9px rgba(196,169,122,0)} 100%{box-shadow:0 0 0 0 rgba(196,169,122,0)} }
+    @media (prefers-reduced-motion: reduce){ .pi-dispatch-dot{ animation:none } }
+    .pi-proof { font-size:12.5px; letter-spacing:.04em; color:rgba(237,232,223,.55); margin:6px 0 0; }
+    .pi-fineprint { font-size:12px; letter-spacing:.03em; color:rgba(237,232,223,.45); margin:12px 0 0; }
     /* Sticky mobile ATC */
     .satc { position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; display: none; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 18px calc(11px + env(safe-area-inset-bottom, 0px)); background: rgba(12,13,16,0.97); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); }
     .satc.show { transform: translateY(0); }
@@ -881,18 +888,20 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar">
-    <p class="ab-sr">Free shipping on orders over $80. 30-day returns. Australia-wide delivery. Secure checkout.</p>
+    <p class="ab-sr">Order by 2pm AEST weekdays for same-day dispatch. Tracked with Australia Post. Free shipping on orders over $80. 30-day returns, 60 days on Twin Sets. Every order over $80 earns a $15 credit.</p>
     <div class="announce-viewport" aria-hidden="true">
       <div class="announce-track">
         <div class="announce-seq">
-          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
-          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $29)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
@@ -1002,6 +1011,7 @@
     <h1 class="pi-name">Contrast<br><em>White</em></h1>
     <p class="pi-price" id="pi-price-display">$59 AUD</p>
     <div class="pi-rating" id="pi-rating" hidden></div>
+    <p class="pi-proof">Delivered to drivers in every Australian state. 70+ orders and counting.</p>
 
     <div class="pi-sep"></div>
 
@@ -1047,40 +1057,16 @@
             <span class="pack-opt-name">Full Car &middot; 4 covers</span>
             <span class="pack-opt-price"><s class="pack-was">$236</s> $178 <span class="pack-opt-currency">AUD</span></span>
           </span>
-          <span class="pack-opt-meta">Front + back rows &middot; save $58 &middot; free shipping &middot; code <strong>SELLOUT10</strong> takes another $10 off</span>
+          <span class="pack-opt-meta">Two Twin Sets &middot; save $58 &middot; free shipping</span>
         </button>
       </div>
-      <p class="pack-mix">Mix and match: add <strong>any two covers</strong> and you pay the Twin Set price of <strong>$89</strong> &mdash; $29 off, applied automatically at checkout. Pair it with <a href="product-midnight-black.html">Midnight Black</a>.</p>
-    </div>
-
-    <div class="adv" id="adv">
-      <p class="adv-h">The Twin Set advantage</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$29 pair saving</strong> — applied automatically, no code</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Free shipping</strong> — no $150 minimum like the other guys</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>60-day fit guarantee</strong> on Twin Sets — double the standard</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$15 Back-Row Credit</strong> emailed after your order</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>$10 review reward</strong> when you share a photo of the fit</span></li>
-      </ul>
-      <p class="adv-compare">A pair, delivered: <strong>Altara $89</strong> &middot; comparable covers elsewhere $128+</p>
+      <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set. Every order over $80 also earns a <strong>$15 credit</strong> toward your next one.</p>
     </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
-    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &mdash; <strong style="color:var(--gold);font-weight:500">60 days on Twin Sets</strong></p>
+    <p class="pi-dispatch" id="pi-dispatch" hidden><span class="pi-dispatch-dot" aria-hidden="true"></span><span id="pi-dispatch-text"></span></p>
+    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &middot; <strong style="color:var(--gold);font-weight:500">60 days on Twin Sets</strong></p>
 
-    <div class="pi-perks">
-      <span class="pi-perk">
-        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Free shipping on orders $80+
-      </span>
-      <span class="pi-perk">
-        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-        30-Day Returns
-      </span>
-      <span class="pi-perk">
-        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Secure Checkout
-      </span>
-    </div>
+    <p class="pi-fineprint">Free shipping over $80 &middot; 30-day returns &middot; Secure checkout</p>
 
     <div class="pi-sep"></div>
 
@@ -1174,7 +1160,7 @@
   <div class="guar-in">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
     <div>
-      <h2 class="guar-h">30-day fit guarantee &mdash; 60 days on Twin Sets</h2>
+      <h2 class="guar-h">30-day fit guarantee, 60 days on Twin Sets</h2>
       <p class="guar-p">Fit it, drive with it, wash it. If it isn’t right for your car, send it back for a full refund — 30 days on singles, 60 days on Twin Sets. You pay nothing to find out.</p>
     </div>
   </div>
@@ -1374,8 +1360,8 @@
         : '$' + t.price);
       var atc = document.getElementById('add-to-cart-btn');
       if(atc) atc.innerHTML = t.was
-        ? 'Add to Cart &mdash; $' + t.price + ' <span style="opacity:.75">&middot; save $' + (t.was - t.price) + '</span>'
-        : 'Add to Cart &mdash; $' + t.price;
+        ? 'Add to Cart &middot; $' + t.price + ' <span style="opacity:.75">&middot; save $' + (t.was - t.price) + '</span>'
+        : 'Add to Cart &middot; $' + t.price;
     }
     Object.keys(btns).forEach(function(k){
       if(btns[k]) btns[k].addEventListener('click', function(){ selectedPack = k; paintPack(); });
@@ -1805,7 +1791,7 @@
       offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
     else offer = { id: c.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
       name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
-      price:89, image:c.items[0].image, label:'Cover the back row too' };
+      price:89, image:c.items[0].image, label:'Add a second pair — Twin Set price' };
     $('cd-x-slot').innerHTML = '<div class="cd-x"><img src="'+esc(offer.image)+'" alt="">'
       + '<div class="cd-x-info"><span class="cd-x-k">'+esc(offer.label)+'</span>'
       + '<span class="cd-x-n">'+esc(offer.name)+' &middot; $89</span></div>'
@@ -1891,5 +1877,22 @@
 })();
 </script>
 
+<script>
+(function(){
+  var el=document.getElementById('pi-dispatch'), txt=document.getElementById('pi-dispatch-text');
+  if(!el||!txt) return;
+  function render(){
+    var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
+    var d=n.getDay(), mins=n.getHours()*60+n.getMinutes(), cutoff=840, h;
+    if(d>=1&&d<=5&&mins<cutoff){
+      var left=cutoff-mins, hh=Math.floor(left/60), mm=left%60;
+      h='Order within <strong>'+(hh?hh+'h ':'')+mm+'m</strong> for dispatch <strong>today</strong> &middot; Australia Post tracked';
+    } else if(d>=1&&d<=4){ h='Dispatched <strong>tomorrow</strong> &middot; order before 2pm AEST &middot; Australia Post tracked'; }
+    else { h='Dispatched <strong>Monday</strong> &middot; order anytime &middot; Australia Post tracked'; }
+    txt.innerHTML=h; el.hidden=false;
+  }
+  render(); setInterval(render,30000);
+})();
+</script>
 </body>
 </html>
