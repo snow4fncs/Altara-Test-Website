@@ -1885,15 +1885,15 @@
   if(!el||!txt) return;
   function render(){
     var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
-    var d=n.getDay(), mins=n.getHours()*60+n.getMinutes(), cutoff=840, h;
-    if(d>=1&&d<=5&&mins<cutoff){
-      var left=cutoff-mins, hh=Math.floor(left/60), mm=left%60;
-      h='Order within <strong>'+(hh?hh+'h ':'')+mm+'m</strong> for dispatch <strong>today</strong> &middot; Australia Post tracked';
+    var d=n.getDay(), secs=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(), cutoff=50400, h;
+    if(d>=1&&d<=5&&secs<cutoff){
+      var left=cutoff-secs, hh=Math.floor(left/3600), mm=Math.floor((left%3600)/60), ss=left%60;
+      h='Order within <strong>'+(hh?hh+'h ':'')+mm+'m '+String(ss).padStart(2,'0')+'s</strong> for dispatch <strong>today</strong> &middot; Australia Post tracked';
     } else if(d>=1&&d<=4){ h='Dispatched <strong>tomorrow</strong> &middot; order before 2pm AEST &middot; Australia Post tracked'; }
     else { h='Dispatched <strong>Monday</strong> &middot; order anytime &middot; Australia Post tracked'; }
     txt.innerHTML=h; el.hidden=false;
   }
-  render(); setInterval(render,30000);
+  render(); setInterval(render,1000);
 })();
 </script>
 </body>
