@@ -1733,6 +1733,9 @@
   var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 29, PROMO_KEY = 'altara-promo';
   var $ = function (id) { return document.getElementById(id); };
   var drawer = $('cd'), overlay = $('cd-overlay');
+  function canonImg(id){ id=String(id);
+    if(/-twin$/.test(id)) return id.indexOf('contrast-white')===0 ? 'Product Photos/Twin Set Contrast White.png' : 'Product Photos/Twin Set Midnight Black.png';
+    return id.indexOf('contrast-white')===0 ? 'Product Photos/Altara Product Image 1.png' : 'Product Photos/Altara Product Image 7.png'; }
   if (!drawer) return;
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
@@ -1801,7 +1804,7 @@
     // items
     $('cd-items').innerHTML = c.items.map(function(i){
       return '<div class="cd-item">'
-        + '<img src="'+esc(i.image)+'" alt="">'
+        + '<img src="'+esc(canonImg(i.id))+'" alt="">'
         + '<div><p class="cd-item-name">'+esc(i.name)+'</p>'
         + '<span class="cd-qty"><button type="button" data-d="-1" data-id="'+esc(i.id)+'" aria-label="Decrease">&minus;</button>'
         + '<span>'+i.qty+'</span>'
@@ -1815,12 +1818,12 @@
     var has = function(pre){ return c.items.some(function(i){ return i.id.indexOf(pre)===0; }); };
     var offer = null;
     if (has('midnight-black') && !has('contrast-white'))
-      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Homepage image.png', label:'Complete the pair' };
+      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Twin Set Contrast White.png', label:'Complete the pair' };
     else if (has('contrast-white') && !has('midnight-black'))
-      offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Altara Product Image 7.png', label:'Complete the pair' };
+      offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Twin Set Midnight Black.png', label:'Complete the pair' };
     else offer = { id: c.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
       name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
-      price:89, image:c.items[0].image, label:'Add a second pair — Twin Set price' };
+      price:89, image:canonImg(c.items[0].id.indexOf('midnight')===0?'midnight-black-twin':'contrast-white-twin'), label:'Add a second pair — Twin Set price' };
     $('cd-x-slot').innerHTML = '<div class="cd-x"><img src="'+esc(offer.image)+'" alt="">'
       + '<div class="cd-x-info"><span class="cd-x-k">'+esc(offer.label)+'</span>'
       + '<span class="cd-x-n">'+esc(offer.name)+' &middot; $89</span></div>'
