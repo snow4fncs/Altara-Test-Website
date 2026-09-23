@@ -103,7 +103,7 @@ export default async function handler(req, res) {
       shipping_rate_data: {
         type: 'fixed_amount',
         fixed_amount: { amount: 0, currency: 'aud' },
-        display_name: 'Free Shipping',
+        display_name: 'Free Shipping · Australia Post, tracked',
         delivery_estimate: {
           minimum: { unit: 'business_day', value: 3 },
           maximum: { unit: 'business_day', value: 7 },
@@ -114,7 +114,7 @@ export default async function handler(req, res) {
       shipping_rate_data: {
         type: 'fixed_amount',
         fixed_amount: { amount: 995, currency: 'aud' },
-        display_name: 'Standard Shipping',
+        display_name: 'Standard Shipping · Australia Post, tracked',
         delivery_estimate: {
           minimum: { unit: 'business_day', value: 3 },
           maximum: { unit: 'business_day', value: 7 },

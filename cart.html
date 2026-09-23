@@ -1413,7 +1413,7 @@
       const shipEl = document.getElementById('cart-shipping');
       const threshMsg = document.getElementById('ship-threshold-msg');
       if (shipping === 0) {
-        shipEl.textContent = 'Free'; shipEl.classList.add('free');
+        shipEl.textContent = 'Free · Australia Post tracked'; shipEl.classList.add('free');
         if (threshMsg) threshMsg.style.display = 'none';
       } else {
         shipEl.textContent = fmt(shipping); shipEl.classList.remove('free');
