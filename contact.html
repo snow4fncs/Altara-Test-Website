@@ -690,7 +690,9 @@
           <textarea class="form-textarea" id="f-message" name="message" placeholder="How can we help you today?"></textarea>
         </div>
 
+        <input type="text" name="website" id="f-website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0" aria-hidden="true">
         <button type="submit" class="form-submit">Send Message</button>
+        <p class="form-status" id="form-status" role="status" style="display:none;margin-top:14px;font-size:13.5px;line-height:1.6"></p>
         <p class="form-note">By submitting this form, you agree to our privacy policy. Your information will never be shared with third parties.</p>
       </form>
     </div>
@@ -866,26 +868,40 @@
     });
   });
 
-  // Form submission placeholder
-  document.getElementById('contact-form').addEventListener('submit', e => {
+  // Form submission - sends through the site, no mail client needed
+  document.getElementById('contact-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const first = document.getElementById('f-first').value.trim();
-    const last = document.getElementById('f-last').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const order = document.getElementById('f-order').value.trim();
+    const btn = document.querySelector('#contact-form .form-submit');
+    const status = document.getElementById('form-status');
     const subject = document.getElementById('f-subject');
-    const subjectText = subject.options[subject.selectedIndex]?.text || '';
-    const message = document.getElementById('f-message').value.trim();
-    const bodyLines = [
-      `Name: ${first} ${last}`,
-      `Email: ${email}`,
-      order ? `Order Number: ${order}` : '',
-      subjectText ? `Enquiry Type: ${subjectText}` : '',
-      '',
-      message
-    ].filter(l => l !== undefined && !(l === '' && !message));
-    const mailto = `mailto:hello@altaradesign.com?subject=${encodeURIComponent('Customer Enquiry' + (subjectText ? ': ' + subjectText : ''))}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-    window.location.href = mailto;
+    const payload = {
+      first_name: document.getElementById('f-first').value.trim(),
+      last_name: document.getElementById('f-last').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+      order_number: document.getElementById('f-order').value.trim(),
+      subject: subject.options[subject.selectedIndex]?.text || '',
+      message: document.getElementById('f-message').value.trim(),
+      website: document.getElementById('f-website').value,
+    };
+    status.style.display = 'none';
+    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Sending\u2026';
+    try {
+      const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.success) {
+        status.style.color = 'var(--gold)';
+        status.textContent = 'Message sent. We reply within 1\u20132 business days.';
+        document.getElementById('contact-form').reset();
+      } else {
+        status.style.color = '#d08f8f';
+        status.textContent = j.error || 'Sending failed. Please email hello@altaradesign.com directly.';
+      }
+    } catch (err) {
+      status.style.color = '#d08f8f';
+      status.textContent = 'Sending failed. Please email hello@altaradesign.com directly.';
+    }
+    status.style.display = 'block';
+    btn.disabled = false; btn.textContent = orig;
   });
 
   // Mobile overlay inline search

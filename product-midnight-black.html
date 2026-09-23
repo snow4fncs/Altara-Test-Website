@@ -620,6 +620,11 @@
     .pi-proof { font-size:12.5px; letter-spacing:.04em; color:rgba(237,232,223,.55); margin:6px 0 0; }
     .pi-fineprint { font-size:12px; letter-spacing:.03em; color:rgba(237,232,223,.45); margin:12px 0 0; }
     .pi-includes { font-size:12.5px; letter-spacing:.04em; color:var(--gold); opacity:.85; margin:4px 0 0; }
+    .pi-keyspecs { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line, rgba(237,232,223,.12)); border:1px solid var(--line, rgba(237,232,223,.12)); margin:16px 0 4px; }
+    .pi-keyspecs div { background:var(--bg, #0c0d10); padding:12px 14px; font-size:12px; line-height:1.55; color:rgba(237,232,223,.55); }
+    .pi-keyspecs strong { display:block; font-size:12.5px; letter-spacing:.05em; color:var(--cream, #EDE8DF); font-weight:500; margin-bottom:2px; }
+    @media (max-width:480px){ .pi-keyspecs{ grid-template-columns:1fr 1fr; } .pi-keyspecs div{ padding:10px 11px; } }
+    .pi-colnote { font-size:12.5px; color:rgba(237,232,223,.5); margin:6px 0 10px; line-height:1.6; }
     /* Sticky mobile ATC */
     .satc { position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; display: none; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 18px calc(11px + env(safe-area-inset-bottom, 0px)); background: rgba(12,13,16,0.97); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); }
     .satc.show { transform: translateY(0); }
@@ -877,6 +882,12 @@
     <div class="pi-rating" id="pi-rating" hidden></div>
     <p class="pi-proof">Delivered to drivers in every Australian state. 70+ orders and counting.</p>
     <p class="pi-includes">Each set: two tailored covers, MagFit clips built in, machine washable.</p>
+    <div class="pi-keyspecs">
+      <div><strong>145 &times; 70 cm</strong>fits most seats, hatchback to ute</div>
+      <div><strong>High-absorbency towelling</strong>traps sweat, water and sand</div>
+      <div><strong>Machine washable</strong>cold wash, quick-dry</div>
+      <div><strong>MagFit&trade; clips</strong>on in 30 seconds, no tools</div>
+    </div>
     <div class="pi-sep"></div>
     <div class="pi-colorway-header">
       <p class="pi-label">Colourway</p>
@@ -885,6 +896,7 @@
         <span class="pi-viewing-name">Midnight Black</span>
       </div>
     </div>
+    <p class="pi-colnote">Both colourways are the same black cover. The difference is the piping: tonal black, or contrast white.</p>
     <div class="pi-variants">
       <a href="product-contrast-white.html" class="pi-var" title="Contrast White">
         <img src="Product Photos/Altara Product Image 1.png" alt="Contrast White">
@@ -1027,6 +1039,7 @@
     <h2 class="cmp-h">Straight answers.</h2>
     <div class="pfaq-list">
       <details class="pfaq-item" open><summary>Does it fit my car?</summary><p>The cover is engineered for a universal fit across the vast majority of standard passenger seats — 145cm × 70cm, with MagFit tension adjusting to seat width and depth. One size fits most, from hatchbacks to utes.</p></details>
+      <details class="pfaq-item"><summary>Is it waterproof?</summary><p>It is built to absorb, not repel. The thick microfibre pile traps sweat, water, sand and spills so they do not reach the seat underneath, then the whole cover goes in the machine and dries fast. For wet swimmers, gym gear and the drive home it does the job; it is not a plastic rain shell for standing water.</p></details>
       <details class="pfaq-item"><summary>Will it interfere with my seat airbag?</summary><p>It is designed to be compatible with most side-impact seat airbags. If your seats have integrated side airbags, check your owner’s manual before fitting any aftermarket cover.</p></details>
       <details class="pfaq-item"><summary>How does it stay on the seat?</summary><p>MagFit magnetic snap-on clips secure the cover behind the seat back — no tools, no straps, no modification. The magnets are tuned to hold through daily driving, hard braking included, and the anti-slip rubber base keeps the seat panel planted.</p></details>
       <details class="pfaq-item"><summary>How long does fitting take?</summary><p>Under 30 seconds per seat. Drop it over the headrest, smooth the base outward from the centre, clip the MagFit magnets behind the seat back. Fully reversible — removal leaves no marks or residue.</p></details>

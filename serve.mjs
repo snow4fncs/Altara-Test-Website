@@ -411,6 +411,11 @@ const server = http.createServer(async (req, res) => {
 
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
+  if (rawPath === '/api/contact' && req.method === 'POST') {
+    const body = await readBody(req);
+    console.log('  [contact] enquiry from', body?.email, '-', String(body?.message || '').slice(0, 60));
+    return send(res, 200, { success: true });
+  }
   if (rawPath === '/api/validate-code') {
     const code = String(query.get('code')||'').toUpperCase();
     const subtotal = Number(query.get('subtotal'));
