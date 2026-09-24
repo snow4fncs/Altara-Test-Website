@@ -1,0 +1,289 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Altara — Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0C0D10; --card:#111317; --line:rgba(237,232,223,.1); --cream:#EDE8DF; --cream-dim:rgba(237,232,223,.6); --gold:#C4A97A; --rev:#3987e5; --prof:#b07d1e; --neg:#c96a5a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--cream); font:300 14px/1.6 Outfit,sans-serif; padding:44px clamp(16px,4vw,56px) 80px; }
+  .masthead { display:flex; align-items:baseline; gap:14px; margin-bottom:8px; }
+  .mark { font-family:'Cormorant Garamond',serif; font-size:26px; letter-spacing:.3em; text-transform:uppercase; }
+  .ey { font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-dim); }
+  h1 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:44px; margin:10px 0 26px; }
+  .gate { max-width:420px; display:grid; gap:12px; margin-top:30px; }
+  .gate input { background:var(--card); border:1px solid var(--line); color:var(--cream); padding:12px 14px; font:inherit; }
+  button { background:#4D6272; border:none; color:var(--cream); padding:12px 22px; font:500 11px/1 Outfit; letter-spacing:.18em; text-transform:uppercase; cursor:pointer; }
+  button.soft { background:transparent; border:1px solid var(--line); }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline:1px solid var(--gold); outline-offset:2px; }
+  .hide { display:none; }
+  .bar { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:end; padding:16px 18px; background:var(--card); border:1px solid var(--line); margin-bottom:22px; }
+  .as { display:grid; gap:4px; }
+  .as label { font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-dim); }
+  .as input, .as select { width:110px; background:var(--bg); border:1px solid var(--line); color:var(--cream); padding:8px 10px; font:inherit; font-variant-numeric:tabular-nums; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:22px; }
+  .kpi { background:var(--card); border:1px solid var(--line); padding:18px 18px 15px; }
+  .kpi .k { font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-dim); margin-bottom:8px; }
+  .kpi .v { font-size:27px; font-weight:500; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+  .kpi .s { font-size:11.5px; color:var(--cream-dim); margin-top:4px; }
+  .kpi.profit .v { color:var(--gold); }
+  .panel { background:var(--card); border:1px solid var(--line); padding:22px; margin-bottom:22px; position:relative; }
+  .panel h2 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:24px; margin-bottom:4px; }
+  .legend { display:flex; gap:18px; font-size:11.5px; color:var(--cream-dim); margin:6px 0 14px; }
+  .legend span { display:inline-flex; align-items:center; gap:7px; }
+  .sw { width:14px; height:3px; border-radius:2px; display:inline-block; }
+  #chart { width:100%; height:300px; display:block; }
+  #tip { position:absolute; pointer-events:none; background:#1b1e24; border:1px solid var(--line); padding:9px 12px; font-size:12px; line-height:1.55; display:none; z-index:5; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums; }
+  th, td { text-align:right; padding:7px 10px; border-bottom:1px solid var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--cream-dim); font-weight:500; }
+  td.neg { color:var(--neg); }
+  .fc { display:flex; flex-wrap:wrap; gap:26px; align-items:center; }
+  .fc .v { font-size:30px; font-weight:500; color:var(--gold); font-variant-numeric:tabular-nums; }
+  input[type=range] { accent-color:var(--gold); width:180px; }
+  .note { font-size:11.5px; color:var(--cream-dim); }
+  @media (max-width:640px){ h1{font-size:32px} .kpi .v{font-size:22px} }
+</style>
+
+<div class="masthead"><span class="mark">Altara</span><span class="ey">Finance &middot; internal</span></div>
+<h1>Money in, money out.</h1>
+
+<div id="gate" class="gate">
+  <label for="tok" class="ey">Admin token</label>
+  <input type="password" id="tok" autocomplete="current-password" placeholder="Your ADMIN_TOKEN">
+  <button id="unlock" type="button">Unlock</button>
+</div>
+
+<div id="panel" class="hide">
+  <div class="bar">
+    <div class="as"><label for="a-window">Window</label>
+      <select id="a-window"><option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option></select></div>
+    <div class="as"><label for="a-cogs">COGS per cover $</label><input id="a-cogs" type="number" step="0.5" min="0"></div>
+    <div class="as"><label for="a-pack">Packaging per order $</label><input id="a-pack" type="number" step="0.1" min="0"></div>
+    <div class="as"><label for="a-post">Postage per order $</label><input id="a-post" type="number" step="0.1" min="0"></div>
+    <div class="as"><label for="a-adman">Ad spend per day $ (manual)</label><input id="a-adman" type="number" step="1" min="0" placeholder="auto"></div>
+    <div class="as"><label for="a-other">Other costs per month $</label><input id="a-other" type="number" step="10" min="0"></div>
+    <button class="soft" id="refresh" type="button">Recalculate</button>
+    <span class="note" id="srcnote"></span>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="panel">
+    <h2>Daily revenue and profit</h2>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--rev)"></i>Revenue (gross)</span>
+      <span><i class="sw" style="background:var(--prof)"></i>Net profit (after fees, ads, COGS, postage)</span>
+    </div>
+    <svg id="chart" role="img" aria-label="Daily revenue bars with net profit line"></svg>
+    <div id="tip"></div>
+  </div>
+
+  <div class="panel">
+    <h2>30-day forecast</h2>
+    <p class="note" style="margin-bottom:12px">Run rate from the last 7 days, adjustable for growth.</p>
+    <div class="fc">
+      <div><div class="ey">Revenue</div><div class="v" id="f-rev"></div></div>
+      <div><div class="ey">Net profit</div><div class="v" id="f-prof"></div></div>
+      <div><div class="ey">Orders</div><div class="v" id="f-ord" style="color:var(--cream)"></div></div>
+      <div class="as"><label for="a-growth">Growth <span id="growthv">0%</span></label>
+        <input type="range" id="a-growth" min="-20" max="50" step="5" value="0"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Daily breakdown</h2>
+    <div style="overflow-x:auto"><table id="daytable"></table></div>
+  </div>
+
+  <div class="panel">
+    <h2>Stripe payouts to bank</h2>
+    <div id="payouts" class="note"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'altara-admin-token', AKEY = 'altara-fin-assumptions';
+  var gate = document.getElementById('gate'), panel = document.getElementById('panel');
+  var DATA = null;
+  var fmt = function (n, dp) { return (n < 0 ? '-' : '') + '$' + Math.abs(n).toFixed(dp === undefined ? 0 : dp).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+
+  var defaults = { cogs: 14, pack: 1, post: 11.2, adman: '', other: 0, window: 30 };
+  function loadAssum() {
+    var a = { ...defaults };
+    try { Object.assign(a, JSON.parse(localStorage.getItem(AKEY) || '{}')); } catch (e) {}
+    document.getElementById('a-cogs').value = a.cogs;
+    document.getElementById('a-pack').value = a.pack;
+    document.getElementById('a-post').value = a.post;
+    document.getElementById('a-adman').value = a.adman;
+    document.getElementById('a-other').value = a.other;
+    document.getElementById('a-window').value = a.window;
+    return a;
+  }
+  function readAssum() {
+    var a = {
+      cogs: +document.getElementById('a-cogs').value || 0,
+      pack: +document.getElementById('a-pack').value || 0,
+      post: +document.getElementById('a-post').value || 0,
+      adman: document.getElementById('a-adman').value === '' ? '' : +document.getElementById('a-adman').value,
+      other: +document.getElementById('a-other').value || 0,
+      window: +document.getElementById('a-window').value || 30,
+    };
+    localStorage.setItem(AKEY, JSON.stringify(a));
+    return a;
+  }
+
+  function token() { return sessionStorage.getItem(KEY) || ''; }
+
+  function load() {
+    var a = readAssum();
+    return fetch('/api/finance?days=' + a.window, { headers: { 'x-admin-token': token() } })
+      .then(function (r) { if (r.status === 401) throw new Error('Token rejected'); if (!r.ok) throw new Error('Load failed (' + r.status + ')'); return r.json(); })
+      .then(function (d) { DATA = d; render(); });
+  }
+
+  function derive() {
+    var a = readAssum();
+    var perDayOther = a.other / 30;
+    return (DATA.days || []).map(function (d) {
+      var ad = a.adman === '' ? (d.adspend || 0) : a.adman;
+      var cogs = d.covers * a.cogs + d.orders * (a.pack + a.post);
+      var profit = d.net - ad - cogs - perDayOther;
+      return { ...d, ad: ad, cogs: cogs, profit: profit };
+    });
+  }
+
+  function render() {
+    var rows = derive();
+    var t = rows.reduce(function (s, d) {
+      s.gross += d.gross; s.fees += d.fees; s.refunds += d.refunds; s.net += d.net;
+      s.ad += d.ad; s.cogs += d.cogs; s.profit += d.profit; s.orders += d.orders; s.covers += d.covers; return s;
+    }, { gross: 0, fees: 0, refunds: 0, net: 0, ad: 0, cogs: 0, profit: 0, orders: 0, covers: 0 });
+    var margin = t.gross ? (t.profit / t.gross * 100) : 0;
+    var aov = t.orders ? t.gross / t.orders : 0;
+
+    document.getElementById('kpis').innerHTML =
+      kpi('Revenue (gross)', fmt(t.gross), t.orders + ' orders') +
+      kpi('Stripe fees', fmt(-t.fees), (t.gross ? (t.fees / t.gross * 100).toFixed(1) : 0) + '% of revenue') +
+      kpi('Refunds', fmt(-t.refunds), '') +
+      kpi('Ad spend', fmt(-t.ad), '') +
+      kpi('COGS + postage', fmt(-t.cogs), t.covers + ' covers shipped') +
+      '<div class="kpi profit"><div class="k">Net profit</div><div class="v">' + fmt(t.profit) + '</div><div class="s">' + margin.toFixed(1) + '% margin &middot; AOV ' + fmt(aov) + '</div></div>';
+
+    drawChart(rows);
+    drawTable(rows);
+    forecast(rows);
+
+    document.getElementById('srcnote').textContent = DATA.ad_spend_available
+      ? 'Ad spend: live from Meta. Leave the manual field empty to use it.'
+      : 'Ad spend: enter a daily average manually (Meta token not configured on the server).';
+    document.getElementById('payouts').innerHTML = (DATA.payouts || []).length
+      ? DATA.payouts.map(function (p) { return p.day + ' &middot; ' + fmt(p.amount); }).join('<br>') + '<br><strong style="color:var(--cream)">Total paid out: ' + fmt(DATA.total_payouts) + '</strong>'
+      : 'No payouts in this window yet.';
+  }
+  function kpi(k, v, s) { return '<div class="kpi"><div class="k">' + k + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>'; }
+
+  function drawChart(rows) {
+    var svg = document.getElementById('chart'), tip = document.getElementById('tip');
+    var W = svg.clientWidth || 900, H = 300, padL = 56, padR = 14, padT = 12, padB = 28;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var iw = W - padL - padR, ih = H - padT - padB;
+    var max = Math.max(10, Math.max.apply(null, rows.map(function (d) { return Math.max(d.gross, d.profit); })));
+    var min = Math.min(0, Math.min.apply(null, rows.map(function (d) { return d.profit; })));
+    var span = max - min;
+    var y = function (v) { return padT + ih - ((v - min) / span) * ih; };
+    var n = rows.length, step = iw / Math.max(n, 1);
+    var bw = Math.max(3, Math.min(26, step - 2));
+    var out = '';
+    // gridlines: 4 recessive
+    for (var g = 0; g <= 4; g++) {
+      var gv = min + span * g / 4, gy = y(gv);
+      out += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + gy + '" y2="' + gy + '" stroke="rgba(237,232,223,.07)"/>' +
+             '<text x="' + (padL - 8) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="10" fill="rgba(237,232,223,.45)">' + fmt(gv) + '</text>';
+    }
+    var zy = y(0);
+    // revenue bars: rounded top only, anchored to zero baseline, 2px gaps via bw
+    rows.forEach(function (d, i) {
+      var x = padL + i * step + (step - bw) / 2;
+      var h = Math.max(0, zy - y(d.gross));
+      var r = Math.min(4, bw / 2, h);
+      if (h > 0) out += '<path d="M' + x + ' ' + zy + ' V' + (y(d.gross) + r) + ' Q' + x + ' ' + y(d.gross) + ' ' + (x + r) + ' ' + y(d.gross) + ' H' + (x + bw - r) + ' Q' + (x + bw) + ' ' + y(d.gross) + ' ' + (x + bw) + ' ' + (y(d.gross) + r) + ' V' + zy + ' Z" fill="#3987e5"/>';
+    });
+    // profit line
+    var pts = rows.map(function (d, i) { return (padL + i * step + step / 2) + ',' + y(d.profit); });
+    if (n > 1) out += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#b07d1e" stroke-width="2" stroke-linejoin="round"/>';
+    // direct label on last points
+    if (n) {
+      var last = rows[n - 1], lx = padL + (n - 1) * step + step / 2;
+      out += '<circle cx="' + lx + '" cy="' + y(last.profit) + '" r="4" fill="#b07d1e" stroke="#111317" stroke-width="2"/>';
+    }
+    // zero axis
+    out += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + zy + '" y2="' + zy + '" stroke="rgba(237,232,223,.25)"/>';
+    // x labels: ~6
+    var every = Math.max(1, Math.ceil(n / 6));
+    rows.forEach(function (d, i) {
+      if (i % every === 0) out += '<text x="' + (padL + i * step + step / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10" fill="rgba(237,232,223,.45)">' + d.day.slice(5) + '</text>';
+    });
+    // hover crosshair zone
+    out += '<line id="xh" y1="' + padT + '" y2="' + (padT + ih) + '" stroke="rgba(237,232,223,.3)" stroke-dasharray="3 3" style="display:none"/>' +
+           '<rect x="' + padL + '" y="' + padT + '" width="' + iw + '" height="' + ih + '" fill="transparent"/>';
+    svg.innerHTML = out;
+    var xh = svg.querySelector('#xh');
+    svg.onmousemove = function (e) {
+      var rect = svg.getBoundingClientRect();
+      var mx = (e.clientX - rect.left) * (W / rect.width);
+      var i = Math.max(0, Math.min(n - 1, Math.floor((mx - padL) / step)));
+      var d = rows[i]; if (!d) return;
+      var cx = padL + i * step + step / 2;
+      xh.setAttribute('x1', cx); xh.setAttribute('x2', cx); xh.style.display = '';
+      tip.style.display = 'block';
+      tip.innerHTML = '<strong>' + d.day + '</strong><br>Revenue ' + fmt(d.gross) + ' &middot; ' + d.orders + ' orders<br>Fees ' + fmt(-d.fees) + ' &middot; Ads ' + fmt(-d.ad) + '<br>COGS+post ' + fmt(-d.cogs) + '<br><span style="color:var(--gold)">Profit ' + fmt(d.profit) + '</span>';
+      var px = e.clientX - rect.left + 14, py = e.clientY - rect.top - 10;
+      if (px + 190 > rect.width) px -= 210;
+      tip.style.left = px + 'px'; tip.style.top = py + 'px';
+    };
+    svg.onmouseleave = function () { tip.style.display = 'none'; xh.style.display = 'none'; };
+  }
+
+  function drawTable(rows) {
+    var h = '<tr><th>Day</th><th>Orders</th><th>Covers</th><th>Gross</th><th>Fees</th><th>Ads</th><th>COGS+post</th><th>Net profit</th></tr>';
+    rows.slice().reverse().forEach(function (d) {
+      h += '<tr><td>' + d.day + '</td><td>' + d.orders + '</td><td>' + d.covers + '</td><td>' + fmt(d.gross) + '</td><td>' + fmt(-d.fees) + '</td><td>' + fmt(-d.ad) + '</td><td>' + fmt(-d.cogs) + '</td><td class="' + (d.profit < 0 ? 'neg' : '') + '" style="' + (d.profit >= 0 ? 'color:var(--gold)' : '') + '">' + fmt(d.profit) + '</td></tr>';
+    });
+    document.getElementById('daytable').innerHTML = h;
+  }
+
+  function forecast(rows) {
+    var last7 = rows.slice(-7);
+    var g = (+document.getElementById('a-growth').value || 0) / 100;
+    document.getElementById('growthv').textContent = (g >= 0 ? '+' : '') + Math.round(g * 100) + '%';
+    var f = last7.reduce(function (s, d) { s.rev += d.gross; s.prof += d.profit; s.ord += d.orders; return s; }, { rev: 0, prof: 0, ord: 0 });
+    var days = Math.max(last7.length, 1);
+    document.getElementById('f-rev').textContent = fmt(f.rev / days * 30 * (1 + g));
+    document.getElementById('f-prof').textContent = fmt(f.prof / days * 30 * (1 + g));
+    document.getElementById('f-ord').textContent = Math.round(f.ord / days * 30 * (1 + g));
+  }
+
+  document.getElementById('a-growth').addEventListener('input', function () { if (DATA) render(); });
+  document.getElementById('refresh').addEventListener('click', function () { load().catch(function (e) { alert(e.message); }); });
+  ['a-cogs', 'a-pack', 'a-post', 'a-adman', 'a-other'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', function () { if (DATA) render(); });
+  });
+  document.getElementById('a-window').addEventListener('change', function () { load().catch(function (e) { alert(e.message); }); });
+  window.addEventListener('resize', function () { if (DATA) render(); });
+
+  document.getElementById('unlock').addEventListener('click', function () {
+    var v = document.getElementById('tok').value.trim(); if (!v) return;
+    sessionStorage.setItem(KEY, v);
+    gate.classList.add('hide'); panel.classList.remove('hide');
+    load().catch(function (e) { alert(e.message); gate.classList.remove('hide'); panel.classList.add('hide'); });
+  });
+  document.getElementById('tok').addEventListener('keydown', function (e) { if (e.key === 'Enter') document.getElementById('unlock').click(); });
+
+  loadAssum();
+  if (token()) { gate.classList.add('hide'); panel.classList.remove('hide'); load().catch(function (e) { alert(e.message); }); }
+})();
+</script>

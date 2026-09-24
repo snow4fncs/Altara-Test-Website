@@ -411,6 +411,19 @@ const server = http.createServer(async (req, res) => {
 
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
+  if (rawPath === '/api/finance') {
+    if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
+    const days = [];
+    const now = Date.now();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now - i * 86400000).toISOString().slice(0, 10);
+      const orders = 3 + Math.floor(Math.random() * 5);
+      const gross = orders * 89;
+      const fees = +(gross * 0.029 + orders * 0.3).toFixed(2);
+      days.push({ day: d, gross, fees, refunds: 0, net: +(gross - fees).toFixed(2), orders, covers: orders * 2, adspend: 70 + Math.floor(Math.random() * 40) });
+    }
+    return send(res, 200, { days, payouts: [{ day: days[5].day, amount: 1200 }, { day: days[15].day, amount: 1900 }], total_payouts: 3100, ad_spend_available: true, window_days: 30 });
+  }
   if (rawPath === '/api/contact' && req.method === 'POST') {
     const body = await readBody(req);
     console.log('  [contact] enquiry from', body?.email, '-', String(body?.message || '').slice(0, 60));
