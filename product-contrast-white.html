@@ -39,7 +39,7 @@
   <title>Contrast White Car Seat Towel Cover — Altara | Sweat & Sand Protection</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:    #0B0C0F;
@@ -988,22 +988,22 @@
 
     <div class="ph-image-area">
       <img class="ph-main-img" id="ph-main-img"
-        src="Product Photos/Altara Product Image 1.png"
+        src="Product Photos/opt/img1-1200.jpg"
         alt="Contrast White -View 1" width="1122" height="1402" loading="eager" fetchpriority="high">
     </div>
 
     <div class="ph-thumbs">
-      <button class="ph-thumb active" data-src="Product Photos/Altara Product Image 1.png">
-        <img src="Product Photos/Altara Product Image 1.png" alt="View 1">
+      <button class="ph-thumb active" data-src="Product Photos/opt/img1-1200.jpg">
+        <img src="Product Photos/opt/img1-1200.jpg" alt="View 1">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 2.png">
-        <img src="Product Photos/Altara Product Image 2.png" alt="View 2">
+      <button class="ph-thumb" data-src="Product Photos/opt/img2-1200.jpg">
+        <img src="Product Photos/opt/img2-1200.jpg" alt="View 2">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 3.png">
-        <img src="Product Photos/Altara Product Image 3.png" alt="View 3">
+      <button class="ph-thumb" data-src="Product Photos/opt/img3-1200.jpg">
+        <img src="Product Photos/opt/img3-1200.jpg" alt="View 3">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/Altara Product Image 8.png">
-        <img src="Product Photos/Altara Product Image 8.png" alt="View 4">
+      <button class="ph-thumb" data-src="Product Photos/opt/img8-1200.jpg">
+        <img src="Product Photos/opt/img8-1200.jpg" alt="View 4">
       </button>
     </div>
 
@@ -1042,11 +1042,11 @@
     <p class="pi-colnote">Both colourways are the same black cover. The difference is the piping: tonal black, or contrast white.</p>
     <div class="pi-variants">
       <div class="pi-var active" title="Contrast White">
-        <img src="Product Photos/Altara Product Image 1.png" alt="Contrast White">
+        <img loading="lazy" decoding="async" src="Product Photos/opt/img1-320.jpg" alt="Contrast White">
         <span class="pi-var-label">Contrast White</span>
       </div>
       <a href="product-midnight-black.html" class="pi-var" title="Midnight Black">
-        <img src="Product Photos/Altara Product Image 7.png" alt="Midnight Black">
+        <img loading="lazy" decoding="async" src="Product Photos/opt/img7-320.jpg" alt="Midnight Black">
         <span class="pi-var-label">Midnight Black</span>
       </a>
     </div>
@@ -1234,7 +1234,7 @@
     <a href="product-midnight-black.html" class="complete-a">Discover Midnight Black</a>
   </div>
   <a href="product-midnight-black.html" class="complete-img">
-    <img src="Product Photos/Homepage image 2.png" alt="Also Available">
+    <img src="Product Photos/opt/homepage-image-2-1200.jpg" alt="Also Available">
   </a>
 </section>
 
@@ -1361,7 +1361,7 @@
   });
 
   // Cart
-  const PROD = { id: 'contrast-white', name: 'Contrast White', price: 69, image: 'Product Photos/Altara Product Image 1.png' };
+  const PROD = { id: 'contrast-white', name: 'Contrast White', price: 69, image: 'Product Photos/opt/img1-320.jpg' };
   const toast = document.getElementById('toast');
   let tt;
   var selectedPack = 'twin';   // all real orders to date are twins - default to the winner
@@ -1400,7 +1400,7 @@
   function addToCartAndGo() {
     var item, qty = 1;
     if (selectedPack === 'single')    item = { id: PROD.id, name: PROD.name, price: 69, image: PROD.image };
-    else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: 'Product Photos/Twin Set Contrast White.png' };
+    else                              item = { id: PROD.id + '-twin', name: PROD.name + ' — Twin Set', price: 89, image: 'Product Photos/opt/twin-set-contrast-white-320.jpg' };
     if (selectedPack === 'fullcar')   qty = 2;
     const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
     const ex = c.items.find(i => i.id === item.id);
@@ -1734,8 +1734,8 @@
   var $ = function (id) { return document.getElementById(id); };
   var drawer = $('cd'), overlay = $('cd-overlay');
   function canonImg(id){ id=String(id);
-    if(/-twin$/.test(id)) return id.indexOf('contrast-white')===0 ? 'Product Photos/Twin Set Contrast White.png' : 'Product Photos/Twin Set Midnight Black.png';
-    return id.indexOf('contrast-white')===0 ? 'Product Photos/Altara Product Image 1.png' : 'Product Photos/Altara Product Image 7.png'; }
+    if(/-twin$/.test(id)) return id.indexOf('contrast-white')===0 ? 'Product Photos/opt/twin-set-contrast-white-320.jpg' : 'Product Photos/opt/twin-set-midnight-black-320.jpg';
+    return id.indexOf('contrast-white')===0 ? 'Product Photos/opt/img1-320.jpg' : 'Product Photos/opt/img7-320.jpg'; }
   if (!drawer) return;
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
@@ -1818,9 +1818,9 @@
     var has = function(pre){ return c.items.some(function(i){ return i.id.indexOf(pre)===0; }); };
     var offer = null;
     if (has('midnight-black') && !has('contrast-white'))
-      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/Twin Set Contrast White.png', label:'Complete the pair' };
+      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Complete the pair' };
     else if (has('contrast-white') && !has('midnight-black'))
-      offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/Twin Set Midnight Black.png', label:'Complete the pair' };
+      offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/opt/twin-set-midnight-black-320.jpg', label:'Complete the pair' };
     else offer = { id: c.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
       name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
       price:89, image:canonImg(c.items[0].id.indexOf('midnight')===0?'midnight-black-twin':'contrast-white-twin'), label:'Add a second pair — Twin Set price' };
