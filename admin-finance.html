@@ -111,7 +111,7 @@
   var DATA = null;
   var fmt = function (n, dp) { return (n < 0 ? '-' : '') + '$' + Math.abs(n).toFixed(dp === undefined ? 0 : dp).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
 
-  var defaults = { cogs: 14, pack: 1, post: 11.2, adman: '', other: 0, window: 30 };
+  var defaults = { cogs: 9.33, pack: 1, post: 13, adman: '', other: 0, window: 30 };
   function loadAssum() {
     var a = { ...defaults };
     try { Object.assign(a, JSON.parse(localStorage.getItem(AKEY) || '{}')); } catch (e) {}

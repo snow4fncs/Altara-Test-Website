@@ -70,7 +70,7 @@ export default async function handler(req, res) {
       const b = bucket(sydneyDay(o.created_at));
       b.orders += 1;
       for (const it of o.items || []) {
-        const per = /-twin$/.test(String(it.id)) ? 2 : 1;
+        const per = /twin/i.test(String(it.id || '') + ' ' + String(it.name || '')) ? 2 : 1;
         b.covers += per * (Number(it.qty) || 1);
       }
     }
