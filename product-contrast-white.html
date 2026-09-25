@@ -933,18 +933,18 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar">
-    <p class="ab-sr">Order by 2pm AEST weekdays for same-day dispatch. Tracked with Australia Post. Free shipping on orders over $80. 30-day returns, 60 days on Twin Sets. Every order over $80 earns a $15 credit.</p>
+    <p class="ab-sr">Same-day dispatch weekdays, tracked with Australia Post. Free shipping on orders over $80. 30-day returns, 60 days on Twin Sets. Every order over $80 earns a $15 credit.</p>
     <div class="announce-viewport" aria-hidden="true">
       <div class="announce-track">
         <div class="announce-seq">
-          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
-          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Tracked with Australia Post</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
@@ -1132,7 +1132,7 @@
       <div class="pi-step done">
         <span class="pi-step-dot"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
         <span class="pi-step-k">Order today</span>
-        <span class="pi-step-s">2pm AEST cutoff</span>
+        <span class="pi-step-s">Same day, weekdays</span>
       </div>
       <div class="pi-step-line"></div>
       <div class="pi-step">
@@ -1989,14 +1989,13 @@
   function render(){
     var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
     var d=n.getDay(), secs=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(), cutoff=50400, h;
-    if(d>=1&&d<=5&&secs<cutoff){
-      var left=cutoff-secs, hh=Math.floor(left/3600), mm=Math.floor((left%3600)/60), ss=left%60;
-      h='Order within <strong>'+(hh?hh+'h ':'')+mm+'m '+String(ss).padStart(2,'0')+'s</strong> for dispatch <strong>today</strong> &middot; Australia Post tracked';
-    } else if(d>=1&&d<=4){ h='Dispatched <strong>tomorrow</strong> &middot; order before 2pm AEST &middot; Australia Post tracked'; }
-    else { h='Dispatched <strong>Monday</strong> &middot; order anytime &middot; Australia Post tracked'; }
+    // Reassurance, not a countdown: speed is a service promise, never pressure.
+    if(d>=1&&d<=5&&secs<cutoff){ h='Ships <strong>today</strong> &middot; tracked with Australia Post'; }
+    else if(d>=1&&d<=5){ h='Ships <strong>tomorrow</strong> &middot; tracked with Australia Post'; }
+    else { h='Ships <strong>Monday</strong> &middot; tracked with Australia Post'; }
     txt.innerHTML=h; el.hidden=false;
   }
-  render(); setInterval(render,1000);
+  render(); setInterval(render,60000);
 })();
 </script>
 <script>

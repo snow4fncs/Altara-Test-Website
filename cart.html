@@ -893,18 +893,18 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar">
-    <p class="ab-sr">Order by 2pm AEST weekdays for same-day dispatch. Tracked with Australia Post. Free shipping on orders over $80. 30-day returns, 60 days on Twin Sets.</p>
+    <p class="ab-sr">Same-day dispatch weekdays, tracked with Australia Post. Free shipping on orders over $80. 30-day returns, 60 days on Twin Sets.</p>
     <div class="announce-viewport" aria-hidden="true">
       <div class="announce-track">
         <div class="announce-seq">
-          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
-          <span class="ab-item">Order by <strong>2pm AEST</strong> for same-day dispatch</span><span class="ab-dot">&#9670;</span>
+          <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
@@ -1067,7 +1067,7 @@
       <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()"><svg class="btn-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Proceed to Checkout</button>
       <div class="assure">
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &middot; full refund if it isn't right</span>
-        <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="cart-dispatch">Order by 2pm AEST for same-day dispatch &middot; Australia Post tracked</span></span>
+        <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="cart-dispatch">Same-day dispatch weekdays &middot; Australia Post tracked</span></span>
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Adding a second pair? Any two covers price-match to $89 the pair, automatically</span>
       </div>
 
@@ -1708,9 +1708,9 @@
     var d=n.getDay(), secs=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(), cutoff=50400;
     if(d>=1&&d<=5&&secs<cutoff){
       var left=cutoff-secs, hh=Math.floor(left/3600), mm=Math.floor((left%3600)/60), ss=left%60;
-      el.innerHTML='Order within <strong style="color:var(--gold);font-variant-numeric:tabular-nums">'+(hh?hh+'h ':'')+mm+'m '+String(ss).padStart(2,'0')+'s</strong> for same-day dispatch &middot; Australia Post tracked';
-    } else if(d>=1&&d<=4){ el.innerHTML='Dispatched <strong style="color:var(--gold)">tomorrow</strong> &middot; order before 2pm AEST &middot; Australia Post tracked'; }
-    else { el.innerHTML='Dispatched <strong style="color:var(--gold)">Monday</strong> &middot; order anytime &middot; Australia Post tracked'; }
+      el.innerHTML='Ships <strong style="color:var(--gold)">today</strong> &middot; tracked with Australia Post';
+    } else if(d>=1&&d<=5){ el.innerHTML='Ships <strong style="color:var(--gold)">tomorrow</strong> &middot; tracked with Australia Post'; }
+    else { el.innerHTML='Ships <strong style="color:var(--gold)">Monday</strong> &middot; tracked with Australia Post'; }
   }
   render(); setInterval(render,1000);
 })();
