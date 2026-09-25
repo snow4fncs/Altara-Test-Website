@@ -758,7 +758,12 @@
     .pi-ugc-meta { position:absolute; left:0; right:0; bottom:0; display:flex; align-items:center; gap:10px; padding:10px 14px; background:linear-gradient(to top, rgba(10,11,13,.9), rgba(10,11,13,0)); font-size:12px; color:var(--cream); }
     .pi-ugc-play { width:26px; height:26px; border-radius:50%; background:var(--gold); color:#141518; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
 
-    .pi-includes { font-size:12.5px; letter-spacing:.04em; color:var(--gold); opacity:.85; margin:4px 0 0; }
+    .pi-benefits { list-style:none; margin:14px 0 0; padding:0; display:grid; gap:10px; }
+    .pi-benefits li { display:flex; align-items:flex-start; gap:10px; font-size:13.5px; line-height:1.5; color:rgba(237,232,223,.72); }
+    .pi-benefits strong { color:var(--cream); font-weight:500; }
+    .pi-bt { width:18px; height:18px; flex-shrink:0; margin-top:1px; fill:none; }
+    .pi-bt circle { fill:var(--gold); }
+    .pi-bt path { stroke:#141518; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
     .pi-keyspecs { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line, rgba(237,232,223,.12)); border:1px solid var(--line, rgba(237,232,223,.12)); margin:16px 0 4px; }
     .pi-keyspecs div { background:var(--bg, #0c0d10); padding:12px 14px; font-size:12px; line-height:1.55; color:rgba(237,232,223,.55); }
     .pi-keyspecs strong { display:block; font-size:12.5px; letter-spacing:.05em; color:var(--cream, #EDE8DF); font-weight:500; margin-bottom:2px; }
@@ -1048,13 +1053,13 @@
     <p class="pi-price" id="pi-price-display"><s class="pack-was" style="font-size:0.7em">$138</s> $89 AUD</p>
     <div class="pi-rating" id="pi-rating" hidden></div>
     <p class="pi-proof">Delivered to drivers in every Australian state. 80+ orders and counting.</p>
-    <p class="pi-includes">Each set: two tailored covers, MagFit clips built in, machine washable.</p>
-    <div class="pi-keyspecs">
-      <div><strong>145 &times; 70 cm</strong>fits most seats, hatchback to ute</div>
-      <div><strong>Waterproof backing layer</strong>absorbent towelling above, sealed beneath</div>
-      <div><strong>Machine washable</strong>cold wash, quick-dry</div>
-      <div><strong>MagFit&trade; clips</strong>on in 30 seconds, no tools</div>
-    </div>
+    <ul class="pi-benefits">
+      <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span><strong>Waterproof backing</strong> &mdash; spills, sweat and sea water never reach your seat</span></li>
+      <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span><strong>Fits most cars</strong> &mdash; hatchback to ute, or your money back</span></li>
+      <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span><strong>Machine washable</strong> &mdash; cold wash, quick dry, back on in minutes</span></li>
+      <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span><strong>On in 30 seconds</strong> &mdash; MagFit&trade; clips, no tools, no fuss</span></li>
+      <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span><strong>60-day fit guarantee</strong> on Twin Sets &mdash; double the standard</span></li>
+    </ul>
 
     <div class="pi-sep"></div>
 
@@ -1118,9 +1123,6 @@
     </div>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
     <p class="pi-dispatch" id="pi-dispatch" hidden><span class="pi-dispatch-dot" aria-hidden="true"></span><span id="pi-dispatch-text"></span></p>
-    <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &middot; <strong style="color:var(--gold);font-weight:500">60 days on Twin Sets</strong></p>
-
-    <p class="pi-fineprint">Free tracked Australia Post shipping over $80 &middot; 30-day returns &middot; Secure checkout</p>
     <div class="pi-steps" aria-label="Order timeline">
       <div class="pi-step done">
         <span class="pi-step-dot"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
