@@ -438,7 +438,7 @@ const server = http.createServer(async (req, res) => {
       const minimum = 150;
       if (Number.isFinite(subtotal) && subtotal < minimum) {
         const short = (minimum - subtotal).toFixed(2).replace(/\.00$/, '');
-        return send(res, 400, { error: `SELLOUT10 needs an order of $${minimum} or more — add $${short} to use it.`, minimum });
+        return send(res, 400, { error: `SELLOUT10 unlocks at $${minimum}. Add $${short} more.`, minimum });
       }
       return send(res, 200, { code, name: '$10 off — Sell-Out', percent_off: null, amount_off: 10, currency: 'aud', minimum });
     }

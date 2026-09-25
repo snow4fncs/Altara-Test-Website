@@ -1364,13 +1364,15 @@
         document.getElementById('promo-value').textContent = '-' + fmt(promoDisc);
         promoRow.style.display = '';
         promoMsg.className = 'promo-msg ok';
-        promoMsg.innerHTML = promo.code + ' applied — confirmed at checkout. <a href="#" id="promo-remove">Remove</a>';
+        promoMsg.innerHTML = promo.code + ' applied. Confirmed at checkout. <a href="#" id="promo-remove">Remove</a>';
+      } else if (promo && promo.minimum && subtotal - bundle.discount < promo.minimum) {
+        promoRow.style.display = 'none';
+        promoMsg.className = 'promo-msg err';
+        promoMsg.innerHTML = promo.code + ' unlocks at ' + fmt(promo.minimum) + '. Add ' + fmt(promo.minimum - (subtotal - bundle.discount)) + ' more. <a href="#" id="promo-remove">Remove</a>';
       } else {
         promoRow.style.display = 'none';
-        if (promo && promo.minimum && subtotal - bundle.discount < promo.minimum) {
-          promoMsg.className = 'promo-msg err';
-          promoMsg.innerHTML = promo.code + ' needs an order of ' + fmt(promo.minimum) + '+ — add ' + fmt(promo.minimum - (subtotal - bundle.discount)) + ' more to use it. <a href="#" id="promo-remove">Remove code</a>';
-        }
+        promoMsg.className = 'promo-msg';
+        promoMsg.innerHTML = '';
       }
       var rm = document.getElementById('promo-remove');
       if (rm) rm.addEventListener('click', function (e) { e.preventDefault(); setPromo(null); renderCart(); });

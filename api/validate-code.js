@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     if (minimum && Number.isFinite(subtotal) && subtotal < minimum) {
       const short = (minimum - subtotal).toFixed(2).replace(/\.00$/, '');
       return res.status(400).json({
-        error: `${pc.code} needs an order of $${minimum} or more — add $${short} to use it.`,
+        error: `${pc.code} unlocks at $${minimum}. Add $${short} more.`,
         minimum,
       });
     }
