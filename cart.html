@@ -839,6 +839,7 @@
     .promo button:hover { border-color: rgba(196,169,122,0.5); }
     .promo button[disabled] { opacity: 0.4; cursor: default; }
     .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
+    .promo-msg:empty { margin: 0; }
     .promo-msg.err { color: #D98A8A; }
     .promo-msg.ok { color: var(--gold); }
     .promo-msg a { color: var(--cream-dim); }
@@ -1375,7 +1376,7 @@
         promoMsg.innerHTML = '';
       }
       var rm = document.getElementById('promo-remove');
-      if (rm) rm.addEventListener('click', function (e) { e.preventDefault(); setPromo(null); renderCart(); });
+      if (rm) rm.addEventListener('click', function (e) { e.preventDefault(); setPromo(null); var pin = document.getElementById('promo-input'); if (pin) pin.value = ''; renderCart(); });
       const shipping = afterDiscount >= FREE_SHIP ? 0 : SHIP_RATE;
 
       // Progress to free shipping - same bar as the drawer, same maths.
