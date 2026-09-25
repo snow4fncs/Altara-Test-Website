@@ -987,20 +987,20 @@
     <div class="pi-steps" aria-label="Order timeline">
       <div class="pi-step done">
         <span class="pi-step-dot"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
-        <span class="pi-step-k">Order today</span>
-        <span class="pi-step-s">Same day, weekdays</span>
+        <span class="pi-step-k">Order</span>
+        <span class="pi-step-s">You order today</span>
       </div>
       <div class="pi-step-line"></div>
       <div class="pi-step">
         <span class="pi-step-dot"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-        <span class="pi-step-k">Dispatched <em id="step-dispatch-day">today</em></span>
-        <span class="pi-step-s">Australia Post tracked</span>
+        <span class="pi-step-k">Ships</span>
+        <span class="pi-step-s">Same day, tracked</span>
       </div>
       <div class="pi-step-line"></div>
       <div class="pi-step">
         <span class="pi-step-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
         <span class="pi-step-k">Delivered</span>
-        <span class="pi-step-s">3&ndash;7 business days</span>
+        <span class="pi-step-s">3&ndash;7 days</span>
       </div>
     </div>
 
@@ -1829,7 +1829,7 @@
     if(d>=1&&d<=4) return 'tomorrow';
     return 'Monday';
   }
-  var el=document.getElementById('step-dispatch-day'); if(el) el.textContent=day();
+
   // quote slider: gentle auto-advance, pauses on touch/hover
   var q=document.getElementById('pi-quotes');
   if(q && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
