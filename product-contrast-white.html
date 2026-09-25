@@ -649,6 +649,10 @@
     .pack-mix a:hover { color: var(--gold); border-bottom-color: var(--gold); }
     .pack-mix a:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
     @media (max-width: 900px) { .pack-mix { font-size: 14px; } }
+    .pi-lowstock { display:flex; align-items:center; gap:9px; font-size:12.5px; letter-spacing:.02em; color:#d9a441; margin:0 0 12px; }
+    .pi-ls-dot { width:8px; height:8px; border-radius:50%; background:#d9a441; flex-shrink:0; box-shadow:0 0 0 0 rgba(217,164,65,.5); animation:lsPulse 2s ease-out infinite; }
+    @keyframes lsPulse { 0%{box-shadow:0 0 0 0 rgba(217,164,65,.45)} 70%{box-shadow:0 0 0 8px rgba(217,164,65,0)} 100%{box-shadow:0 0 0 0 rgba(217,164,65,0)} }
+    @media (prefers-reduced-motion: reduce){ .pi-ls-dot{ animation:none } }
   
     @media (max-width: 900px) {
       .pack-opt-name { font-size: 10.5px; }
@@ -1120,6 +1124,7 @@
       </div>
       <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set. Every order over $80 also earns a <strong>$15 credit</strong> toward your next one.</p>
     </div>
+    <p class="pi-lowstock"><span class="pi-ls-dot" aria-hidden="true"></span>Low stock &middot; selling fast this week</p>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
     <p class="pi-dispatch" id="pi-dispatch" hidden><span class="pi-dispatch-dot" aria-hidden="true"></span><span id="pi-dispatch-text"></span></p>
     <div class="pi-steps" aria-label="Order timeline">
