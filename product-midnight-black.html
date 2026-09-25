@@ -537,7 +537,9 @@
     .pack-mix a:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
     @media (max-width: 900px) { .pack-mix { font-size: 14px; } }
     .pi-lowstock { display:flex; align-items:center; gap:11px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; color:#9e3b34; margin:2px 0 14px; }
-    .pi-ls-bar { width:1px; height:13px; background:#9e3b34; flex-shrink:0; }
+    .pi-ls-dot { width:6px; height:6px; border-radius:50%; background:#a8443c; flex-shrink:0; animation:lsdot 2.2s ease-in-out infinite; }
+    @keyframes lsdot { 0%,100%{ box-shadow:0 0 0 0 rgba(168,68,60,.55); opacity:1 } 50%{ box-shadow:0 0 0 5px rgba(168,68,60,0); opacity:.65 } }
+    @media (prefers-reduced-motion: reduce){ .pi-ls-dot{ animation:none } }
     .pi-ls-note { font-size:11px; letter-spacing:.02em; text-transform:none; font-weight:300; color:rgba(237,232,223,.4); }
   
     @media (max-width: 900px) {
@@ -979,7 +981,7 @@
       </div>
       <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set. Every order over $80 also earns a <strong>$15 credit</strong> toward your next one.</p>
     </div>
-    <p class="pi-lowstock"><span class="pi-ls-bar" aria-hidden="true"></span>Low Stock<span class="pi-ls-note">Limited sets remaining</span></p>
+    <p class="pi-lowstock"><span class="pi-ls-dot" aria-hidden="true"></span>Low Stock<span class="pi-ls-note">Limited sets remaining</span></p>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
     <p class="pi-dispatch" id="pi-dispatch" hidden><span class="pi-dispatch-dot" aria-hidden="true"></span><span id="pi-dispatch-text"></span></p>
     <div class="pi-steps" aria-label="Order timeline">
