@@ -277,6 +277,19 @@
     }
 
     /* Order number */
+        .otrack { display:flex; align-items:flex-start; justify-content:center; margin:34px auto 8px; max-width:520px; }
+    .otrack-step { display:grid; justify-items:center; gap:4px; width:31%; text-align:center; }
+    .otrack-dot { width:30px; height:30px; border-radius:50%; border:1px solid rgba(237,232,223,.28); display:flex; align-items:center; justify-content:center; }
+    .otrack-step.done .otrack-dot { background:var(--gold, #C4A97A); border-color:var(--gold, #C4A97A); }
+    .otrack-dot svg { width:14px; height:14px; fill:none; stroke:#141518; stroke-width:2.2; }
+    .otrack-k { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(237,232,223,.85); }
+    .otrack-s { font-size:10.5px; color:rgba(237,232,223,.4); }
+    .otrack-line { flex:1; height:1px; background:rgba(237,232,223,.2); margin-top:15px; }
+    .order-totals { border-top:1px solid rgba(237,232,223,.1); margin-top:14px; padding-top:12px; display:grid; gap:7px; font-size:13px; }
+    .order-totals .tr { display:flex; justify-content:space-between; color:rgba(237,232,223,.6); }
+    .order-totals .tr.save span:last-child { color:var(--gold, #C4A97A); }
+    .order-totals .tr.grand { font-size:15px; color:#EDE8DF; font-weight:500; padding-top:5px; border-top:1px solid rgba(237,232,223,.1); }
+    .order-totals .free { color:var(--gold, #C4A97A); }
     .order-number-wrap {
       display: inline-flex;
       align-items: center;
@@ -803,6 +816,26 @@
     <!-- Subtext -->
     <p class="confirm-subtext">Your order has been received and is being prepared. A confirmation email will be sent to your address.</p>
 
+    <div class="otrack" aria-label="Order progress">
+      <div class="otrack-step done">
+        <span class="otrack-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <span class="otrack-k">Order placed</span>
+        <span class="otrack-s" id="otrack-date"></span>
+      </div>
+      <div class="otrack-line"></div>
+      <div class="otrack-step">
+        <span class="otrack-dot"></span>
+        <span class="otrack-k">Shipping</span>
+        <span class="otrack-s">Tracked email coming</span>
+      </div>
+      <div class="otrack-line"></div>
+      <div class="otrack-step">
+        <span class="otrack-dot"></span>
+        <span class="otrack-k">Delivery</span>
+        <span class="otrack-s">3&ndash;7 business days</span>
+      </div>
+    </div>
+
     <!-- Order number -->
     <div class="order-number-wrap">
       <span class="order-number-label">Order</span>
@@ -906,8 +939,12 @@
 </footer>
 
 <script>
-  // Clear cart on confirmation page — order is complete
-  try { localStorage.removeItem('altara-cart'); } catch(e) {}
+  // Capture the just-placed order for the receipt BEFORE anything clears it.
+  var __orderCart = null;
+  try {
+    var __raw = localStorage.getItem('altara-cart');
+    if (__raw) { var __p = JSON.parse(__raw); __orderCart = Array.isArray(__p) ? __p : (__p && __p.items) || []; }
+  } catch(e) {}
   // Badge stays hidden (cart is empty)
 
   // ─── NAV SCROLL ───
@@ -953,13 +990,15 @@
   document.getElementById('order-num').textContent = 'ALTARA-' + orderNum;
 
   // ─── ORDER ITEMS ───
-  let cartItems = [];
-  try {
-    const cartData = localStorage.getItem('altara-cart');
-    if (cartData) {
-      cartItems = JSON.parse(cartData) || [];
-    }
-  } catch (e) {}
+  let cartItems = Array.isArray(__orderCart) ? __orderCart : [];
+  const canonImg = id => {
+    id = String(id || '');
+    if (/twin/i.test(id)) return id.indexOf('contrast-white') === 0
+      ? 'Product Photos/opt/twin-set-contrast-white-320.jpg'
+      : 'Product Photos/opt/twin-set-midnight-black-320.jpg';
+    return id.indexOf('contrast-white') === 0
+      ? 'Product Photos/opt/img1-320.jpg' : 'Product Photos/opt/img7-320.jpg';
+  };
 
   const listEl = document.getElementById('order-items-list');
 
@@ -968,7 +1007,7 @@
       const el = document.createElement('div');
       el.className = 'order-item';
 
-      const imgSrc = item.image || 'https://placehold.co/48x48/181B1F/72787F?text=A';
+      const imgSrc = canonImg(item.id) || item.image;
       const name = item.name || 'Altara Cover';
       const variant = item.variant || (item.color ? item.color : '');
       const qty = item.quantity || item.qty || 1;
@@ -989,10 +1028,30 @@
       `;
       listEl.appendChild(el);
     });
+    // totals: mirror the cart's maths so the card matches what Stripe charged
+    const subtotal = cartItems.reduce((s, i) => s + (Number(i.price) || 0) * (i.quantity || i.qty || 1), 0);
+    const singles = cartItems.filter(i => !/twin/i.test(String(i.id))).reduce((n, i) => n + (i.quantity || i.qty || 1), 0);
+    const saving = Math.floor(singles / 2) * 49;
+    const afterSave = subtotal - saving;
+    const shipping = afterSave >= 80 ? 0 : 9.95;
+    const money = n => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const tot = document.createElement('div');
+    tot.className = 'order-totals';
+    tot.innerHTML = '<div class="tr"><span>Subtotal</span><span>' + money(subtotal) + '</span></div>'
+      + (saving ? '<div class="tr save"><span>Twin Set saving</span><span>-' + money(saving) + '</span></div>' : '')
+      + '<div class="tr"><span>Shipping</span><span class="' + (shipping ? '' : 'free') + '">' + (shipping ? money(shipping) : 'FREE · Australia Post tracked') + '</span></div>'
+      + '<div class="tr grand"><span>Total</span><span>' + money(afterSave + shipping) + ' AUD</span></div>';
+    listEl.appendChild(tot);
   } else {
     // Fallback: no cart data — show a graceful empty state
     listEl.innerHTML = '<p class="order-empty">Your items are on their way.</p>';
   }
+  // a real purchase empties the cart; a stray visit to this page must not
+  if (sessionId && cartItems.length) {
+    localStorage.removeItem('altara-cart');
+  }
+  const dEl = document.getElementById('otrack-date');
+  if (dEl) dEl.textContent = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
 
   // Footer accordion (mobile)
   document.querySelectorAll('.footer-col h4').forEach(h4 => {

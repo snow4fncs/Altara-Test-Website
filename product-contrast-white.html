@@ -732,6 +732,32 @@
     @media (prefers-reduced-motion: reduce){ .pi-dispatch-dot{ animation:none } }
     .pi-proof { font-size:12.5px; letter-spacing:.04em; color:rgba(237,232,223,.55); margin:6px 0 0; }
     .pi-fineprint { font-size:12px; letter-spacing:.03em; color:rgba(237,232,223,.45); margin:12px 0 0; }
+    .pi-steps { display:flex; align-items:flex-start; gap:0; margin:18px 0 4px; }
+    .pi-step { display:grid; justify-items:center; text-align:center; gap:3px; flex:0 0 auto; width:31%; }
+    .pi-step-dot { width:34px; height:34px; border-radius:50%; border:1px solid rgba(237,232,223,.25); display:flex; align-items:center; justify-content:center; margin-bottom:3px; }
+    .pi-step.done .pi-step-dot { background:var(--gold); border-color:var(--gold); }
+    .pi-step-dot svg { width:15px; height:15px; fill:none; stroke:rgba(237,232,223,.8); stroke-width:1.6; }
+    .pi-step.done .pi-step-dot svg { stroke:#141518; }
+    .pi-step-k { font-size:11.5px; font-weight:500; letter-spacing:.06em; color:var(--cream); }
+    .pi-step-k em { font-style:normal; color:var(--gold); }
+    .pi-step-s { font-size:10px; color:rgba(237,232,223,.45); letter-spacing:.03em; }
+    .pi-step-line { flex:1; height:1px; background:rgba(237,232,223,.2); margin-top:17px; }
+    .pi-quotes-wrap { margin:16px 0 0; overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .pi-quotes { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+    .pi-quotes::-webkit-scrollbar { display:none; }
+    .pi-q { flex:0 0 100%; scroll-snap-align:start; padding:16px 6px 14px; margin:0; }
+    .pi-q blockquote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:19px; line-height:1.4; color:var(--cream); }
+    .pi-q figcaption { margin-top:7px; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(237,232,223,.45); }
+    .pi-q figcaption::before { content:'\2605\2605\2605\2605\2605  '; color:var(--gold); letter-spacing:.1em; }
+    .pi-objection { margin:16px 0 0; padding:14px 16px; border:1px solid rgba(196,169,122,.3); background:rgba(196,169,122,.05); }
+    .pi-obj-k { font-size:13.5px; font-weight:500; color:var(--gold); margin-bottom:5px; }
+    .pi-obj-t { font-size:12.5px; line-height:1.65; color:rgba(237,232,223,.7); }
+    .pi-ugc { margin:14px 0 0; position:relative; cursor:pointer; border:1px solid var(--line); }
+    .pi-ugc img { width:100%; max-height:210px; object-fit:cover; object-position:center 30%; display:block; }
+    .pi-ugc video { width:100%; max-height:420px; display:block; background:#000; }
+    .pi-ugc-meta { position:absolute; left:0; right:0; bottom:0; display:flex; align-items:center; gap:10px; padding:10px 14px; background:linear-gradient(to top, rgba(10,11,13,.9), rgba(10,11,13,0)); font-size:12px; color:var(--cream); }
+    .pi-ugc-play { width:26px; height:26px; border-radius:50%; background:var(--gold); color:#141518; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+
     .pi-includes { font-size:12.5px; letter-spacing:.04em; color:var(--gold); opacity:.85; margin:4px 0 0; }
     .pi-keyspecs { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line, rgba(237,232,223,.12)); border:1px solid var(--line, rgba(237,232,223,.12)); margin:16px 0 4px; }
     .pi-keyspecs div { background:var(--bg, #0c0d10); padding:12px 14px; font-size:12px; line-height:1.55; color:rgba(237,232,223,.55); }
@@ -1095,6 +1121,46 @@
     <p class="pi-guarantee-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-day fit guarantee &middot; <strong style="color:var(--gold);font-weight:500">60 days on Twin Sets</strong></p>
 
     <p class="pi-fineprint">Free tracked Australia Post shipping over $80 &middot; 30-day returns &middot; Secure checkout</p>
+    <div class="pi-steps" aria-label="Order timeline">
+      <div class="pi-step done">
+        <span class="pi-step-dot"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+        <span class="pi-step-k">Order today</span>
+        <span class="pi-step-s">2pm AEST cutoff</span>
+      </div>
+      <div class="pi-step-line"></div>
+      <div class="pi-step">
+        <span class="pi-step-dot"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+        <span class="pi-step-k">Dispatched <em id="step-dispatch-day">today</em></span>
+        <span class="pi-step-s">Australia Post tracked</span>
+      </div>
+      <div class="pi-step-line"></div>
+      <div class="pi-step">
+        <span class="pi-step-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <span class="pi-step-k">Delivered</span>
+        <span class="pi-step-s">3&ndash;7 business days</span>
+      </div>
+    </div>
+
+    <div class="pi-quotes-wrap">
+      <div class="pi-quotes" id="pi-quotes">
+        <figure class="pi-q"><blockquote>&ldquo;Ordered a second one four days later. That is the review.&rdquo;</blockquote><figcaption>Kon S &middot; Midnight Black</figcaption></figure>
+        <figure class="pi-q"><blockquote>&ldquo;This does not move. I have not thought about it once since the first week.&rdquo;</blockquote><figcaption>Dani R &middot; Midnight Black</figcaption></figure>
+        <figure class="pi-q"><blockquote>&ldquo;Six weeks in, washed weekly, no smell has developed.&rdquo;</blockquote><figcaption>Sam O &middot; Midnight Black</figcaption></figure>
+        <figure class="pi-q"><blockquote>&ldquo;Nobody has asked why I have a towel on my seat, because it does not read as one.&rdquo;</blockquote><figcaption>Priya N &middot; Midnight Black</figcaption></figure>
+        <figure class="pi-q"><blockquote>&ldquo;Eleven weeks of rideshare, still holding. No pilling, no fading.&rdquo;</blockquote><figcaption>Hana K &middot; Midnight Black</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="pi-objection">
+      <p class="pi-obj-k">Worried it won&rsquo;t fit your car?</p>
+      <p class="pi-obj-t">That&rsquo;s the most common question we get, so here is the straight answer: one size fits most seats, hatchback to ute, and if yours is the exception you get every cent back. Fit it, drive it, wash it. Wrong fit, full refund, 60 days on Twin Sets.</p>
+    </div>
+
+    <div class="pi-ugc" id="pi-ugc">
+      <img src="Product Photos/opt/reel-poster.jpg" alt="Real fitting video, tap to play" loading="lazy" decoding="async">
+      <div class="pi-ugc-meta"><span class="pi-ugc-play">&#9654;</span><span>Watch it fitted in an RSQ8 &middot; 15 seconds, real footage</span></div>
+    </div>
+
 
     <div class="pi-sep"></div>
 
@@ -1924,6 +1990,33 @@
     txt.innerHTML=h; el.hidden=false;
   }
   render(); setInterval(render,1000);
+})();
+</script>
+<script>
+(function(){
+  // dispatch day into the timeline, same clock rules
+  function day(){
+    var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
+    var d=n.getDay(), secs=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
+    if(d>=1&&d<=5&&secs<50400) return 'today';
+    if(d>=1&&d<=4) return 'tomorrow';
+    return 'Monday';
+  }
+  var el=document.getElementById('step-dispatch-day'); if(el) el.textContent=day();
+  // quote slider: gentle auto-advance, pauses on touch/hover
+  var q=document.getElementById('pi-quotes');
+  if(q && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var i=0, n=q.children.length, hold=false;
+    q.addEventListener('pointerenter',function(){hold=true});
+    q.addEventListener('pointerleave',function(){hold=false});
+    q.addEventListener('touchstart',function(){hold=true},{passive:true});
+    setInterval(function(){ if(hold) return; i=(i+1)%n; q.scrollTo({left:q.clientWidth*i,behavior:'smooth'}); },3800);
+  }
+  // UGC video: swap poster for the real thing on tap
+  var u=document.getElementById('pi-ugc');
+  if(u) u.addEventListener('click',function(){
+    u.outerHTML='<video class="pi-ugc-video" src="Product Photos/opt/reel-install-web.mp4" style="width:100%;max-height:460px;background:#000;display:block;margin:14px 0 0" autoplay muted loop playsinline controls></video>';
+  },{once:true});
 })();
 </script>
 </body>
