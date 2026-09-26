@@ -103,6 +103,7 @@
     .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
     .ph-image-area { overflow: hidden; position: relative; background: #d7c9bb; display: flex; align-items: center; justify-content: center; }
         .ph-main-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+        .ph-main-img.ph-contain { object-fit: contain; background: #17181b; }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
     .ph-thumb { flex: 1; min-width: 0; background: #d8cabd; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
     .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
@@ -901,7 +902,7 @@
     <div class="ph-thumbs">
       <button class="ph-thumb active" data-src="Product Photos/opt/img7-wide.jpg"><img src="Product Photos/opt/img7-1200.jpg" alt="View 1"></button>
       <button class="ph-thumb" data-src="Product Photos/opt/img9-wide.jpg"><img src="Product Photos/opt/img9-1200.jpg" alt="View 2"></button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img6-wide.jpg"><img src="Product Photos/opt/img6-1200.jpg" alt="View 3"></button>
+      <button class="ph-thumb" data-src="Product Photos/opt/img6-1200.jpg"><img src="Product Photos/opt/img6-1200.jpg" alt="View 3"></button>
       <button class="ph-thumb" data-src="Product Photos/opt/img5-wide.jpg"><img src="Product Photos/opt/img5-1200.jpg" alt="View 4"></button>
     </div>
   </div>
@@ -1254,6 +1255,7 @@
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       mainImg.src = btn.dataset.src;
+      mainImg.classList.toggle('ph-contain', /img6-1200/.test(btn.dataset.src));
     });
   });
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
