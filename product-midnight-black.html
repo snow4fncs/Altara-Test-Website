@@ -101,11 +101,10 @@
 
     .product-hero { margin-top: var(--nav-h); display: grid; grid-template-columns: 62% 38%; align-items: start; }
     .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
-    .ph-image-area { overflow: hidden; position: relative; background: #131210; }
-    .ph-image-area::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 15%; background: linear-gradient(to top, var(--bg) 0%, transparent 100%); pointer-events: none; z-index: 1; }
-    .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 16px 28px;  }
+    .ph-image-area { overflow: hidden; position: relative; background: radial-gradient(125% 115% at 50% 40%, #ddd0c3 0%, #cebfb0 46%, #ab9d8f 100%); }
+        .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 10px 18px; }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
-    .ph-thumb { flex: 1; min-width: 0; background: #131210; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
+    .ph-thumb { flex: 1; min-width: 0; background: #d8cabd; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
     .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
     .ph-thumb.active { opacity: 1; }
     .ph-thumb:hover:not(.active) { opacity: 0.68; }
@@ -151,7 +150,7 @@
     .pi-var.active { opacity: 1; }
     .pi-var.active::after { background: var(--gold); }
     .pi-var:hover:not(.active) { opacity: 0.8; }
-    .pi-var img { width: 100%; height: 92px; object-fit: contain; display: block; padding: 6px 10px; background: #131210; }
+    .pi-var img { width: 100%; height: 92px; object-fit: contain; display: block; padding: 6px 10px; background: #d8cabd; }
     .pi-var-label { display: block; font-size: 8px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(237,232,223,0.36); padding: 5px 8px 7px; background: rgba(17,19,22,0.95); }
     .pi-var.active .pi-var-label { color: rgba(237,232,223,0.72); }
     .pi-add { display: block; width: 100%; background: var(--brand); color: var(--cream); border: none; padding: 16px 16px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; margin-bottom: 12px; transition: background 0.24s; }
