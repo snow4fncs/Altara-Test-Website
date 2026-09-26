@@ -138,7 +138,7 @@
     .ph-image-area {
       overflow: hidden;
       position: relative;
-      background: #d7c9bb;
+      background: #101114;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -159,13 +159,13 @@
     .ph-thumb {
       flex: 1;
       min-width: 0;
-      background: #131210;
+      background: #101114;
       border: none;
       cursor: pointer;
       overflow: hidden;
       padding: 0;
       position: relative;
-      opacity: 0.38;
+      opacity: 0.45;
       transition: opacity 0.2s;
     }
     .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
@@ -178,7 +178,7 @@
       transition: background 0.2s;
     }
     .ph-thumb.active::after { background: var(--gold); }
-    .ph-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 6px; }
+    .ph-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* RIGHT: natural-flow info panel */
     .ph-info {
@@ -257,7 +257,7 @@
     .pi-var.active { opacity: 1; }
     .pi-var.active::after { background: var(--gold); }
     .pi-var:hover:not(.active) { opacity: 0.8; }
-    .pi-var img { width: 100%; height: 92px; object-fit: contain; display: block; padding: 6px 10px; background: #d8cabd; }
+    .pi-var img { width: 100%; height: 92px; object-fit: cover; display: block; background: #101114; }
     .pi-var-label { display: block; font-size: 8px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(237,232,223,0.36); padding: 5px 8px 7px; background: rgba(17,19,22,0.95); }
     .pi-var.active .pi-var-label { color: rgba(237,232,223,0.72); }
 
@@ -1030,16 +1030,16 @@
 
     <div class="ph-thumbs">
       <button class="ph-thumb active" data-src="Product Photos/opt/img1-wide.jpg">
-        <img src="Product Photos/opt/img1-1200.jpg" alt="View 1">
+        <img src="Product Photos/opt/img1-wide.jpg" alt="View 1">
       </button>
       <button class="ph-thumb" data-src="Product Photos/opt/img2-wide.jpg">
-        <img src="Product Photos/opt/img2-1200.jpg" alt="View 2">
+        <img src="Product Photos/opt/img2-wide.jpg" alt="View 2">
       </button>
       <button class="ph-thumb" data-src="Product Photos/opt/img3-wide.jpg">
-        <img src="Product Photos/opt/img3-1200.jpg" alt="View 3">
+        <img src="Product Photos/opt/img3-wide.jpg" alt="View 3">
       </button>
       <button class="ph-thumb" data-src="Product Photos/opt/img8-wide.jpg">
-        <img src="Product Photos/opt/img8-1200.jpg" alt="View 4">
+        <img src="Product Photos/opt/img8-wide.jpg" alt="View 4">
       </button>
     </div>
 
