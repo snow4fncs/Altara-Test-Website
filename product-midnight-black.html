@@ -1249,11 +1249,15 @@
     }, { passive: true });
   })();
   const mainImg = document.getElementById('ph-main-img');
+  // Phones get the tight portrait crops (product fills the frame); desktop keeps the wide studio shots.
+  const phCompact = window.matchMedia('(max-width: 768px)').matches;
+  const phSrc = s => phCompact ? s.replace('-wide.jpg', '-1200.jpg') : s;
+  if (phCompact) mainImg.src = phSrc(mainImg.getAttribute('src'));
   document.querySelectorAll('.ph-thumb').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      mainImg.src = btn.dataset.src;
+      mainImg.src = phSrc(btn.dataset.src);
     });
   });
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
