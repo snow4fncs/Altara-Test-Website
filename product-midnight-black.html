@@ -101,8 +101,9 @@
 
     .product-hero { margin-top: var(--nav-h); display: grid; grid-template-columns: 62% 38%; align-items: start; }
     .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
-    .ph-image-area { overflow: hidden; position: relative; background: radial-gradient(125% 115% at 50% 40%, #ddd0c3 0%, #cebfb0 46%, #ab9d8f 100%); }
-        .ph-main-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 10px 18px; }
+    .ph-image-area { overflow: hidden; position: relative; background: #d7c9bb; display: flex; align-items: center; justify-content: center; }
+    .ph-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(38px) saturate(1.04); transform: scale(1.18); opacity: 0.92; z-index: 0; pointer-events: none; }
+        .ph-main-img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; display: block; margin: 0 auto; }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
     .ph-thumb { flex: 1; min-width: 0; background: #d8cabd; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.38; transition: opacity 0.2s; }
     .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
@@ -896,6 +897,7 @@
 <div class="product-hero">
   <div class="ph-left">
     <div class="ph-image-area">
+      <img class="ph-bg" id="ph-bg" src="Product Photos/opt/img7-1200.jpg" alt="" aria-hidden="true">
       <img class="ph-main-img" id="ph-main-img" src="Product Photos/opt/img7-1200.jpg" alt="Midnight Black -View 1" width="1122" height="1402" loading="eager" fetchpriority="high">
     </div>
     <div class="ph-thumbs">
@@ -914,7 +916,7 @@
     <h1 class="pi-name">Midnight<br><em>Black</em></h1>
     <p class="pi-price" id="pi-price-display"><s class="pack-was" style="font-size:0.7em">$138</s> $89 AUD</p>
     <div class="pi-rating" id="pi-rating" hidden></div>
-    <p class="pi-proof">Delivered to drivers in every Australian state. 80+ orders and counting.</p>
+    <p class="pi-proof">Delivered to drivers in every Australian state. 100+ orders and counting.</p>
     <ul class="pi-benefits">
       <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Waterproof Backing</span></li>
       <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Universal Fit</span></li>
@@ -1249,11 +1251,13 @@
     }, { passive: true });
   })();
   const mainImg = document.getElementById('ph-main-img');
+  const bgImg = document.getElementById('ph-bg');
   document.querySelectorAll('.ph-thumb').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       mainImg.src = btn.dataset.src;
+      if (bgImg) bgImg.src = btn.dataset.src;
     });
   });
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
