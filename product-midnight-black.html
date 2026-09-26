@@ -102,8 +102,7 @@
     .product-hero { margin-top: var(--nav-h); display: grid; grid-template-columns: 62% 38%; align-items: start; }
     .ph-left { display: grid; grid-template-rows: 1fr var(--thumb-h); border-right: 1px solid var(--line); overflow: clip; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); }
     .ph-image-area { overflow: hidden; position: relative; background: #101114; display: flex; align-items: center; justify-content: center; }
-        .ph-main-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-        .ph-main-img.ph-contain { object-fit: contain; background: #17181b; }
+        .ph-main-img { max-width: calc(100% - 72px); max-height: calc(100% - 72px); width: auto; height: auto; object-fit: contain; display: block; border: 1px solid rgba(196,169,122,0.25); box-shadow: 0 24px 70px rgba(0,0,0,0.55); }
     .ph-thumbs { display: flex; border-top: 1px solid var(--line); overflow: hidden; }
     .ph-thumb { flex: 1; min-width: 0; background: #101114; border: none; cursor: pointer; overflow: hidden; padding: 0; position: relative; opacity: 0.45; transition: opacity 0.2s; }
     .ph-thumb + .ph-thumb { border-left: 1px solid var(--line); }
@@ -321,8 +320,8 @@
       .nav-btn span { display: none; }
       .product-hero { grid-template-columns: 1fr; height: auto; display: block; }
       .ph-left { grid-template-rows: auto var(--thumb-h); height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
-      .ph-image-area { aspect-ratio: 3/4; height: auto; max-height: 540px; }
-      .ph-main-img { object-fit: cover; }
+      .ph-image-area { aspect-ratio: 1/1; height: auto; max-height: 540px; }
+      .ph-main-img { max-width: calc(100% - 40px); max-height: calc(100% - 40px); }
       .ph-info { padding: 28px 24px 48px; }
       .pi-back { margin-bottom: 22px; }
       .pi-var img { height: 68px; }
@@ -1255,7 +1254,6 @@
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       mainImg.src = btn.dataset.src;
-      mainImg.classList.toggle('ph-contain', /img6-1200/.test(btn.dataset.src));
     });
   });
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
