@@ -143,14 +143,11 @@
       align-items: center;
       justify-content: center;
     }
-    .ph-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(38px) saturate(1.04); transform: scale(1.18); opacity: 0.92; z-index: 0; pointer-events: none; }
         .ph-main-img {
-      position: relative; z-index: 1;
-      max-width: 100%; max-height: 100%;
-      width: auto; height: 100%;
-      object-fit: contain;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
-      margin: 0 auto;
     }
 
     /* THUMBNAIL STRIP */
@@ -454,7 +451,7 @@
       .product-hero { grid-template-columns: 1fr; height: auto; display: block; }
       .ph-left { grid-template-rows: auto var(--thumb-h); height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line); }
       .ph-image-area { aspect-ratio: 3/4; height: auto; max-height: 540px; }
-      .ph-main-img { object-fit: contain; padding: 8px 16px; }
+      .ph-main-img { object-fit: cover; }
       .ph-info { padding: 28px 24px 48px; }
       .pi-back { margin-bottom: 22px; }
       .pi-var img { height: 68px; }
@@ -1026,23 +1023,22 @@
   <div class="ph-left">
 
     <div class="ph-image-area">
-      <img class="ph-bg" id="ph-bg" src="Product Photos/opt/img1-1200.jpg" alt="" aria-hidden="true">
       <img class="ph-main-img" id="ph-main-img"
-        src="Product Photos/opt/img1-1200.jpg"
-        alt="Contrast White -View 1" width="1122" height="1402" loading="eager" fetchpriority="high">
+        src="Product Photos/opt/img1-wide.jpg"
+        alt="Contrast White -View 1" width="2000" height="1493" loading="eager" fetchpriority="high">
     </div>
 
     <div class="ph-thumbs">
-      <button class="ph-thumb active" data-src="Product Photos/opt/img1-1200.jpg">
+      <button class="ph-thumb active" data-src="Product Photos/opt/img1-wide.jpg">
         <img src="Product Photos/opt/img1-1200.jpg" alt="View 1">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img2-1200.jpg">
+      <button class="ph-thumb" data-src="Product Photos/opt/img2-wide.jpg">
         <img src="Product Photos/opt/img2-1200.jpg" alt="View 2">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img3-1200.jpg">
+      <button class="ph-thumb" data-src="Product Photos/opt/img3-wide.jpg">
         <img src="Product Photos/opt/img3-1200.jpg" alt="View 3">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img8-1200.jpg">
+      <button class="ph-thumb" data-src="Product Photos/opt/img8-wide.jpg">
         <img src="Product Photos/opt/img8-1200.jpg" alt="View 4">
       </button>
     </div>
@@ -1422,13 +1418,11 @@
 
   // Image switcher
   const mainImg = document.getElementById('ph-main-img');
-  const bgImg = document.getElementById('ph-bg');
   document.querySelectorAll('.ph-thumb').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.ph-thumb').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       mainImg.src = btn.dataset.src;
-      if (bgImg) bgImg.src = btn.dataset.src;
     });
   });
 
