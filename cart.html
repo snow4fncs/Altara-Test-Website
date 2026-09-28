@@ -1235,16 +1235,21 @@
     // This display is convenience only; api/create-checkout.js recomputes it
     // from the cart and is the figure the customer is actually charged.
     const BUNDLE_PAIR_SAVING = 39;
+    // Two Twin Sets (the Full Car) take a further $9 off: $198 becomes $189.
+    const TWIN_PAIR_SAVING = 9;
 
     function bundleInfo(cart) {
       const singles = cart.items
         .filter(i => !/-twin$/.test(i.id))
         .reduce((n, i) => n + i.qty, 0);
+      const twins = cart.items
+        .filter(i => /-twin$/.test(i.id))
+        .reduce((n, i) => n + i.qty, 0);
       const pairs = Math.floor(singles / 2);
       return {
         singles,
         pairs,
-        discount: pairs * BUNDLE_PAIR_SAVING,
+        discount: pairs * BUNDLE_PAIR_SAVING + Math.floor(twins / 2) * TWIN_PAIR_SAVING,
         oneAwayFromPair: singles % 2 === 1,
       };
     }

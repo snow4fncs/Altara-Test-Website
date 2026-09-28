@@ -1115,11 +1115,11 @@
           <span class="pack-badge gold">Best value</span>
           <span>
             <span class="pack-opt-name">Full Car &middot; 4 covers</span>
-            <span class="pack-opt-price"><s class="pack-was">$276</s> $198 <span class="pack-opt-currency">AUD</span></span>
+            <span class="pack-opt-price"><s class="pack-was">$276</s> $189 <span class="pack-opt-currency">AUD</span></span>
           </span>
           <ul class="pack-opt-list">
             <li>Two Twin Sets, four covers</li>
-            <li>Save $78 &middot; free Australia Post shipping, tracked</li>
+            <li>Save $87 &middot; free Australia Post shipping, tracked</li>
             <li>Extra $10 off with code <strong>SELLOUT10</strong></li>
           </ul>
         </button>
@@ -1446,7 +1446,7 @@
   var TIERS = {
     single:  { price: 69,  was: null, label: '$69 AUD' },
     twin:    { price: 99,  was: 138,  label: "$99 AUD" },
-    fullcar: { price: 198, was: 276,  label: "$198 AUD" }
+    fullcar: { price: 189, was: 276,  label: "$189 AUD" }
   };
   (function(){
     var btns = { single: document.getElementById('pack-single'),
@@ -1808,7 +1808,7 @@
 <script>
 /* Cart drawer: the whole cart without leaving the product page. */
 (function () {
-  var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 29, PROMO_KEY = 'altara-promo';
+  var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 39, TWINPAIR_SAVE = 9, PROMO_KEY = 'altara-promo';
   var $ = function (id) { return document.getElementById(id); };
   var drawer = $('cd'), overlay = $('cd-overlay');
   function canonImg(id){ id=String(id);
@@ -1824,8 +1824,7 @@
     var b=document.getElementById('cart-badge'); if(b){ b.textContent=n; b.classList.toggle('show', n>0); } }
   function fmt(n){ return '$' + n.toFixed(2); }
   function promo(){ try { return JSON.parse(localStorage.getItem(PROMO_KEY)) || null; } catch(e){ return null; } }
-  function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);})
-    .reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE; }
+  function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); var twins=c.items.filter(function(i){return /-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE + Math.floor(twins/2)*TWINPAIR_SAVE; }
   function promoAmt(p, base){ if(!p) return 0;
     if (p.minimum && base < p.minimum) return 0;
     var d = p.amount_off ? Number(p.amount_off) : base*(Number(p.percent_off)||0)/100;
