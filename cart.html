@@ -900,14 +900,14 @@
         <div class="announce-seq">
           <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $99 <strong>(save $39)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
         <div class="announce-seq">
           <span class="ab-item">Same-day dispatch <strong>&amp; free tracked shipping</strong></span><span class="ab-dot">&#9670;</span>
           <span class="ab-item">Free shipping on orders over $80</span><span class="ab-dot">&#9670;</span>
-          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $89 <strong>(save $49)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
+          <span class="ab-item">30-day returns</span><span class="ab-dot">&#9670;</span><span class="ab-item">Twin Set &middot; 2 covers $99 <strong>(save $39)</strong> &middot; 60-day guarantee</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Australia-wide delivery</span><span class="ab-dot ab-extra">&#9670;</span>
           <span class="ab-item ab-extra">Secure checkout</span><span class="ab-dot ab-extra">&#9670;</span>
         </div>
@@ -1069,7 +1069,7 @@
       <div class="assure">
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &middot; full refund if it isn't right</span>
         <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="cart-dispatch">Same-day dispatch weekdays &middot; Australia Post tracked</span></span>
-        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Adding a second pair? Any two covers price-match to $89 the pair, automatically</span>
+        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Adding a second pair? Any two covers price-match to $99 the pair, automatically</span>
       </div>
 
       <p class="secure-note">
@@ -1228,13 +1228,13 @@
 
     // ─── Twin Set bundle ────────────────────────────────────────────────────
     // Any two single covers are priced as a Twin Set: 2 x $69 = $138 becomes
-    // $89, so $49 comes off per pair. Mix or match - one black and one white
+    // $99, so $39 comes off per pair. Mix or match - one black and one white
     // qualifies, and so does two of the same. Without the "two of the same"
     // case, two singles of one colour would cost $29 MORE than that colour's
     // Twin Set, which is the same goods.
     // This display is convenience only; api/create-checkout.js recomputes it
     // from the cart and is the figure the customer is actually charged.
-    const BUNDLE_PAIR_SAVING = 49;
+    const BUNDLE_PAIR_SAVING = 39;
 
     function bundleInfo(cart) {
       const singles = cart.items
@@ -1443,7 +1443,7 @@
         slot.innerHTML = '<div class="xsell">'
           + '<img src="' + offer.image + '" alt="">'
           + '<div class="xsell-info"><span class="xsell-k">' + offer.label + '</span>'
-          + '<span class="xsell-n">' + offer.name + '</span> <span class="xsell-p">$89 &middot; free shipping</span></div>'
+          + '<span class="xsell-n">' + offer.name + '</span> <span class="xsell-p">$99 &middot; free shipping</span></div>'
           + '<button type="button" class="xsell-btn" id="xsell-add">Add</button></div>';
         document.getElementById('xsell-add').addEventListener('click', function(){
           var c = getCart();
