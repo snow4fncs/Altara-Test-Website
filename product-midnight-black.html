@@ -644,10 +644,11 @@
     .pi-obj-k { font-size:13.5px; font-weight:500; color:var(--gold); margin-bottom:5px; }
     .pi-obj-t { font-size:12.5px; line-height:1.65; color:rgba(237,232,223,.7); }
     .pi-ugc { margin:14px 0 0; position:relative; cursor:pointer; border:1px solid var(--line); }
-    .pi-ugc img { width:100%; max-height:210px; object-fit:cover; object-position:center 30%; display:block; }
+    .pi-ugc img { width:100%; max-height:300px; object-fit:cover; object-position:center 30%; display:block; }
     .pi-ugc video { width:100%; max-height:420px; display:block; background:#000; }
-    .pi-ugc-meta { position:absolute; left:0; right:0; bottom:0; display:flex; align-items:center; gap:10px; padding:10px 14px; background:linear-gradient(to top, rgba(10,11,13,.9), rgba(10,11,13,0)); font-size:12px; color:var(--cream); }
-    .pi-ugc-play { width:26px; height:26px; border-radius:50%; background:var(--gold); color:#141518; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+    .pi-ugc-meta { position:absolute; left:0; right:0; top:0; display:flex; align-items:center; justify-content:center; padding:12px 14px 18px; background:linear-gradient(to bottom, rgba(10,11,13,.92), rgba(10,11,13,0)); font-size:13px; letter-spacing:.04em; color:var(--cream); }
+    .pi-ugc-play { position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); width:56px; height:56px; border-radius:50%; background:var(--gold); color:#141518; display:flex; align-items:center; justify-content:center; font-size:17px; padding-left:4px; box-shadow:0 8px 32px rgba(0,0,0,.55); transition:transform .2s ease; }
+    .pi-ugc:hover .pi-ugc-play { transform:translate(-50%,-50%) scale(1.1); }
 
     .pi-benefits { list-style:none; margin:14px 0 0; padding:0; display:grid; gap:10px; }
     .pi-benefits li { display:flex; align-items:center; gap:10px; font-size:14px; letter-spacing:.01em; color:var(--cream); font-weight:500; }
@@ -1020,7 +1021,7 @@
 
     <div class="pi-ugc" id="pi-ugc">
       <img src="Product Photos/opt/reel-poster.jpg" alt="Real fitting video, tap to play" loading="lazy" decoding="async">
-      <div class="pi-ugc-meta"><span class="pi-ugc-play">&#9654;</span><span>Watch it fitted in an RSQ8 &middot; 15 seconds, real footage</span></div>
+      <span class="pi-ugc-play">&#9654;</span><div class="pi-ugc-meta"><span>Watch it fitted in an Audi RSQ8</span></div>
     </div>
 
     <div class="pi-sep"></div>
