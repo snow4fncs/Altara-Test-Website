@@ -83,6 +83,9 @@ export default async function handler(req, res) {
     }));
   }
 
-  await saveSeen([...seen, ...fresh.map(h => h.id)]);
+  // Seed/save: on first run remember EVERY reported id (not just the capped
+  // batch) so pre-existing listings never false-alert on the second scan.
+  const remember = firstRun ? hits.filter(h => h && h.id).map(h => h.id) : fresh.map(h => h.id);
+  await saveSeen([...seen, ...remember]);
   return res.status(200).json({ ok: true, received: hits.length, new: fresh.length, firstRun, emailed, meta });
 }
