@@ -76,17 +76,63 @@
   .hide { display:none; }
   code { font-family:ui-monospace,Menlo,monospace; font-size:.86em; background:var(--bg-3); padding:.1rem .35rem; }
   a { color:var(--gold); }
+  /* tabs + stock */
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin:28px 0 0; }
+  .tabs button { border:0; border-bottom:2px solid transparent; padding:12px 18px; margin-bottom:-1px; color:var(--cream-dim); }
+  .tabs button.on { color:var(--cream); border-bottom-color:var(--gold); }
+  .tabs button:hover { opacity:1; color:var(--cream); }
+  .head-right { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .stock-badge { display:inline-flex; align-items:center; gap:14px; font-size:12.5px; letter-spacing:.02em; color:var(--cream);
+    border:1px solid var(--border); background:var(--bg-2); padding:8px 14px; cursor:pointer; text-transform:none; font-weight:400; }
+  .stock-badge:hover { opacity:1; border-color:rgba(196,169,122,.5); }
+  .stock-badge .k { color:var(--cream-dim); }
+  .stock-badge b { font-weight:600; font-variant-numeric:tabular-nums; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--good); margin-right:7px; vertical-align:middle; }
+  .dot.warn { background:var(--warn); } .dot.bad { background:var(--bad); }
+  .stock-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:15px; margin-top:18px; }
+  .stock-card { background:var(--bg-2); border:1px solid var(--border); padding:24px 26px; display:grid; gap:12px; }
+  .stock-card .name { font-size:13px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--cream-dim); display:flex; align-items:center; justify-content:space-between; }
+  .stock-card .big { font-family:'Cormorant Garamond',Garamond,serif; font-size:60px; line-height:1; font-weight:300; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .stock-card .big small { font-family:'Outfit',sans-serif; font-size:13px; color:var(--cream-dim); letter-spacing:.02em; margin-left:8px; }
+  .stock-card .big.bad { color:var(--bad); } .stock-card .big.warn { color:var(--warn); }
+  .kv { display:grid; grid-template-columns:1fr auto; gap:6px 16px; font-size:14px; color:var(--cream-dim); border-top:1px solid var(--border); padding-top:12px; }
+  .kv b { color:var(--cream); font-weight:500; font-variant-numeric:tabular-nums; text-align:right; }
+  .stock-form { background:var(--bg-2); border:1px solid var(--border); padding:22px 24px; display:grid; gap:14px; grid-template-columns:1.1fr .8fr 1fr 1fr 1.6fr auto; align-items:end; margin-top:26px; }
+  @media (max-width:900px) { .stock-form { grid-template-columns:1fr 1fr; } .stock-form .field.note, .stock-form button { grid-column:1 / -1; } }
+  .mv { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  .mv th, .mv td { text-align:left; padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .mv th { font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--cream-dim); }
+  .mv td.n { text-align:right; font-variant-numeric:tabular-nums; font-weight:500; }
+  .mv td.n.neg { color:var(--bad); }
+  .mv .kind { font-size:10.5px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; padding:3px 8px; border:1px solid currentColor; }
+  .mv .kind.received { color:var(--good); } .mv .kind.incoming { color:var(--warn); } .mv .kind.adjust { color:var(--brand-lt); }
+  .mv-wrap { overflow-x:auto; }
+  @media (max-width:640px) {
+    .wrap { padding:28px 16px 88px; }
+    h1 { font-size:36px; margin-top:26px; }
+    .bar { margin:22px 0 14px; }
+    .bar > div { display:grid !important; grid-template-columns:1fr 1fr; width:100%; }
+    .bar button { padding:13px 10px; font-size:10.5px; white-space:normal; }
+    .card { padding:18px 16px; }
+    .when { margin-left:0; }
+    .stock-badge { width:100%; justify-content:space-between; }
+    .mv th:nth-child(5), .mv td:nth-child(5), .mv th:nth-child(6), .mv td:nth-child(6) { display:none; }
+    .mv th, .mv td { padding:10px 6px; }
+  }
   @media (prefers-reduced-motion:reduce) { button { transition:none; } }
 </style>
 
 <div class="wrap">
   <div class="masthead">
     <span class="mark">Altara</span>
-    <span class="ey">Orders &amp; fulfilment &middot; internal</span>
+    <div class="head-right">
+      <span class="ey">Orders &amp; fulfilment &middot; internal</span>
+      <button type="button" class="stock-badge hide" id="stock-badge" title="Open the stock tab"></button>
+    </div>
   </div>
 
   <h1>Fulfilment</h1>
-  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch. <strong style="color:var(--cream)">Export to-ship CSV</strong> downloads every unshipped order in MyPost Business&rsquo;s own import format &mdash; upload it via Send &rarr; Import orders, print all labels at home, drop the satchels off.</p>
+  <p class="sub">Paste a tracking number to mark an order shipped and email the customer. Review requests unlock five days after dispatch. <strong style="color:var(--cream)">Export to-ship CSV</strong> downloads every unshipped order in MyPost Business&rsquo;s own import format &mdash; upload it via Send &rarr; Import orders, print all labels at home, drop the satchels off. On a phone the export opens the share sheet, so you can save it to Files or send it straight to the MyPost app.</p>
 
   <div id="gate" class="gate">
     <label for="tok">Admin token</label>
@@ -96,6 +142,11 @@
   </div>
 
   <div id="panel" class="hide">
+    <nav class="tabs" aria-label="Sections">
+      <button type="button" class="on" data-tab="orders">Orders</button>
+      <button type="button" data-tab="stock">Stock</button>
+    </nav>
+    <div id="tab-orders">
     <div class="bar">
       <span class="count" id="count"></span>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
@@ -108,6 +159,25 @@
     </div>
     <div id="msg"></div>
     <div id="list"></div>
+    </div>
+
+    <div id="tab-stock" class="hide">
+      <p class="sub" style="margin-top:22px">Stock on hand is <strong style="color:var(--cream)">covers received minus covers sold</strong>, and covers sold is read live from paid orders (a Twin Set is two covers, a Full Car four). Enter your opening count as a <em>Received</em> row, log factory orders as <em>Incoming</em>, and mark them received when they land.</p>
+      <div id="stock-msg"></div>
+      <div class="stock-grid" id="stock-cards"></div>
+      <form class="stock-form" id="stock-form">
+        <div class="field"><label for="sf-sku">Colour</label>
+          <select id="sf-sku"><option value="midnight-black">Midnight Black</option><option value="contrast-white">Contrast White</option></select></div>
+        <div class="field"><label for="sf-qty">Covers</label><input type="number" id="sf-qty" inputmode="numeric" placeholder="e.g. 400" required></div>
+        <div class="field"><label for="sf-kind">Type</label>
+          <select id="sf-kind"><option value="incoming">Incoming order</option><option value="received">Received now</option><option value="adjust">Adjustment (+/-)</option></select></div>
+        <div class="field" id="sf-exp-wrap"><label for="sf-exp">Expected</label><input type="date" id="sf-exp"></div>
+        <div class="field note"><label for="sf-note">Note</label><input type="text" id="sf-note" maxlength="200" placeholder="Factory run 2, 10 cartons"></div>
+        <button type="submit" class="go">Add</button>
+      </form>
+      <h2 class="sec">Movements <small id="mv-count"></small></h2>
+      <div class="mv-wrap"><table class="mv" id="mv"><thead><tr><th>Date</th><th>Colour</th><th>Type</th><th style="text-align:right">Covers</th><th>Expected</th><th>Note</th><th></th></tr></thead><tbody></tbody></table></div>
+    </div>
   </div>
 </div>
 
@@ -284,6 +354,13 @@
     localStorage.setItem(SENDER_KEY, JSON.stringify(out));
     return out;
   }
+  function downloadBlob(blob, fname){
+    var aEl = document.createElement('a');
+    aEl.href = URL.createObjectURL(blob);
+    aEl.download = fname;
+    document.body.appendChild(aEl); aEl.click(); aEl.remove();
+    setTimeout(function(){ URL.revokeObjectURL(aEl.href); }, 1000);
+  }
   function exportCsv(e){
     var sender = getSender(e && e.shiftKey);   // shift-click the button to edit sender details
     if (!sender) return;
@@ -324,11 +401,22 @@
       ].map(csvCell).join(',');
     }));
     var blob = new Blob([lines.join('\r\n')], { type:'text/csv;charset=utf-8' });
-    var aEl = document.createElement('a');
-    aEl.href = URL.createObjectURL(blob);
-    aEl.download = 'mypost-orders-' + today() + '.csv';
-    document.body.appendChild(aEl); aEl.click(); aEl.remove();
-    URL.revokeObjectURL(aEl.href);
+    var fname = 'mypost-orders-' + today() + '.csv';
+    // Phones: a blob download either opens the CSV as text or vanishes into
+    // Files. The share sheet lets you save it, AirDrop it or send it to
+    // MyPost directly, so on a touch device that is the primary route.
+    var file = null;
+    try { file = new File([blob], fname, { type: 'text/csv' }); } catch (e) {}
+    var isTouch = matchMedia('(pointer:coarse)').matches;
+    var shared = false;
+    if (isTouch && file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      shared = true;
+      navigator.share({ files: [file], title: fname }).catch(function(err){
+        if (err && err.name === 'AbortError') return;
+        downloadBlob(blob, fname);
+      });
+    }
+    if (!shared) downloadBlob(blob, fname);
     fetch('/api/fulfilment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-admin-token': token() },
@@ -448,16 +536,96 @@
     }).catch(function(err){ note(err.message, true); });
   });
 
+
+  // ── Stock tab ──
+  var stockMsg = document.getElementById('stock-msg');
+  var badge = document.getElementById('stock-badge');
+  function snote(t, err){ stockMsg.innerHTML = t ? '<p class="msg'+(err?' err':'')+'">'+esc(t)+'</p>' : ''; }
+  function level(s, low){ return s.remaining <= low ? 'bad' : s.remaining <= low*2 ? 'warn' : ''; }
+  function fmtD(d){ if(!d) return ''; try{ var x=new Date(d+(String(d).length===10?'T00:00:00':'')); return x.toLocaleDateString('en-AU',{day:'numeric',month:'short'}); }catch(e){ return d; } }
+  function stockApi(body){
+    return fetch('/api/stock', { method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-token': token() }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||('Failed ('+r.status+')')); return j; }); });
+  }
+  function loadStock(){
+    return fetch('/api/stock', { headers:{ 'x-admin-token': token() } })
+      .then(function(r){ if(!r.ok) throw new Error('Could not load stock ('+r.status+').'); return r.json(); })
+      .then(function(d){
+        var low = d.low_units || 20, sum = d.summary || {}, skus = Object.keys(sum);
+        // top-right badge
+        badge.className = 'stock-badge';
+        badge.innerHTML = '<span class="k">Stock</span>' + skus.map(function(k){ var s=sum[k];
+          return '<span><i class="dot '+level(s,low)+'"></i>'+esc(s.label.split(' ')[1]||s.label)+' <b>'+s.remaining+'</b></span>'; }).join('')
+          + (skus.some(function(k){ return sum[k].incoming>0; }) ? '<span class="k">+'+skus.reduce(function(n,k){ return n+sum[k].incoming; },0)+' incoming</span>' : '');
+        // cards
+        document.getElementById('stock-cards').innerHTML = skus.map(function(k){ var s=sum[k], lv=level(s,low);
+          return '<div class="stock-card">'
+            + '<div class="name"><span>'+esc(s.label)+'</span>'+(s.low?'<span class="pill pend">Low</span>':'')+'</div>'
+            + '<div class="big '+lv+'">'+s.remaining+'<small>covers on hand · '+Math.floor(s.remaining/2)+' twin sets</small></div>'
+            + '<dl class="kv"><span>Received</span><b>'+s.received+'</b><span>Sold, all time</span><b>'+s.sold+'</b><span>Sold, last 30 days</span><b>'+s.sold_30d+'</b>'
+            + '<span>Incoming</span><b>'+(s.incoming||0)+'</b>'
+            + '<span>Days of cover at current rate</span><b>'+(s.days_cover==null?'—':s.days_cover)+'</b></dl>'
+            + '</div>'; }).join('');
+        // movements
+        var mv = d.movements || [];
+        document.getElementById('mv-count').textContent = mv.length + (mv.length===1?' entry':' entries');
+        document.querySelector('#mv tbody').innerHTML = mv.length ? mv.map(function(m){
+          var neg = m.qty < 0;
+          return '<tr><td>'+fmt(m.created_at)+'</td><td>'+esc((sum[m.sku]||{}).label||m.sku)+'</td>'
+            + '<td><span class="kind '+esc(m.kind)+'">'+esc(m.kind)+'</span></td>'
+            + '<td class="n'+(neg?' neg':'')+'">'+(neg?'':'+')+m.qty+'</td>'
+            + '<td>'+(m.kind==='incoming'?fmtD(m.expected_at):(m.received_at?'landed '+fmt(m.received_at):''))+'</td>'
+            + '<td style="color:var(--cream-dim)">'+esc(m.note||'')+'</td>'
+            + '<td style="text-align:right;white-space:nowrap">'+(m.kind==='incoming'?'<button type="button" class="mini go" data-sact="receive" data-sid="'+esc(m.id)+'">Received</button> ':'')
+            + '<button type="button" class="mini" data-sact="delete" data-sid="'+esc(m.id)+'">Delete</button></td></tr>'; }).join('')
+          : '<tr><td colspan="7" style="color:var(--cream-dim);padding:22px 10px">No stock entries yet. Add your opening count as a Received row.</td></tr>';
+        if (d.migration_required) snote('Stock table not created yet. Run supabase-stock.sql in Supabase (SQL Editor) once, then refresh. Covers sold is already live: '+skus.map(function(k){ return sum[k].label+' '+sum[k].sold; }).join(', ')+'.', true);
+      });
+  }
+  document.getElementById('stock-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var kind = document.getElementById('sf-kind').value;
+    var body = { action:'add', sku: document.getElementById('sf-sku').value, kind: kind, qty: document.getElementById('sf-qty').value,
+                 note: document.getElementById('sf-note').value, expected_at: kind==='incoming' ? document.getElementById('sf-exp').value : null };
+    if (!body.qty) { snote('Enter a quantity in covers.', true); return; }
+    var b = this.querySelector('button'); b.disabled = true; snote('');
+    stockApi(body).then(function(){ document.getElementById('sf-qty').value=''; document.getElementById('sf-note').value=''; return loadStock(); })
+      .then(function(){ snote('Added.'); }).catch(function(err){ snote(err.message, true); }).then(function(){ b.disabled=false; });
+  });
+  document.getElementById('sf-kind').addEventListener('change', function(){
+    document.getElementById('sf-exp-wrap').style.visibility = this.value==='incoming' ? 'visible' : 'hidden';
+  });
+  document.getElementById('mv').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-sact]'); if (!b) return;
+    var act = b.getAttribute('data-sact'), id = b.getAttribute('data-sid');
+    if (act==='delete' && !confirm('Delete this stock entry?')) return;
+    if (act==='receive' && !confirm('Mark this incoming order as received? It will count as stock on hand.')) return;
+    b.disabled = true;
+    stockApi({ action: act, id: id }).then(loadStock).then(function(){ snote(act==='receive'?'Marked received.':'Deleted.'); })
+      .catch(function(err){ b.disabled=false; snote(err.message, true); });
+  });
+  // tabs
+  function showTab(name){
+    document.querySelectorAll('.tabs button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tab')===name); });
+    document.getElementById('tab-orders').className = name==='orders' ? '' : 'hide';
+    document.getElementById('tab-stock').className = name==='stock' ? '' : 'hide';
+    try { sessionStorage.setItem('altara-admin-tab', name); } catch(e){}
+  }
+  document.querySelector('.tabs').addEventListener('click', function(e){ var b=e.target.closest('button[data-tab]'); if(b) showTab(b.getAttribute('data-tab')); });
+  badge.addEventListener('click', function(){ showTab('stock'); });
+  showTab(sessionStorage.getItem('altara-admin-tab') || 'orders');
+
   document.getElementById('unlock').addEventListener('click', function(){
     var v = document.getElementById('tok').value.trim();
     if (!v) return;
     sessionStorage.setItem(KEY, v); show(true);
     load().catch(function(e){ note(e.message, true); });
+    loadStock().catch(function(e){ snote(e.message, true); });
   });
   document.getElementById('tok').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('unlock').click(); });
-  document.getElementById('refresh').addEventListener('click', function(){ note(''); load().catch(function(e){ note(e.message,true); }); });
-  document.getElementById('lock').addEventListener('click', function(){ sessionStorage.removeItem(KEY); show(false); });
+  document.getElementById('refresh').addEventListener('click', function(){ note(''); load().catch(function(e){ note(e.message,true); }); loadStock().catch(function(e){ snote(e.message,true); }); });
+  document.getElementById('lock').addEventListener('click', function(){ sessionStorage.removeItem(KEY); show(false); badge.className='stock-badge hide'; });
 
-  if (token()) { show(true); load().catch(function(e){ note(e.message,true); }); } else { show(false); }
+  if (token()) { show(true); load().catch(function(e){ note(e.message,true); }); loadStock().catch(function(e){ snote(e.message,true); }); } else { show(false); }
 })();
 </script>

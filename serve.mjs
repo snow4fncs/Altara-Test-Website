@@ -405,12 +405,50 @@ async function handleFulfilment(req, res) {
   return send(res, 405, { error: 'Method not allowed' });
 }
 
+
+// Local mock of /api/stock. Movements live in memory; covers sold come from
+// mockOrders the same way the real endpoint reads the orders table.
+let mockStock = [
+  { id:'s1', created_at:'2026-08-01T00:00:00Z', sku:'midnight-black', kind:'received', qty:260, note:'Opening count', expected_at:null, received_at:null },
+  { id:'s2', created_at:'2026-08-01T00:00:00Z', sku:'contrast-white', kind:'received', qty:60,  note:'Opening count', expected_at:null, received_at:null },
+  { id:'s3', created_at:'2026-09-28T00:00:00Z', sku:'midnight-black', kind:'incoming', qty:400, note:'Factory run 2', expected_at:'2026-10-20', received_at:null },
+];
+const STOCK_SKUS = { 'midnight-black':'Midnight Black', 'contrast-white':'Contrast White' };
+const stockLineSku = n => /contrast/i.test(n) ? 'contrast-white' : /midnight/i.test(n) ? 'midnight-black' : null;
+const stockLineUnits = n => /full\s*car/i.test(n) ? 4 : /twin/i.test(n) ? 2 : 1;
+function stockSummary() {
+  const now = Date.now(), d30 = now - 30*86400000, out = {};
+  for (const sku of Object.keys(STOCK_SKUS)) out[sku] = { sku, label: STOCK_SKUS[sku], sold:0, sold_30d:0, received:0, incoming:0, remaining:0, days_cover:null, low:false };
+  for (const o of mockOrders.filter(o => o.status==='paid')) for (const it of o.items||[]) { const k = stockLineSku(it.name); if (!k) continue; const u = stockLineUnits(it.name)*(it.qty||1); out[k].sold += u; if (new Date(o.created_at) >= d30) out[k].sold_30d += u; }
+  for (const m of mockStock) { if (!out[m.sku]) continue; if (m.kind==='incoming') out[m.sku].incoming += m.qty; else out[m.sku].received += m.qty; }
+  for (const s of Object.values(out)) { s.remaining = s.received - s.sold; const r = s.sold_30d/30; s.days_cover = r>0 ? Math.max(0, Math.floor(s.remaining/r)) : null; s.low = s.remaining <= 20; }
+  return out;
+}
+async function handleStock(req, res) {
+  if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
+  if (req.method === 'GET') return send(res, 200, { summary: stockSummary(), movements: mockStock.slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)), migration_required:false, low_units:20 });
+  if (req.method !== 'POST') return send(res, 405, { error: 'Method not allowed' });
+  const body = await readBody(req); if (!body) return send(res, 400, { error: 'Malformed request' });
+  if (body.action === 'add') {
+    const qty = Math.trunc(Number(body.qty));
+    if (!STOCK_SKUS[body.sku]) return send(res, 400, { error: 'Choose a colour' });
+    if (!['received','incoming','adjust'].includes(body.kind)) return send(res, 400, { error: 'Choose a type' });
+    if (!Number.isFinite(qty) || qty === 0) return send(res, 400, { error: 'Enter a quantity in covers' });
+    const m = { id:'s'+Date.now(), created_at:new Date().toISOString(), sku:body.sku, kind:body.kind, qty, note:body.note||null, expected_at: body.kind==='incoming' ? (body.expected_at||null) : null, received_at:null };
+    mockStock.push(m); return send(res, 200, { success:true, movement:m });
+  }
+  if (body.action === 'receive') { const m = mockStock.find(x => x.id===body.id && x.kind==='incoming'); if (!m) return send(res, 404, { error:'No incoming order with that id' }); m.kind='received'; m.received_at=new Date().toISOString(); return send(res, 200, { success:true, movement:m }); }
+  if (body.action === 'delete') { mockStock = mockStock.filter(x => x.id!==body.id); return send(res, 200, { success:true }); }
+  return send(res, 400, { error: 'Unknown action' });
+}
+
 const server = http.createServer(async (req, res) => {
   const [rawPath, rawQuery] = req.url.split('?');
   const query = new URLSearchParams(rawQuery || '');
 
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
+  if (rawPath === '/api/stock') return handleStock(req, res);
   if (rawPath === '/api/finance') {
     if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
     const days = [];
