@@ -81,7 +81,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency }) {
     heading: `You left<br>something.`,
     blocks:
       para(`Your cart is still saved &mdash; picking up where you left off takes one click, no re-entering anything.`)
-      + para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$99</strong>, which is $39 off two singles and includes free shipping Australia-wide.`)
+      + para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`)
       + rule()
       + (amount ? row('Your cart', money(amount) + ' ' + String(currency || 'AUD').toUpperCase()) : ''),
     cta: { href: recoveryUrl, label: 'Return to checkout',
@@ -96,7 +96,7 @@ export function repeatOfferEmailHtml({ first, code = 'BACKROW15', discountLabel 
     heading: `Ready for<br>a second pair?`,
     blocks:
       para(`Hi ${esc(first)} &mdash; most people start with one pair and come back for another once they see how much mess it catches &mdash; a spare for wash day, or covers for the other car.`)
-      + para(`Any two covers price as a Twin Set at <strong style="color:${CREAM}">$99</strong>, mix or match: one Midnight Black and one Contrast White qualifies just the same.`)
+      + para(`Any two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, mix or match: one Midnight Black and one Contrast White qualifies just the same.`)
       + (code ? rule() + row('Your code', esc(code) + (discountLabel ? ' &mdash; ' + esc(discountLabel) : '')) : ''),
     cta: { href: `${SITE}/collection.html`, label: 'Shop the collection',
            note: 'Free shipping on orders over $80.' },

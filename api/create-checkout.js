@@ -4,33 +4,33 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const PRODUCTS = {
   'midnight-black': process.env.STRIPE_PRICE_MIDNIGHT_BLACK_69 || 'price_1UINBuEHIlR7gqjNHepXoIOA',
-  'midnight-black-twin': process.env.STRIPE_PRICE_MIDNIGHT_BLACK_TWIN_99 || 'price_1UKbspEHIlR7gqjNW43Fgnhk',
+  'midnight-black-twin': process.env.STRIPE_PRICE_MIDNIGHT_BLACK_TWIN || 'price_1U0ChIEHIlR7gqjNucCO3D2C',
   'contrast-white': process.env.STRIPE_PRICE_CONTRAST_WHITE_69 || 'price_1UINBvEHIlR7gqjNMSYqikSb',
-  'contrast-white-twin': process.env.STRIPE_PRICE_CONTRAST_WHITE_TWIN_99 || 'price_1UKbsqEHIlR7gqjNCeDML2bC',
+  'contrast-white-twin': process.env.STRIPE_PRICE_CONTRAST_WHITE_TWIN || 'price_1U0CgsEHIlR7gqjNH2h19uVF',
 };
 
 const PRICES = {
   'midnight-black': 69,
-  'midnight-black-twin': 99,
+  'midnight-black-twin': 89,
   'contrast-white': 69,
-  'contrast-white-twin': 99,
+  'contrast-white-twin': 89,
 };
 
 const FREE_SHIP_THRESHOLD = 80;
 
 // ─── Twin Set bundle ────────────────────────────────────────────────────────
-// Any two single covers are charged as a Twin Set: 2 x $69 = $138 becomes $99,
+// Any two single covers are charged as a Twin Set: 2 x $69 = $138 becomes $89,
 // so $39 comes off per pair. Mix or match, because two singles of one colour
 // are the same goods as that colour's Twin Set and must not cost more.
 //
 // This is recomputed here from the submitted cart. The cart page shows the same
 // figure for transparency, but nothing the browser sends about pricing is
 // trusted - only the item ids and quantities.
-const BUNDLE_PAIR_SAVING = 39;
+const BUNDLE_PAIR_SAVING = 49;
 
 // Two Twin Sets in one order (the Full Car) take a further $9 off:
-// 2 x $99 = $198 becomes $189. Mixed colours qualify the same way.
-const TWIN_PAIR_SAVING = 9;
+// 2 x $89 = $178. No further discount at present (saving constant 0). Mixed colours qualify the same way.
+const TWIN_PAIR_SAVING = 0;
 
 export function bundleDiscount(items) {
   const singles = items
