@@ -49,7 +49,6 @@ export function shippedEmailHtml({ first, ref, trackingNumber, carrier, suburb, 
     heading: `It's shipped,<br>${esc(first)}.`,
     blocks:
       para(`Your Altara cover is on its way${suburb ? ' to ' + esc(suburb) : ''} with ${esc(carrier)}. Delivery is usually 3&ndash;7 business days.`)
-      + para(`A thank you from us: <strong style="color:#EDE8DF">$15 off your next order</strong>. Use code <strong style="color:#EDE8DF">BACKROW15</strong> at checkout on any order over $80.`)
       + rule()
       + row('Tracking number', esc(trackingNumber))
       + row('Order reference', esc(ref)),
@@ -90,7 +89,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency }) {
 }
 
 // ── 4. Repeat purchase ───────────────────────────────────────────────────────
-export function repeatOfferEmailHtml({ first, code = 'BACKROW15', discountLabel = '$15 off your next order' }) {
+export function repeatOfferEmailHtml({ first, code = '', discountLabel = '' }) {
   return shell({
     eyebrow: 'Round two',
     heading: `Ready for<br>a second pair?`,
