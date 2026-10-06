@@ -838,6 +838,8 @@
       border: 1px solid var(--border); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 0 18px; }
     .promo button:hover { border-color: rgba(196,169,122,0.5); }
     .promo button[disabled] { opacity: 0.4; cursor: default; }
+    .promo--email { grid-template-columns: 1fr; }
+    .promo--email input { text-transform: none; letter-spacing: 0.02em; }
     .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
     .promo-msg:empty { margin: 0; }
     .promo-msg.err { color: #D98A8A; }
@@ -1043,6 +1045,10 @@
         <span class="summary-value save" id="bundle-value"></span>
       </div>
       <p class="bundle-nudge" id="bundle-nudge" style="display:none"></p>
+      <div class="promo promo--email">
+        <input type="email" id="email-input" placeholder="Email for your receipt and tracking" autocomplete="email" inputmode="email" aria-label="Email for your receipt and tracking">
+      </div>
+      <p class="promo-msg" id="email-msg" aria-live="polite"></p>
       <div class="promo">
         <input type="text" id="promo-input" placeholder="Discount code" autocomplete="off" autocapitalize="characters" aria-label="Discount code">
         <button type="button" id="promo-apply">Apply</button>
@@ -1568,6 +1574,11 @@
             items: cart.items.map(i => ({ id: i.id, qty: i.qty })),
             fbp: readCookie('_fbp'),
             fbc: readCookie('_fbc'),
+            customer_email: (function () {
+              var el = document.getElementById('email-input');
+              var v = el ? el.value.trim() : '';
+              return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? v : undefined;
+            })(),
             promo_code: (function () {
               var pr = getPromo();
               var base = getTotal(cart) - bundleInfo(cart).discount;
@@ -1593,6 +1604,20 @@
     // Init
     renderCart();
     updateNavBadge();
+
+    // Email: remembered on this device so a returning visitor is not asked twice.
+    (function () {
+      var el = document.getElementById('email-input'), msg = document.getElementById('email-msg');
+      if (!el) return;
+      try { el.value = localStorage.getItem('altara-email') || ''; } catch (e) {}
+      var ok = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
+      el.addEventListener('blur', function () {
+        var v = el.value.trim();
+        if (!v) { msg.textContent = ''; msg.className = 'promo-msg'; return; }
+        if (ok(v)) { try { localStorage.setItem('altara-email', v); } catch (e) {} msg.textContent = ''; msg.className = 'promo-msg'; }
+        else { msg.textContent = 'That email does not look right. Check it so your receipt and tracking reach you.'; msg.className = 'promo-msg err'; }
+      });
+    })();
 
     // ─── Inline Search ───
     (function() {

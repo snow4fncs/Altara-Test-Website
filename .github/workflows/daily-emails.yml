@@ -1,0 +1,27 @@
+name: daily-emails
+
+# Sends the review requests and repeat-purchase offers that have come due.
+# 23:00 UTC is 9am Sydney in winter and 10am in summer. The endpoint stamps
+# every send on the order, so a duplicate run sends nothing twice.
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: daily-emails
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send due review requests and repeat offers
+        env:
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+        run: |
+          curl -sS --fail -X POST https://www.altaradesign.com/api/fulfilment \
+            -H "content-type: application/json" \
+            -H "x-admin-token: $ADMIN_TOKEN" \
+            -d '{"action":"daily_emails"}'

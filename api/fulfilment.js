@@ -52,6 +52,73 @@ async function stampShippedEmail(id) {
   if (error && error.code !== MISSING_COLUMN) console.error('shipped_email_at stamp error:', error);
 }
 
+// Repeat offer goes out this many days after dispatch when sent by the daily
+// job: long enough to have used the cover, soon enough to still be top of mind.
+const REPEAT_OFFER_DAYS = 14;
+
+async function sendRepeatOffers({ minDays, limit, code, discountLabel }) {
+  const cutoff = new Date(Date.now() - minDays * 86400000).toISOString();
+  const { data, error } = await supabase
+    .from('orders').select('id, customer_email, customer_name, repeat_email_at, shipped_at')
+    .eq('status', 'paid').is('repeat_email_at', null).not('shipped_at', 'is', null)
+    .lte('shipped_at', cutoff).order('shipped_at', { ascending: true });
+  if (error) { console.error('repeat_offer load error:', error); return { error: 'Could not load buyers' }; }
+
+  // One email per person, not per order - repeat customers exist.
+  const seen = new Set(); const targets = [];
+  for (const o of data || []) {
+    const key = String(o.customer_email || '').toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key); targets.push(o);
+  }
+  const batch = targets.slice(0, limit);
+
+  let sent = 0;
+  for (const o of batch) {
+    const r = await sendEmail({
+      to: o.customer_email,
+      subject: 'Cover the back seats too',
+      html: repeatOfferEmailHtml({ first: firstName(o.customer_name), code, discountLabel }),
+      tag: 'repeat_offer',
+    });
+    if (r.sent) {
+      sent++;
+      await supabase.from('orders').update({ repeat_email_at: new Date().toISOString() })
+        .ilike('customer_email', o.customer_email);
+    }
+  }
+  return { recipients: batch.length, sent, remaining: targets.length - batch.length };
+}
+
+async function sendDueReviewRequests({ limit }) {
+  const cutoff = new Date(Date.now() - REVIEW_UNLOCK_DAYS * 86400000).toISOString();
+  const { data, error } = await supabase
+    .from('orders').select('id, customer_email, customer_name, stripe_payment_intent, shipped_at')
+    .eq('status', 'paid').is('review_email_at', null).not('shipped_at', 'is', null)
+    .lte('shipped_at', cutoff).order('shipped_at', { ascending: true }).limit(limit);
+  if (error) { console.error('review due load error:', error); return { error: 'Could not load orders' }; }
+
+  const { data: reviewRows } = await supabase.from('reviews').select('email');
+  const reviewed = new Set((reviewRows || []).map(r => String(r.email || '').toLowerCase()));
+
+  let sent = 0, skipped = 0;
+  for (const o of data || []) {
+    const key = String(o.customer_email || '').toLowerCase();
+    if (!key || reviewed.has(key)) { skipped++; continue; }
+    const r = await sendEmail({
+      to: o.customer_email,
+      subject: "How's your Altara cover holding up?",
+      html: reviewRequestEmailHtml({ first: firstName(o.customer_name), ref: orderRefFrom(o.stripe_payment_intent) }),
+      tag: 'review_request',
+    });
+    if (r.sent) {
+      sent++;
+      await supabase.from('orders').update({ review_email_at: new Date().toISOString() }).eq('id', o.id);
+    }
+  }
+  return { due: (data || []).length, sent, skipped_already_reviewed: skipped };
+}
+
 export default async function handler(req, res) {
   if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 
@@ -110,36 +177,25 @@ export default async function handler(req, res) {
   if (!action) return res.status(400).json({ error: 'action is required' });
 
   // ── repeat-purchase offer: past buyers, one email each ──
+  // Only people whose parcel has had time to arrive and be used (min_days
+  // after dispatch, default 10). Each recipient is stamped the moment their
+  // email sends, so a timeout part-way through can never double-send on retry.
   if (action === 'repeat_offer') {
-    const { data, error } = await supabase
-      .from('orders').select('id, customer_email, customer_name, repeat_email_at')
-      .eq('status', 'paid').is('repeat_email_at', null);
-    if (error) return res.status(500).json({ error: 'Could not load buyers' });
+    const r = await sendRepeatOffers({
+      minDays: Number(req.body.min_days) || 10,
+      limit: Math.min(Number(req.body.limit) || 40, 80),
+      code: req.body.code, discountLabel: req.body.discount_label,
+    });
+    return res.status(200).json({ success: true, ...r });
+  }
 
-    // One email per person, not per order - repeat customers exist.
-    const seen = new Set(); const targets = [];
-    for (const o of data || []) {
-      const key = String(o.customer_email || '').toLowerCase();
-      if (!key || seen.has(key)) continue;
-      seen.add(key); targets.push(o);
-    }
-
-    let sent = 0;
-    for (const o of targets) {
-      const r = await sendEmail({
-        to: o.customer_email,
-        subject: 'Cover the back seats too',
-        html: repeatOfferEmailHtml({ first: firstName(o.customer_name), code: req.body.code, discountLabel: req.body.discount_label }),
-        tag: 'repeat_offer',
-      });
-      if (r.sent) sent++;
-    }
-    if (targets.length) {
-      await supabase.from('orders')
-        .update({ repeat_email_at: new Date().toISOString() })
-        .in('customer_email', targets.map(t => t.customer_email));
-    }
-    return res.status(200).json({ success: true, recipients: targets.length, sent });
+  // ── daily automation: review requests + repeat offers that are due ──
+  // Hit once a day by .github/workflows/daily-emails.yml. Idempotent: every
+  // send is stamped on the order, so running it twice sends nothing twice.
+  if (action === 'daily_emails') {
+    const reviews = await sendDueReviewRequests({ limit: 40 });
+    const repeats = await sendRepeatOffers({ minDays: REPEAT_OFFER_DAYS, limit: 40 });
+    return res.status(200).json({ success: true, reviews, repeats });
   }
 
   // -- mark a batch of orders as exported / postage bought --

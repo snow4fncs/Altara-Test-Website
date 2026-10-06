@@ -82,7 +82,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { items, fbp, fbc, promo_code } = req.body;
+    const { items, fbp, fbc, promo_code, customer_email } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: 'No items' });
 
     // Meta's browser cookies and the user agent, carried through Stripe so the
@@ -191,6 +191,13 @@ export default async function handler(req, res) {
     params.after_expiration = {
       recovery: { enabled: true, allow_promotion_codes: !params.discounts },
     };
+
+    // Email collected on the cart page, when given. It prefills Stripe's form
+    // and, more importantly, means an abandoned session still has an address
+    // the recovery email can go to. Without it, only the few who typed their
+    // email into Stripe before leaving could ever be recovered.
+    const email = String(customer_email || '').trim().slice(0, 254);
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) params.customer_email = email;
 
     // A promotion code must never cost a sale. If Stripe rejects the session
     // because of the attached code (restriction changed, redemptions exhausted,
