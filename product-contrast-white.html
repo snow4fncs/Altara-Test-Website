@@ -959,7 +959,7 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="index.html" class="nav-logo">
-    <img src="brand assets/Altara Brand Logo.png" alt="Altara">
+    <img src="brand assets/Altara Brand Logo-480.webp" alt="Altara">
   </a>
   <div class="nav-center">
     <ul class="nav-links">
@@ -1025,22 +1025,22 @@
 
     <div class="ph-image-area">
       <img class="ph-main-img" id="ph-main-img"
-        src="Product Photos/opt/img1-wide.jpg"
+        src="Product Photos/opt/img1-wide.webp"
         alt="Contrast White -View 1" width="2000" height="1493" loading="eager" fetchpriority="high">
     </div>
 
     <div class="ph-thumbs">
-      <button class="ph-thumb active" data-src="Product Photos/opt/img1-wide.jpg">
-        <img src="Product Photos/opt/img1-wide.jpg" alt="View 1">
+      <button class="ph-thumb active" data-src="Product Photos/opt/img1-wide.webp">
+        <img src="Product Photos/opt/img1-320.jpg" alt="View 1" loading="lazy" decoding="async" width="320" height="240">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img2-wide.jpg">
-        <img src="Product Photos/opt/img2-wide.jpg" alt="View 2">
+      <button class="ph-thumb" data-src="Product Photos/opt/img2-wide.webp">
+        <img src="Product Photos/opt/img2-320.jpg" alt="View 2" loading="lazy" decoding="async" width="320" height="240">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img3-wide.jpg">
-        <img src="Product Photos/opt/img3-wide.jpg" alt="View 3">
+      <button class="ph-thumb" data-src="Product Photos/opt/img3-wide.webp">
+        <img src="Product Photos/opt/img3-320.jpg" alt="View 3" loading="lazy" decoding="async" width="320" height="240">
       </button>
-      <button class="ph-thumb" data-src="Product Photos/opt/img8-wide.jpg">
-        <img src="Product Photos/opt/img8-wide.jpg" alt="View 4">
+      <button class="ph-thumb" data-src="Product Photos/opt/img8-wide.webp">
+        <img src="Product Photos/opt/img8-320.jpg" alt="View 4" loading="lazy" decoding="async" width="320" height="240">
       </button>
     </div>
 
@@ -1309,7 +1309,7 @@
     <a href="product-midnight-black.html" class="complete-a">Discover Midnight Black</a>
   </div>
   <a href="product-midnight-black.html" class="complete-img">
-    <img src="Product Photos/opt/homepage-image-2-1200.jpg" alt="Also Available">
+    <img src="Product Photos/opt/homepage-image-2-1200.webp" alt="Also Available" loading="lazy" decoding="async" width="1672" height="941">
   </a>
 </section>
 
@@ -1327,7 +1327,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+      <div class="footer-logo"><img src="brand assets/Altara Brand Logo-480.webp" alt="Altara"></div>
       <p class="footer-tagline">Tailored for every drive. Premium seat covers built for the way you live.</p>
     </div>
     <div class="footer-col"><h4>Product</h4><ul><li><a href="collection.html">Seat Covers</a></li><li><a href="collection.html">Collections</a></li><li><a href="reviews.html">Reviews</a></li></ul></div>
@@ -1354,7 +1354,7 @@
 
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
   <div class="mob-ol-header">
-    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo.png" alt="Altara"></div>
+    <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo-480.webp" alt="Altara"></div>
     <div class="mob-ol-header-right">
         <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
         <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
@@ -1421,7 +1421,7 @@
   const mainImg = document.getElementById('ph-main-img');
   // Phones get the tight portrait crops (product fills the frame); desktop keeps the wide studio shots.
   const phCompact = window.matchMedia('(max-width: 768px)').matches;
-  const phSrc = s => phCompact ? s.replace('-wide.jpg', '-1200.jpg') : s;
+  const phSrc = s => phCompact ? s.replace('-wide.webp', '-1200.webp') : s;
   if (phCompact) mainImg.src = phSrc(mainImg.getAttribute('src'));
   document.querySelectorAll('.ph-thumb').forEach(btn => {
     btn.addEventListener('click', () => {
