@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { orderRef as buildRef } from './_ref.js';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { recoveryEmailHtml, sendEmail } from './_emails.js';
@@ -64,7 +65,7 @@ export function buildPurchaseEvent(session, items, shipping) {
       currency: String(session.currency || 'aud').toUpperCase(),
       value: (session.amount_total || 0) / 100,
       num_items: items.reduce((n, i) => n + (i.qty || 1), 0),
-      order_id: orderRef(session),
+      order_id: orderRef(session, items),
       content_type: 'product',
       contents: items.map(i => ({ id: i.name, quantity: i.qty || 1, item_price: i.price })),
     },
@@ -73,7 +74,7 @@ export function buildPurchaseEvent(session, items, shipping) {
 
 async function sendPurchaseToMeta(session, items, shipping) {
   if (!process.env.META_CAPI_TOKEN) {
-    console.error('META_CAPI_TOKEN not set - Purchase not reported to Meta for', orderRef(session));
+    console.error('META_CAPI_TOKEN not set - Purchase not reported to Meta for', orderRef(session, items));
     return;
   }
   try {
@@ -88,7 +89,7 @@ async function sendPurchaseToMeta(session, items, shipping) {
     });
     const body = await res.text();
     if (!res.ok) console.error(`Meta CAPI error ${res.status}:`, body);
-    else console.log('Purchase reported to Meta for', orderRef(session), body);
+    else console.log('Purchase reported to Meta for', orderRef(session, items), body);
   } catch (err) {
     // Never allowed to fail the webhook: Stripe would retry and we would write
     // a duplicate order row.
@@ -110,10 +111,10 @@ async function getRawBody(req) {
 const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const money = n => '$' + Number(n).toFixed(2);
 
-// Short, human-readable reference customers can quote back to us.
-export function orderRef(session) {
-  const src = session.payment_intent || session.id || '';
-  return 'ALT-' + src.slice(-8).toUpperCase();
+// Short, human-readable reference customers can quote back to us, built from
+// what they bought (see api/_ref.js): ALT-MB2-XXXXXX is a Midnight Black Twin Set.
+export function orderRef(session, items = []) {
+  return buildRef(session.payment_intent || session.id || '', items);
 }
 
 export function orderEmailHtml({ first, ref, items, subtotal, shipping, total, address, recipient }) {
@@ -296,7 +297,7 @@ export default async function handler(req, res) {
         email,
         first: (recipient.trim().split(' ')[0]) || 'there',
         recipient: recipient || 'Customer',
-        ref: orderRef(session),
+        ref: orderRef(session, items),
         items,
         subtotal: session.amount_subtotal / 100,
         shipping: (session.shipping_cost?.amount_total || 0) / 100,

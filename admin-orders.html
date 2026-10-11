@@ -375,7 +375,9 @@
     }
     var lines = [AP_HEADER.join(',')].concat(rows.map(function(o){
       var a = o.shipping_address || {};
-      var xl = coverCount(o) >= 3;             // anything beyond one twin set ships XLarge
+      var n = coverCount(o);                   // single S, Twin Set M, three L, Full Car XL
+      var satchel = n <= 1 ? 'AP_SATCHEL_S' : n === 2 ? 'AP_SATCHEL_M' : n === 3 ? 'AP_SATCHEL_L' : 'AP_SATCHEL_XL';
+      var kg = n <= 2 ? '1' : '3';
       return [
         trunc(sender.name, 35),
         'Altara',
@@ -391,9 +393,9 @@
         trunc(a.postal_code || '', 4),
         trunc(o.customer_email || '', 50),
         'NO',                                  // tracking emails come from the store, not AusPost
-        xl ? 'AP_SATCHEL_XL' : 'AP_SATCHEL_M',
+        satchel,
         'PP',                                  // Parcel Post
-        xl ? '3' : '1',                        // kg (satchel cap is 5)
+        kg,                                    // kg (satchel cap is 5)
         trunc((o.items||[]).map(function(i){ return i.name+' x'+i.qty; }).join('; '), 50),
         trunc(o.ref, 50),                      // order ref prints on the label
         'NO',                                  // signature on delivery

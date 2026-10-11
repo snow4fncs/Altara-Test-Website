@@ -976,8 +976,23 @@
 
   // ─── ORDER NUMBER ───
   const sessionId = new URLSearchParams(window.location.search).get('session_id');
-  const orderNum = sessionId ? sessionId.replace('cs_test_', '').replace('cs_live_', '').slice(0, 12).toUpperCase() : 'ALTARA-' + Math.random().toString(36).slice(2,7).toUpperCase();
-  document.getElementById('order-num').textContent = 'ALTARA-' + orderNum;
+  // Shown immediately from the cart so the page never waits, then replaced by
+  // the server's reference (api/order-ref.js), which is the one in the emails
+  // and on the shipping label: ALT-MB2-XXXXXX = Midnight Black, two covers.
+  (function () {
+    const el = document.getElementById('order-num');
+    const cart = Array.isArray(__orderCart) ? __orderCart : [];
+    const twin = i => /twin/i.test(String(i.id || i.name || ''));
+    const white = i => /white|contrast/i.test(String(i.id || '') + ' ' + String(i.name || ''));
+    const units = cart.reduce((n, i) => n + (twin(i) ? 2 : 1) * (Number(i.qty) || 1), 0);
+    const col = cart.some(white) && cart.some(i => !white(i)) ? 'MX' : cart.some(white) ? 'CW' : 'MB';
+    el.textContent = 'ALT-' + col + (units || '') + (sessionId ? '-' + sessionId.slice(-6).toUpperCase() : '');
+    if (!sessionId) return;
+    fetch('/api/order-ref?session_id=' + encodeURIComponent(sessionId))
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { if (j && j.ref) el.textContent = j.ref; })
+      .catch(() => {});
+  })();
 
   // ─── ORDER ITEMS ───
   let cartItems = Array.isArray(__orderCart) ? __orderCart : [];

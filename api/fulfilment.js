@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { shippedEmailHtml, reviewRequestEmailHtml, repeatOfferEmailHtml, sendEmail } from './_emails.js';
+import { orderRef } from './_ref.js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
@@ -20,7 +21,7 @@ function isAdmin(req) {
 // still fresh in mind.
 const REVIEW_UNLOCK_DAYS = 5;
 
-const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
+const orderRefFrom = o => orderRef(o.stripe_payment_intent, o.items);
 
 // A customer email must never carry a junk tracking link. Carriers here use
 // 8-40 letters/digits (AusPost: 99722... or R...; Sendle/Aramex similar);
@@ -93,7 +94,7 @@ async function sendRepeatOffers({ minDays, limit, code, discountLabel }) {
 async function sendDueReviewRequests({ limit }) {
   const cutoff = new Date(Date.now() - REVIEW_UNLOCK_DAYS * 86400000).toISOString();
   const { data, error } = await supabase
-    .from('orders').select('id, customer_email, customer_name, stripe_payment_intent, shipped_at')
+    .from('orders').select('id, customer_email, customer_name, stripe_payment_intent, shipped_at, items')
     .eq('status', 'paid').is('review_email_at', null).not('shipped_at', 'is', null)
     .lte('shipped_at', cutoff).order('shipped_at', { ascending: true }).limit(limit);
   if (error) { console.error('review due load error:', error); return { error: 'Could not load orders' }; }
@@ -108,7 +109,7 @@ async function sendDueReviewRequests({ limit }) {
     const r = await sendEmail({
       to: o.customer_email,
       subject: "How's your Altara cover holding up?",
-      html: reviewRequestEmailHtml({ first: firstName(o.customer_name), ref: orderRefFrom(o.stripe_payment_intent) }),
+      html: reviewRequestEmailHtml({ first: firstName(o.customer_name), ref: orderRefFrom(o) }),
       tag: 'review_request',
     });
     if (r.sent) {
@@ -156,7 +157,7 @@ export default async function handler(req, res) {
       const review = reviewsByEmail.get(String(o.customer_email || '').toLowerCase()) || null;
       return {
         ...o,
-        ref: orderRefFrom(o.stripe_payment_intent),
+        ref: orderRefFrom(o),
         has_review: !!review,
         review_rating: review ? review.rating : null,
         review_published: review ? !!review.approved : null,
@@ -233,7 +234,7 @@ export default async function handler(req, res) {
   }
   if (findErr || !order) return res.status(404).json({ error: 'Order not found' });
 
-  const ref = orderRefFrom(order.stripe_payment_intent);
+  const ref = orderRefFrom(order);
   const first = firstName(order.customer_name);
 
   // ── mark shipped + send tracking ──

@@ -28,8 +28,8 @@ const FREE_SHIP_THRESHOLD = 80;
 // trusted - only the item ids and quantities.
 const BUNDLE_PAIR_SAVING = 49;
 
-// Two Twin Sets in one order (the Full Car) take a further $9 off:
-// 2 x $89 = $178. No further discount at present (saving constant 0). Mixed colours qualify the same way.
+// Two Twin Sets in one order (the Full Car) currently take no further discount
+// (constant kept at 0). Any four covers would qualify the same way.
 const TWIN_PAIR_SAVING = 0;
 
 export function bundleDiscount(items) {
@@ -39,7 +39,9 @@ export function bundleDiscount(items) {
   const twins = items
     .filter(i => /-twin$/.test(String(i.id)))
     .reduce((n, i) => n + Math.max(1, Number(i.qty) || 1), 0);
-  return Math.floor(singles / 2) * BUNDLE_PAIR_SAVING + Math.floor(twins / 2) * TWIN_PAIR_SAVING;
+  // Any four covers make a Full Car: two Twin Sets, a Twin Set plus a mixed pair, or four singles.
+  const pairs = Math.floor(singles / 2) + twins;
+  return Math.floor(singles / 2) * BUNDLE_PAIR_SAVING + Math.floor(pairs / 2) * TWIN_PAIR_SAVING;
 }
 
 // Coupons are reused by deterministic id so we do not litter the account with a

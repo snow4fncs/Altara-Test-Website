@@ -1,4 +1,5 @@
 import http from 'http';
+import { orderRef } from './api/_ref.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -321,7 +322,7 @@ let mockOrders = [
     shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
 ];
 
-const orderRefFrom = pi => 'ALT-' + String(pi || '').slice(-8).toUpperCase();
+const orderRefFrom = o => orderRef(o.stripe_payment_intent, o.items);
 
 async function handleFulfilment(req, res) {
   if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
@@ -333,7 +334,7 @@ async function handleFulfilment(req, res) {
       .map(o => {
         const days = o.shipped_at ? Math.floor((now - new Date(o.shipped_at)) / 86400000) : null;
         const rv = mockReviewEmails.get(String(o.customer_email||'').toLowerCase()) || null;
-        return { ...o, ref: orderRefFrom(o.stripe_payment_intent),
+        return { ...o, ref: orderRefFrom(o),
                  has_review: !!rv, review_rating: rv?rv.rating:null, review_published: rv?rv.approved:null,
                  review_due: !!o.shipped_at && !o.review_email_at && !rv && days >= REVIEW_UNLOCK_DAYS, shipped_days_ago: days };
       });
@@ -449,6 +450,13 @@ const server = http.createServer(async (req, res) => {
   if (rawPath === '/api/reviews') return handleReviews(req, res, query);
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
   if (rawPath === '/api/stock') return handleStock(req, res);
+  if (rawPath === '/api/stock-level') {
+    return send(res, 200, { 'midnight-black': { status: 'low', under: 50 }, 'contrast-white': { status: 'ok' } });
+  }
+  if (rawPath === '/api/order-ref') {
+    // Local stand-in for api/order-ref.js: a Midnight Black Twin Set reference.
+    return send(res, 200, { ref: orderRef(String(query.session_id || 'pi_mockDEMO01'), [{ name: 'Midnight Black - Twin Set', qty: 1 }]) });
+  }
   if (rawPath === '/api/finance') {
     if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });
     const days = [];

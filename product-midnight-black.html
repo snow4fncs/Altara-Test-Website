@@ -123,7 +123,8 @@
     .pi-sep { width: 100%; height: 1px; background: var(--line); margin: 24px 0; flex-shrink: 0; }
     .pack-wrap { margin: 4px 0 20px; }
     .pack-opts { display: flex; gap: 8px; }
-    .pack-opt { flex: 1; padding: 14px 16px; background: transparent; border: 1px solid rgba(237,232,223,0.1); cursor: pointer; text-align: left; transition: border-color 0.22s, background 0.22s; -webkit-tap-highlight-color: transparent; }
+    .pack-opts { flex-wrap: wrap; }
+    .pack-opt { flex: 1 1 calc(50% - 6px); padding: 14px 16px; background: transparent; border: 1px solid rgba(237,232,223,0.1); cursor: pointer; text-align: left; transition: border-color 0.22s, background 0.22s; -webkit-tap-highlight-color: transparent; }
     .pack-opt:hover { border-color: rgba(237,232,223,0.2); }
     .pack-opt.active { border-color: rgba(196,169,122,0.45); background: rgba(196,169,122,0.04); }
     .pack-opt-name { display: block; font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,223,0.35); margin-bottom: 6px; transition: color 0.22s; }
@@ -966,6 +967,16 @@
             <li>Save $49 &middot; free Australia Post shipping, tracked</li>
           </ul>
         </button>
+        <button class="pack-opt" id="pack-mixed" type="button" aria-pressed="false">
+          <span>
+            <span class="pack-opt-name">Mixed pair &middot; one of each</span>
+            <span class="pack-opt-price"><s class="pack-was">$138</s> $89 <span class="pack-opt-currency">AUD</span></span>
+          </span>
+          <ul class="pack-opt-list">
+            <li>One Midnight Black, one Contrast White</li>
+            <li>Save $49 &middot; free Australia Post shipping, tracked</li>
+          </ul>
+        </button>
         <button class="pack-opt" id="pack-fullcar" type="button" aria-pressed="false">
           <span class="pack-badge gold">Best value</span>
           <span>
@@ -1270,11 +1281,13 @@
   var TIERS = {
     single:  { price: 69,  was: null, label: '$69 AUD' },
     twin:    { price: 89,  was: 138,  label: "$89 AUD" },
+    mixed:   { price: 89,  was: 138,  label: "$89 AUD" },
     fullcar: { price: 178, was: 276,  label: "$178 AUD" }
   };
   (function(){
     var btns = { single: document.getElementById('pack-single'),
                  twin: document.getElementById('pack-twin'),
+                 mixed: document.getElementById('pack-mixed'),
                  fullcar: document.getElementById('pack-fullcar') };
     var p = document.getElementById('pi-price-display');
     function paintPack(){
@@ -1305,8 +1318,18 @@
     else                              item = { id: PROD.id + '-twin', name: PROD.name + " — Twin Set", price: 89, image: 'Product Photos/opt/twin-set-midnight-black-320.jpg' };
     if (selectedPack === 'fullcar')   qty = 2;
     const c = JSON.parse(localStorage.getItem('altara-cart') || '{"items":[]}');
-    const ex = c.items.find(i => i.id === item.id);
-    if (ex) ex.qty += qty; else c.items.push({ ...item, qty: qty });
+    if (selectedPack === 'mixed') {
+      // One of each colour as two singles; the cart prices any two covers as a Twin Set.
+      [{ id: 'midnight-black', name: 'Midnight Black', price: 69, image: 'Product Photos/opt/img7-320.jpg' },
+       { id: 'contrast-white', name: 'Contrast White', price: 69, image: 'Product Photos/opt/img1-320.jpg' }].forEach(function (one) {
+        var e = c.items.find(function (i) { return i.id === one.id; });
+        if (e) e.qty += 1; else c.items.push({ ...one, qty: 1 });
+      });
+      item = { id: 'mixed-pair', name: 'Mixed pair', price: 89 };
+    } else {
+      const ex = c.items.find(i => i.id === item.id);
+      if (ex) ex.qty += qty; else c.items.push({ ...item, qty: qty });
+    }
     localStorage.setItem('altara-cart', JSON.stringify(c));
     if (typeof fbq === 'function') fbq('track', 'AddToCart', { content_ids: [item.id], content_name: item.name, value: item.price * qty, currency: 'AUD' });
     // Open the drawer: the buyer keeps their place on the page, and the
@@ -1644,7 +1667,7 @@
     var b=document.getElementById('cart-badge'); if(b){ b.textContent=n; b.classList.toggle('show', n>0); } }
   function fmt(n){ return '$' + n.toFixed(2); }
   function promo(){ try { return JSON.parse(localStorage.getItem(PROMO_KEY)) || null; } catch(e){ return null; } }
-  function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); var twins=c.items.filter(function(i){return /-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE + Math.floor(twins/2)*TWINPAIR_SAVE; }
+  function bundleDisc(c){ var singles=c.items.filter(function(i){return !/-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); var twins=c.items.filter(function(i){return /-twin$/.test(i.id);}).reduce(function(n,i){return n+i.qty;},0); return Math.floor(singles/2)*PAIR_SAVE + Math.floor((Math.floor(singles/2)+twins)/2)*TWINPAIR_SAVE; }
   function promoAmt(p, base){ if(!p) return 0;
     if (p.minimum && base < p.minimum) return 0;
     var d = p.amount_off ? Number(p.amount_off) : base*(Number(p.percent_off)||0)/100;
