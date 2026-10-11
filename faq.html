@@ -8,9 +8,7 @@
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    n.queue=[];var L=function(){if(n.l)return;n.l=1;t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)};('requestIdleCallback' in f?f.requestIdleCallback(L,{timeout:2500}):setTimeout(L,1200));['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){f.addEventListener(ev,L,{once:true,passive:true})})}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1907598646567033');
     fbq('track', 'PageView');
@@ -27,9 +25,9 @@
   <meta name="theme-color" content="#0C0D10">
   <meta name="color-scheme" content="dark">
   <title>FAQ - Altara</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
+  <link rel="preload" href="/fonts/cormorant-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
   <style>
     :root {
       --bg: #0C0D10; --bg-2: #111317; --bg-3: #181B1F;

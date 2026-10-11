@@ -28,9 +28,9 @@ const FREE_SHIP_THRESHOLD = 80;
 // trusted - only the item ids and quantities.
 const BUNDLE_PAIR_SAVING = 49;
 
-// Two Twin Sets in one order (the Full Car) currently take no further discount
-// (constant kept at 0). Any four covers would qualify the same way.
-const TWIN_PAIR_SAVING = 0;
+// Two Twin Sets in one order (the Full Car) take a further $19 off:
+// 2 x $89 = $178 becomes $159. Mixed colours qualify the same way.
+const TWIN_PAIR_SAVING = 19;
 
 export function bundleDiscount(items) {
   const singles = items

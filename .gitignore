@@ -8,3 +8,6 @@ temporary screenshots/
 .agents/
 .claude/
 skills-lock.json
+.car-scan-profile/
+car-scan-seen.json
+car-scan-hits.log

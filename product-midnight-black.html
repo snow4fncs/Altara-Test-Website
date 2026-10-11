@@ -8,9 +8,7 @@
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    n.queue=[];var L=function(){if(n.l)return;n.l=1;t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)};('requestIdleCallback' in f?f.requestIdleCallback(L,{timeout:2500}):setTimeout(L,1200));['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){f.addEventListener(ev,L,{once:true,passive:true})})}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1907598646567033');
     fbq('track', 'PageView');
@@ -37,9 +35,9 @@
   <meta name="theme-color" content="#0C0D10">
   <meta name="color-scheme" content="dark">
   <title>Midnight Black Car Seat Towel Cover — Altara | Sweat & Sand Protection</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="/fonts/cormorant-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
   <style>
     :root {
       --bg:    #0B0C0F;
@@ -816,6 +814,8 @@
   <meta name="twitter:title" content="Midnight Black Seat Cover — Altara">
   <meta name="twitter:description" content="Altara Midnight Black seat cover — premium materials, precision fit. Free shipping across Australia.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%207.png">
+  <!-- Quietly fetch the cart page in the background so checkout opens instantly -->
+  <link rel="prefetch" href="/cart.html">
 </head>
 <body data-product="midnight-black">
 
@@ -981,11 +981,11 @@
           <span class="pack-badge gold">Best value</span>
           <span>
             <span class="pack-opt-name">Full Car &middot; 4 covers</span>
-            <span class="pack-opt-price"><s class="pack-was">$276</s> $178 <span class="pack-opt-currency">AUD</span></span>
+            <span class="pack-opt-price"><s class="pack-was">$276</s> $159 <span class="pack-opt-currency">AUD</span></span>
           </span>
           <ul class="pack-opt-list">
             <li>Two Twin Sets, four covers</li>
-            <li>Save $98 &middot; free Australia Post shipping, tracked</li>
+            <li>Save $117 &middot; free Australia Post shipping, tracked</li>
             <li>Extra $10 off with code <strong>SELLOUT10</strong></li>
           </ul>
         </button>
@@ -1282,7 +1282,7 @@
     single:  { price: 69,  was: null, label: '$69 AUD' },
     twin:    { price: 89,  was: 138,  label: "$89 AUD" },
     mixed:   { price: 89,  was: 138,  label: "$89 AUD" },
-    fullcar: { price: 178, was: 276,  label: "$178 AUD" }
+    fullcar: { price: 159, was: 276,  label: "$159 AUD" }
   };
   (function(){
     var btns = { single: document.getElementById('pack-single'),
@@ -1651,7 +1651,7 @@
 <script>
 /* Cart drawer: the whole cart without leaving the product page. */
 (function () {
-  var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 49, TWINPAIR_SAVE = 0, PROMO_KEY = 'altara-promo';
+  var FREE_SHIP = 80, SHIP_RATE = 9.95, PAIR_SAVE = 49, TWINPAIR_SAVE = 19, PROMO_KEY = 'altara-promo';
   var $ = function (id) { return document.getElementById(id); };
   var drawer = $('cd'), overlay = $('cd-overlay');
   function canonImg(id){ id=String(id);
