@@ -926,6 +926,7 @@
     var ph = (r && r.photos) || [];
     if (!ph.length) return '';
     return '<div class="ar-photos">' + ph.slice(0, 3).map(function (u, i) {
+      u = String(u || '').trim();
       return '<a class="ar-photos-item" href="' + esc(u) + '" data-lightbox data-who="' + esc(r.reviewer_name || '') + '" aria-label="Customer photo ' + (i + 1) + ' of ' + Math.min(ph.length, 3) + ', opens in a viewer">'
            + '<img src="' + esc(u) + '" alt="Customer photo" loading="lazy"></a>';
     }).join('') + '</div>';
@@ -1424,9 +1425,9 @@
     document.addEventListener('click', function (e) {
       var a = e.target.closest('a[data-lightbox]'); if (!a) return;
       var strip = a.parentElement; var all = Array.prototype.slice.call(strip.querySelectorAll('a[data-lightbox]'));
-      e.preventDefault();
-      open(all.map(function (el) { var im = el.querySelector('img'); return { src: el.getAttribute('href'), alt: im ? im.alt : '', who: el.getAttribute('data-who') || '' }; }), Math.max(0, all.indexOf(a)), a);
-    });
+      e.preventDefault(); e.stopPropagation();
+      open(all.map(function (el) { var im = el.querySelector('img'); return { src: (el.getAttribute('href') || '').trim(), alt: im ? im.alt : '', who: el.getAttribute('data-who') || '' }; }), Math.max(0, all.indexOf(a)), a);
+    }, true);
   })();
   </script>
 </body>
