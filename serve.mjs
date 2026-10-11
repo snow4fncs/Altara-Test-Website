@@ -63,7 +63,7 @@ const reviews = [
     reviewer_name: 'Dani R.', rating: 5, created_at: '2026-08-09T07:40:00Z',
     title: 'Solved a problem I had stopped trying to solve',
     body: 'Maroubra, in the water by quarter to six most mornings. For about two years my solution was an old towel folded over the seat, which slid into the footwell roughly every second time I got in. I had accepted that as just part of swimming. This does not move. I have not thought about it once since the first week, which is the highest compliment I can give a thing like this.',
-    verified: true, approved: true, photos: [],
+    verified: true, approved: true, photos: ['https://qhyactfkoumechqkwfdr.supabase.co/storage/v1/object/public/review-photos/ca69b0f5-e41f-49ca-a320-4493a0e7271f-0.jpg','https://qhyactfkoumechqkwfdr.supabase.co/storage/v1/object/public/review-photos/274974b7-ac52-4c76-9764-f1bdda103029-1.jpg'],
   },
   {
     id: 'seed-mb-2', product: 'midnight-black', email: 'seed.mb2@example.com',
