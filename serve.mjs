@@ -451,7 +451,10 @@ const server = http.createServer(async (req, res) => {
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
   if (rawPath === '/api/stock') return handleStock(req, res);
   if (rawPath === '/api/stock-level') {
-    return send(res, 200, { 'midnight-black': { status: 'low', under: 50 }, 'contrast-white': { status: 'ok' } });
+    return send(res, 200, { 'midnight-black': { status: 'out', restock: 'mid November' }, 'contrast-white': { status: 'ok' } });
+  }
+  if (rawPath === '/api/waitlist' && req.method === 'POST') {
+    let b = ''; req.on('data', c => b += c); return req.on('end', () => { console.log('  [waitlist] ' + b); send(res, 200, { success: true }); });
   }
   if (rawPath === '/api/order-ref') {
     // Local stand-in for api/order-ref.js: a Midnight Black Twin Set reference.

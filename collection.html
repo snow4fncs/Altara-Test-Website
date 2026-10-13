@@ -697,6 +697,9 @@
   <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/product-*"},"eagerness":"moderate"}]}</script>
   <link rel="prefetch" href="/product-midnight-black.html">
   <link rel="prefetch" href="/Product%20Photos/opt/img7-wide.webp" as="image">
+  <style>
+    .tile-soldout { position:absolute; top:14px; left:14px; z-index:2; font-family:'Outfit',sans-serif; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:#EDE8DF; background:rgba(12,13,16,.78); border:1px solid rgba(237,232,223,.25); padding:7px 11px; }
+  </style>
 </head>
 <body>
 
@@ -1226,6 +1229,18 @@
       open(all.map(function (el) { var im = el.querySelector('img'); return { src: (el.getAttribute('href') || '').trim(), alt: im ? im.alt : '', who: el.getAttribute('data-who') || '' }; }), Math.max(0, all.indexOf(a)), a);
     }, true);
   })();
+  </script>
+  <script>
+    fetch('/api/stock-level').then(function (r) { return r.ok ? r.json() : {}; }).then(function (lv) {
+      if (!lv['midnight-black'] || lv['midnight-black'].status !== 'out') return;
+      document.querySelectorAll('a[href="product-midnight-black.html"]').forEach(function (a) {
+        var box = a.querySelector('.range-tile-img-box, .product-tile-img-wrap'); if (!box) return;
+        box.style.position = 'relative'; var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = 'Sold out · back ' + (lv['midnight-black'].restock || 'soon'); box.appendChild(b);
+        var link = a.querySelector('.range-tile-link, .product-tile-explore'); if (link) link.textContent = 'Join the waitlist';
+      });
+      var hero = document.querySelector('a.btn-primary[href="product-midnight-black.html"]');
+      if (hero) { hero.href = 'product-contrast-white.html'; hero.textContent = 'Shop Contrast White'; }
+    }).catch(function () {});
   </script>
 </body>
 </html>

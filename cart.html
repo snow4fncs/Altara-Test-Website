@@ -836,6 +836,7 @@
       border: 1px solid var(--border); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 0 18px; }
     .promo button:hover { border-color: rgba(196,169,122,0.5); }
     .promo button[disabled] { opacity: 0.4; cursor: default; }
+    .cart-soldout { color: #D98A8A !important; }
     .promo--email { grid-template-columns: 1fr; }
     .promo--email input { text-transform: none; letter-spacing: 0.02em; }
     .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
@@ -1332,6 +1333,7 @@
           </a>
           <div class="cart-item-info">
             <a class="cart-item-name" href="${href}">${item.name}</a>
+            ${(window.__stock && window.__stock[String(item.id).replace('-twin','')] && window.__stock[String(item.id).replace('-twin','')].status === 'out') ? '<p class="cart-item-meta cart-soldout">Sold out · remove to continue, or join the waitlist on the product page</p>' : ''}
             <p class="cart-item-meta">Seat Cover</p>
             ${item.variant ? `<p class="cart-item-meta">${item.variant}</p>` : ''}
             <p class="cart-item-feature">MagFit&trade;</p>
@@ -1553,6 +1555,7 @@
       if (!cart.items.length) return;
 
       const btn = document.getElementById('btn-checkout');
+      let data = null;
       btn.textContent = 'Redirecting…';
       btn.disabled = true;
       btn.style.opacity = '0.6';
@@ -1586,7 +1589,7 @@
             })(),
           }),
         });
-        const data = await res.json();
+        data = await res.json();
         if (data.url) {
           window.location.href = data.url;
         } else {
@@ -1596,7 +1599,7 @@
         btn.textContent = 'Proceed to Checkout';
         btn.disabled = false;
         btn.style.opacity = '';
-        alert('Something went wrong. Please try again.');
+        alert((data && data.error) || 'Something went wrong. Please try again.');
         console.error(err);
       }
     }
@@ -1604,6 +1607,8 @@
     // Init
     renderCart();
     updateNavBadge();
+    // Sold-out lines: re-render once stock is known so the row carries the notice.
+    fetch('/api/stock-level').then(function (r) { return r.ok ? r.json() : {}; }).then(function (lv) { window.__stock = lv || {}; renderCart(); }).catch(function () {});
 
     // Email: remembered on this device so a returning visitor is not asked twice.
     (function () {

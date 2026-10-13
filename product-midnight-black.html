@@ -534,6 +534,23 @@
     .pack-mix a:hover { color: var(--gold); border-bottom-color: var(--gold); }
     .pack-mix a:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
     @media (max-width: 900px) { .pack-mix { font-size: 14px; } }
+    /* Sold-out state: packs greyed, colourway marked, waitlist form in the brand's input style */
+    .pack-opt.is-soldout { opacity: .38; pointer-events: none; }
+    .pi-var.is-soldout { opacity: .5; }
+    .pi-var.is-soldout .pi-var-label { color: #9e3b34; }
+    body.is-soldout .pi-dispatch { display:none; }
+    body.is-soldout .pi-add { background: transparent; border: 1px solid rgba(196,169,122,.5); color: var(--cream); }
+    .pi-wait { margin: 14px 0 6px; display: grid; gap: 9px; }
+    .pi-wait[hidden] { display: none; }
+    .pi-wait label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--cream-dim); font-weight: 500; }
+    .pi-wait-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .pi-wait input { font-family: 'Outfit', sans-serif; font-size: 15px; color: var(--cream); background: var(--bg); border: 1px solid rgba(237,232,223,.18); padding: 13px 14px; }
+    .pi-wait input:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .pi-wait button { font-family: 'Outfit', sans-serif; cursor: pointer; background: var(--gold, #C4A97A); color: #141518; border: 0; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; padding: 0 18px; }
+    .pi-wait button[disabled] { opacity: .5; cursor: default; }
+    .pi-wait-msg { font-size: 13px; color: var(--cream-dim); min-height: 1.2em; margin: 0; }
+    .pi-wait-msg.ok { color: var(--gold, #C4A97A); } .pi-wait-msg.err { color: #D98A8A; }
+    .pi-lowstock[hidden] { display:none; }
     .pi-lowstock { display:flex; align-items:center; gap:11px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; color:#9e3b34; margin:2px 0 14px; }
     .pi-ls-dot { width:6px; height:6px; border-radius:50%; background:#a8443c; flex-shrink:0; animation:lsdot 2.2s ease-in-out infinite; }
     @keyframes lsdot { 0%,100%{ box-shadow:0 0 0 0 rgba(168,68,60,.55); opacity:1 } 50%{ box-shadow:0 0 0 5px rgba(168,68,60,0); opacity:.65 } }
@@ -991,8 +1008,13 @@
       </div>
       <p class="pack-mix">Mix colours freely: any two covers price as a Twin Set.</p>
     </div>
-    <p class="pi-lowstock"><span class="pi-ls-dot" aria-hidden="true"></span>Low Stock<span class="pi-ls-note">Limited sets remaining</span></p>
+    <p class="pi-lowstock" id="pi-lowstock" hidden><span class="pi-ls-dot" aria-hidden="true"></span>Low Stock<span class="pi-ls-note" id="pi-ls-note">Limited sets remaining</span></p>
     <button class="pi-add" id="add-to-cart-btn">Add to Cart</button>
+    <form class="pi-wait" id="pi-wait" hidden novalidate>
+      <label for="pi-wait-email">Email me when it&rsquo;s back</label>
+      <div class="pi-wait-row"><input id="pi-wait-email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required><button type="submit">Notify me</button></div>
+      <p class="pi-wait-msg" aria-live="polite"></p>
+    </form>
     <p class="pi-dispatch" id="pi-dispatch" hidden><span class="pi-dispatch-dot" aria-hidden="true"></span><span id="pi-dispatch-text"></span></p>
     <div class="pi-steps" aria-label="Order timeline">
       <div class="pi-step done">
@@ -1274,6 +1296,43 @@
   document.querySelectorAll('.pi-acc-btn').forEach(btn => {
     btn.addEventListener('click', () => btn.closest('.pi-acc').classList.toggle('open'));
   });
+  // Stock state from the public stock API: a real low-stock line, or a sold-out state with a waitlist.
+  window.__stock = {};
+  fetch('/api/stock-level').then(function (r) { return r.ok ? r.json() : {}; }).then(function (lv) {
+    window.__stock = lv || {};
+    var me = lv && lv[PROD.id]; var el = document.getElementById('pi-lowstock');
+    if (el && me && me.status === 'low') { document.getElementById('pi-ls-note').textContent = 'Fewer than ' + me.under + ' ' + PROD.name + ' sets left'; el.hidden = false; }
+    // mark any colourway that is sold out, on either page
+    document.querySelectorAll('.pi-var').forEach(function (v) {
+      var sku = /white/i.test(v.title || v.textContent) ? 'contrast-white' : 'midnight-black';
+      if (lv[sku] && lv[sku].status === 'out') { v.classList.add('is-soldout'); var lab = v.querySelector('.pi-var-label'); if (lab) lab.textContent = lab.textContent + ' · Sold out'; }
+    });
+    var blackOut = lv['midnight-black'] && lv['midnight-black'].status === 'out';
+    if (blackOut && document.getElementById('pack-mixed')) { document.getElementById('pack-mixed').classList.add('is-soldout'); document.getElementById('pack-mixed').disabled = true; if (selectedPack === 'mixed') { selectedPack = 'twin'; } }
+    if (!me || me.status !== 'out') return;
+    // this colour is sold out: buy controls become a waitlist
+    document.body.classList.add('is-soldout');
+    if (el) { el.hidden = false; el.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span>Sold out<span class="pi-ls-note">Next batch lands ' + (me.restock || 'soon') + '</span>'; }
+    ['pack-single', 'pack-twin', 'pack-mixed', 'pack-fullcar'].forEach(function (id) { var b = document.getElementById(id); if (b) { b.classList.add('is-soldout'); b.disabled = true; } });
+    // Swap the buy buttons for fresh nodes so the add-to-cart listeners are gone, then make them open the waitlist.
+    var wait = document.getElementById('pi-wait');
+    var swap = function (id, label, scroll) { var b = document.getElementById(id); if (!b) return; var n = b.cloneNode(true); n.textContent = label; n.removeAttribute('onclick'); b.parentNode.replaceChild(n, b);
+      n.addEventListener('click', function (e) { e.preventDefault(); wait.hidden = false; if (scroll) wait.scrollIntoView({ block: 'center', behavior: 'smooth' }); wait.querySelector('input').focus(); }); };
+    swap('add-to-cart-btn', 'Notify me when it\u2019s back', false); swap('satc-btn', 'Notify me', true);
+    var sp = document.getElementById('satc-price'); if (sp) sp.textContent = 'Sold out';
+  }).catch(function () {});
+  (function () {
+    var f = document.getElementById('pi-wait'); if (!f) return;
+    f.addEventListener('submit', function (e) {
+      e.preventDefault(); var em = f.querySelector('input').value.trim(), msg = f.querySelector('.pi-wait-msg'), btn = f.querySelector('button');
+      btn.disabled = true; msg.textContent = 'Adding you\u2026'; msg.className = 'pi-wait-msg';
+      fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: em, product: PROD.id + '-restock' }) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (x) { if (!x.ok) throw new Error(x.j.error || 'Could not add you'); msg.textContent = 'You\u2019re on the list. We\u2019ll email you the day it lands.'; msg.className = 'pi-wait-msg ok'; f.querySelector('input').value = ''; })
+        .catch(function (err) { msg.textContent = err.message; msg.className = 'pi-wait-msg err'; })
+        .finally(function () { btn.disabled = false; });
+    });
+  })();
   const PROD = { id: 'midnight-black', name: 'Midnight Black', price: 69, image: 'Product Photos/opt/img7-320.jpg' };
   const toast = document.getElementById('toast'); let tt;
   var selectedPack = 'twin';   // all real orders to date are twins - default to the winner
@@ -1744,6 +1803,7 @@
     else offer = { id: c.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
       name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
       price:89, image:canonImg(c.items[0].id.indexOf('midnight')===0?'midnight-black-twin':'contrast-white-twin'), label:'Add a second pair — Twin Set price' };
+    if (offer && window.__stock && window.__stock[offer.id.replace('-twin','')] && window.__stock[offer.id.replace('-twin','')].status === 'out') { $('cd-x-slot').innerHTML = ''; return; }
     $('cd-x-slot').innerHTML = '<div class="cd-x"><img src="'+esc(offer.image)+'" alt="">'
       + '<div class="cd-x-info"><span class="cd-x-k">'+esc(offer.label)+'</span>'
       + '<span class="cd-x-n">'+esc(offer.name)+' &middot; $89</span></div>'

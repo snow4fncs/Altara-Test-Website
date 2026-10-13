@@ -1,6 +1,27 @@
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+import { summarise } from './stock.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+
+// Covers needed per cart line, by colour. Refuses the session when the shelf cannot cover it.
+const SKU_OF = { 'midnight-black': 'midnight-black', 'midnight-black-twin': 'midnight-black', 'contrast-white': 'contrast-white', 'contrast-white-twin': 'contrast-white' };
+const LABEL = { 'midnight-black': 'Midnight Black', 'contrast-white': 'Contrast White' };
+async function soldOutCheck(items) {
+  const need = {};
+  for (const i of items) { const sku = SKU_OF[i.id]; if (!sku) continue; need[sku] = (need[sku] || 0) + (/-twin$/.test(i.id) ? 2 : 1) * (Number(i.qty) || 1); }
+  if (!Object.keys(need).length) return null;
+  try {
+    const [{ data: orders }, { data: movements }] = await Promise.all([
+      supabase.from('orders').select('items, created_at, status').eq('status', 'paid').limit(2000),
+      supabase.from('stock_movements').select('*'),
+    ]);
+    const s = summarise(orders || [], movements || []);
+    for (const [sku, n] of Object.entries(need)) if (s[sku] && s[sku].remaining < n) return `${LABEL[sku]} is sold out. Remove it from your cart to continue, or join the waitlist on the product page.`;
+  } catch (err) { console.error('stock check failed, allowing checkout:', err.message); }
+  return null;
+}
 
 const PRODUCTS = {
   'midnight-black': process.env.STRIPE_PRICE_MIDNIGHT_BLACK_69 || 'price_1UINBuEHIlR7gqjNHepXoIOA',
@@ -86,6 +107,8 @@ export default async function handler(req, res) {
   try {
     const { items, fbp, fbc, promo_code, customer_email } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: 'No items' });
+    const soldOut = await soldOutCheck(items);
+    if (soldOut) return res.status(409).json({ error: soldOut });
 
     // Meta's browser cookies and the user agent, carried through Stripe so the
     // webhook can attach them to the server-side Purchase event. Without these
