@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/stock-level",
+      "destination": "/api/stock?public=1"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     }

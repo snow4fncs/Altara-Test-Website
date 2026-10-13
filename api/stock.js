@@ -46,7 +46,31 @@ export function summarise(orders, movements) {
   return out;
 }
 
+// Public, coarse stock signal for the product pages (served at /api/stock-level by a rewrite in
+// vercel.json, so it does not count as another serverless function). A band, never the exact count.
+const LOW_AT = 60;
+const RESTOCK = { 'midnight-black': 'mid November', 'contrast-white': 'soon' };  // edit when the supplier confirms
+const band = n => Math.ceil(Math.max(n, 1) / 25) * 25;
+async function publicLevel(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+  try {
+    const [{ data: orders }, { data: movements }] = await Promise.all([
+      supabase.from('orders').select('items, created_at, status').eq('status', 'paid').limit(2000),
+      supabase.from('stock_movements').select('*'),
+    ]);
+    const s = summarise(orders || [], movements || []);
+    const out = {};
+    for (const [sku, v] of Object.entries(s)) {
+      // Fewer than two covers cannot make a Twin Set, so the colour is treated as sold out.
+      out[sku] = v.remaining < 2 ? { status: 'out', restock: RESTOCK[sku] || 'soon' } : v.remaining <= LOW_AT ? { status: 'low', under: band(v.remaining) } : { status: 'ok' };
+    }
+    res.setHeader('Cache-Control', 'public, max-age=120');
+    return res.status(200).json(out);
+  } catch (err) { console.error('stock-level error:', err.message); return res.status(200).json({}); }
+}
+
 export default async function handler(req, res) {
+  if (req.query && req.query.public === '1') return publicLevel(req, res);
   if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 
   if (req.method === 'GET') {
