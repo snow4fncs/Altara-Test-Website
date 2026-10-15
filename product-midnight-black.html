@@ -538,6 +538,10 @@
     .pack-opt.is-soldout { opacity: .38; pointer-events: none; }
     .pi-var.is-soldout { opacity: .5; }
     .pi-var.is-soldout .pi-var-label { color: #9e3b34; }
+    .pi-soldout-top { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:10px 0 2px; font-size:13.5px; color:rgba(237,232,223,.78); }
+    .pi-soldout-top strong { font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; color:#c9524a; }
+    .pi-soldout-top a { color:var(--gold, #C4A97A); text-decoration:underline; text-underline-offset:3px; }
+    .ph-soldout { position:absolute; top:14px; left:14px; z-index:3; font-family:'Outfit',sans-serif; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:#EDE8DF; background:rgba(12,13,16,.82); border:1px solid rgba(237,232,223,.28); padding:8px 12px; pointer-events:none; }
     body.is-soldout .pi-dispatch { display:none; }
     body.is-soldout .pi-add { background: transparent; border: 1px solid rgba(196,169,122,.5); color: var(--cream); }
     .pi-wait { margin: 14px 0 6px; display: grid; gap: 9px; }
@@ -1312,10 +1316,20 @@
     if (!me || me.status !== 'out') return;
     // this colour is sold out: buy controls become a waitlist
     document.body.classList.add('is-soldout');
+    var wait = document.getElementById('pi-wait');
+    // Say it where the eye lands first: under the price, and as a badge on the photo (matters most on a phone).
+    var price = document.getElementById('pi-price-display');
+    if (price && !document.getElementById('pi-soldout-top')) {
+      var top = document.createElement('p'); top.id = 'pi-soldout-top'; top.className = 'pi-soldout-top';
+      top.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span><strong>Sold out</strong><span>Next batch lands ' + (me.restock || 'soon') + '.</span><a href="#pi-wait">Notify me</a>';
+      price.insertAdjacentElement('afterend', top);
+      top.querySelector('a').addEventListener('click', function (e) { e.preventDefault(); wait.hidden = false; wait.scrollIntoView({ block: 'center', behavior: 'smooth' }); wait.querySelector('input').focus(); });
+    }
+    var area = document.querySelector('.ph-image-area');
+    if (area && !area.querySelector('.ph-soldout')) { area.style.position = 'relative'; var b = document.createElement('span'); b.className = 'ph-soldout'; b.textContent = 'Sold out'; area.appendChild(b); }
     if (el) { el.hidden = false; el.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span>Sold out<span class="pi-ls-note">Next batch lands ' + (me.restock || 'soon') + '</span>'; }
     ['pack-single', 'pack-twin', 'pack-mixed', 'pack-fullcar'].forEach(function (id) { var b = document.getElementById(id); if (b) { b.classList.add('is-soldout'); b.disabled = true; } });
     // Swap the buy buttons for fresh nodes so the add-to-cart listeners are gone, then make them open the waitlist.
-    var wait = document.getElementById('pi-wait');
     var swap = function (id, label, scroll) { var b = document.getElementById(id); if (!b) return; var n = b.cloneNode(true); n.textContent = label; n.removeAttribute('onclick'); b.parentNode.replaceChild(n, b);
       n.addEventListener('click', function (e) { e.preventDefault(); wait.hidden = false; if (scroll) wait.scrollIntoView({ block: 'center', behavior: 'smooth' }); wait.querySelector('input').focus(); }); };
     swap('add-to-cart-btn', 'Notify me when it\u2019s back', false); swap('satc-btn', 'Notify me', true);
