@@ -307,7 +307,7 @@ let mockOrders = [
     shipped_at:'2026-08-08T02:00:00Z', shipped_email_at:null, review_email_at:null, repeat_email_at:null },
   { id:'o3', created_at:'2026-08-17T22:10:00Z', customer_email:'tommym20iphone@icloud.com', customer_name:'Tommy Martin',
     shipping_address:{ line1:'4 Example St', city:'Narraweena', state:'NSW', postal_code:'2099', country:'AU' },
-    items:[{name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
+    items:[{ preorder:true, ships:'mid November',name:'Midnight Black - Twin Set',qty:1,price:89}], total:89, currency:'aud', status:'paid',
     stripe_payment_intent:'pi_xxxxTOMMY001', tracking_number:null, carrier:null,
     shipped_at:null, label_printed_at:null, review_email_at:null, repeat_email_at:null },
   { id:'o4', created_at:'2026-08-18T05:20:00Z', customer_email:'gjdouglas71@gmail.com', customer_name:'Gary Douglas',
@@ -451,14 +451,15 @@ const server = http.createServer(async (req, res) => {
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
   if (rawPath === '/api/stock') return handleStock(req, res);
   if (rawPath === '/api/stock-level') {
-    return send(res, 200, { 'midnight-black': { status: 'out', restock: 'mid November' }, 'contrast-white': { status: 'ok' } });
+    // Local stand-in for the public stock signal. Flip 'preorder' to 'out' to see the waitlist state.
+    return send(res, 200, { 'midnight-black': { status: 'preorder', ships: 'mid November', restock: 'mid November' }, 'contrast-white': { status: 'ok' } });
   }
   if (rawPath === '/api/waitlist' && req.method === 'POST') {
     let b = ''; req.on('data', c => b += c); return req.on('end', () => { console.log('  [waitlist] ' + b); send(res, 200, { success: true }); });
   }
   if (rawPath === '/api/order-ref') {
     // Local stand-in for api/order-ref.js: a Midnight Black Twin Set reference.
-    return send(res, 200, { ref: orderRef(String(query.session_id || 'pi_mockDEMO01'), [{ name: 'Midnight Black - Twin Set', qty: 1 }]) });
+    return send(res, 200, { ref: orderRef(String(query.session_id || 'pi_mockDEMO01'), [{ name: 'Midnight Black - Twin Set', qty: 1 }]), preorder: 'mid November' });
   }
   if (rawPath === '/api/finance') {
     if ((req.headers['x-admin-token'] || '') !== DEV_ADMIN_TOKEN) return send(res, 401, { error: 'Admin token required' });

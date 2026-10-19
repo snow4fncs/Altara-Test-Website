@@ -1232,12 +1232,14 @@
   </script>
   <script>
     fetch('/api/stock-level').then(function (r) { return r.ok ? r.json() : {}; }).then(function (lv) {
-      if (!lv['midnight-black'] || lv['midnight-black'].status !== 'out') return;
+      var mb = lv['midnight-black']; if (!mb || (mb.status !== 'out' && mb.status !== 'preorder')) return;
+      var pre = mb.status === 'preorder';
       document.querySelectorAll('a[href="product-midnight-black.html"]').forEach(function (a) {
         var box = a.querySelector('.range-tile-img-box, .product-tile-img-wrap'); if (!box) return;
-        box.style.position = 'relative'; var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = 'Sold out · back ' + (lv['midnight-black'].restock || 'soon'); box.appendChild(b);
-        var link = a.querySelector('.range-tile-link, .product-tile-explore'); if (link) link.textContent = 'Join the waitlist';
+        box.style.position = 'relative'; var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = pre ? 'Pre-order · ships ' + (mb.ships || 'mid November') : 'Sold out · back ' + (mb.restock || 'soon'); box.appendChild(b);
+        var link = a.querySelector('.range-tile-link, .product-tile-explore'); if (link) link.textContent = pre ? 'Pre-order now' : 'Join the waitlist';
       });
+      if (pre) return;
       var hero = document.querySelector('a.btn-primary[href="product-midnight-black.html"]');
       if (hero) { hero.href = 'product-contrast-white.html'; hero.textContent = 'Shop Contrast White'; }
     }).catch(function () {});

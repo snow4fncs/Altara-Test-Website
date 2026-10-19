@@ -837,6 +837,7 @@
     .promo button:hover { border-color: rgba(196,169,122,0.5); }
     .promo button[disabled] { opacity: 0.4; cursor: default; }
     .cart-soldout { color: #D98A8A !important; }
+    .cart-preorder { color: var(--gold) !important; }
     .promo--email { grid-template-columns: 1fr; }
     .promo--email input { text-transform: none; letter-spacing: 0.02em; }
     .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
@@ -1333,7 +1334,7 @@
           </a>
           <div class="cart-item-info">
             <a class="cart-item-name" href="${href}">${item.name}</a>
-            ${(window.__stock && window.__stock[String(item.id).replace('-twin','')] && window.__stock[String(item.id).replace('-twin','')].status === 'out') ? '<p class="cart-item-meta cart-soldout">Sold out · remove to continue, or join the waitlist on the product page</p>' : ''}
+            ${stockNote(item.id)}
             <p class="cart-item-meta">Seat Cover</p>
             ${item.variant ? `<p class="cart-item-meta">${item.variant}</p>` : ''}
             <p class="cart-item-feature">MagFit&trade;</p>
@@ -1538,6 +1539,17 @@
     }
 
     // ─── Stripe Checkout ───
+    // Stock state per cart row: sold out blocks checkout, a pre-order says its ship date.
+    function stockNote(id) {
+      var s = window.__stock && window.__stock[String(id).replace('-twin', '')];
+      if (!s) return '';
+      if (s.status === 'out') return '<p class="cart-item-meta cart-soldout">Sold out · remove to continue, or join the waitlist on the product page</p>';
+      if (s.status === 'preorder') return '<p class="cart-item-meta cart-preorder">Pre-order · ships ' + (s.ships || 'mid November') + '</p>';
+      return '';
+    }
+    function cartHasPreorder() {
+      try { return getCart().items.some(function (i) { var s = window.__stock && window.__stock[String(i.id).replace('-twin', '')]; return s && s.status === 'preorder'; }); } catch (e) { return false; }
+    }
     async function startCheckout() {
       // Meta Pixel — InitiateCheckout
       (function() {
@@ -1742,6 +1754,10 @@
   var el=document.getElementById('cart-dispatch');
   if(!el) return;
   function render(){
+    if(typeof cartHasPreorder==='function' && cartHasPreorder()){
+      var ps=getCart().items.map(function(i){ var s=window.__stock[String(i.id).replace('-twin','')]; return s&&s.ships; }).filter(Boolean)[0]||'mid November';
+      el.textContent='Pre-order in cart \u00b7 ships '+ps+' \u00b7 tracked with Australia Post'; return;
+    }
     var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
     var d=n.getDay(), secs=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(), cutoff=50400;
     if(d>=1&&d<=5&&secs<cutoff){

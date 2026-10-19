@@ -988,7 +988,10 @@
     if (!sessionId) return;
     fetch('/api/order-ref?session_id=' + encodeURIComponent(sessionId))
       .then(r => r.ok ? r.json() : null)
-      .then(j => { if (j && j.ref) el.textContent = j.ref; })
+      .then(j => {
+        if (j && j.ref) el.textContent = j.ref;
+        if (j && j.preorder) { const dv = document.querySelector('.delivery-value'); if (dv) dv.textContent = 'Ships ' + j.preorder + ', then 3 \u2014 5 business days'; const sub = document.querySelector('.confirm-subtext'); if (sub) sub.innerHTML = 'Your order has been received. Midnight Black is a pre-order: your whole order ships together <strong style="color:var(--gold,#C4A97A)">' + j.preorder + '</strong>, and we email you the tracking number the day it leaves. A confirmation email is on its way.'; }
+      })
       .catch(() => {});
   })();
 

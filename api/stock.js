@@ -50,6 +50,14 @@ export function summarise(orders, movements) {
 // vercel.json, so it does not count as another serverless function). A band, never the exact count.
 const LOW_AT = 60;
 const RESTOCK = { 'midnight-black': 'mid November', 'contrast-white': 'soon' };  // edit when the supplier confirms
+// Pre-orders: a sold-out colour keeps selling against the incoming batch, with the ship date said
+// plainly everywhere (page, cart, Stripe, email, console). `cap` is how many covers may be pre-sold
+// before the colour falls back to plain sold-out, so a late shipment never over-promises.
+export const PREORDER = { 'midnight-black': { on: true, ships: 'mid November', cap: 150 } };
+export function preorderFor(sku, remaining) {
+  const p = PREORDER[sku];
+  return p && p.on && remaining > -p.cap ? p : null;
+}
 const band = n => Math.ceil(Math.max(n, 1) / 25) * 25;
 async function publicLevel(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -62,7 +70,10 @@ async function publicLevel(req, res) {
     const out = {};
     for (const [sku, v] of Object.entries(s)) {
       // Fewer than two covers cannot make a Twin Set, so the colour is treated as sold out.
-      out[sku] = v.remaining < 2 ? { status: 'out', restock: RESTOCK[sku] || 'soon' } : v.remaining <= LOW_AT ? { status: 'low', under: band(v.remaining) } : { status: 'ok' };
+      const pre = v.remaining < 2 ? preorderFor(sku, v.remaining) : null;
+      out[sku] = pre ? { status: 'preorder', ships: pre.ships, restock: RESTOCK[sku] || pre.ships }
+        : v.remaining < 2 ? { status: 'out', restock: RESTOCK[sku] || 'soon' }
+        : v.remaining <= LOW_AT ? { status: 'low', under: band(v.remaining) } : { status: 'ok' };
     }
     res.setHeader('Cache-Control', 'public, max-age=120');
     return res.status(200).json(out);

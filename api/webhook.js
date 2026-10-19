@@ -117,11 +117,11 @@ export function orderRef(session, items = []) {
   return buildRef(session.payment_intent || session.id || '', items);
 }
 
-export function orderEmailHtml({ first, ref, items, subtotal, shipping, total, address, recipient }) {
+export function orderEmailHtml({ first, ref, items, subtotal, shipping, total, address, recipient, preorderShips = '' }) {
   const rows = items.map(i => `
       <tr>
         <td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-          <p style="margin:0;font-size:13px;color:#EDE8DF;">${esc(i.name)}</p>
+          <p style="margin:0;font-size:13px;color:#EDE8DF;">${esc(i.name)}${i.preorder ? ' <span style="color:#C4A97A;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">&middot; pre-order</span>' : ''}</p>
           <p style="margin:3px 0 0;font-size:11px;color:#72787F;">Qty ${esc(i.qty)}</p>
         </td>
         <td align="right" style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;color:#EDE8DF;white-space:nowrap;">${esc(money(i.price))}</td>
@@ -156,6 +156,13 @@ export function orderEmailHtml({ first, ref, items, subtotal, shipping, total, a
     <p style="margin:0;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(237,232,223,0.3);">Order Reference</p>
     <p style="margin:6px 0 0;font-size:15px;color:#C4A97A;letter-spacing:0.08em;">${esc(ref)}</p>
   </td></tr>
+${preorderShips ? `
+  <tr><td style="padding:18px 48px 0;">
+    <div style="border:1px solid rgba(196,169,122,0.45);padding:16px 18px;">
+      <p style="margin:0 0 6px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#C4A97A;">Pre-order</p>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:#EDE8DF;">Your Midnight Black cover${items.filter(i => i.preorder).reduce((n, i) => n + (i.qty || 1), 0) > 1 || /twin/i.test(items.filter(i => i.preorder).map(i => i.name).join(' ')) ? 's are' : ' is'} part of the batch landing <strong style="color:#C4A97A;">${esc(preorderShips)}</strong>. Your whole order ships together the day it arrives, and we email you the tracking number then. Need it sooner? Reply to this email and we will swap you to Contrast White or refund you, no questions.</p>
+    </div>
+  </td></tr>` : ''}
 
   <tr><td style="padding:18px 48px 4px;">
     <p style="margin:0 0 6px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(237,232,223,0.3);">Your Order</p>
@@ -254,11 +261,16 @@ export default async function handler(req, res) {
     // Get line items
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ['data.price.product'] });
 
-    const items = lineItems.data.map(item => ({
-      name: item.description,
-      qty: item.quantity,
-      price: item.amount_total / 100,
-    }));
+    // Pre-ordered colours were named in the session metadata by create-checkout;
+    // the flag travels with the item so the console and emails can say so.
+    const preSkus = String(session.metadata?.preorder || '').split(',').filter(Boolean);
+    const preShips = session.metadata?.preorder_ships || '';
+    const skuOfName = n => /white|contrast/i.test(n || '') ? 'contrast-white' : /black|midnight/i.test(n || '') ? 'midnight-black' : null;
+    const items = lineItems.data.map(item => {
+      const row = { name: item.description, qty: item.quantity, price: item.amount_total / 100 };
+      if (preSkus.includes(skuOfName(item.description))) { row.preorder = true; row.ships = preShips; }
+      return row;
+    });
 
     // Stripe moved shipping details under collected_information; keep the old
     // path as a fallback so this works across API versions.
@@ -303,6 +315,7 @@ export default async function handler(req, res) {
         shipping: (session.shipping_cost?.amount_total || 0) / 100,
         total: session.amount_total / 100,
         address: shipping?.address || null,
+        preorderShips: items.some(i => i.preorder) ? preShips : '',
       });
     } else {
       console.error('No customer email on session', session.id, '- confirmation email skipped');

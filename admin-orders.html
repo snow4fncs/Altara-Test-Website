@@ -245,9 +245,11 @@
           var where = [addr.city, addr.state, addr.postal_code].filter(Boolean).join(' ');
           var items = (o.items||[]).map(function(i){ return esc(i.name)+' ×'+i.qty; }).join(', ');
           var shipped = !!o.shipped_at;
+          var preItems = (o.items||[]).filter(function(i){ return i.preorder; });
 
           var status = shipped
             ? '<span class="pill ship">Shipped</span>'
+            : preItems.length ? '<span class="pill rev-got">Pre-order · ships '+esc(preItems[0].ships||'when stock lands')+'</span>'
             : '<span class="pill pend">Awaiting dispatch</span>';
           if (shipped) {
             status += o.shipped_email_at
@@ -313,10 +315,14 @@
             + body + '</article>';
         };
 
-        var toShip = orders.filter(function(o){ return !o.shipped_at; });
+        var toShip = orders.filter(function(o){ return !o.shipped_at && !isPreorder(o); });
+        var waiting = orders.filter(function(o){ return !o.shipped_at && isPreorder(o); });
         var done = orders.filter(function(o){ return !!o.shipped_at; });
         list.innerHTML =
           (toShip.length ? '<h2 class="sec">To ship <small>'+toShip.length+' order'+(toShip.length===1?'':'s')+'</small></h2>' + pickList(toShip) + toShip.map(renderCard).join('') : '')
+          + (waiting.length ? '<h2 class="sec">Pre-orders waiting on stock <small>'+waiting.length+' order'+(waiting.length===1?'':'s')+' · '+waiting.reduce(function(n,o){ return n+coverCount(o); },0)+' covers owed</small></h2>'
+              + '<p class="sub" style="margin:-6px 0 18px">Paid in full, ship date promised to the customer. Book the batch in as Received on the Stock tab when it lands, then these move into To ship and the CSV export.</p>'
+              + waiting.map(renderCard).join('') : '')
           + (done.length ? '<h2 class="sec">Shipped <small>'+done.length+' order'+(done.length===1?'':'s')+'</small></h2>' + done.map(renderCard).join('') : '');
       });
   }
@@ -362,6 +368,7 @@
       + '<div class="sat">Satchels: '+sats.join('')+'</div>'
       + '</div>';
   }
+  function isPreorder(o){ return (o.items||[]).some(function(i){ return i.preorder; }); }
   function coverCount(o){
     return (o.items||[]).reduce(function(n,i){
       var twin = /-twin$/.test(String(i.id||'')) || /twin/i.test(String(i.name||''));
@@ -403,7 +410,7 @@
     var sender = getSender(e && e.shiftKey);   // shift-click the button to edit sender details
     if (!sender) return;
     var everything = e && e.altKey;            // alt-click: include already-exported orders
-    var unshipped = lastOrders.filter(function(o){ return !o.shipped_at; });
+    var unshipped = lastOrders.filter(function(o){ return !o.shipped_at && !isPreorder(o); });   // pre-orders wait for stock
     var rows = everything ? unshipped : unshipped.filter(function(o){ return !o.label_printed_at; });
     if (!rows.length) {
       note(unshipped.length
@@ -604,6 +611,7 @@
             + '<div class="big '+lv+'">'+s.remaining+'<small>covers on hand · '+Math.floor(s.remaining/2)+' twin sets</small></div>'
             + '<dl class="kv"><span>Received</span><b>'+s.received+'</b><span>Sold, all time</span><b>'+s.sold+'</b><span>Sold, last 30 days</span><b>'+s.sold_30d+'</b>'
             + '<span>Incoming</span><b>'+(s.incoming||0)+'</b>'
+            + (s.remaining<0 ? '<span>Pre-sold, owed to customers</span><b style="color:var(--gold)">'+(-s.remaining)+'</b>' : '')
             + '<span>Days of cover at current rate</span><b>'+(s.days_cover==null?'—':s.days_cover)+'</b></dl>'
             + '</div>'; }).join('');
         // movements

@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { summarise } from './stock.js';
+import { summarise, preorderFor } from './stock.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
@@ -18,7 +18,14 @@ async function soldOutCheck(items) {
       supabase.from('stock_movements').select('*'),
     ]);
     const s = summarise(orders || [], movements || []);
-    for (const [sku, n] of Object.entries(need)) if (s[sku] && s[sku].remaining < n) return `${LABEL[sku]} is sold out. Remove it from your cart to continue, or join the waitlist on the product page.`;
+    const pre = [];
+    for (const [sku, n] of Object.entries(need)) {
+      if (!s[sku] || s[sku].remaining >= n) continue;
+      const p = preorderFor(sku, s[sku].remaining - n);
+      if (!p) return { error: `${LABEL[sku]} is sold out. Remove it from your cart to continue, or join the waitlist on the product page.` };
+      pre.push({ sku, label: LABEL[sku], ships: p.ships });
+    }
+    if (pre.length) return { preorder: pre };
   } catch (err) { console.error('stock check failed, allowing checkout:', err.message); }
   return null;
 }
@@ -107,8 +114,9 @@ export default async function handler(req, res) {
   try {
     const { items, fbp, fbc, promo_code, customer_email } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: 'No items' });
-    const soldOut = await soldOutCheck(items);
-    if (soldOut) return res.status(409).json({ error: soldOut });
+    const stockCheck = await soldOutCheck(items);
+    if (stockCheck && stockCheck.error) return res.status(409).json({ error: stockCheck.error });
+    const preorder = stockCheck && stockCheck.preorder ? stockCheck.preorder : [];
 
     // Meta's browser cookies and the user agent, carried through Stripe so the
     // webhook can attach them to the server-side Purchase event. Without these
@@ -168,12 +176,19 @@ export default async function handler(req, res) {
       metadata: {
         source: 'altara-web',
         bundle_discount_aud: String(discount),
+        preorder: preorder.map(p => p.sku).join(','),
+        preorder_ships: preorder[0] ? preorder[0].ships : '',
         meta_fbp: metaContext.fbp,
         meta_fbc: metaContext.fbc,
         meta_ua: metaContext.ua,
         meta_ip: metaContext.ip,
       },
     };
+
+    // Say the pre-order ship date on the Stripe page itself, above the Pay button.
+    if (preorder.length) {
+      params.custom_text = { submit: { message: `Pre-order: ${preorder.map(p => p.label).join(' and ')} ships ${preorder[0].ships}. Orders with a pre-order item ship together, and we email tracking the day it leaves.` } };
+    }
 
     // The cart validated this before checkout; re-verify here because the
     // browser is never trusted with pricing. Minimums are judged on what the

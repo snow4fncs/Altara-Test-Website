@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     ]);
     const items = lines.data.map(l => ({ name: l.description, qty: l.quantity }));
     res.setHeader('Cache-Control', 'private, max-age=86400');
-    res.status(200).json({ ref: orderRef(session.payment_intent || session.id, items) });
+    res.status(200).json({ ref: orderRef(session.payment_intent || session.id, items), preorder: session.metadata?.preorder_ships || null });
   } catch (err) {
     console.error('order-ref error:', err.message);
     res.status(404).json({ error: 'Session not found' });
