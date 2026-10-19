@@ -698,6 +698,10 @@
   <link rel="prefetch" href="/product-midnight-black.html">
   <link rel="prefetch" href="/Product%20Photos/opt/img7-wide.webp" as="image">
   <style>
+    .pre-ribbon-wrap { position:absolute; top:0; left:0; width:150px; height:150px; overflow:hidden; z-index:3; pointer-events:none; }
+    .pre-ribbon { position:absolute; top:34px; left:-50px; width:220px; transform:rotate(-45deg); background:#C4A97A; color:#141518; font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.28em; text-transform:uppercase; text-align:center; padding:7px 0 6px; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+    .pre-band { position:absolute; left:0; right:0; bottom:0; z-index:2; padding:34px 16px 14px; background:linear-gradient(to top, rgba(12,13,16,.88), rgba(12,13,16,.5) 55%, transparent); color:#EDE8DF; font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; pointer-events:none; text-align:center; }
+    .pre-band strong { color:#C4A97A; font-weight:600; }
     .tile-soldout { position:absolute; top:14px; left:14px; z-index:2; font-family:'Outfit',sans-serif; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:#EDE8DF; background:rgba(12,13,16,.78); border:1px solid rgba(237,232,223,.25); padding:7px 11px; }
   </style>
 </head>
@@ -1236,7 +1240,11 @@
       var pre = mb.status === 'preorder';
       document.querySelectorAll('a[href="product-midnight-black.html"]').forEach(function (a) {
         var box = a.querySelector('.range-tile-img-box, .product-tile-img-wrap'); if (!box) return;
-        box.style.position = 'relative'; var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = pre ? 'Pre-order · ships ' + (mb.ships || 'mid November') : 'Sold out · back ' + (mb.restock || 'soon'); box.appendChild(b);
+        box.style.position = 'relative';
+        if (pre) {
+          var rw = document.createElement('div'); rw.className = 'pre-ribbon-wrap'; rw.innerHTML = '<span class="pre-ribbon">Pre-order</span>'; box.appendChild(rw);
+          var bd = document.createElement('div'); bd.className = 'pre-band'; bd.innerHTML = '<span>Ships <strong>' + (mb.ships || 'mid November') + '</strong></span>'; box.appendChild(bd);
+        } else { var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = 'Sold out · back ' + (mb.restock || 'soon'); box.appendChild(b); }
         var link = a.querySelector('.range-tile-link, .product-tile-explore'); if (link) link.textContent = pre ? 'Pre-order now' : 'Join the waitlist';
       });
       if (pre) return;

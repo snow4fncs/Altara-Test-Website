@@ -558,6 +558,10 @@
     .pi-preorder-top { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:10px 0 2px; font-size:13.5px; color:rgba(237,232,223,.78); }
     .pi-preorder-top strong { font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; color:var(--gold, #C4A97A); }
     .pi-preorder-top .pi-ls-dot { background:var(--gold, #C4A97A); }
+    .pre-ribbon-wrap { position:absolute; top:0; left:0; width:190px; height:190px; overflow:hidden; z-index:4; pointer-events:none; }
+    .pre-ribbon { position:absolute; top:44px; left:-58px; width:270px; transform:rotate(-45deg); background:var(--gold, #C4A97A); color:#141518; font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; letter-spacing:.3em; text-transform:uppercase; text-align:center; padding:9px 0 8px; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+    .pre-band { position:absolute; left:0; right:0; bottom:0; z-index:3; padding:38px 18px 16px; background:linear-gradient(to top, rgba(12,13,16,.88), rgba(12,13,16,.55) 55%, transparent); color:#EDE8DF; font-family:'Outfit',sans-serif; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; pointer-events:none; text-align:center; }
+    .pre-band strong { color:var(--gold, #C4A97A); font-weight:600; }
     .ph-preorder { position:absolute; top:14px; left:14px; z-index:3; font-family:'Outfit',sans-serif; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:#141518; background:var(--gold, #C4A97A); padding:8px 12px; pointer-events:none; }
     .pi-lowstock { display:flex; align-items:center; gap:11px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; color:#9e3b34; margin:2px 0 14px; }
     .pi-ls-dot { width:6px; height:6px; border-radius:50%; background:#a8443c; flex-shrink:0; animation:lsdot 2.2s ease-in-out infinite; }
@@ -1330,7 +1334,16 @@
         pp.insertAdjacentElement('afterend', pt);
       }
       var pa = document.querySelector('.ph-image-area');
-      if (pa && !pa.querySelector('.ph-preorder')) { pa.style.position = 'relative'; var pb = document.createElement('span'); pb.className = 'ph-preorder'; pb.textContent = 'Pre-order · ships ' + ships; pa.appendChild(pb); }
+      if (pa && !pa.querySelector('.pre-ribbon-wrap')) {
+        pa.style.position = 'relative';
+        var rw = document.createElement('div'); rw.className = 'pre-ribbon-wrap'; rw.innerHTML = '<span class="pre-ribbon">Pre-order</span>'; pa.appendChild(rw);
+        var bd = document.createElement('div'); bd.className = 'pre-band'; bd.innerHTML = '<span>Ships <strong>' + ships + '</strong></span>'; pa.appendChild(bd);
+        // The photo sits inside a dark frame, so pin the ribbon and band to the photo's own edges.
+        var place = function () { var im = pa.querySelector('.ph-main-img'); if (!im) return; var r = im.getBoundingClientRect(), pr = pa.getBoundingClientRect(); if (!r.width) return;
+          rw.style.top = (r.top - pr.top) + 'px'; rw.style.left = (r.left - pr.left) + 'px';
+          bd.style.left = (r.left - pr.left) + 'px'; bd.style.right = 'auto'; bd.style.width = r.width + 'px'; bd.style.bottom = (pr.bottom - r.bottom) + 'px'; };
+        place(); window.addEventListener('resize', place); var mi = pa.querySelector('.ph-main-img'); if (mi) { mi.addEventListener('load', place); if (window.ResizeObserver) new ResizeObserver(place).observe(mi); }
+      }
       var ab = document.getElementById('add-to-cart-btn'); if (ab) ab.textContent = 'Pre-order · Add to Cart';
       var sb = document.getElementById('satc-btn'); if (sb) sb.textContent = 'Pre-order';
       document.querySelectorAll('.pi-step-s').forEach(function (st) { if (/Same day/.test(st.textContent)) st.textContent = 'Ships ' + ships; });
