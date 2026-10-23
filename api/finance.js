@@ -81,7 +81,7 @@ export default async function handler(req, res) {
       try {
         const since = new Date(sinceMs).toISOString().slice(0, 10);
         const until = new Date().toISOString().slice(0, 10);
-        const url = `https://graph.facebook.com/v21.0/act_2548980925519496/insights?fields=spend&time_increment=1&time_range={"since":"${since}","until":"${until}"}&access_token=${process.env.FB_USER_TOKEN_LL}`;
+        const url = `https://graph.facebook.com/v21.0/act_2548980925519496/insights?fields=spend&limit=200&time_increment=1&time_range={"since":"${since}","until":"${until}"}&access_token=${process.env.FB_USER_TOKEN_LL}`;
         const r = await fetch(url);
         const j = await r.json();
         if (j.data) {
