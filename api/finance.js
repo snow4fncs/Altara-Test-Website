@@ -79,8 +79,9 @@ export default async function handler(req, res) {
     let adSpendAvailable = false;
     if (process.env.FB_USER_TOKEN_LL) {
       try {
-        const since = new Date(sinceMs).toISOString().slice(0, 10);
-        const until = new Date().toISOString().slice(0, 10);
+        // Sydney dates, so today's spend shows on today's row rather than lagging a day behind UTC.
+        const since = sydneyDay(sinceMs);
+        const until = sydneyDay(Date.now());
         const url = `https://graph.facebook.com/v21.0/act_2548980925519496/insights?fields=spend&limit=200&time_increment=1&time_range={"since":"${since}","until":"${until}"}&access_token=${process.env.FB_USER_TOKEN_LL}`;
         const r = await fetch(url);
         const j = await r.json();
