@@ -25,3 +25,11 @@ jobs:
             -H "content-type: application/json" \
             -H "x-admin-token: $ADMIN_TOKEN" \
             -d '{"action":"daily_emails"}'
+      - name: Morning ad watch email
+        env:
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+        run: |
+          curl -sS --fail -X POST https://www.altaradesign.com/api/fulfilment \
+            -H "content-type: application/json" \
+            -H "x-admin-token: $ADMIN_TOKEN" \
+            -d '{"action":"ad_watch"}'
