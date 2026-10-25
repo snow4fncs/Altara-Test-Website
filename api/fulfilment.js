@@ -198,7 +198,7 @@ export default async function handler(req, res) {
     const report = await adWatch();
     const to = String(req.body.to || 'hello@altaradesign.com');
     const sent = req.body.dry ? { sent: false, reason: 'dry' } : await sendEmail({ to, subject: report.subject, html: report.html, tag: 'ad-watch' });
-    return res.status(200).json({ success: true, sent, ...report.data, ...(req.body.dry ? { html: report.html } : {}) });
+    return res.status(200).json({ success: true, sent, ...report.data, ...(req.body.dry ? { html: report.html, subject: report.subject } : {}) });
   }
 
   if (action === 'daily_emails') {
@@ -361,10 +361,14 @@ async function adWatch() {
     fbGet(ACT + '/insights', { level: 'ad', fields: 'ad_id,ad_name,adset_name,spend,actions,action_values', time_range: { since: threeAgo, until: yesterday }, limit: 500 }),
     fbGet(ACT + '/ads', { fields: 'name,effective_status,ad_review_feedback', effective_status: ['DISAPPROVED', 'WITH_ISSUES'], limit: 100 }),
     fbGet(ACT + '/activities', { fields: 'event_type,event_time,object_name,actor_name,extra_data', since: yesterday, until: today, limit: 200 }),
-    supabase.from('orders').select('created_at, total, items').eq('status', 'paid').gte('created_at', new Date(now - 3 * 86400000).toISOString()),
+    supabase.from('orders').select('created_at, total, items').eq('status', 'paid').gte('created_at', new Date(now - 8 * 86400000).toISOString()),
   ]);
   const real = (orders || []).filter(o => SYD(o.created_at) === yesterday);
   const realRev = real.reduce((n, o) => n + Number(o.total || 0), 0);
+  // Profit the same way the finance page does it: Stripe fee estimate, covers at COGS, postage and packaging per order, ads.
+  const UNIT = { cogs: 9.33, post: 13.35, pack: 1, feePct: 0.0175, feeFixed: 0.30 };
+  const coversOf = os => os.reduce((n, o) => n + (o.items || []).reduce((m, i) => m + (/twin/i.test(String(i.name || '')) ? 2 : 1) * (Number(i.qty) || 1), 0), 0);
+  const profitOf = (os, ads) => { const rev = os.reduce((n, o) => n + Number(o.total || 0), 0); const fees = rev * UNIT.feePct + os.length * UNIT.feeFixed; const goods = coversOf(os) * UNIT.cogs; const post = os.length * (UNIT.post + UNIT.pack); return { rev, fees, goods, post, ads, profit: rev - fees - goods - post - ads, covers: coversOf(os) }; };
   const preorders = real.filter(o => (o.items || []).some(i => i.preorder)).length;
   let spend = 0, imp = 0, clicks = 0, metaPur = 0;
   const yByAd = yRows.map(r => { const a = acts(r); spend += +r.spend; imp += +r.impressions; clicks += +r.inline_link_clicks; metaPur += a.purchase || 0; return { name: r.ad_name, set: r.adset_name, spend: +r.spend, pur: a.purchase || 0, rev: a.purchase_value || 0 }; }).sort((p, q) => q.spend - p.spend);
@@ -377,6 +381,12 @@ async function adWatch() {
   const winners = wRows.map(r => { const a = acts(r); return { name: r.ad_name, spend: +r.spend, pur: a.purchase || 0, rev: a.purchase_value || 0 }; }).filter(x => x.pur >= 2).sort((p, q) => (q.rev / q.spend) - (p.rev / p.spend));
   const changeRows = changes.filter(c => !/^ad_account_/.test(c.event_type)).slice(0, 25);
   const mer = spend ? realRev / spend : 0;
+  const yP = profitOf(real, spend);
+  // Last seven full days, for the trend.
+  const sevenAgo = SYD(now - 7 * 86400000);
+  const weekSpend = (await fbGet(ACT + '/insights', { level: 'account', fields: 'spend', time_range: { since: sevenAgo, until: yesterday }, limit: 10 })).reduce((n, r) => n + Number(r.spend || 0), 0);
+  const weekOrders = (orders || []).filter(o => { const d = SYD(o.created_at); return d >= sevenAgo && d <= yesterday; });
+  const wP = profitOf(weekOrders, weekSpend);
 
   const esc = v => String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
   const row = cells => '<tr>' + cells.map((c, i) => `<td style="padding:6px 8px;border-bottom:1px solid #2a2d33;font-size:13px;color:#EDE8DF;${i ? 'text-align:right;white-space:nowrap;' : ''}">${c}</td>`).join('') + '</tr>';
@@ -387,6 +397,7 @@ async function adWatch() {
     <p style="margin:0 0 6px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#C4A97A;">Altara ad watch</p>
     <p style="margin:0 0 18px;font-family:Georgia,serif;font-size:30px;font-weight:300;color:#EDE8DF;">${esc(yesterday)} &middot; ${verdict}</p>
     ${table(['', 'Spend', 'Orders', 'Revenue', 'MER'], [row(['Yesterday (real orders from the store)', money(spend), String(real.length) + (preorders ? ` <span style="color:#C4A97A">(${preorders} pre-order)</span>` : ''), money(realRev), mer.toFixed(2)]), row(['Meta-attributed purchases', '', String(metaPur), '', '']), row(['Click rate / landing page views', (imp ? (100 * clicks / imp).toFixed(2) + '%' : '-'), '', '', ''])])}
+    ${h2('Profit')}${table(['', 'Yesterday', 'Last 7 days'], [row(['Revenue', money(yP.rev), money(wP.rev)]), row(['Stripe fees', money(-yP.fees), money(-wP.fees)]), row(['Ads', money(-yP.ads), money(-wP.ads)]), row([`Covers at $${UNIT.cogs} (${yP.covers} / ${wP.covers})`, money(-yP.goods), money(-wP.goods)]), row([`Postage and packaging at $${(UNIT.post + UNIT.pack).toFixed(2)} an order`, money(-yP.post), money(-wP.post)]), row(['<strong style="color:#C4A97A">Net profit</strong>', `<strong style="color:${yP.profit >= 0 ? '#7FBF9A' : '#D98A8A'}">${money(yP.profit)}</strong>`, `<strong style="color:${wP.profit >= 0 ? '#7FBF9A' : '#D98A8A'}">${money(wP.profit)}</strong>`]), row(['Ads as % of revenue', yP.rev ? Math.round(100 * yP.ads / yP.rev) + '%' : '-', wP.rev ? Math.round(100 * wP.ads / wP.rev) + '%' : '-'])])}
     ${h2('Spend by ad yesterday')}${table(['Ad', 'Spend', 'Sales', 'Rev'], yByAd.filter(a => a.spend >= 1).map(a => row([esc(a.name), money(a.spend), String(a.pur), money(a.rev)])))}
     ${h2('Kill rule: $15+ over three days, no sale')}${kill.length ? table(['Ad', '3-day spend'], kill.map(k => row([esc(k.name) + ` <span style="color:#9A9590">(${esc(k.set)})</span>` + (k.live ? ' <strong style="color:#D98A8A">LIVE</strong>' : ' <span style="color:#72787F">paused</span>'), money(k.spend)]))) : '<p style="font-size:13px;color:#9A9590">Nothing tripped it.</p>'}
     ${h2('Working: 2+ sales in three days')}${winners.length ? table(['Ad', 'Spend', 'Sales', 'ROAS'], winners.map(w => row([esc(w.name), money(w.spend), String(w.pur), (w.rev / w.spend).toFixed(1)]))) : '<p style="font-size:13px;color:#9A9590">Nothing with two sales yet.</p>'}
@@ -394,6 +405,6 @@ async function adWatch() {
     ${h2('Changes in the account, last day')}${changeRows.length ? table(['When', 'What', 'Object'], changeRows.map(c => row([esc(new Date(c.event_time).toLocaleTimeString('en-AU', { timeZone: 'Australia/Sydney', hour: '2-digit', minute: '2-digit' })), esc(c.event_type.replace(/_/g, ' ')), esc(c.object_name || '')]))) : '<p style="font-size:13px;color:#9A9590">No changes.</p>'}
     <p style="margin-top:28px;font-size:11px;color:#72787F;">Sent by the fulfilment API each morning. Spend is Meta's figure for the Sydney day; orders and revenue are the store's own.</p>
   </div></body></html>`;
-  const subject = `Ads ${yesterday}: ${money(spend)} spent, ${real.length} order${real.length === 1 ? '' : 's'}, ${money(realRev)}${liveKill.length ? `, ${liveKill.length} to kill` : ''}${bad.length ? `, ${bad.length} REJECTED` : ''}`;
-  return { subject, html, data: { day: yesterday, spend, real_orders: real.length, revenue: realRev, mer, meta_purchases: metaPur, kill: kill.map(k => ({ id: k.id, name: k.name, spend: k.spend, live: !!k.live })), rejected: bad.map(b => b.name), changes: changeRows.length } };
+  const subject = `Ads ${yesterday}: ${money(spend)} spent, ${real.length} order${real.length === 1 ? '' : 's'}, ${money(realRev)}, profit ${money(yP.profit)}${liveKill.length ? `, ${liveKill.length} to kill` : ''}${bad.length ? `, ${bad.length} REJECTED` : ''}`;
+  return { subject, html, data: { day: yesterday, spend, real_orders: real.length, revenue: realRev, mer, profit: Math.round(yP.profit), week: { spend: Math.round(weekSpend), orders: weekOrders.length, revenue: Math.round(wP.rev), profit: Math.round(wP.profit) }, meta_purchases: metaPur, kill: kill.map(k => ({ id: k.id, name: k.name, spend: k.spend, live: !!k.live })), rejected: bad.map(b => b.name), changes: changeRows.length } };
 }
