@@ -75,12 +75,14 @@ export default async function handler(req, res) {
       <p style="font-size:11px;color:#999;margin-top:14px;">Scans every ~30 min via GitHub Actions. Edit the watch list in watcher/scan.mjs.</p>
     </div>`;
     const top = fresh[0].title.slice(0, 60);
-    ({ sent: emailed } = await sendEmail({
-      to: ALERT_TO,
-      subject: `Watcher: ${fresh.length} new — ${top}`,
-      html,
-      tag: 'watcher-alert',
-    }));
+    // Phone first: an SMS via Twilio when the account is configured, otherwise a push via ntfy,
+    // and email only when neither is set up. One message per scan, the top few listings in it.
+    const lines = shown.slice(0, 4).map(h => `${h.title.slice(0, 50)}${h.price != null ? ' $' + Number(h.price).toLocaleString() : ''} ${h.url}`);
+    const text = `Watcher: ${fresh.length} new\n${lines.join('\n')}${fresh.length > 4 ? `\n+${fresh.length - 4} more` : ''}`;
+    const sms = await sendSms(text);
+    const push = sms.sent ? { sent: false } : await sendPush(`Watcher: ${fresh.length} new`, text);
+    if (sms.sent || push.sent) emailed = true;
+    else ({ sent: emailed } = await sendEmail({ to: ALERT_TO, subject: `Watcher: ${fresh.length} new — ${top}`, html, tag: 'watcher-alert' }));
   }
 
   // Seed/save: on first run remember EVERY reported id (not just the capped
@@ -88,4 +90,31 @@ export default async function handler(req, res) {
   const remember = firstRun ? hits.filter(h => h && h.id).map(h => h.id) : fresh.map(h => h.id);
   await saveSeen([...seen, ...remember]);
   return res.status(200).json({ ok: true, received: hits.length, new: fresh.length, firstRun, emailed, meta });
+}
+
+// SMS through Twilio. Needs TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM (the Twilio number)
+// and WATCHER_SMS_TO (the phone, +61 format) on the server. Skipped quietly when any is missing.
+async function sendSms(body) {
+  const { TWILIO_ACCOUNT_SID: sid, TWILIO_AUTH_TOKEN: tok, TWILIO_FROM: from, WATCHER_SMS_TO: to } = process.env;
+  if (!sid || !tok || !from || !to) return { sent: false, reason: 'sms_not_configured' };
+  try {
+    const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+      method: 'POST',
+      headers: { Authorization: 'Basic ' + Buffer.from(`${sid}:${tok}`).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 1500) }),
+    });
+    if (!r.ok) { console.error('Twilio error', r.status, await r.text()); return { sent: false, reason: 'twilio_' + r.status }; }
+    return { sent: true };
+  } catch (e) { console.error('Twilio failed:', e.message); return { sent: false, reason: e.message }; }
+}
+
+// Push notification through ntfy.sh: install the ntfy app, subscribe to a private topic name, set
+// WATCHER_NTFY_TOPIC to it. Free, instant, no account needed.
+async function sendPush(title, body) {
+  const topic = process.env.WATCHER_NTFY_TOPIC;
+  if (!topic) return { sent: false, reason: 'push_not_configured' };
+  try {
+    const r = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, { method: 'POST', headers: { Title: title, Priority: 'high', Tags: 'eyes' }, body });
+    return { sent: r.ok };
+  } catch (e) { console.error('ntfy failed:', e.message); return { sent: false, reason: e.message }; }
 }
