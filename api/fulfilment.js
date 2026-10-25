@@ -94,10 +94,14 @@ async function sendRepeatOffers({ minDays, limit, code, discountLabel }) {
 async function sendDueReviewRequests({ limit }) {
   const cutoff = new Date(Date.now() - REVIEW_UNLOCK_DAYS * 86400000).toISOString();
   const { data, error } = await supabase
-    .from('orders').select('id, customer_email, customer_name, stripe_payment_intent, shipped_at, items')
+    .from('orders').select('id, customer_email, customer_name, stripe_payment_intent, shipped_at, items, shipping_address')
     .eq('status', 'paid').is('review_email_at', null).not('shipped_at', 'is', null)
     .lte('shipped_at', cutoff).order('shipped_at', { ascending: true }).limit(limit);
   if (error) { console.error('review due load error:', error); return { error: 'Could not load orders' }; }
+  // Australia Post gives us no delivery scan to work from, so this is the typical Parcel Post
+  // transit time from Sydney for each state plus ten days of use before we ask for a review.
+  const REVIEW_DAYS_BY_STATE = { NSW: 12, ACT: 12, VIC: 13, QLD: 14, SA: 14, TAS: 15, WA: 18, NT: 18 };
+  const dueFor = o => { const st = String((o.shipping_address || {}).state || '').toUpperCase(); return REVIEW_DAYS_BY_STATE[st] || 9; };
 
   const { data: reviewRows } = await supabase.from('reviews').select('email');
   const reviewed = new Set((reviewRows || []).map(r => String(r.email || '').toLowerCase()));
@@ -106,6 +110,7 @@ async function sendDueReviewRequests({ limit }) {
   for (const o of data || []) {
     const key = String(o.customer_email || '').toLowerCase();
     if (!key || reviewed.has(key)) { skipped++; continue; }
+    if (new Date(o.shipped_at).getTime() > Date.now() - dueFor(o) * 86400000) { skipped++; continue; }  // not there yet
     const r = await sendEmail({
       to: o.customer_email,
       subject: "How's your Altara cover holding up?",
