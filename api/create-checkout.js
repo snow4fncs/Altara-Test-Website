@@ -187,7 +187,7 @@ export default async function handler(req, res) {
 
     // Say the pre-order ship date on the Stripe page itself, above the Pay button.
     if (preorder.length) {
-      params.custom_text = { submit: { message: `Pre-order: ${preorder.map(p => p.label).join(' and ')} ships ${preorder[0].ships}. Orders with a pre-order item ship together, and we email tracking the day it leaves.` } };
+      params.custom_text = { submit: { message: `Pre-order: ${preorder.map(p => p.label).join(' and ')} ships ${preorder[0].ships}. Full refund any time before it leaves, just reply to your order email. We email tracking the day it ships.` } };
     }
 
     // The cart validated this before checkout; re-verify here because the
