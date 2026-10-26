@@ -201,7 +201,7 @@ export default async function handler(req, res) {
   // -- morning ad watch: yesterday's numbers, kill-rule flags, rejected ads, account changes --
   if (action === 'ad_watch') {
     const report = await adWatch();
-    const to = String(req.body.to || 'hello@altaradesign.com');
+    const to = String(req.body.to || process.env.WATCHER_ALERT_TO || 'hello@altaradesign.com');
     const sent = req.body.dry ? { sent: false, reason: 'dry' } : await sendEmail({ to, subject: report.subject, html: report.html, tag: 'ad-watch' });
     return res.status(200).json({ success: true, sent, ...report.data, ...(req.body.dry ? { html: report.html, subject: report.subject } : {}) });
   }
