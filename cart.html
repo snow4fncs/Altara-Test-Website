@@ -854,6 +854,8 @@
     .pay-icons { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
     .pay { display: inline-flex; align-items: center; justify-content: center; height: 26px; min-width: 44px;
       padding: 0 9px; background: #f6f4ef; border-radius: 4px; font-family: 'Outfit', sans-serif; user-select: none; }
+    .pay-icons .pay-afterpay { background:#B2FCE4; color:#0b0b0b; font-weight:700; letter-spacing:-.01em; text-transform:lowercase; }
+    .pay-icons .pay-klarna { background:#FFB3C7; color:#0b0b0b; font-weight:700; }
     .pay-visa { color: #1434CB; font-weight: 700; font-style: italic; font-size: 12px; letter-spacing: 0.02em; }
     .pay-mc { gap: 0; }
     .mc-l, .mc-r { width: 15px; height: 15px; border-radius: 50%; display: inline-block; }
@@ -1092,13 +1094,15 @@
 
       <div class="payments-note">
         <strong>We accept</strong>
-        <span class="pay-icons" role="img" aria-label="Visa, Mastercard, American Express, Apple Pay, Google Pay, Zip">
+        <span class="pay-icons" role="img" aria-label="Visa, Mastercard, American Express, Apple Pay, Google Pay, Afterpay, Zip, Klarna">
           <span class="pay pay-visa">VISA</span>
           <span class="pay pay-mc" aria-hidden="true"><i class="mc-l"></i><i class="mc-r"></i></span>
           <span class="pay pay-amex">AMEX</span>
           <span class="pay pay-apple">&#63743; Pay</span>
           <span class="pay pay-gpay"><b class="g-G">G</b> Pay</span>
           <span class="pay pay-zip">zip</span>
+      <span class="pay pay-afterpay">afterpay</span>
+      <span class="pay pay-klarna">Klarna.</span>
         </span>
       </div>
     </aside>
