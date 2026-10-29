@@ -838,6 +838,8 @@
     .promo button[disabled] { opacity: 0.4; cursor: default; }
     .cart-soldout { color: #D98A8A !important; }
     .cart-preorder { color: var(--gold) !important; }
+    .xsell-pre { display:block; font-size:11.5px; color: var(--gold); letter-spacing:.04em; }
+    .xsell-p strong { color: var(--gold); font-weight:600; }
     .promo--email { grid-template-columns: 1fr; }
     .promo--email input { text-transform: none; letter-spacing: 0.02em; }
     .promo-msg { font-size: 12px; line-height: 1.6; margin: 0 0 10px; color: var(--cream-dim); min-height: 0; }
@@ -1454,10 +1456,25 @@
                     name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
                     price:89, image: (cart.items[0].id.indexOf('midnight')===0 ? 'Product Photos/opt/twin-set-midnight-black-320.jpg' : 'Product Photos/opt/twin-set-contrast-white-320.jpg'), label:'Add a second pair — Twin Set price' };
         if (!offer) { slot.innerHTML=''; return; }
+        // While black is a pre-order, offering it as the add-on would hold the whole order until
+        // November; offer a second white set that ships now instead.
+        if (offer.id === 'midnight-black-twin' && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder' && has('contrast-white'))
+          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Second set, ships now' };
+        // What the add actually costs once bundle pricing applies: a second Twin Set on top of a
+        // Twin Set is +$70 (any four covers price as a Full Car, $159), not another $89.
+        var trial = JSON.parse(JSON.stringify(cart)); var tx = trial.items.find(function(i){ return i.id === offer.id; });
+        if (tx) tx.qty++; else trial.items.push({ id: offer.id, qty: 1, price: offer.price, name: offer.name });
+        var nowPay = getTotal(cart) - bundleInfo(cart).discount, thenPay = getTotal(trial) - bundleInfo(trial).discount, delta = Math.round(thenPay - nowPay);
+        var fourCovers = trial.items.reduce(function(n, i){ return n + (/twin/i.test(i.id) ? 2 : 1) * i.qty; }, 0) >= 4;
+        var priceLine = delta < offer.price
+          ? '<strong>+$' + delta + '</strong> &middot; ' + (fourCovers ? 'Full Car pricing, $' + Math.round(thenPay) + ' for four covers' : 'Twin Set pricing, $' + Math.round(thenPay) + ' for the pair')
+          : '$89 &middot; free shipping';
+        if (fourCovers && delta < offer.price) offer.label = 'Second set for the other car, or the back row';
+        var preNote = (offer.id.indexOf('midnight-black') === 0 && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder') ? ' <span class="xsell-pre">pre-order &middot; ships ' + (window.__stock['midnight-black'].ships || 'mid November') + '</span>' : '';
         slot.innerHTML = '<div class="xsell">'
           + '<img src="' + offer.image + '" alt="">'
           + '<div class="xsell-info"><span class="xsell-k">' + offer.label + '</span>'
-          + '<span class="xsell-n">' + offer.name + '</span> <span class="xsell-p">$89 &middot; free shipping</span></div>'
+          + '<span class="xsell-n">' + offer.name + '</span>' + preNote + ' <span class="xsell-p">' + priceLine + '</span></div>'
           + '<button type="button" class="xsell-btn" id="xsell-add">Add</button></div>';
         document.getElementById('xsell-add').addEventListener('click', function(){
           var c = getCart();
