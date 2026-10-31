@@ -25,21 +25,25 @@ const GUMTREE = q =>
 // Accessory listings (arm pads, foam inserts, cases) dominate under-cap
 // results, so chair and hub legs carry an exclusion regex plus a price floor —
 // a real Aeron is never $55.
-const CHAIR_JUNK = /\b(pads?|caps?|inserts?|replacement|casters?|wheels?|cylinder|foam|repair|brackets?|screws?|armrest|arm rest|back support|lumbar pad|parts)\b/i;
-const HUB_JUNK = /\b(case|mount|stand|holder|wall|cable|charger|adapter|skin|cover|screen protector)\b/i;
+const CHAIR_JUNK = /\b(pads?|caps?|inserts?|replacement|casters?|wheels?|cylinder|foam|repair|brackets?|screws?|armrest|arm rest|arms? only|back support|lumbar(?: pad| support)?|headrest|parts?|stand|base only|seat only|back only|mesh only|gas lift|tilt|knobs?|levers?|kit|covers?|frame only|blade|posts?|bolts?|service|manual|brochure|catalog(?:ue)?|poster|miniature|1:6|model)\b/i;
+// A chair listing must actually be a chair, not a part described with the brand name.
+const CHAIR_NEED = /\b(chair|aeron|embody|mirra|sayl|cosm|setu|celle)\b/i;
+const HUB_JUNK = /\b(case|mounts?|mounting|stands?|holders?|wall|cables?|chargers?|adapt[eo]rs?|skins?|covers?|screen protector|docks?|docking|base|brackets?|shelf|shelves|tilt|swivel|rotat\w*|cradle|riser|arm|clip|grip|foot|power (?:supply|cord|lead)|usb|remote|stickers?|decals?|box only|empty box|manual|for nest hub|fits nest hub|compatible)\b/i;
+// A hub listing must be the device itself.
+const HUB_NEED = /\bnest hub\b/i;
 
 const WATCHES = [
-  { id: 'ebay-aeron',   label: 'HM Aeron (eBay)',    url: EBAY('herman miller aeron', 600),  max: 600, min: 150, junk: CHAIR_JUNK, kind: 'ebay' },
-  { id: 'ebay-embody',  label: 'HM Embody (eBay)',   url: EBAY('herman miller embody', 900), max: 900, min: 250, junk: CHAIR_JUNK, kind: 'ebay' },
-  { id: 'ebay-hm',      label: 'HM generic (eBay)',  url: EBAY('herman miller chair', 300),  max: 300, min: 80,  junk: CHAIR_JUNK, kind: 'ebay' },
-  { id: 'ebay-nesthub', label: 'Nest Hub (eBay)',    url: EBAY('google nest hub', 60),       max: 60,  min: 15,  junk: HUB_JUNK,   kind: 'ebay' },
+  { id: 'ebay-aeron',   label: 'HM Aeron (eBay)',    url: EBAY('herman miller aeron', 600),  max: 600, min: 150, junk: CHAIR_JUNK, need: CHAIR_NEED, kind: 'ebay' },
+  { id: 'ebay-embody',  label: 'HM Embody (eBay)',   url: EBAY('herman miller embody', 900), max: 900, min: 250, junk: CHAIR_JUNK, need: CHAIR_NEED, kind: 'ebay' },
+  { id: 'ebay-hm',      label: 'HM generic (eBay)',  url: EBAY('herman miller chair', 300),  max: 300, min: 80,  junk: CHAIR_JUNK, need: CHAIR_NEED, kind: 'ebay' },
+  { id: 'ebay-nesthub', label: 'Nest Hub (eBay)',    url: EBAY('google nest hub', 60),       max: 60,  min: 15,  junk: HUB_JUNK, need: HUB_NEED, kind: 'ebay' },
   // Expensive-plate resale watch: heritage mentions at any price, or any plate
   // listing at $1,500+ (the 2-3 character tier the user is hunting).
   { id: 'ebay-plates',  label: 'NSW plates (eBay)',  url: EBAY('nsw number plate'),          kind: 'ebay',
     keep: h => /heritage/i.test(h.title) || (h.price != null && h.price >= 1500) },
-  { id: 'gum-aeron',    label: 'HM Aeron (Gumtree)', url: GUMTREE('herman miller aeron'),    max: 600, min: 150, junk: CHAIR_JUNK, kind: 'gumtree' },
-  { id: 'gum-embody',   label: 'HM Embody (Gumtree)',url: GUMTREE('herman miller embody'),   max: 900, min: 250, junk: CHAIR_JUNK, kind: 'gumtree' },
-  { id: 'gum-nesthub',  label: 'Nest Hub (Gumtree)', url: GUMTREE('google nest hub'),        max: 60,  min: 15,  junk: HUB_JUNK,   kind: 'gumtree' },
+  { id: 'gum-aeron',    label: 'HM Aeron (Gumtree)', url: GUMTREE('herman miller aeron'),    max: 600, min: 150, junk: CHAIR_JUNK, need: CHAIR_NEED, kind: 'gumtree' },
+  { id: 'gum-embody',   label: 'HM Embody (Gumtree)',url: GUMTREE('herman miller embody'),   max: 900, min: 250, junk: CHAIR_JUNK, need: CHAIR_NEED, kind: 'gumtree' },
+  { id: 'gum-nesthub',  label: 'Nest Hub (Gumtree)', url: GUMTREE('google nest hub'),        max: 60,  min: 15,  junk: HUB_JUNK, need: HUB_NEED, kind: 'gumtree' },
   // New heritage-plate AUCTIONS at Lawsons (whole catalogs — this is where
   // 2-3 character plates actually surface).
   { id: 'lawsons',      label: 'Lawsons plate auction', url: 'https://www.lawsons.com.au/departments/heritage-number-plates/', kind: 'lawsons' },
@@ -114,6 +118,7 @@ for (const w of WATCHES) {
       if (!title || /shop on ebay/i.test(title)) continue;
       const price = parsePrice(r.text);
       const hit = { id: gid, watch: w.label, title, price, url: r.url };
+      if (w.need && !w.need.test(title)) continue;   // must be the thing itself, not an accessory named after it
       if (w.junk && w.junk.test(title)) continue;
       if (w.max != null && price != null && price > w.max) continue;
       if (w.min != null && (price == null || price < w.min)) continue;
