@@ -83,7 +83,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency, preorderShips
       + (preorderShips
         ? para(`Midnight Black is a pre-order from the batch landing <strong style="color:${CREAM}">${preorderShips}</strong>. Reserving now holds your set, we email tracking the day it ships, and you can have a full refund any time before it leaves.`)
         : para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`))
-      + para(`Pay by card, Apple Pay, Google Pay, or in four instalments with Afterpay, Zip or Klarna.`)
+      + para(`Pay by card, Apple Pay, Google Pay, or in four instalments with Afterpay or Klarna. Zip is available too.`)
       + rule()
       + (amount ? row('Your cart', money(amount) + ' ' + String(currency || 'AUD').toUpperCase()) : ''),
     cta: { href: recoveryUrl, label: 'Return to checkout',
