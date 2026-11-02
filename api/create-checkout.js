@@ -238,6 +238,10 @@ export default async function handler(req, res) {
     params.after_expiration = {
       recovery: { enabled: true, allow_promotion_codes: !params.discounts },
     };
+    // Stripe's default is 24 hours, so the "still in your cart" email arrived a day later.
+    // Two hours keeps it while the customer still remembers the cart; the recovery link
+    // restores everything if they come back after that.
+    params.expires_at = Math.floor(Date.now() / 1000) + 2 * 3600;
 
     // Email collected on the cart page, when given. It prefills Stripe's form
     // and, more importantly, means an abandoned session still has an address

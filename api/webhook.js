@@ -333,7 +333,9 @@ export default async function handler(req, res) {
   // on the session in api/create-checkout.js.
   if (event.type === 'checkout.session.expired') {
     const session = event.data.object;
-    const email = session.customer_details?.email;
+    // Email typed into Stripe's form, or the one passed from the cart (customer_email).
+    // Reading only customer_details missed every cart-supplied address.
+    const email = session.customer_details?.email || session.customer_email;
     const recoveryUrl = session.after_expiration?.recovery?.url;
 
     if (!email) {
