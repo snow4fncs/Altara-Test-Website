@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { summarise, preorderFor } from './stock.js';
+import { summarise, preorderFor, PREORDER } from './stock.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
@@ -13,11 +13,18 @@ async function soldOutCheck(items) {
   for (const i of items) { const sku = SKU_OF[i.id]; if (!sku) continue; need[sku] = (need[sku] || 0) + (/-twin$/.test(i.id) ? 2 : 1) * (Number(i.qty) || 1); }
   if (!Object.keys(need).length) return null;
   try {
-    const [{ data: orders }, { data: movements }] = await Promise.all([
+    const [{ data: orders, error: oErr }, { data: movements, error: mErr }] = await Promise.all([
       supabase.from('orders').select('items, created_at, status').eq('status', 'paid').limit(2000),
       supabase.from('stock_movements').select('*'),
     ]);
-    const s = summarise(orders || [], movements || []);
+    // A failed read must never refuse the sale. Fail open: let the order through, and flag any
+    // colour that is currently set up for pre-order so the console still holds it for the batch.
+    if (oErr || mErr || !Array.isArray(orders) || !Array.isArray(movements) || !movements.length) {
+      console.error('stock check read failed, allowing checkout:', (oErr || mErr || {}).message || 'no rows');
+      const pre = Object.keys(need).filter(sku => PREORDER[sku] && PREORDER[sku].on).map(sku => ({ sku, label: LABEL[sku], ships: PREORDER[sku].ships }));
+      return pre.length ? { preorder: pre } : null;
+    }
+    const s = summarise(orders, movements);
     const pre = [];
     for (const [sku, n] of Object.entries(need)) {
       if (!s[sku] || s[sku].remaining >= n) continue;

@@ -62,11 +62,18 @@ const band = n => Math.ceil(Math.max(n, 1) / 25) * 25;
 async function publicLevel(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const [{ data: orders }, { data: movements }] = await Promise.all([
+    const [{ data: orders, error: oErr }, { data: movements, error: mErr }] = await Promise.all([
       supabase.from('orders').select('items, created_at, status').eq('status', 'paid').limit(2000),
       supabase.from('stock_movements').select('*'),
     ]);
-    const s = summarise(orders || [], movements || []);
+    // A failed read must never look like an empty stock ledger: with no "received" rows every
+    // colour reads as sold out and the site badges both. Say nothing instead, and don't cache it.
+    if (oErr || mErr || !Array.isArray(orders) || !Array.isArray(movements) || !movements.length) {
+      console.error('stock-level read failed or empty ledger:', (oErr || mErr || {}).message || 'no rows');
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({});
+    }
+    const s = summarise(orders, movements);
     const out = {};
     for (const [sku, v] of Object.entries(s)) {
       // Fewer than two covers cannot make a Twin Set, so the colour is treated as sold out.
