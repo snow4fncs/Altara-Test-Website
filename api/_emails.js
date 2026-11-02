@@ -74,17 +74,20 @@ export function reviewRequestEmailHtml({ first, ref }) {
 }
 
 // ── 3. Abandoned checkout recovery ───────────────────────────────────────────
-export function recoveryEmailHtml({ recoveryUrl, amount, currency }) {
+export function recoveryEmailHtml({ recoveryUrl, amount, currency, preorderShips = '' }) {
   return shell({
     eyebrow: 'Still in your cart',
     heading: `You left<br>something.`,
     blocks:
       para(`Your cart is still saved &mdash; picking up where you left off takes one click, no re-entering anything.`)
-      + para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`)
+      + (preorderShips
+        ? para(`Midnight Black is a pre-order from the batch landing <strong style="color:${CREAM}">${preorderShips}</strong>. Reserving now holds your set, we email tracking the day it ships, and you can have a full refund any time before it leaves.`)
+        : para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`))
+      + para(`Pay by card, Apple Pay, Google Pay, or in four instalments with Afterpay, Zip or Klarna.`)
       + rule()
       + (amount ? row('Your cart', money(amount) + ' ' + String(currency || 'AUD').toUpperCase()) : ''),
     cta: { href: recoveryUrl, label: 'Return to checkout',
-           note: '30-day returns. Secure checkout. If you changed your mind, no hard feelings &mdash; reply and tell us why and we\'ll take it on board.' },
+           note: '60-day fit guarantee on Twin Sets. Secure checkout. If you changed your mind, no hard feelings &mdash; reply and tell us why and we\'ll take it on board.' },
   });
 }
 

@@ -360,11 +360,12 @@ export default async function handler(req, res) {
       } else {
         const result = await sendEmail({
           to: email,
-          subject: 'You left something in your cart',
+          subject: session.metadata?.preorder ? 'Your Midnight Black pre-order is still saved' : 'You left something in your cart',
           html: recoveryEmailHtml({
             recoveryUrl,
             amount: (session.amount_total || 0) / 100,
             currency: session.currency,
+            preorderShips: session.metadata?.preorder ? (session.metadata.preorder_ships || 'mid November') : '',
           }),
           tag: 'cart_recovery',
         });
