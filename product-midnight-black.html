@@ -785,6 +785,10 @@
       color: var(--cream); border: 1px solid var(--border); font-size: 9.5px; font-weight: 600;
       letter-spacing: 0.14em; text-transform: uppercase; padding: 0 16px; }
     .cd-promo-msg { font-size: 11.5px; margin-top: 7px; color: var(--cream-dim); }
+    .cd-email { width: 100%; font-family: 'Outfit', sans-serif; font-size: 16px; color: var(--cream); background: var(--bg-2); border: 1px solid var(--border); padding: 11px 12px; margin-bottom: 4px; }
+    .cd-email::placeholder { color: var(--muted); font-size: 13px; }
+    .cd-email:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+    .cd-email.err { border-color: #D98A8A; }
     .cd-promo-msg.err { color: #D98A8A; } .cd-promo-msg.ok { color: var(--gold); }
     .cd-promo-msg a { color: var(--cream-dim); }
     /* summary + foot */
@@ -1749,6 +1753,8 @@
     <div class="cd-rows" id="cd-rows"></div>
   </div>
   <div class="cd-foot">
+    <input type="email" class="cd-email" id="cd-email" placeholder="Email for receipt &amp; tracking" autocomplete="email" inputmode="email" aria-label="Your email for your receipt and tracking">
+    <p class="cd-promo-msg" id="cd-email-msg" aria-live="polite"></p>
     <button type="button" class="cd-checkout" id="cd-checkout">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
       <span id="cd-checkout-label">Checkout</span>
@@ -1865,9 +1871,23 @@
       name: (c.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
       price:89, image:canonImg(c.items[0].id.indexOf('midnight')===0?'midnight-black-twin':'contrast-white-twin'), label:'Add a second pair — Twin Set price' };
     if (offer && window.__stock && window.__stock[offer.id.replace('-twin','')] && window.__stock[offer.id.replace('-twin','')].status === 'out') { $('cd-x-slot').innerHTML = ''; return; }
+    // While black is a pre-order, adding it to a white order would hold the whole order until
+    // it lands, so a white cart is offered a second white set that ships now.
+    var mbPre = window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder';
+    if (mbPre && offer.id === 'midnight-black-twin' && has('contrast-white'))
+      offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Second set, ships now' };
+    // Say what the add actually costs: a second Twin Set is +$70 under Full Car pricing.
+    var trial = { items: c.items.map(function(i){ return { id:i.id, qty:i.qty, price:i.price }; }) };
+    var tx = trial.items.find(function(i){ return i.id === offer.id; }); if (tx) tx.qty++; else trial.items.push({ id:offer.id, qty:1, price:offer.price });
+    var payNow = c.items.reduce(function(n,i){ return n+i.price*i.qty; },0) - bundleDisc(c), payThen = trial.items.reduce(function(n,i){ return n+i.price*i.qty; },0) - bundleDisc(trial);
+    var delta = Math.round(payThen - payNow);
+    var fourUp = trial.items.reduce(function(n,i){ return n + (/-twin$/.test(i.id)?2:1)*i.qty; },0) >= 4;
+    if (fourUp && delta < offer.price) offer.label = 'Second set for the other car';
+    var priceTxt = delta < offer.price ? '+$' + delta + (fourUp ? ' &middot; $' + Math.round(payThen) + ' for four' : '') : '$' + offer.price;
+    var preTxt = (offer.id === 'midnight-black-twin' && mbPre) ? ' &middot; pre-order' : '';
     $('cd-x-slot').innerHTML = '<div class="cd-x"><img src="'+esc(offer.image)+'" alt="">'
       + '<div class="cd-x-info"><span class="cd-x-k">'+esc(offer.label)+'</span>'
-      + '<span class="cd-x-n">'+esc(offer.name)+' &middot; $89</span></div>'
+      + '<span class="cd-x-n">'+esc(offer.name)+' &middot; '+priceTxt+preTxt+'</span></div>'
       + '<button type="button" class="cd-x-add" id="cd-x-add">+ Add</button></div>';
     $('cd-x-add').addEventListener('click', function(){
       var c2=cart(); var ex=c2.items.find(function(i){return i.id===offer.id;});
@@ -1926,8 +1946,18 @@
   $('cd-promo-input').addEventListener('keydown', function(e){ if(e.key==='Enter') applyPromo(); });
 
   // checkout straight from the drawer
+  // Email in the drawer too: it prefills Stripe and is the only way to send the saved-cart
+  // link if checkout isn't finished. Shared with the cart page via localStorage.
+  (function(){ var e=$('cd-email'); if(!e) return; try{ e.value=localStorage.getItem('altara-email')||''; }catch(x){}
+    e.addEventListener('input', function(){ e.classList.remove('err'); $('cd-email-msg').textContent=''; }); })();
   $('cd-checkout').addEventListener('click', function(){
     var c=cart(); if(!c.items.length) return;
+    var em=$('cd-email'), emv=em?em.value.trim():'';
+    if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emv)){
+      em.classList.add('err'); var m=$('cd-email-msg'); m.className='cd-promo-msg err'; m.textContent='Add your email so we can send your receipt and tracking.';
+      em.focus(); return;
+    }
+    try{ localStorage.setItem('altara-email', emv); }catch(x){}
     var btn=$('cd-checkout'); btn.disabled=true; $('cd-checkout-label').textContent='Redirecting…';
     function readCookie(name){ var m=document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)');
       return m?decodeURIComponent(m[2]):''; }
@@ -1938,7 +1968,7 @@
       currency:'AUD'});
     fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ items:c.items.map(function(i){return {id:i.id,qty:i.qty};}),
-        fbp:readCookie('_fbp'), fbc:readCookie('_fbc'),
+        fbp:readCookie('_fbp'), fbc:readCookie('_fbc'), customer_email: emv || undefined,
         promo_code:(function(){ var pr=promo(); var base=c.items.reduce(function(s,i){return s+i.price*i.qty;},0)-bundleDisc(c);
           return (pr && promoAmt(pr,base)>0)?pr.code:undefined; })() })})
       .then(function(r){ return r.json(); })
