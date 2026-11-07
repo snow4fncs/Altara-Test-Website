@@ -847,6 +847,10 @@
     .promo-msg.err { color: #D98A8A; }
     .promo-msg.ok { color: var(--gold); }
     .promo-msg a { color: var(--cream-dim); }
+    /* The email message sits between the field and the checkout button. Reserve its line even when empty,
+       so clearing it on blur cannot move the button out from under a click. */
+    #email-msg { min-height: 19px; }
+    #email-msg:empty { margin: 0 0 10px; }
     /* Lock in the button */
     .btn-lock { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;
       vertical-align: -2px; margin-right: 9px; }
@@ -1667,6 +1671,11 @@
       if (!el) return;
       try { el.value = localStorage.getItem('altara-email') || ''; } catch (e) {}
       var ok = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
+      // Clear the nudge as soon as the address is valid (while typing), not on blur: a blur-time change
+      // between the field and the button happens mid-click and swallowed the first tap on Checkout.
+      el.addEventListener('input', function () {
+        if (ok(el.value.trim())) { msg.textContent = ''; msg.className = 'promo-msg'; }
+      });
       el.addEventListener('blur', function () {
         var v = el.value.trim();
         if (!v) { msg.textContent = ''; msg.className = 'promo-msg'; return; }
