@@ -888,14 +888,14 @@
   <link rel="canonical" href="https://www.altaradesign.com/cart.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Altara">
-  <meta property="og:title" content="Your Cart — Altara">
+  <meta property="og:title" content="Your Cart | Altara">
   <meta property="og:description" content="Review your Altara seat covers and complete your order. Free shipping Australia-wide.">
   <meta property="og:url" content="https://www.altaradesign.com/cart.html">
   <meta property="og:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Your Cart — Altara">
+  <meta name="twitter:title" content="Your Cart | Altara">
   <meta name="twitter:description" content="Review your Altara seat covers and complete your order. Free shipping Australia-wide.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
 </head>
@@ -1456,18 +1456,18 @@
         var has = function(prefix){ return cart.items.some(function(i){ return i.id.indexOf(prefix) === 0; }); };
         var offer = null;
         if (has('midnight-black') && !has('contrast-white'))
-          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Complete the pair' };
+          offer = { id:'contrast-white-twin', name:'Contrast White Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Complete the pair' };
         else if (has('contrast-white') && !has('midnight-black'))
-          offer = { id:'midnight-black-twin', name:'Midnight Black — Twin Set', price:89, image:'Product Photos/opt/twin-set-midnight-black-320.jpg', label:'Complete the pair' };
+          offer = { id:'midnight-black-twin', name:'Midnight Black Twin Set', price:89, image:'Product Photos/opt/twin-set-midnight-black-320.jpg', label:'Complete the pair' };
         else if (cart.items.length)
           offer = { id: cart.items[0].id.indexOf('midnight')===0 ? 'midnight-black-twin' : 'contrast-white-twin',
-                    name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' — Twin Set',
-                    price:89, image: (cart.items[0].id.indexOf('midnight')===0 ? 'Product Photos/opt/twin-set-midnight-black-320.jpg' : 'Product Photos/opt/twin-set-contrast-white-320.jpg'), label:'Add a second pair — Twin Set price' };
+                    name: (cart.items[0].id.indexOf('midnight')===0 ? 'Midnight Black' : 'Contrast White') + ' Twin Set',
+                    price:89, image: (cart.items[0].id.indexOf('midnight')===0 ? 'Product Photos/opt/twin-set-midnight-black-320.jpg' : 'Product Photos/opt/twin-set-contrast-white-320.jpg'), label:'Add a second pair at the Twin Set price' };
         if (!offer) { slot.innerHTML=''; return; }
         // While black is a pre-order, offering it as the add-on would hold the whole order until
         // November; offer a second white set that ships now instead.
         if (offer.id === 'midnight-black-twin' && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder' && has('contrast-white'))
-          offer = { id:'contrast-white-twin', name:'Contrast White — Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Second set, ships now' };
+          offer = { id:'contrast-white-twin', name:'Contrast White Twin Set', price:89, image:'Product Photos/opt/twin-set-contrast-white-320.jpg', label:'Second set, ships now' };
         // What the add actually costs once bundle pricing applies: a second Twin Set on top of a
         // Twin Set is +$70 (any four covers price as a Full Car, $159), not another $89.
         var trial = JSON.parse(JSON.stringify(cart)); var tx = trial.items.find(function(i){ return i.id === offer.id; });
@@ -1516,7 +1516,7 @@
           if (!res.ok) { msg.className = 'promo-msg err'; msg.textContent = res.j.error || 'That code is not valid'; return; }
           setPromo(res.j); inp.value = ''; renderCart();
         })
-        .catch(function () { btn.disabled = false; msg.className = 'promo-msg err'; msg.textContent = 'Could not check that code — try again.'; });
+        .catch(function () { btn.disabled = false; msg.className = 'promo-msg err'; msg.textContent = 'Could not check that code. Try again.'; });
     }
 
     // Show the sticky bar only while the real checkout button is out of view.
@@ -1594,7 +1594,7 @@
         return;
       }
       try { localStorage.setItem('altara-email', emailVal); } catch (e) {}
-      // Meta Pixel — InitiateCheckout
+      // Meta Pixel: InitiateCheckout
       (function() {
         var cart = getCart();
         // report what the customer actually pays, not the pre-discount subtotal

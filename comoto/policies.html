@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policies. Comoto Club</title>
+<meta name="description" content="Pricing, eligibility, insurance and excess, cancellation, damage, privacy and conduct, written in plain English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="h1">Policies, in plain English</h1>
+      <p class="lede">These are the terms you agree to when you hold dates. They are written to be read, not skimmed past. The hire agreement you sign at pickup says the same things in the same words.</p>
+    </div>
+
+    <div class="grid" style="padding-bottom:var(--s-2)">
+      <div class="main stack-lg" style="--gap:56px">
+
+        <section id="pricing" class="stack" aria-labelledby="p-h">
+          <h2 class="h2" id="p-h">What it costs</h2>
+          <div id="price-table"></div>
+        </section>
+
+        <section id="eligibility" class="stack" aria-labelledby="e-h">
+          <h2 class="h2" id="e-h">Who can hire</h2>
+          <div id="elig-table"></div>
+          <p class="measure">Your licence is checked against the physical card at pickup, and against the RMS or equivalent register where we are able to. A licence that is suspended, expired or does not match the rider is a cancelled booking with no refund. We would rather say that here than at the counter.</p>
+        </section>
+
+        <section id="insurance" class="stack" aria-labelledby="i-h">
+          <h2 class="h2" id="i-h">Insurance and excess</h2>
+          <p class="measure">Every hire is covered by a comprehensive motor policy underwritten by <span id="insurer"></span>. The policy covers damage to the machine, damage to third party property and third party injury while the machine is ridden lawfully by the named rider within the terms below. The policy document is available on request and will be linked here once the underwriter is confirmed.</p>
+          <table class="tbl tbl--tight">
+            <tbody>
+              <tr><th scope="row">Standard excess</th><td id="ex-std"></td></tr>
+              <tr><th scope="row">Reduced excess</th><td id="ex-red"></td></tr>
+              <tr><th scope="row">Covered</th><td>Accidental damage including stationary drops, theft with the keys returned, fire, storm, pothole damage to tyres and rims, third party property and injury.</td></tr>
+              <tr><th scope="row">Not covered</th><td>Riding under the influence of alcohol or drugs. Riding without a helmet. Unsealed roads on any machine that is not adventure class. Track use, racing or timed events. Any rider not named on the booking. Damage caused deliberately or by gross negligence. Loss of personal belongings. In these cases the rider is liable for the full cost of repair or replacement and any third party claim.</td></tr>
+              <tr><th scope="row">If it is not your fault</th><td>You still pay the excess at pickup of the claim. It is refunded in full when the other party's insurer accepts liability.</td></tr>
+              <tr><th scope="row">Roadside</th><td>24 hour roadside assistance across NSW is included. If the machine cannot continue, we recover it and you, and a replacement machine is provided where one is free, at no cost.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="damage" class="stack" aria-labelledby="d-h">
+          <h2 class="h2" id="d-h">If the machine is damaged</h2>
+          <p class="measure">Tell us at return, or by phone straight away if it affects safety. We photograph the damage with you, against the condition photographs taken at pickup. We obtain a repair quote from the servicing garage, show it to you, and charge the lesser of the quote and your excess to the card on file. If the repair takes the machine out of the fleet for more than three days we may charge loss of use at 50% of the day rate for each further day, capped at ten days. You receive the invoice for the repair.</p>
+          <p class="measure">Existing damage is photographed and published on every machine's page with a date. You are never charged for something that was already there.</p>
+        </section>
+
+        <section id="cancellation" class="stack" aria-labelledby="c-h">
+          <h2 class="h2" id="c-h">If you cancel</h2>
+          <div id="cancel-table"></div>
+          <p class="measure">Refunds go to the original card within five business days. Dates can be moved once at no cost if you tell us more than 48 hours before pickup and the new dates are free. If we cancel, for a fault with the machine or a road closure that makes the hire impossible, you receive a full refund or the closest equivalent machine at the same rate, your choice.</p>
+        </section>
+
+        <section id="bond" class="stack" aria-labelledby="b-h">
+          <h2 class="h2" id="b-h">Bond</h2>
+          <p class="measure" id="bond-line"></p>
+        </section>
+
+        <section id="fuel" class="stack" aria-labelledby="f-h">
+          <h2 class="h2" id="f-h">Fuel, kilometres and late return</h2>
+          <p class="measure" id="fuel-line"></p>
+          <p class="measure" id="km-line"></p>
+          <p class="measure" id="late-line"></p>
+        </section>
+
+        <section id="privacy" class="stack" aria-labelledby="pr-h">
+          <h2 class="h2" id="pr-h">Privacy</h2>
+          <p class="measure">We collect your name, contact details, licence details and card details because we cannot hire you a motorcycle without them. Licence images are stored encrypted, checked by a person at pickup, and deleted 30 days after your return. Card details are held by <span id="processor"></span> and never touch our systems. We do not sell, share or rent your details to anyone. We email you about your booking and, if you tick the box, about the fleet twice a year at most. You can ask for everything we hold about you, or for it to be deleted, by emailing <a href="mailto:garage@comotoclub.com.au">garage@comotoclub.com.au</a> and we will do it within ten business days.</p>
+        </section>
+
+        <section id="conduct" class="stack" aria-labelledby="co-h">
+          <h2 class="h2" id="co-h">On the road</h2>
+          <p class="measure">Ride to the law. Fines and camera infringements are transferred to the rider by statutory declaration, plus a $50 administration fee per notice. The machines are tracked for recovery in the event of theft and the location data is not looked at for any other reason. If you are stopped by police, the rego papers and our phone number are in the tank bag.</p>
+        </section>
+
+      </div>
+
+      <aside class="rail rail--sticky">
+        <div class="panel">
+          <h2 class="h3">On this page</h2>
+          <ul style="list-style:none;display:grid;gap:8px;font-size:.9375rem">
+            <li><a href="#pricing">What it costs</a></li>
+            <li><a href="#eligibility">Who can hire</a></li>
+            <li><a href="#insurance">Insurance and excess</a></li>
+            <li><a href="#damage">If the machine is damaged</a></li>
+            <li><a href="#cancellation">If you cancel</a></li>
+            <li><a href="#bond">Bond</a></li>
+            <li><a href="#fuel">Fuel, kilometres and late return</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#conduct">On the road</a></li>
+          </ul>
+          <p class="small muted">Last updated 21 Sep 2026.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, business, pricing, money, moneyCents, num, tbc, esc, priceTable, cancellationTable, eligibilityList } from './app.js';
+  mountChrome({ active: '' });
+  document.getElementById('price-table').innerHTML = priceTable();
+  document.getElementById('elig-table').innerHTML = eligibilityList();
+  document.getElementById('cancel-table').innerHTML = cancellationTable();
+  document.getElementById('insurer').innerHTML = tbc(business.insurer);
+  document.getElementById('processor').textContent = business.paymentProcessor;
+  document.getElementById('ex-std').textContent = `${money(pricing.excessStandard)}. The most you pay for any single incident covered by the policy.`;
+  document.getElementById('ex-red').textContent = `${money(pricing.excessReduced)}, for ${money(pricing.excessReductionPerDay)} a day, chosen when you book or at pickup.`;
+  document.getElementById('bond-line').textContent = `${money(pricing.bond)} is authorised on your card at pickup. ${pricing.bondTerms} If there is damage, kilometres over the allowance, fuel or a late fee to settle, we charge the agreed amount and release the rest. We never charge the bond without showing you the figure first.`;
+  document.getElementById('fuel-line').textContent = pricing.fuelPolicy;
+  document.getElementById('km-line').textContent = `${num(pricing.kmPerDay)} km a day is included and pooled across the hire. Beyond that, ${moneyCents(pricing.kmOverage)} a km, calculated from the odometer photographs taken together at pickup and return.`;
+  document.getElementById('late-line').textContent = `Return time is agreed when you book. There is a ${pricing.lateGraceMinutes} minute grace period, then ${money(pricing.lateFeePerHour.value)} for each hour or part hour. A rider who calls before the return time is charged a fair fee, not the full one. This figure is indicative pending confirmation.`;
+</script>
+</body>
+</html>

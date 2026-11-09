@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Membership. Comoto Club</title>
+<meta name="description" content="Three membership tiers with the annual fee, included days, booking window, guest days and bond stated as numbers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="h1">A garage with a membership</h1>
+      <p class="lede">Day hire needs no membership. Membership buys a longer booking window, included days, a smaller bond and, at the top tier, a key. Every figure is on this page.</p>
+    </div>
+
+    <div class="grid">
+      <div class="main">
+        <div class="tiers" id="tiers"></div>
+        <p class="note note--indicative" style="margin-top:16px">Membership fees are shown for evaluation and will be confirmed before launch. Day hire pricing is as published.</p>
+      </div>
+      <aside class="rail rail--sticky">
+        <div class="panel">
+          <h2 class="h3">What a day is worth</h2>
+          <p class="small muted" id="worth"></p>
+          <table class="tbl tbl--tight" id="compare"><thead><tr><th>Tier</th><th class="r">Fee per included day</th></tr></thead><tbody></tbody></table>
+        </div>
+      </aside>
+    </div>
+
+    <div style="padding:var(--s-2) 0 var(--s-1)">
+      <hr class="rule rule--strong">
+      <div class="grid" style="margin-top:48px">
+        <div class="main stack">
+          <h2 class="h2">How it works</h2>
+          <p class="measure">Included days are any machine, any day of the week, and they roll for the full membership year. Days beyond your allowance are charged at the day rate less your tier's discount. The booking window is how far ahead you can hold dates. Day hire is 30 days. Guest days let a licensed friend ride a second machine on your membership, under the same eligibility rules and with their own licence checked at pickup. Bond figures are the authorisation held on your card for each hire. Excess is the same at every tier, and excess reduction is priced the same at every tier.</p>
+          <p class="measure">Membership is paid annually and is not refundable after the first hire. It can be paused once for up to three months for injury or travel. Ask.</p>
+          <p><a class="btn btn--primary" href="contact.html?about=membership">Ask about membership</a></p>
+        </div>
+        <aside class="rail">
+          <div class="panel">
+            <h2 class="h3">Same rules at every tier</h2>
+            <div id="elig"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, money, num, eligibilityList, pricing } from './app.js';
+  import { tiers } from './fixtures.js';
+  mountChrome({ active: 'membership.html' });
+
+  document.getElementById('tiers').innerHTML = tiers.map(t => `
+    <article class="tier" aria-labelledby="t-${t.slug}">
+      <div>
+        <h2 class="tier__name" id="t-${t.slug}">${t.name}</h2>
+        <p class="tier__fee">${t.annual ? `${money(t.annual)} <small>a year${t.indicative ? ', indicative' : ''}</small>` : 'No fee'}</p>
+        <p class="tier__line">${t.line}</p>
+      </div>
+      <table class="tbl tbl--tight">
+        <tbody>
+          <tr><th scope="row">Included days</th><td class="r">${t.includedDays ? num(t.includedDays) : 'None'}</td></tr>
+          <tr><th scope="row">Booking window</th><td class="r">${t.priorityDays >= 365 ? 'Any date' : `${t.priorityDays} days ahead`}</td></tr>
+          <tr><th scope="row">Further days</th><td class="r">${t.discount ? `Day rate less ${t.discount}%` : 'Day rate'}</td></tr>
+          <tr><th scope="row">Guest days</th><td class="r">${t.guestDays ? num(t.guestDays) : 'None'}</td></tr>
+          <tr><th scope="row">Bond held per hire</th><td class="r">${t.bond ? money(t.bond) : 'Waived'}</td></tr>
+          <tr><th scope="row">Excess</th><td class="r">${money(pricing.excessStandard)}, or ${money(pricing.excessReduced)} reduced</td></tr>
+        </tbody>
+      </table>
+    </article>`).join('');
+
+  const mid = Math.round((pricing.rateRange[0] + pricing.rateRange[1]) / 2);
+  document.getElementById('worth').textContent = `Day rates run ${money(pricing.rateRange[0])} to ${money(pricing.rateRange[1])}. Against a middle rate of ${money(mid)}, this is what each tier's included days cost you per day.`;
+  document.querySelector('#compare tbody').innerHTML = tiers.filter(t => t.includedDays).map(t => `
+    <tr><td>${t.name}</td><td class="r">${money(Math.round(t.annual / t.includedDays))}</td></tr>`).join('') + `<tr><td>Day hire, middle rate</td><td class="r">${money(mid)}</td></tr>`;
+
+  document.getElementById('elig').innerHTML = eligibilityList();
+</script>
+</body>
+</html>

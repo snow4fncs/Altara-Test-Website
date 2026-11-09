@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#FFFFFF">
+<head>
+  <meta charset="UTF-8">
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];var L=function(){if(n.l)return;n.l=1;t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)};('requestIdleCallback' in f?f.requestIdleCallback(L,{timeout:2500}):setTimeout(L,1200));['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){f.addEventListener(ev,L,{once:true,passive:true})})}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1907598646567033');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1907598646567033&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End Meta Pixel Code -->
+  <script>/* page-transition */(function(){var OL_BG='#FFFFFF';var ol=document.createElement('div');ol.style.cssText='position:fixed;inset:0;background:'+OL_BG+';z-index:2147483647;pointer-events:none;';document.documentElement.appendChild(ol);var n=false,done=false;function forceIn(){try{var r=document.querySelectorAll('.rev:not(.in)');for(var i=0;i<r.length;i++){if(r[i].getBoundingClientRect().top<window.innerHeight+1){r[i].style.transition='none';r[i].classList.add('in');}}var p=document.querySelectorAll('.pre-reveal');for(var j=0;j<p.length;j++){p[j].style.transition='none';p[j].classList.remove('pre-reveal');}}catch(e){}}function reveal(){if(done)return;done=true;forceIn();ol.style.transition='opacity 0.5s cubic-bezier(0.4,0,0.2,1)';ol.style.opacity='0';}var gf=setTimeout(reveal,5000);function sched(){var ft=setTimeout(reveal,1500);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){clearTimeout(ft);setTimeout(reveal,80);});}else{clearTimeout(ft);setTimeout(reveal,80);}}function go(){clearTimeout(gf);gf=setTimeout(reveal,5000);var hi=document.querySelector('[fetchpriority="high"]')||document.querySelector('.ph-main-img');if(hi&&!hi.complete){var s=false;function od(){if(s)return;s=true;sched();}hi.addEventListener('load',od,{once:true});hi.addEventListener('error',od,{once:true});setTimeout(od,2000);}else{sched();}}if(document.readyState!=='loading'){go();}else{document.addEventListener('DOMContentLoaded',go);}window.addEventListener('pageshow',function(e){if(e.persisted){n=false;done=false;ol.style.transition='none';ol.style.opacity='1';requestAnimationFrame(function(){requestAnimationFrame(go);});}});document.addEventListener('click',function(e){if(n)return;var a=e.target.closest('a');if(!a)return;var h=a.getAttribute('href');if(!h||h.startsWith('#'))return;if(h.startsWith('http')&&!h.includes('altaradesign.com'))return;if(a.target==='_blank')return;if(h.startsWith('mailto:')||h.startsWith('tel:'))return;e.preventDefault();n=true;ol.style.transition='opacity 0.22s ease';ol.style.opacity='1';var nf=false;function dn(){if(nf)return;nf=true;window.location.href=h;}ol.addEventListener('transitionend',dn,{once:true});setTimeout(dn,350);});})();</script>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="color-scheme" content="light">
+  <title>Order Confirmed | Altara</title>
+  <link rel="preload" href="/fonts/cormorant-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --bg-2: #F4F1EA;
+      --bg-3: #FAF9F6;
+      --brand: #151719;
+      --brand-lt: #5E6873;
+      --cream: #151719;
+      --cream-dim: #5E6873;
+      --gold: #7A6B57;
+      --muted: #5F6770;
+      --border: rgba(21,23,25,0.104);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; background: #FFFFFF; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 52px;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 4px);
+      height: calc(58px + env(safe-area-inset-top, 0px));
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.4s ease, transform 0.35s ease;
+    }
+    nav.scrolled { border-bottom-color: var(--border); }
+    .nav-logo { overflow: hidden; height: 50px; display: flex; align-items: center; }
+    .nav-logo img {
+      height: 110px;
+      transform: translateY(5px);
+      width: auto;
+      filter: brightness(0);
+      opacity: 0.72;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    nav:hover .nav-logo img { opacity: 0.92; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(21,23,25,0.792);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:focus-visible { outline: 1px solid rgba(21,23,25,0.44); outline-offset: 4px; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-icon-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(21,23,25,0.792);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+    .nav-icon-btn:hover { color: var(--cream); }
+    .nav-icon-btn:focus-visible { outline: 1px solid rgba(21,23,25,0.44); outline-offset: 6px; }
+    .nav-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-icon-btn span {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+
+    /* ─── SEARCH ─── */
+    .search-btn { background: none; border: none; cursor: pointer; color: rgba(21,23,25,0.792); display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; transition: color 0.2s ease; }
+    .search-btn:hover { color: var(--cream); }
+    .search-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .search-btn span { font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+    .nav-center { position: relative; display: flex; align-items: center; }
+    .nav-search-area { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%) translateX(-6px); opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; white-space: nowrap; }
+    nav.search-active { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: transparent; }
+    nav.search-active .nav-links { opacity: 0; pointer-events: none; transform: translateX(-10px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    nav.search-active .nav-search-area { opacity: 1; pointer-events: all; transform: translateX(-50%) translateX(0); transition: opacity 0.25s ease 0.08s, transform 0.25s ease 0.08s; }
+    .nav-search-icon { color: rgba(21,23,25,0.605); flex-shrink: 0; display: flex; align-items: center; }
+    .nav-search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-search-input { background: none; border: none; border-bottom: 1px solid rgba(21,23,25,0.275); color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.06em; padding: 5px 0; width: 200px; outline: none; transition: border-color 0.2s ease; caret-color: var(--gold); }
+    .nav-search-input:focus { border-bottom-color: rgba(21,23,25,0.605); }
+    .nav-search-input::placeholder { color: rgba(21,23,25,0.308); }
+    .nav-search-close { background: none; border: none; cursor: pointer; color: rgba(21,23,25,0.44); font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.2s ease; display: flex; align-items: center; }
+    .nav-search-close:hover { color: var(--cream); }
+    .search-panel { position: fixed; top: 76px; left: 0; right: 0; z-index: 199; background: rgba(255,255,255,0.97); border-bottom: 1px solid rgba(21,23,25,0.088); padding: 26px 56px 30px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .search-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .search-panel-label { font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(21,23,25,0.385); margin-bottom: 14px; }
+    .search-suggestions-list { list-style: none; display: flex; flex-direction: column; }
+    .search-suggestions-list a { display: block; font-size: 14px; font-weight: 400; color: rgba(21,23,25,0.66); text-decoration: none; padding: 5px 0; transition: color 0.18s ease, padding-left 0.2s ease; letter-spacing: 0.025em; }
+    .search-suggestions-list a:hover { color: var(--cream); padding-left: 6px; }
+
+    /* ─── CHECKOUT STEPS ─── */
+    .checkout-steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 32px; background: rgba(255,255,255,0.5); border-bottom: 1px solid var(--border); margin-top: 80px; }
+    .step { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .step.active { color: var(--cream); }
+    .step.done { color: var(--gold); }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .step.active .step-num { background: var(--cream); border-color: var(--cream); color: var(--bg); }
+    .step.done .step-num { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+    .step-line { width: 48px; height: 1px; background: var(--border); margin: 0 16px; }
+
+    /* ─── CONFIRMATION CONTENT ─── */
+    .confirmation-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 80px 32px 120px;
+      text-align: center;
+    }
+
+    /* Checkmark */
+    .checkmark-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: scale(0.7);
+      animation: checkmarkAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+    }
+    @keyframes checkmarkAppear {
+      to { opacity: 1; transform: scale(1); }
+    }
+    .checkmark-circle {
+      width: 72px;
+      height: 72px;
+    }
+    .checkmark-ring {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.5;
+      opacity: 0.3;
+    }
+    .checkmark-path {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: drawCheck 0.6s ease 0.8s forwards;
+    }
+    .checkmark-outer-ring {
+      fill: none;
+      stroke: rgba(185,170,152,0.27);
+      stroke-width: 0.5;
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Eyebrow */
+    .confirm-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.4s forwards;
+    }
+
+    /* Heading */
+    .confirm-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.5s forwards;
+    }
+    .confirm-heading em {
+      font-style: italic;
+      color: var(--cream-dim);
+    }
+
+    /* Subtext */
+    .confirm-subtext {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 440px;
+      margin: 0 auto 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.6s forwards;
+    }
+
+    /* Order number */
+        .otrack { display:flex; align-items:flex-start; justify-content:center; margin:34px auto 8px; max-width:520px; }
+    .otrack-step { display:grid; justify-items:center; gap:4px; width:31%; text-align:center; }
+    .otrack-dot { width:30px; height:30px; border-radius:50%; border:1px solid rgba(21,23,25,0.308); display:flex; align-items:center; justify-content:center; }
+    .otrack-step.done .otrack-dot { background:var(--gold, #7A6B57); border-color:var(--gold, #7A6B57); }
+    .otrack-dot svg { width:14px; height:14px; fill:none; stroke:#FAF9F6; stroke-width:2.2; }
+    .otrack-k { font-size: 12px; letter-spacing:.18em; text-transform:uppercase; color:rgba(21,23,25,0.935); }
+    .otrack-s { font-size: 12px; color:rgba(21,23,25,0.44); }
+    .otrack-line { flex:1; height:1px; background:rgba(21,23,25,0.22); margin-top:15px; }
+    .order-totals { border-top:1px solid rgba(21,23,25,0.15); margin-top:14px; padding-top:12px; display:grid; gap:7px; font-size: 14px; }
+    .order-totals .tr { display:flex; justify-content:space-between; color:rgba(21,23,25,0.66); }
+    .order-totals .tr.save span:last-child { color:var(--gold, #7A6B57); }
+    .order-totals .tr.grand { font-size:15px; color:#151719; font-weight:500; padding-top:5px; border-top:1px solid rgba(21,23,25,0.15); }
+    .order-totals .free { color:var(--gold, #7A6B57); }
+    .order-number-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: rgba(185,170,152,0.108);
+      border: 1px solid rgba(185,170,152,0.324);
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.7s forwards;
+    }
+    .order-number-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .order-number-value {
+      font-size: 14px;
+      font-weight: 400;
+      font-family: 'Outfit', monospace;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+    }
+
+    /* Delivery */
+    .delivery-section {
+      margin-bottom: 48px;
+      padding: 28px 32px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.8s forwards;
+    }
+    .delivery-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .delivery-value {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.4;
+    }
+
+    /* Order items */
+    .order-items-section {
+      text-align: left;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 0.9s forwards;
+    }
+    .order-items-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-item-img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+      background: var(--bg-2);
+    }
+    .order-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .order-item-name {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .order-item-variant {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .order-item-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums lining-nums;
+      flex-shrink: 0;
+    }
+
+    .order-empty {
+      padding: 24px 0;
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Separator */
+    .separator {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 1.0s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Buttons */
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 1.0s forwards;
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border: 1px solid rgba(21,23,25,0.385);
+      background: transparent;
+      color: var(--cream);
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+    .btn-outline:hover {
+      border-color: rgba(21,23,25,0.77);
+      background: rgba(244,241,234,0.66);
+      color: var(--cream);
+    }
+    .btn-outline:focus-visible {
+      outline: 1px solid rgba(21,23,25,0.44);
+      outline-offset: 3px;
+    }
+    .btn-outline:active { opacity: 0.8; }
+
+    .btn-filled {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border: 1px solid var(--cream);
+      background: var(--cream);
+      color: var(--bg);
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+    }
+    .btn-filled:hover {
+      background: rgba(21,23,25,0.968);
+      border-color: rgba(21,23,25,0.968);
+    }
+    .btn-filled:focus-visible {
+      outline: 1px solid rgba(21,23,25,0.55);
+      outline-offset: 3px;
+    }
+    .btn-filled:active { opacity: 0.85; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 16px 14px;
+      min-width: 44px;
+      min-height: 44px;
+      z-index: 302;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ham-line {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--cream);
+      opacity: 0.78;
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease;
+      transform-origin: center;
+    }
+    .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); opacity: 1; }
+    .hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); opacity: 1; }
+
+    /* ── Mobile overlay ── */
+    .mob-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 302;
+      background: var(--bg);
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: opacity;
+      transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mob-overlay.open { display: flex; opacity: 1; pointer-events: all; }
+
+    .mob-ol-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; padding-top: env(safe-area-inset-top, 0px); height: auto; min-height: 62px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .mob-ol-logo { height: 42px; overflow: hidden; display: flex; align-items: center; }
+    .mob-ol-logo img { height: 88px; transform: translateY(4px); filter: brightness(0); opacity: 0.7; }
+    .mob-close { background: none; border: none; cursor: pointer; color: rgba(21,23,25,0.55); padding: 10px; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s; }
+    .mob-close:active { color: var(--cream); }
+    .mob-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .mob-ol-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 36px 24px 24px; }
+
+    .mob-ol-section { margin-bottom: 36px; }
+    .mob-ol-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.75; margin-bottom: 4px;
+    }
+
+    .mob-main-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+      font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 400;
+      letter-spacing: -0.01em; color: var(--cream); text-decoration: none;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.42s ease, transform 0.42s ease, color 0.18s ease;
+    }
+    .mob-main-link:first-of-type { border-top: 1px solid var(--border); }
+    .mob-overlay.open .mob-main-link:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.07s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.13s; }
+    .mob-overlay.open .mob-main-link:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.19s; }
+    .mob-main-link:active { color: var(--gold); }
+    .mob-main-arr { font-size: 16px; color: var(--gold); opacity: 0.45; pointer-events: none; transition: opacity 0.18s, transform 0.18s; }
+    .mob-main-link:active .mob-main-arr { opacity: 1; transform: translateX(3px); }
+
+    .mob-sub-list { list-style: none; padding: 0; }
+    .mob-sub-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid rgba(21,23,25,0.072);
+      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(21,23,25,0.55);
+      text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      transition: color 0.18s ease;
+      opacity: 0; transform: translateY(6px);
+    }
+    .mob-overlay.open .mob-sub-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.22s; }
+    .mob-overlay.open .mob-sub-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.28s; }
+    .mob-overlay.open .mob-sub-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.34s; }
+    .mob-overlay.open .mob-sub-link:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.40s; }
+    .mob-sub-link:active { color: var(--cream); }
+    .mob-sub-arr { font-size: 12px; opacity: 0.3; pointer-events: none; }
+
+    .mob-ol-
+    .mob-overlay.open .mob-ol-
+    .mob-ol-actions { display: flex; gap: 0; }
+    .mob-action {
+      display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none;
+      color: rgba(21,23,25,0.55); text-decoration: none;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      padding: 8px 16px; transition: color 0.18s ease; min-width: 56px;
+    }
+    .mob-action:active { color: var(--cream); }
+    .mob-action svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+    .mob-action span { font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+    .mob-ol-tagline { font-size: 12px; font-weight: 400; color: rgba(21,23,25,0.242); letter-spacing: 0.06em; font-style: italic; }
+    .mob-ol-header-right { display: flex; align-items: center; }
+    .mob-ol-header .mob-action { padding: 8px 10px; min-width: auto; }
+    .mob-ol-header .mob-action span { display: none; }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mob-overlay { display: flex; visibility: visible; }
+      nav { padding: env(safe-area-inset-top, 0px) 20px 9px; background: #FFFFFF; height: calc(62px + env(safe-area-inset-top, 0px)); margin-top: 0; align-items: flex-end; transform: translateY(0) !important; }
+      .nav-center { display: none !important; }
+      #search-open-btn { display: none; }
+      .nav-actions a[href="account.html"] { display: none; }
+      .nav-icon-btn { min-width: 44px; min-height: 44px; justify-content: center; }
+      .nav-icon-btn svg { width: 22px; height: 22px; }
+      .nav-icon-btn span { display: none; }
+      .checkout-steps { padding: 12px 16px; gap: 0; }
+      .step { font-size: 12px; gap: 5px; letter-spacing: 0.1em; }
+      .step-num { width: 16px; height: 16px; font-size: 7px; }
+      .step-line { width: 16px; margin: 0 5px; }
+    }
+  
+    /* ─── FOOTER ─── */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 72px 72px 44px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 64px; }
+    .footer-logo img { height: 110px; filter: brightness(0); opacity: 0.5; display: block; margin-bottom: 22px; }
+    .footer-tagline { font-size: 14px; font-weight: 400; color: var(--muted); line-height: 1.75; max-width: 240px; }
+    .footer-col h4 { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(21,23,25,0.55); margin-bottom: 22px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .footer-col ul a { font-size: 14px; font-weight: 400; color: var(--muted); text-decoration: none; transition: color 0.2s ease; }
+    .footer-col ul a:hover { color: var(--cream-dim); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p { font-size: 12px; font-weight: 400; color: var(--muted); }
+    .footer-social { border-top: 1px solid var(--border); padding: 28px 0 32px; display: flex; align-items: center; gap: 28px; }
+    .footer-social h4 { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(21,23,25,0.55); margin: 0; }
+    .footer-social-icons { display: flex; gap: 14px; align-items: center; }
+    .social-icon { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(21,23,25,0.16); border-radius: 50%; color: var(--muted); text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+    .social-icon:hover { color: var(--cream); border-color: rgba(21,23,25,0.33); }
+    .social-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 768px) {
+    footer { padding: 44px 24px 36px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+    .footer-logo img { height: 80px; margin-bottom: 14px; }
+    .footer-tagline { margin-bottom: 28px; }
+    .footer-col { border-top: 1px solid var(--border); }
+    .footer-col h4 { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .footer-col h4::after { content: '+'; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 400; opacity: 0.4; transition: transform 0.3s ease; line-height: 1; }
+    .footer-col.open h4::after { transform: rotate(45deg); }
+    .footer-col ul { display: none; padding-bottom: 16px; }
+    .footer-col.open ul { display: flex; }
+    .footer-social { flex-wrap: wrap; padding: 18px 0 22px; gap: 14px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  
+    /* ─── MOB OVERLAY INLINE SEARCH ─── */
+    .mob-search-bar { display: none; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+    .mob-search-bar.open { display: flex; }
+    .mob-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(21,23,25,0.288); }
+    .mob-search-input-wrap svg { width: 16px; height: 16px; stroke: rgba(21,23,25,0.44); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .mob-search-field { flex: 1; background: none; border: none; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 400; padding: 8px 0; outline: none; caret-color: var(--gold); letter-spacing: 0.02em; }
+    .mob-search-field::placeholder { color: rgba(21,23,25,0.308); }
+    .mob-search-submit { background: none; border: none; color: var(--gold); font-size: 20px; padding: 0 0 0 8px; cursor: pointer; line-height: 1; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #FFFFFF; z-index: 9998; pointer-events: none;  }
+  
+    .confirm-review {
+      border: 1px solid var(--border);
+      background: rgba(244,241,234,0.56);
+      padding: 26px 28px 28px;
+      margin-bottom: 36px;
+      display: grid;
+      gap: 9px;
+      justify-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease 1.05s forwards;
+    }
+    .confirm-review-label {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .confirm-review-text {
+      font-size: 14px; line-height: 1.8; color: var(--cream-dim);
+      font-weight: 400; max-width: 46ch;
+    }
+    .confirm-review-link {
+      margin-top: 6px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      border-bottom: 1px solid rgba(21,23,25,0.33);
+      padding-bottom: 3px;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+    .confirm-review-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .confirm-review-link:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      .confirm-review { animation: none; opacity: 1; transform: none; }
+      .confirm-review-link { transition: none; }
+    }
+  </style>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Your Altara order is confirmed. Thank you for your purchase. We'll be in touch with shipping details soon.">
+  <link rel="canonical" href="https://www.altaradesign.com/confirmation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Altara">
+  <meta property="og:title" content="Order Confirmed | Altara">
+  <meta property="og:description" content="Your Altara order is confirmed. Thank you for your purchase.">
+  <meta property="og:url" content="https://www.altaradesign.com/confirmation.html">
+  <meta property="og:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Order Confirmed | Altara">
+  <meta name="twitter:description" content="Your Altara order is confirmed. Thank you for your purchase.">
+  <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
+
+  <link rel="stylesheet" href="/white-site/alpine.css">
+</head>
+<body class="alpine page-confirmation">
+  <div class="announce-bar"><p class="ab-line"><span class="ab-a">Free tracked shipping over $80</span><span class="ab-sep">·</span><span class="ab-b">60-day fit guarantee</span><span class="ab-sep ab-sep-c">·</span><span class="ab-c">Afterpay, Zip and Klarna</span></p></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo" aria-label="Altara Home">
+    <img src="brand assets/Altara Brand Logo-480.webp" alt="Altara">
+  </a>
+  <div class="nav-center">
+    <ul class="nav-links" role="list">
+      <li><a href="collection.html">Collection</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#craft">Materials</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    </ul>
+    <div class="nav-search-area" id="nav-search-area" aria-hidden="true">
+      <span class="nav-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <form id="nav-search-form" action="search.html" method="get" style="display:flex;align-items:center;gap:10px;">
+        <input class="nav-search-input" type="search" name="q" id="nav-search-q" placeholder="Search Altara..." autocomplete="off" aria-label="Search products">
+        <button class="nav-search-close" id="nav-search-close" type="button" aria-label="Close search">&#215;</button>
+      </form>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <button class="search-btn" id="search-open-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+    </button>
+    <a href="account.html" class="nav-icon-btn" aria-label="Account">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Account</span>
+    </a>
+    <a href="cart.html" class="nav-icon-btn nav-cart-count" aria-label="Cart">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Cart</span>
+      <span class="cart-badge" id="nav-cart-badge" aria-label="items in cart"></span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mob-overlay">
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+      <span class="ham-line"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- SEARCH PANEL -->
+<div class="search-panel" id="search-panel" aria-hidden="true">
+  <p class="search-panel-label">Suggested Searches</p>
+  <ul class="search-suggestions-list" role="list">
+    <li><a href="product-contrast-white.html">Contrast White Seat Cover</a></li>
+    <li><a href="product-midnight-black.html">Midnight Black Seat Cover</a></li>
+    <li><a href="collection.html">View All Products</a></li>
+  </ul>
+</div>
+
+<!-- CHECKOUT STEPS -->
+<div class="checkout-steps">
+  <div class="step done">
+    <div class="step-num">&#10003;</div>
+    <span>Cart</span>
+  </div>
+  <div class="step-line"></div>
+  <div class="step done">
+    <div class="step-num">&#10003;</div>
+    <span>Checkout</span>
+  </div>
+  <div class="step-line"></div>
+  <div class="step active">
+    <div class="step-num">3</div>
+    <span>Confirmation</span>
+  </div>
+</div>
+
+<!-- CONFIRMATION CONTENT -->
+<main>
+  <div class="confirmation-wrap">
+
+    <!-- Animated checkmark -->
+    <div class="checkmark-wrap">
+      <svg class="checkmark-circle" viewBox="0 0 72 72" aria-hidden="true">
+        <circle class="checkmark-outer-ring" cx="36" cy="36" r="34"/>
+        <circle class="checkmark-ring" cx="36" cy="36" r="28"/>
+        <polyline class="checkmark-path" points="22,36 31,45 50,26"/>
+      </svg>
+    </div>
+
+    <!-- Eyebrow -->
+    <p class="confirm-eyebrow">Order Confirmed</p>
+
+    <!-- Heading -->
+    <h1 class="confirm-heading">Thank <em>you</em></h1>
+
+    <!-- Subtext -->
+    <p class="confirm-subtext">Your order has been received and is being prepared. A confirmation email will be sent to your address.</p>
+
+    <div class="otrack" aria-label="Order progress">
+      <div class="otrack-step done">
+        <span class="otrack-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <span class="otrack-k">Order placed</span>
+        <span class="otrack-s" id="otrack-date"></span>
+      </div>
+      <div class="otrack-line"></div>
+      <div class="otrack-step">
+        <span class="otrack-dot"></span>
+        <span class="otrack-k">Shipping</span>
+        <span class="otrack-s">Tracked email coming</span>
+      </div>
+      <div class="otrack-line"></div>
+      <div class="otrack-step">
+        <span class="otrack-dot"></span>
+        <span class="otrack-k">Delivery</span>
+        <span class="otrack-s">3&ndash;7 business days</span>
+      </div>
+    </div>
+
+    <!-- Order number -->
+    <div class="order-number-wrap">
+      <span class="order-number-label">Order</span>
+      <span class="order-number-value" id="order-num">ALTARA-XXXXX</span>
+    </div>
+
+    <!-- Estimated delivery -->
+    <div class="delivery-section">
+      <p class="delivery-eyebrow">Estimated Delivery</p>
+      <p class="delivery-value">3–5 Business Days</p>
+    </div>
+
+    <!-- Order items -->
+    <div class="order-items-section">
+      <p class="order-items-label">Your Order</p>
+      <div id="order-items-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="separator"></div>
+
+    <!-- Review invitation. Deliberately framed for later: the product has not
+         arrived yet, so asking for a verdict now would be asking too early. -->
+    <div class="confirm-review">
+      <p class="confirm-review-label">When it arrives</p>
+      <p class="confirm-review-text">Live with it for a week, then tell other drivers how it went. Verified purchases carry a badge. Yours will count.</p>
+      <a href="review.html" class="confirm-review-link">Write a review</a>
+    </div>
+
+    <!-- CTA buttons -->
+    <div class="cta-row">
+      <a href="collection.html" class="btn-outline">Continue Shopping</a>
+      <a href="account.html" class="btn-filled">View Account</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+  <footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <img src="brand assets/Altara Brand Logo-480.webp" alt="Altara">
+      </div>
+      <p class="footer-tagline">Tailored for every drive. Premium seat covers built for the way you live.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="collection.html">Seat Covers</a></li>
+        <li><a href="collection.html">Collections</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="faq.html">FAQ</a></li><li><a href="gym-sweat-car-seat-protection.html">Gym Sweat Guide</a></li><li><a href="beach-sand-car-seats.html">Beach Sand Guide</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="returns.html">Returns</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-social">
+    <h4>Follow Us</h4>
+    <div class="footer-social-icons">
+      <a href="https://instagram.com/altara.au" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://www.facebook.com/people/Altara/61590417895053/" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Altara. All rights reserved.</p>
+    <p>Tailored for every drive.</p>
+  </div>
+</footer>
+
+<script>
+  // Capture the just-placed order for the receipt BEFORE anything clears it.
+  var __orderCart = null;
+  try {
+    var __raw = localStorage.getItem('altara-cart');
+    if (__raw) { var __p = JSON.parse(__raw); __orderCart = Array.isArray(__p) ? __p : (__p && __p.items) || []; }
+  } catch(e) {}
+  // Badge stays hidden (cart is empty)
+
+  // ─── NAV SCROLL ───
+  const nav = document.getElementById('nav');
+  (function() {
+    let lastY = 0, ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (window.innerWidth <= 768) { nav.classList.toggle('scrolled', y > 50); lastY = y; ticking = false; return; }
+        if (y > lastY + 4 && y > 80) {
+          nav.style.transform = 'translateY(-100%)';
+        } else if (y < lastY - 4 || y <= 80) {
+          nav.style.transform = 'translateY(0)';
+        }
+        nav.classList.toggle('scrolled', y > 50);
+        lastY = y;
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
+
+  // ─── INLINE SEARCH ───
+  (function() {
+    const openBtn = document.getElementById('search-open-btn');
+    const closeBtn = document.getElementById('nav-search-close');
+    const searchArea = document.getElementById('nav-search-area');
+    const panel = document.getElementById('search-panel');
+    const inp = document.getElementById('nav-search-q');
+    function openSearch() { nav.classList.add('search-active'); panel.classList.add('open'); searchArea.setAttribute('aria-hidden','false'); panel.setAttribute('aria-hidden','false'); setTimeout(() => inp.focus(), 120); }
+    function closeSearch() { nav.classList.remove('search-active'); panel.classList.remove('open'); searchArea.setAttribute('aria-hidden','true'); panel.setAttribute('aria-hidden','true'); inp.value = ''; }
+    openBtn.addEventListener('click', openSearch);
+    closeBtn.addEventListener('click', closeSearch);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('search-active')) closeSearch(); });
+    panel.addEventListener('click', e => { if (e.target === panel) closeSearch(); });
+  })();
+
+  // ─── ORDER NUMBER ───
+  const sessionId = new URLSearchParams(window.location.search).get('session_id');
+  // Shown immediately from the cart so the page never waits, then replaced by
+  // the server's reference (api/order-ref.js), which is the one in the emails
+  // and on the shipping label: ALT-MB2-XXXXXX = Midnight Black, two covers.
+  (function () {
+    const el = document.getElementById('order-num');
+    const cart = Array.isArray(__orderCart) ? __orderCart : [];
+    const twin = i => /twin/i.test(String(i.id || i.name || ''));
+    const white = i => /white|contrast/i.test(String(i.id || '') + ' ' + String(i.name || ''));
+    const units = cart.reduce((n, i) => n + (twin(i) ? 2 : 1) * (Number(i.qty) || 1), 0);
+    const col = cart.some(white) && cart.some(i => !white(i)) ? 'MX' : cart.some(white) ? 'CW' : 'MB';
+    el.textContent = 'ALT-' + col + (units || '') + (sessionId ? '-' + sessionId.slice(-6).toUpperCase() : '');
+    if (!sessionId) return;
+    fetch('/api/order-ref?session_id=' + encodeURIComponent(sessionId))
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        if (j && j.ref) el.textContent = j.ref;
+        if (j && j.preorder) { const dv = document.querySelector('.delivery-value'); if (dv) dv.textContent = 'Ships ' + j.preorder + ', then 3 \u2014 5 business days'; const sub = document.querySelector('.confirm-subtext'); if (sub) sub.innerHTML = 'Your order has been received. Midnight Black is a pre-order: your whole order ships together <strong style="color:var(--gold,#7A6B57)">' + j.preorder + '</strong>, and we email you the tracking number the day it leaves. A confirmation email is on its way.'; }
+      })
+      .catch(() => {});
+  })();
+
+  // ─── ORDER ITEMS ───
+  let cartItems = Array.isArray(__orderCart) ? __orderCart : [];
+  const canonImg = id => {
+    id = String(id || '');
+    if (/twin/i.test(id)) return id.indexOf('contrast-white') === 0
+      ? 'Product Photos/opt/twin-set-contrast-white-320.jpg'
+      : 'Product Photos/opt/twin-set-midnight-black-320.jpg';
+    return id.indexOf('contrast-white') === 0
+      ? 'Product Photos/opt/img1-320.jpg' : 'Product Photos/opt/img7-320.jpg';
+  };
+
+  const listEl = document.getElementById('order-items-list');
+
+  if (cartItems.length > 0) {
+    cartItems.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'order-item';
+
+      const imgSrc = canonImg(item.id) || item.image;
+      const name = item.name || 'Altara Cover';
+      const variant = item.variant || (item.color ? item.color : '');
+      const qty = item.quantity || item.qty || 1;
+      const price = item.price
+        ? (typeof item.price === 'number' ? item.price : parseFloat(item.price.toString().replace(/[^0-9.]/g, '')))
+        : 0;
+      const total = price * qty;
+      const priceStr = total ? `$${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '';
+      const variantLine = [variant, qty > 1 ? `Qty: ${qty}` : ''].filter(Boolean).join(' · ');
+
+      el.innerHTML = `
+        <img class="order-item-img" src="${imgSrc}" alt="${name}" onerror="this.src='https://placehold.co/48x48/181B1F/72787F?text=A'">
+        <div class="order-item-info">
+          <div class="order-item-name">${name}</div>
+          ${variantLine ? `<div class="order-item-variant">${variantLine}</div>` : ''}
+        </div>
+        ${priceStr ? `<div class="order-item-price">${priceStr}</div>` : ''}
+      `;
+      listEl.appendChild(el);
+    });
+    // totals: mirror the cart's maths so the card matches what Stripe charged
+    const subtotal = cartItems.reduce((s, i) => s + (Number(i.price) || 0) * (i.quantity || i.qty || 1), 0);
+    const singles = cartItems.filter(i => !/twin/i.test(String(i.id))).reduce((n, i) => n + (i.quantity || i.qty || 1), 0);
+    const saving = Math.floor(singles / 2) * 49;
+    const afterSave = subtotal - saving;
+    const shipping = afterSave >= 80 ? 0 : 9.95;
+    const money = n => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const tot = document.createElement('div');
+    tot.className = 'order-totals';
+    tot.innerHTML = '<div class="tr"><span>Subtotal</span><span>' + money(subtotal) + '</span></div>'
+      + (saving ? '<div class="tr save"><span>Twin Set saving</span><span>-' + money(saving) + '</span></div>' : '')
+      + '<div class="tr"><span>Shipping</span><span class="' + (shipping ? '' : 'free') + '">' + (shipping ? money(shipping) : 'FREE · Australia Post tracked') + '</span></div>'
+      + '<div class="tr grand"><span>Total</span><span>' + money(afterSave + shipping) + ' AUD</span></div>';
+    listEl.appendChild(tot);
+  } else {
+    // Fallback: no cart data, show a graceful empty state
+    listEl.innerHTML = '<p class="order-empty">Your items are on their way.</p>';
+  }
+  // a real purchase empties the cart; a stray visit to this page must not
+  if (sessionId && cartItems.length) {
+    localStorage.removeItem('altara-cart');
+  }
+  const dEl = document.getElementById('otrack-date');
+  if (dEl) dEl.textContent = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+
+  // Footer accordion (mobile)
+  document.querySelectorAll('.footer-col h4').forEach(h4 => {
+    h4.addEventListener('click', () => { h4.parentElement.classList.toggle('open'); });
+  });
+// Mobile hamburger menu
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('mob-overlay');
+    const closeBtn = document.getElementById('mob-close');
+    if (!hamburger || !overlay) return;
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+
+    }
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+
+    }
+
+    hamburger.addEventListener('click', () => {
+      overlay.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
+    });
+  });
+
+  // Mobile overlay inline search
+  (function() {
+    const searchBtn = document.getElementById('mob-search-btn');
+    const searchBar = document.getElementById('mob-search-bar');
+    const searchField = document.getElementById('mob-search-field');
+    if (!searchBtn || !searchBar) return;
+    searchBtn.addEventListener('click', () => {
+      const open = searchBar.classList.toggle('open');
+      searchBar.setAttribute('aria-hidden', String(!open));
+      if (open && searchField) { setTimeout(() => searchField.focus(), 60); }
+    });
+  })();
+  </script>
+
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-ol-header">
+      <div class="mob-ol-logo"><img src="brand assets/Altara Brand Logo-480.webp" alt="Altara"></div>
+      <div class="mob-ol-header-right">
+        <button class="mob-action" id="mob-search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span></button>
+          <a href="account.html" class="mob-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Account</span></a>
+          <a href="cart.html" class="mob-action"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Cart</span></a>
+        <button class="mob-close" id="mob-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  <div class="mob-search-bar" id="mob-search-bar" aria-hidden="true">
+    <form class="mob-search-input-wrap" action="search.html" method="get" id="mob-search-form">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="mob-search-field" type="search" name="q" placeholder="Search products…" autocomplete="off" id="mob-search-field" aria-label="Search">
+    </form>
+    <button class="mob-search-submit" type="submit" form="mob-search-form" aria-label="Submit search">→</button>
+  </div>
+  <div class="mob-ol-body">
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Shop</div>
+      <a href="collection.html" class="mob-main-link">Collection <span class="mob-main-arr">→</span></a>
+      <a href="product-midnight-black.html" class="mob-main-link">Midnight Black <span class="mob-main-arr">→</span></a>
+      <a href="product-contrast-white.html" class="mob-main-link">Contrast White <span class="mob-main-arr">→</span></a>
+      <a href="reviews.html" class="mob-main-link">Reviews <span class="mob-main-arr">→</span></a>
+    </div>
+    <div class="mob-ol-section">
+      <div class="mob-ol-label">Support</div>
+      <ul class="mob-sub-list">
+        <li><a href="faq.html" class="mob-sub-link">FAQ <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="shipping.html" class="mob-sub-link">Shipping &amp; Delivery <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="returns.html" class="mob-sub-link">Returns &amp; Exchanges <span class="mob-sub-arr">→</span></a></li>
+        <li><a href="contact.html" class="mob-sub-link">Contact Us <span class="mob-sub-arr">→</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="mob-ol-footer">
+    <span class="mob-ol-tagline">Altara®</span>
+  </div>
+</div>
+
+  <!-- Meta Pixel - Purchase is NOT sent from here.
+       This page used to read localStorage key "altara-order", which nothing ever
+       wrote, so the event never fired and Meta received zero purchases. Rather
+       than repair it, Purchase is now sent from api/webhook.js when Stripe
+       confirms payment: server to server, so it survives a closed tab, Safari
+       and ad blockers, and carries the real charged total rather than a guess
+       reconstructed from the cart. Do not add a browser Purchase event here
+       without also giving it event_id "ord_<stripe_session_id>", or the same
+       sale will be counted twice. -->
+  <script src="/white-site/alpine.js" defer></script>
+</body>
+</html>

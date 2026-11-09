@@ -1,0 +1,68 @@
+<!doctype html><meta charset="utf-8">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+  :root { --ink:#0C0D10; --cream:#EDE8DF; --gold:#C4A97A; --mm:11px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { width:2400px; height:1300px; overflow:hidden; background:var(--ink); font-family:'Outfit',sans-serif; color:var(--cream); position:relative; }
+  .light { position:absolute; inset:0; background:
+    radial-gradient(60% 45% at 50% 28%, rgba(196,169,122,.10), transparent 70%),
+    radial-gradient(90% 40% at 50% 100%, rgba(237,232,223,.06), transparent 70%); }
+  .grain { position:absolute; inset:0; opacity:.07; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode:screen; }
+  .floor { position:absolute; left:0; right:0; bottom:0; height:420px; background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.025)); }
+  .row { position:absolute; left:0; right:0; bottom:300px; display:flex; justify-content:center; align-items:flex-end; gap:150px; }
+  .bottle { position:relative; width:calc(32 * var(--mm)); display:flex; flex-direction:column; align-items:center; }
+  .cord { width:2px; height:calc(26 * var(--mm)); background:linear-gradient(to bottom, rgba(237,232,223,0), rgba(237,232,223,.55)); margin-bottom:-2px; }
+  .cap { width:calc(21 * var(--mm)); height:calc(14 * var(--mm)); border-radius:calc(2 * var(--mm)) calc(2 * var(--mm)) 0 0;
+         background:linear-gradient(90deg,#0a0a0c 0%,#2a2b2f 18%,#15161a 45%,#3a3b40 62%,#101114 100%); position:relative; z-index:2;
+         box-shadow:inset 0 2px 0 rgba(255,255,255,.08), 0 6px 14px rgba(0,0,0,.6); }
+  .cap::after { content:''; position:absolute; left:8%; right:8%; top:22%; height:1px; background:rgba(237,232,223,.12); box-shadow:0 10px 0 rgba(237,232,223,.08), 0 20px 0 rgba(237,232,223,.06); }
+  .neck { width:calc(12 * var(--mm)); height:calc(3 * var(--mm)); background:linear-gradient(90deg,#1e2126,#3b4047,#1a1c21); z-index:1; }
+  .glass { width:calc(32 * var(--mm)); height:calc(38 * var(--mm)); position:relative; border-radius:calc(1.6 * var(--mm));
+           background:
+             linear-gradient(90deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 86%, rgba(255,255,255,.14) 100%),
+             linear-gradient(to bottom, rgba(40,42,48,.55) 0%, rgba(40,42,48,.55) 11%, rgba(190,140,60,.65) 12.5%, rgba(140,92,36,.55) 13.5%, rgba(150,100,40,.6) 45%, rgba(175,118,46,.78) 100%),
+             #15110b;
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 -18px 30px rgba(0,0,0,.35), 0 30px 60px rgba(0,0,0,.65); overflow:hidden; }
+  .glass::before { content:''; position:absolute; left:6%; top:4%; width:3%; height:90%; background:linear-gradient(to bottom, rgba(255,255,255,.35), rgba(255,255,255,.05)); border-radius:99px; filter:blur(1px); }
+  .glass::after { content:''; position:absolute; right:7%; top:8%; width:2%; height:84%; background:linear-gradient(to bottom, rgba(255,255,255,.18), rgba(255,255,255,.02)); border-radius:99px; }
+  .label { position:absolute; left:50%; top:46%; width:calc(22 * var(--mm)); height:calc(22 * var(--mm)); transform:translate(-50%,-50%); box-shadow:0 1px 2px rgba(0,0,0,.5), inset 0 0 0 .5px rgba(255,255,255,.06); overflow:hidden; }
+  .label iframe { border:0; width:22mm; height:22mm; display:block; pointer-events:none; transform-origin:0 0; }
+  .shadow { position:absolute; left:50%; bottom:-30px; width:120%; height:40px; transform:translateX(-50%); background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.75), transparent 70%); }
+  .refl { position:absolute; left:0; right:0; top:100%; height:60%; transform:scaleY(-1); opacity:.16; -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,.6), transparent 70%); mask-image:linear-gradient(to top, rgba(0,0,0,.6), transparent 70%); pointer-events:none; }
+  .caption { position:absolute; left:0; right:0; top:120px; text-align:center; }
+  .caption .eb { font-size:14px; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); font-weight:300; }
+  .caption h1 { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:58px; letter-spacing:-.01em; margin-top:16px; }
+  .caption h1 i { color:var(--gold); }
+  /* box */
+  .box { position:absolute; right:150px; bottom:300px; width:calc(36 * var(--mm)); height:calc(60 * var(--mm)); background:linear-gradient(90deg,#0e0f12 0%,#17181c 40%,#0b0c0e 100%); border-radius:calc(.8 * var(--mm)); box-shadow:inset 0 0 0 1px rgba(255,255,255,.07), 0 30px 60px rgba(0,0,0,.65); }
+  .box .side { position:absolute; right:calc(-7 * var(--mm)); top:0; width:calc(7 * var(--mm)); height:100%; background:linear-gradient(90deg,#08090b,#121317 60%,#0a0b0d); transform:skewY(-14deg); transform-origin:left top; border-radius:0 calc(.4*var(--mm)) calc(.4*var(--mm)) 0; box-shadow:inset 1px 0 0 rgba(255,255,255,.05); }
+  .box .top { position:absolute; left:0; top:calc(-7 * var(--mm) * .25); width:100%; height:calc(7 * var(--mm) * .25); background:linear-gradient(90deg,#1a1c20,#101114); transform:skewX(-76deg); transform-origin:left bottom; }
+  .box .label { width:calc(30 * var(--mm)); height:calc(30 * var(--mm)); top:38%; }
+  .box .label iframe { width:30mm; height:30mm; }
+</style>
+<div class="light"></div><div class="grain"></div><div class="floor"></div>
+<div class="caption"><div class="eb">Altara · Car fragrance · 8 ml</div><h1>Five scents. <i>One</i> label system.</h1></div>
+<div class="row" id="row"></div>
+<script>
+  const S = [['01','Tobacco & Vanilla','Tobacco leaf · Vanilla · Cocoa'],['02','Bergamot & Pepper','Bergamot · Pepper · Amber'],['03','Leather','Leather · Cedar · Smoke'],['04','Pineapple & Birch','Pineapple · Birch · Musk'],['05','Pear & Freesia','Pear · Freesia · Patchouli']];
+  const q = new URLSearchParams(location.search); const mode = q.get('mode') || 'row';
+  const row = document.getElementById('row');
+  const url = (v, n, name, notes) => '/brand%20assets/scent-labels/label.html?' + new URLSearchParams({ variant: v, n, name, notes });
+  if (mode === 'row') {
+    for (const [n, name, notes] of S) {
+      const b = document.createElement('div'); b.className = 'bottle';
+      b.innerHTML = `<div class="cord"></div><div class="cap"></div><div class="neck"></div><div class="glass"><div class="label"><iframe src="${url('bottle', n, name, notes)}" scrolling="no"></iframe></div></div><div class="shadow"></div>`;
+      row.appendChild(b);
+    }
+  } else {
+    // one bottle + its box, larger
+    document.documentElement.style.setProperty('--mm', '13px'); document.querySelector('.caption').style.top = '70px';
+    const [n, name, notes] = S[+q.get('i') || 0];
+    row.style.gap = '220px'; row.style.justifyContent = 'center';
+    row.innerHTML = `<div class="bottle"><div class="cord"></div><div class="cap"></div><div class="neck"></div><div class="glass"><div class="label"><iframe src="${url('bottle', n, name, notes)}" scrolling="no"></iframe></div></div><div class="shadow"></div></div>
+      <div class="box" style="position:relative;right:auto;bottom:auto"><div class="side"></div><div class="top"></div><div class="label"><iframe src="${url('box', n, name, notes)}" scrolling="no"></iframe></div><div class="shadow"></div></div>`;
+    document.querySelector('.caption h1').innerHTML = name.replace(' & ', ' <i>&amp;</i> ');
+  }
+  const pxmm = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mm'));
+  document.querySelectorAll('.label iframe').forEach(f => f.style.transform = 'scale(' + (pxmm / 3.7795) + ')');
+</script>

@@ -36,7 +36,7 @@ ${topic ? `<p style="margin:0 0 12px">Topic: ${esc(topic)}</p>` : ''}
         from: 'Altara Website <hello@altaradesign.com>',
         to: 'hello@altaradesign.com',
         reply_to: from,
-        subject: `Enquiry${topic ? ': ' + topic : ''} — ${name}`,
+        subject: `Enquiry${topic ? ': ' + topic : ''} from ${name}`,
         html,
       }),
     });

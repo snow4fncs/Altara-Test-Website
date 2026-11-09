@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Machine. Comoto Club</title>
+<meta name="description" content="Specification, logbook, condition photographs, full price breakdown and live availability for one Comoto Club machine.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="fleet.html">Fleet</a><span aria-hidden="true">/</span><a href="fleet.html" id="crumb-cls"></a></nav>
+      <h1 class="h1" id="m-name"></h1>
+      <dl class="spec" id="m-quick" style="max-width:640px"></dl>
+    </div>
+  </div>
+
+  <div class="wrap grid" style="padding-bottom:var(--s-2)">
+    <div class="main stack-lg">
+
+      <div class="gallery" id="gallery"></div>
+
+      <section aria-labelledby="fit-h" class="stack">
+        <h2 class="h2" id="fit-h">Who it suits</h2>
+        <p class="lede" id="m-fit"></p>
+      </section>
+
+      <section aria-labelledby="log-h">
+        <div class="section-head" style="margin-bottom:24px">
+          <h2 class="h2" id="log-h">Logbook</h2>
+          <p class="muted">Service history for this machine, as recorded by the mechanic.</p>
+        </div>
+        <dl class="ledger" id="ledger"></dl>
+      </section>
+
+      <section aria-labelledby="spec-h">
+        <h2 class="h2" id="spec-h" style="margin-bottom:24px">Specification</h2>
+        <dl class="spec" id="m-spec"></dl>
+        <p class="note" style="margin-top:16px">Manufacturer published figures. Kerb weight is with all fluids and a full tank.</p>
+      </section>
+
+      <section aria-labelledby="inc-h">
+        <h2 class="h2" id="inc-h" style="margin-bottom:24px">Included in the day rate</h2>
+        <table class="tbl tbl--tight" id="included"><tbody></tbody></table>
+      </section>
+
+      <section aria-labelledby="price-h">
+        <div class="section-head" style="margin-bottom:24px">
+          <h2 class="h2" id="price-h">Full price breakdown</h2>
+          <p class="muted">Expanded by default. Change the dates in the calendar and this updates.</p>
+        </div>
+        <div id="price-full"></div>
+      </section>
+
+      <section aria-labelledby="cal-h">
+        <div class="section-head" style="margin-bottom:24px">
+          <h2 class="h2" id="cal-h">Availability</h2>
+          <p class="muted">Booked dates are struck through. Pick a pickup day, then a return day.</p>
+        </div>
+        <div id="calendar" style="max-width:520px"></div>
+      </section>
+
+      <section aria-labelledby="cancel-h">
+        <h2 class="h2" id="cancel-h" style="margin-bottom:24px">If you cancel</h2>
+        <div id="cancel"></div>
+      </section>
+    </div>
+
+    <aside class="rail rail--sticky" aria-label="Booking">
+      <div class="panel panel--dark" id="rail">
+        <div>
+          <p class="muted small" id="rail-dates-label">Your dates</p>
+          <p id="rail-dates" class="rail-dates"></p>
+        </div>
+        <div id="rail-quote" aria-live="polite"></div>
+        <a class="btn btn--primary btn--wide" id="hold" href="book.html">Hold these dates</a>
+        <p class="note">Nothing is charged when you hold. The bond is <span id="rail-bond"></span>, held on your card and released within five business days of return.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, bySlug, fleet, classes, photoFor, photoSrcset, photoAlt, imagery, pic, srcOf, srcsetOf, money, moneyCents, num, fmtDate, fmtShort, esc, quote, priceLinesHtml, mountCalendar, cancellationTable, qs, qsFrom, pricing, business, tbc, addDays, TODAY, iso, nextFree } from './app.js';
+
+  mountChrome({ active: 'fleet.html', bar: true });
+
+  const q = qs();
+  const m = bySlug(q.m) || fleet[0];
+  document.title = `${m.year} ${m.make} ${m.model}. Comoto Club`;
+
+  document.getElementById('crumb-cls').textContent = classes[m.cls];
+  document.getElementById('crumb-cls').href = `fleet.html?cls=${m.cls}`;
+  document.getElementById('m-name').textContent = `${m.make} ${m.model}`;
+  document.getElementById('m-quick').innerHTML = [
+    ['Year', m.year], ['Engine', `${num(m.cc)} cc`], ['Day rate', money(m.rate)],
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+
+  const shots = [
+    { src: photoFor(m, 2400, 1600), srcset: photoSrcset(m), alt: photoAlt(m, `${m.make} ${m.model}, three-quarter front, neutral ground`), lead: !!m.photo, cap: m.photo ? `${m.photo.where}` : '', when: m.photo ? (m.photo.kind === 'photo' ? `Photographed ${fmtShort(m.photo.date)}` : 'Film study, replaced by the fleet shoot') : '' },
+    ...imagery.details.map(d => ({ src: srcOf(d, 800), srcset: srcsetOf(d), alt: d.alt, cap: d.cap, when: '' })),
+    ...(m.environment ? [{ src: srcOf(m.environment, 1400), srcset: srcsetOf(m.environment), alt: m.environment.alt, cap: m.environment.where, when: `Photographed ${fmtShort(m.environment.date)}`, wide: true }] : []),
+  ];
+  const cond = m.condition.map(c => ({ note: true, cap: `Existing: ${c.what}`, when: `Recorded ${fmtShort(c.date)}. Photograph is taken with you at pickup and kept on file`, mark: true }));
+  const all = [...shots, ...cond];
+  if (!cond.length) all.push({ note: true, cap: m.lastService.odo <= 1500 ? 'Delivered new. No marks recorded.' : 'No cosmetic damage recorded.', when: `Checked ${fmtShort(m.lastService.date)}` });
+  document.getElementById('gallery').innerHTML = all.map((s, i) => s.note ? `<figure class="wide note-card${s.mark ? ' note-card--mark' : ''}"><b>${esc(s.cap)}</b><span>${esc(s.when)}.${s.mark ? '' : ' Any mark found later is photographed, dated and published here before the next hire.'}</span></figure>` : `
+    <figure class="${s.lead ? 'lead' : (s.wide || i >= 5) ? 'wide' : ''}"><img src="${s.src}" ${s.srcset ? `srcset="${s.srcset}" sizes="${s.lead ? '(min-width: 1024px) 66vw, 100vw' : '(min-width: 1024px) 16vw, 50vw'}"` : ''} width="900" height="600" alt="${esc(s.alt)}" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}>${s.cap ? `<figcaption>${esc(s.cap)}${s.when ? ` <span class="when">${esc(s.when)}</span>` : ''}</figcaption>` : ''}</figure>`).join('');
+
+  document.getElementById('m-fit').textContent = m.fit;
+
+  document.getElementById('ledger').innerHTML = [
+    ['Last service', `${num(m.lastService.odo)} km`, fmtShort(m.lastService.date)],
+    ['Next service due', `${num(m.lastService.odo + business.serviceIntervalKm)} km`, `or ${fmtShort(addDays(m.lastService.date, 182))}`],
+    ['Tyres', m.tyres.make, `fitted ${fmtShort(m.tyres.fitted)}`],
+    ['Brake pads, front', `${m.pads.front.toFixed(1)} mm`, `measured ${fmtShort(m.lastService.date)}`],
+    ['Brake pads, rear', `${m.pads.rear.toFixed(1)} mm`, `measured ${fmtShort(m.lastService.date)}`],
+    ['Serviced by', tbc(business.headMechanic), 'every service, in this garage'],
+    ['Pre-hire checklist', '20 items, signed', 'before every hire'],
+  ].map(([k, v, w]) => `<div><dt>${k}</dt><dd>${v}</dd><dd class="when">${w}</dd></div>`).join('');
+
+  document.getElementById('m-spec').innerHTML = [
+    ['Engine', `${num(m.cc)} cc`], ['Power', `${m.kw} kW`], ['Torque', `${m.nm} Nm`],
+    ['Kerb weight', `${num(m.kg)} kg`], ['Seat height', `${num(m.seatMm)} mm`], ['Tank', `${m.tankL} litres`],
+    ['ABS', m.abs], ['Rider modes', m.modes], ['Luggage', m.luggage],
+    ...(m.colour ? [['Colour', m.colour]] : []), ...(m.suspension ? [['Suspension', m.suspension]] : []), ...(m.brakes ? [['Brakes', m.brakes]] : []), ...(m.dash ? [['Dash', m.dash]] : []),
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+
+  const singleSeat = ['panigale-v2', 'speed-triple-1200-rs'].includes(m.slug);
+  const newMachine = m.lastService.odo <= 1500;
+  document.querySelector('#included tbody').innerHTML = [
+    ['Luggage', m.luggage], ['Helmet', 'One in your size, plus a second for a pillion' + (singleSeat ? '. This machine is single seat as fitted.' : '')],
+    ['Helmet lock', 'Fitted'], ['Tank bag', 'Fitted, with the rego and insurance card inside'],
+    ['Fuel', 'First tank full'], ['Roadside', '24 hour roadside assistance across NSW'],
+    ['Wet weather gear', 'Jacket and overtrousers in your size, from the garage'],
+  ].map(([k, v]) => `<tr><th scope="row">${k}</th><td>${esc(v)}</td></tr>`).join('');
+
+  // Dates: from the query, or the next free Saturday and Sunday.
+  let from = q.from || null, to = q.to || null;
+  if (!from) {
+    let d = addDays(TODAY, (6 - TODAY.getDay() + 7) % 7 || 7);
+    for (let i = 0; i < 20; i++) { if (!m.booked.some(([a, b]) => iso(d) >= a && iso(d) <= b) && !m.booked.some(([a, b]) => iso(addDays(d, 1)) >= a && iso(addDays(d, 1)) <= b)) break; d = addDays(d, 7); }
+    from = iso(d); to = iso(addDays(d, 1));
+  }
+  let reduced = false;
+
+  function renderPrice() {
+    const qt = quote({ machine: m, from, to: to || from, excessReduction: reduced });
+    document.getElementById('rail-dates').textContent = to ? `${fmtDate(from)} to ${fmtDate(to)}` : `${fmtDate(from)}, pick a return day`;
+    document.getElementById('rail-quote').innerHTML = priceLinesHtml(qt);
+    document.getElementById('rail-bond').textContent = money(pricing.bond);
+    document.getElementById('hold').href = 'book.html?' + qsFrom({ m: m.slug, from, to: to || from, er: reduced ? 1 : '' });
+
+    const full = quote({ machine: m, from, to: to || from, excessReduction: false });
+    const withRed = quote({ machine: m, from, to: to || from, excessReduction: true });
+    document.getElementById('price-full').innerHTML = `
+      <table class="tbl">
+        <tbody>
+          <tr><th scope="row">Day rate</th><td>${money(m.rate)} a day, GST included</td><td class="r">${money(full.lines[0].amount)}</td></tr>
+          <tr><th scope="row">GST</th><td>Included in every figure on this page, ${moneyCents(full.gst)} of the total</td><td class="r">included</td></tr>
+          <tr><th scope="row">Bond</th><td>${esc(pricing.bondTerms)}</td><td class="r">${money(pricing.bond)} held</td></tr>
+          <tr><th scope="row">Excess, standard</th><td>The most you pay if the machine is damaged</td><td class="r">${money(pricing.excessStandard)}</td></tr>
+          <tr><th scope="row">Excess, reduced</th><td>
+            <label class="check" style="border:0;padding:0"><input type="checkbox" id="er-toggle" ${reduced ? 'checked' : ''}><span>Reduce the excess to ${money(pricing.excessReduced)} for ${money(pricing.excessReductionPerDay)} a day</span></label>
+          </td><td class="r">${money(withRed.lines[1].amount)}</td></tr>
+          <tr><th scope="row">Kilometres</th><td>${num(pricing.kmPerDay)} km a day included, ${num(full.kmIncluded)} km for these dates. Then ${moneyCents(pricing.kmOverage)} a km.</td><td class="r">included</td></tr>
+          <tr><th scope="row">Fuel</th><td>${esc(pricing.fuelPolicy)}</td><td class="r">included</td></tr>
+          <tr><th scope="row">Late return</th><td>${pricing.lateGraceMinutes} minute grace, then by the hour. <span class="note note--indicative"></span></td><td class="r">${money(pricing.lateFeePerHour.value)} an hour</td></tr>
+          <tr><th scope="row">Delivery</th><td>Within ${pricing.deliveryFee.radiusKm} km of the garage, if you choose it. Collection is free. <span class="note note--indicative"></span></td><td class="r">${money(pricing.deliveryFee.value)}</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="2">Total for ${full.days} day${full.days > 1 ? 's' : ''}${reduced ? ' with reduced excess' : ''}</td><td class="r">${money(qt.total)}</td></tr></tfoot>
+      </table>`;
+    document.getElementById('er-toggle').addEventListener('change', e => { reduced = e.target.checked; renderPrice(); });
+
+    document.getElementById('cancel').innerHTML = cancellationTable(from);
+  }
+
+  mountCalendar(document.getElementById('calendar'), {
+    machine: m, from, to,
+    onChange: sel => { from = sel.from; to = sel.to; renderPrice(); },
+  });
+  renderPrice();
+
+  const ld = {
+    '@context': 'https://schema.org', '@type': 'Product', name: `${m.year} ${m.make} ${m.model}`,
+    description: m.fit, brand: { '@type': 'Brand', name: m.make },
+    offers: { '@type': 'Offer', price: m.rate, priceCurrency: 'AUD', availability: 'https://schema.org/InStock', description: 'Per day, GST included' },
+  };
+  const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+</script>
+</body>
+</html>

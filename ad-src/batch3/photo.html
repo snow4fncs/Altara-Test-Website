@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500;600&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;overflow:hidden;position:relative;font-family:Outfit,sans-serif;background:#0c0d10}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center 25%}
+.grad{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(to top,rgba(12,13,16,.92) 0%,rgba(12,13,16,.55) 45%,rgba(12,13,16,0) 100%)}
+.txt{position:absolute;left:64px;right:64px;bottom:96px;text-align:center;color:#F3EBDD}
+.eb{font-size:30px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;margin-bottom:18px;color:#E6D7B8}
+h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:112px;line-height:1.0;letter-spacing:-.01em}
+h1 em{font-style:italic}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:48px;line-height:1.2;margin-top:18px}
+body.s1080{height:1080px} body.s1080 h1{font-size:92px} body.s1080 .sub{font-size:40px} body.s1080 .txt{bottom:72px}
+body.s1920{height:1920px} body.s1920 .txt{bottom:300px} body.s1920 h1{font-size:118px} body.s1920 .sub{font-size:50px} body.s1920 .ph{background-position:center 40%}
+</style>
+<div class="ph" id="ph"></div><div class="grad"></div>
+<div class="txt"><div class="eb" id="eb"></div><h1 id="h1"></h1><div class="sub" id="sub"></div></div>
+<script>
+const q=new URLSearchParams(location.search);document.body.className='s'+(q.get('size')||'1350');
+document.getElementById('ph').style.backgroundImage="url('"+q.get('img')+"')";
+document.getElementById('eb').innerHTML=q.get('eb')||'';document.getElementById('h1').innerHTML=q.get('h1')||'';document.getElementById('sub').innerHTML=q.get('sub')||'';
+</script>

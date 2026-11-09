@@ -71,7 +71,7 @@ function isAdmin(req) {
 export default async function handler(req, res) {
   // ── list approved reviews, for one product or across the range ──
   if (req.method === 'GET') {
-    // moderation queue — everything awaiting a decision
+    // moderation queue: everything awaiting a decision
     if (req.query.pending === '1') {
       if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 

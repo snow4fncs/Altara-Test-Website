@@ -1,4 +1,4 @@
-// Marketplace watcher — the alerting half.
+// Marketplace watcher: the alerting half.
 //
 // watcher/scan.mjs (running on a GitHub Actions schedule) POSTs raw
 // marketplace hits here. This endpoint dedupes them against a seen-set kept
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
     const sms = await sendSms(text);
     const push = sms.sent ? { sent: false } : await sendPush(`Watcher: ${fresh.length} new`, text);
     if (sms.sent || push.sent) emailed = true;
-    else ({ sent: emailed } = await sendEmail({ to: ALERT_TO, subject: `Watcher: ${fresh.length} new — ${top}`, html, tag: 'watcher-alert' }));
+    else ({ sent: emailed } = await sendEmail({ to: ALERT_TO, subject: `Watcher: ${fresh.length} new · ${top}`, html, tag: 'watcher-alert' }));
   }
 
   // Seed/save: on first run remember EVERY reported id (not just the capped

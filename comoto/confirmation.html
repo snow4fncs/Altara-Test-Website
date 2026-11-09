@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dates held. Comoto Club</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="muted">Booking reference <strong class="num" id="ref"></strong></p>
+      <h1 class="h1">Dates held</h1>
+      <p class="lede" id="lede"></p>
+    </div>
+
+    <div class="grid" style="padding-bottom:var(--s-2)">
+      <div class="main stack-lg">
+        <figure style="aspect-ratio:21/9;overflow:hidden;border-radius:var(--radius);background:var(--bitumen)"><img id="photo" width="1200" height="800" alt="" style="width:100%;height:100%;object-fit:cover"></figure>
+
+        <section class="stack">
+          <h2 class="h2">The hire</h2>
+          <dl class="ledger" id="hire"></dl>
+        </section>
+
+        <div class="photo" style="aspect-ratio:3/2" id="bring-photo"></div>
+        <section class="stack">
+          <h2 class="h2">What to bring</h2>
+          <table class="tbl tbl--tight">
+            <tbody>
+              <tr><th scope="row">Licence</th><td>The physical card that matches the photographs you uploaded. A photo of it on your phone is not enough.</td></tr>
+              <tr><th scope="row">Card</th><td>The card you paid with, for the bond authorisation.</td></tr>
+              <tr><th scope="row">Gear</th><td>Your own helmet if you prefer it, boots that cover the ankle, gloves, a jacket. Wet weather gear in your size is included.</td></tr>
+              <tr><th scope="row">Time</th><td>Allow 30 minutes at pickup. The inspection is done with you and it is not rushed.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="stack">
+          <h2 class="h2">If your plans change</h2>
+          <div id="cancel"></div>
+          <p class="measure" id="cancel-line"></p>
+        </section>
+      </div>
+
+      <aside class="rail rail--sticky">
+        <div class="panel">
+          <h2 class="h3">Pickup and contact</h2>
+          <dl class="price-lines" id="where"></dl>
+          <div id="map"></div>
+          <p class="small muted" id="email-line"></p>
+          <a class="btn btn--ghost btn--wide" href="index.html">Back to the garage</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, bySlug, fleet, classes, photoFor, imagery, pic, money, moneyCents, fmtDate, esc, quote, cancellationTable, qs, pricing, business, tbc, addDays, num } from './app.js';
+  import { cancellation } from './fixtures.js';
+  mountChrome({ active: '' });
+
+  const q = qs();
+  const m = bySlug(q.m) || fleet[0];
+  const from = q.from, to = q.to || q.from;
+  const qt = quote({ machine: m, from, to, excessReduction: q.er === '1', delivery: q.d === '1', pillion: q.p === '1', comms: q.c === '1', extraKm: Number(q.km || 0) });
+
+  document.getElementById('bring-photo').innerHTML = pic(imagery.helmet, { sizes: '(min-width: 1024px) 66vw, 100vw', w: 1400 });
+  document.getElementById('ref').textContent = q.ref || 'CC-PREVIEW';
+  document.getElementById('lede').innerHTML = `${esc(m.make)} ${esc(m.model)}, ${fmtDate(from)} to ${fmtDate(to)}. ${money(qt.total)} charged, GST included. A confirmation with exactly this page's contents has been sent to ${esc(q.email || 'your email')}.`;
+  const img = document.getElementById('photo'); img.src = photoFor(m, 1200, 800); img.alt = `${m.make} ${m.model}`;
+
+  document.getElementById('hire').innerHTML = [
+    ['Machine', `${m.year} ${m.make} ${m.model}`, classes[m.cls]],
+    ['Pickup', `${fmtDate(from)} at ${q.pt || '07:00'}`, q.d === '1' ? 'delivered to you' : 'from the garage'],
+    ['Return', `${fmtDate(to)} by ${q.rt || '17:00'}`, `${pricing.lateGraceMinutes} minute grace`],
+    ['Paid', money(qt.total), `GST of ${moneyCents(qt.gst)} included`],
+    ['Bond', `${money(qt.bond)} at pickup`, 'held, not charged'],
+    ['Your excess', money(qt.excess), q.er === '1' ? 'reduced excess taken' : 'standard excess'],
+    ['Kilometres', `${num(qt.kmIncluded)} km included`, `then ${moneyCents(pricing.kmOverage)} a km`],
+  ].map(([k, v, w]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd><dd class="when">${esc(w)}</dd></div>`).join('');
+
+  document.getElementById('cancel').innerHTML = cancellationTable(from);
+  const full = cancellation.find(r => r.refund === 100);
+  document.getElementById('cancel-line').textContent = `For a full refund, cancel by ${fmtDate(addDays(from, -full.from))}. To cancel or move dates, reply to the confirmation email or call. Dates can be moved once at no cost if you tell us more than 48 hours before pickup.`;
+
+  document.getElementById('where').innerHTML = [
+    ['Address', tbc(business.address)],
+    ['Phone', tbc(business.phone)],
+    ['Email', `<a href="mailto:${business.email}">${business.email}</a>`],
+    ['Who', `${tbc(business.founder)} or ${tbc(business.headMechanic)}`],
+  ].map(([k, v]) => `<div class="price-line"><span>${k}</span><span style="text-align:right">${v}</span></div>`).join('');
+  document.getElementById('map').innerHTML = business.mapEmbed || `<div class="map-tbc" style="border-color:var(--rule-strong);color:var(--ink-2)"><p>Map embeds once the pickup address is confirmed.<br><span class="tbc">Address: TBC</span></p></div>`;
+  document.getElementById('email-line').textContent = 'Preview build: the confirmation email is not yet sent. In production it mirrors this page exactly.';
+</script>
+</body>
+</html>

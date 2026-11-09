@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions. Comoto Club</title>
+<meta name="description" content="Straight answers to the awkward questions: what happens if you drop it, what happens if it rains, what is not covered, and who is allowed to hire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="h1">Questions</h1>
+      <p class="lede">Straight answers on damage, weather, cover and eligibility. If yours is not here, ask and it will be added.</p>
+    </div>
+    <div class="grid" style="padding-bottom:var(--s-2)">
+      <div class="main">
+        <div class="faq" id="faq"></div>
+      </div>
+      <aside class="rail rail--sticky">
+        <div class="panel">
+          <h2 class="h3">Ask us</h2>
+          <p class="small muted" id="phone-line"></p>
+          <a class="btn btn--ghost btn--wide" href="contact.html">Send the enquiry</a>
+          <p class="small muted">The full plain English policies are on the <a href="policies.html">policies page</a>.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, business, tbc, esc } from './app.js';
+  import { faq } from './fixtures.js';
+  mountChrome({ active: '' });
+
+  document.getElementById('faq').innerHTML = faq.map((f, i) => `
+    <details ${i === 0 ? 'open' : ''}>
+      <summary>${esc(f.q)}</summary>
+      <div class="faq__a"><p>${esc(f.a)}</p></div>
+    </details>`).join('');
+
+  document.getElementById('phone-line').innerHTML = `${tbc(business.phone)}, ${esc(business.phoneResponse)}. Outside those hours, email is answered by 09:00 the next working day.`;
+
+  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+  const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+</script>
+</body>
+</html>

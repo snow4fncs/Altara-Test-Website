@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;overflow:hidden;position:relative;font-family:Inter,-apple-system,sans-serif;background:#000}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center 35%}
+/* TikTok / Reels style caption: white text, black rounded label blocks, centred */
+.cap{position:absolute;left:70px;right:70px;top:150px;text-align:center}
+.cap span{display:inline;background:#fff;color:#111;font-weight:700;font-size:54px;line-height:1.55;padding:6px 18px;box-decoration-break:clone;-webkit-box-decoration-break:clone;border-radius:14px}
+.cap.dark span{background:rgba(0,0,0,.78);color:#fff}
+.cap2{position:absolute;left:70px;right:70px;bottom:120px;text-align:center}
+.cap2 span{display:inline;background:rgba(0,0,0,.78);color:#fff;font-weight:600;font-size:40px;line-height:1.6;padding:6px 18px;box-decoration-break:clone;-webkit-box-decoration-break:clone;border-radius:12px}
+body.s1080{height:1080px} body.s1080 .cap{top:110px} body.s1080 .cap span{font-size:48px} body.s1080 .cap2{bottom:80px}
+body.s1920{height:1920px} body.s1920 .cap{top:420px} body.s1920 .cap span{font-size:60px} body.s1920 .cap2{bottom:380px}
+</style>
+<div class="ph" id="ph"></div>
+<div class="cap" id="cap"><span id="c1"></span></div>
+<div class="cap2" id="cap2"><span id="c2"></span></div>
+<script>
+const q=new URLSearchParams(location.search);document.body.className='s'+(q.get('size')||'1350');
+document.getElementById('ph').style.backgroundImage="url('"+q.get('img')+"')";
+if(q.get('dark'))document.getElementById('cap').classList.add('dark');
+document.getElementById('c1').textContent=q.get('c1')||'';
+const c2=q.get('c2')||'';document.getElementById('c2').textContent=c2;if(!c2)document.getElementById('cap2').style.display='none';
+</script>

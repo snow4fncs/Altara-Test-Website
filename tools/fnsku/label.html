@@ -1,0 +1,49 @@
+<!doctype html><meta charset="utf-8">
+<style>
+  /* A4 sheet, Avery L7160 layout: 3 across x 7 down, 63.5 x 38.1 mm labels, 2.5 mm column gutter, 15.15 mm top margin, 7.2 mm side margin */
+  @page { size: A4; margin: 0; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { background:#fff; font-family: Helvetica, Arial, sans-serif; color:#000; }
+  .sheet { width:210mm; height:297mm; padding:15.15mm 7.2mm 0; display:grid; grid-template-columns: repeat(3, 63.5mm); column-gap:2.5mm; grid-auto-rows:38.1mm; page-break-after:always; }
+  .sheet:last-child { page-break-after:auto; }
+  .label { width:63.5mm; height:38.1mm; padding:2.6mm 3mm 2mm; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .label.outline { outline: 0.1mm dashed #bbb; }
+  .bars { display:flex; height:13mm; align-items:stretch; }
+  .bars i { display:block; height:100%; }
+  .code { font-size:9pt; letter-spacing:.12em; margin-top:1.2mm; font-weight:600; }
+  .title { font-size:6.5pt; line-height:1.25; text-align:center; margin-top:1mm; max-height:8.2mm; overflow:hidden; }
+  .cond { font-size:6.5pt; margin-top:.6mm; }
+  .sample { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:60pt; color:rgba(200,0,0,.18); transform:rotate(-25deg); pointer-events:none; }
+</style>
+<div id="root"></div>
+<script>
+  // Code 128, subset B, with the required start/checksum/stop. Renders as bar widths from the standard pattern table.
+  const P = ['212222','222122','222221','121223','121322','131222','122213','122312','132212','221213','221312','231212','112232','122132','122231','113222','123122','123221','223211','221132','221231','213212','223112','312131','311222','321122','321221','312212','322112','322211','212123','212321','232121','111323','131123','131321','112313','132113','132311','211313','231113','231311','112133','112331','132131','113123','113321','133121','313121','211331','231131','213113','213311','213131','311123','311321','331121','312113','312311','332111','314111','221411','431111','111224','111422','121124','121421','141122','141221','112214','112412','122114','122411','142112','142211','241211','221114','413111','241112','134111','111242','121142','121241','114212','124112','124211','411212','421112','421211','212141','214121','412121','111143','111341','131141','114113','114311','411113','411311','113141','114131','311141','411131','211412','211214','211232','2331112'];
+  function code128B(s) {
+    const START = 104, STOP = 106; let sum = START; const codes = [START];
+    for (let i = 0; i < s.length; i++) { const v = s.charCodeAt(i) - 32; if (v < 0 || v > 94) throw new Error('char not in Code 128 B: ' + s[i]); codes.push(v); sum += v * (i + 1); }
+    codes.push(sum % 103, STOP);
+    return codes.map(c => P[c]).join('');
+  }
+  function barsHtml(widths, mmPerUnit) {
+    let h = ''; for (let i = 0; i < widths.length; i++) { const w = +widths[i] * mmPerUnit; h += '<i style="width:' + w + 'mm;background:' + (i % 2 === 0 ? '#000' : 'transparent') + '"></i>'; }
+    return h;
+  }
+  const q = new URLSearchParams(location.search);
+  const fnsku = (q.get('fnsku') || '').trim().toUpperCase(), title = q.get('title') || 'Altara Car Seat Cover - Midnight Black', cond = q.get('cond') || 'New', n = +(q.get('n') || 100), outline = q.get('outline') === '1', sample = q.get('sample') === '1';
+  const root = document.getElementById('root');
+  if (!fnsku) { root.innerHTML = '<p style="padding:20mm;font-size:14pt">Add ?fnsku=X00XXXXXXX to the URL.</p>'; }
+  else {
+    const widths = code128B(fnsku); const units = [...widths].reduce((a, b) => a + +b, 0);
+    const mmPerUnit = Math.min(0.33, 55 / units);   // keep the whole barcode inside 55 mm, module >= 0.33 mm when it fits
+    const perSheet = 21; let html = '';
+    for (let i = 0; i < n; i += perSheet) {
+      html += '<div class="sheet" style="position:relative">' + (sample ? '<div class="sample">SAMPLE</div>' : '');
+      for (let k = i; k < Math.min(n, i + perSheet); k++) {
+        html += '<div class="label' + (outline ? ' outline' : '') + '"><div class="bars">' + barsHtml(widths, mmPerUnit) + '</div><div class="code">' + fnsku + '</div><div class="title">' + title.replace(/</g, '&lt;') + '</div><div class="cond">' + cond.replace(/</g, '&lt;') + '</div></div>';
+      }
+      html += '</div>';
+    }
+    root.innerHTML = html;
+  }
+</script>

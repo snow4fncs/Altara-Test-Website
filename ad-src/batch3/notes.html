@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;overflow:hidden;position:relative;font-family:-apple-system,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif;background:#000}
+.ph{position:absolute;inset:0;background:url('/social/assets/incar-black.jpg') center 30%/cover;filter:brightness(.5)}
+.note{position:absolute;left:72px;right:72px;top:160px;background:#1c1c1e;border-radius:34px;padding:40px 48px 56px;color:#fff;box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.bar{display:flex;justify-content:space-between;align-items:center;color:#e5b53a;font-size:30px;margin-bottom:26px}
+.bar span:last-child{color:#8e8e93;font-size:26px}
+.date{color:#8e8e93;font-size:26px;text-align:center;margin-bottom:22px}
+h1{font-size:52px;font-weight:700;line-height:1.15;margin-bottom:28px;letter-spacing:-.01em}
+ol{list-style:none}
+li{font-size:36px;line-height:1.45;padding:14px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:18px}
+li:first-child{border-top:0}
+li b{font-weight:700}
+li small{display:block;font-size:28px;color:#9a9aa0;font-weight:400;margin-top:4px}
+li .n{color:#8e8e93;min-width:44px}
+body.s1080{height:1080px} body.s1080 .note{top:70px;padding:30px 40px 40px} body.s1080 h1{font-size:44px;margin-bottom:18px} body.s1080 li{font-size:31px;padding:10px 0} body.s1080 li small{font-size:24px}
+body.s1920{height:1920px} body.s1920 .note{top:400px}
+</style>
+<div class="ph"></div>
+<div class="note">
+  <div class="bar"><span>‹ Notes</span><span>Done</span></div>
+  <div class="date" id="date"></div>
+  <h1 id="h1"></h1>
+  <ol id="list"></ol>
+</div>
+<script>
+const q=new URLSearchParams(location.search);document.body.className='s'+(q.get('size')||'1350');
+document.getElementById('h1').textContent=q.get('h1')||'';document.getElementById('date').textContent=q.get('date')||'';
+document.getElementById('list').innerHTML=(q.get('items')||'').split('||').map((r,i)=>{const [a,b]=r.split('|');return '<li><span class="n">'+(i+1)+'.</span><span><b>'+a+'</b>'+(b?'<small>'+b+'</small>':'')+'</span></li>'}).join('');
+</script>

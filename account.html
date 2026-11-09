@@ -867,14 +867,14 @@
   <link rel="canonical" href="https://www.altaradesign.com/account.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Altara">
-  <meta property="og:title" content="My Account — Altara">
+  <meta property="og:title" content="My Account | Altara">
   <meta property="og:description" content="Sign in to your Altara account to view order history and manage your details.">
   <meta property="og:url" content="https://www.altaradesign.com/account.html">
   <meta property="og:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="My Account — Altara">
+  <meta name="twitter:title" content="My Account | Altara">
   <meta name="twitter:description" content="Sign in to your Altara account to view order history and manage your details.">
   <meta name="twitter:image" content="https://www.altaradesign.com/Product%20Photos/Altara%20Product%20Image%202.png">
 </head>
@@ -950,7 +950,7 @@
       </div>
       <button type="submit" class="btn-primary">Update Password</button>
       <p class="auth-error" id="reset-error"></p>
-      <p class="auth-success" id="reset-success">Password updated — you're now signed in.</p>
+      <p class="auth-success" id="reset-success">Password updated. You're now signed in.</p>
     </form>
   </div>
 
@@ -959,7 +959,7 @@
     <div class="dashboard-header">
       <div>
         <div class="dashboard-welcome-label">Welcome back</div>
-        <div class="dashboard-name" id="dashboard-name">—</div>
+        <div class="dashboard-name" id="dashboard-name"></div>
         <div class="dashboard-email" id="dashboard-email"></div>
       </div>
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
@@ -998,7 +998,7 @@
         </div>
         <div class="forgot-row">
           <a href="#" class="forgot-link" id="forgot-link">Forgot your password?</a>
-          <p class="auth-success" id="forgot-success" style="margin-top:8px">Check your email — we've sent a reset link.</p>
+          <p class="auth-success" id="forgot-success" style="margin-top:8px">Check your email. We've sent a reset link.</p>
           <p class="auth-error" id="forgot-error" style="margin-top:8px"></p>
         </div>
         <button type="submit" class="btn-primary">Sign In</button>
@@ -1092,7 +1092,7 @@
         </div>
         <button type="submit" class="btn-primary">Create Account</button>
         <p class="auth-error" id="create-error"></p>
-        <p class="auth-success" id="create-success">Account created — check your email to confirm, then sign in.</p>
+        <p class="auth-success" id="create-success">Account created. Check your email to confirm, then sign in.</p>
         <p class="signin-note">Already have an account? <a href="#sign-in-col">Sign in</a></p>
       </form>
     </div>
@@ -1254,7 +1254,7 @@
         });
         return;
       }
-      // No hash tokens — check localStorage for existing session
+      // No hash tokens, check localStorage for existing session
       sb.auth.getSession().then(({ data: { session } }) => {
         if (session) showDashboard(session.user);
       });

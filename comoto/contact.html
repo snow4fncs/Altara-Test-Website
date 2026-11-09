@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact the garage. Comoto Club</title>
+<meta name="description" content="Phone, email, address and hours for the Comoto Club garage, and a form that tells you where your details go.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="h1">Contact</h1>
+      <p class="lede" id="lede"></p>
+    </div>
+
+    <div class="grid" style="padding-bottom:var(--s-2)">
+      <div class="main">
+        <form id="enquiry" class="form-grid" novalidate>
+          <div class="form-grid form-grid--2">
+            <div class="field field--boxed"><label for="c-name">Your name</label><input id="c-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field field--boxed"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field field--boxed"><label for="c-phone">Phone, if you would rather be called</label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
+            <div class="field field--boxed"><label for="c-about">About</label>
+              <select id="c-about" name="about">
+                <option value="hire">A hire</option>
+                <option value="membership">Membership</option>
+                <option value="machine">A particular machine</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+          </div>
+          <div class="field field--boxed"><label for="c-msg">What you want to know</label><textarea id="c-msg" name="message" required></textarea></div>
+          <p class="note">Your name, email, phone and message go to our inbox and nowhere else. They are kept for as long as the conversation is open and then for twelve months, in case you come back. Nothing here is added to a mailing list.</p>
+          <div id="c-alert" hidden></div>
+          <div class="step-actions" style="border:0;padding-top:0;justify-content:flex-start">
+            <button class="btn btn--primary" type="submit">Send the enquiry</button>
+            <span class="small muted" id="c-reply"></span>
+          </div>
+        </form>
+      </div>
+
+      <aside class="rail rail--sticky">
+        <div class="panel">
+          <h2 class="h3">Pickup</h2>
+          <dl class="price-lines" id="contact-lines"></dl>
+          <div id="map"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, business, tbc, esc, qs } from './app.js';
+  mountChrome({ active: '' });
+
+  document.getElementById('lede').innerHTML = `${tbc(business.phone)}, ${esc(business.phoneResponse)}. Email is answered by 09:00 the next working day.`;
+  document.getElementById('c-reply').textContent = 'Replies within one working day.';
+
+  const q = qs(); if (q.about) document.getElementById('c-about').value = q.about;
+
+  document.getElementById('contact-lines').innerHTML = [
+    ['Address', tbc(business.address)],
+    ['Phone', tbc(business.phone)],
+    ['Email', `<a href="mailto:${business.email}">${business.email}</a>`],
+    ['Hours', tbc(business.hours)],
+  ].map(([k, v]) => `<div class="price-line"><span>${k}</span><span style="text-align:right">${v}</span></div>`).join('');
+  document.getElementById('map').innerHTML = business.mapEmbed || `<div class="map-tbc" style="border-color:var(--rule-strong);color:var(--ink-2)"><p>Map embeds once the pickup address is confirmed.<br><span class="tbc">Address: TBC</span></p></div>`;
+
+  const form = document.getElementById('enquiry');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let ok = true;
+    form.querySelectorAll('.field').forEach(f => {
+      const i = f.querySelector('input, textarea, select'); f.classList.remove('is-invalid');
+      f.querySelector('.error')?.remove();
+      if (i.required && !i.value.trim() || (i.type === 'email' && i.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(i.value))) {
+        ok = false; f.classList.add('is-invalid');
+        const err = document.createElement('p'); err.className = 'error'; err.textContent = i.type === 'email' && i.value ? 'That does not look like an email address.' : 'This is needed to reply to you.'; f.appendChild(err);
+      }
+    });
+    const alert = document.getElementById('c-alert'); alert.hidden = false;
+    if (!ok) { alert.className = 'alert'; alert.innerHTML = '<p>Something is missing above. Fill in the marked fields and send again.</p>'; return; }
+    // No backend in this preview. Sent state is shown honestly as a preview.
+    alert.className = 'notice'; alert.innerHTML = `<p>Enquiry sent. A reply will reach ${esc(form.email.value)} within one working day.</p><p class="small muted" style="margin-top:8px">Preview build: this form is not yet connected to the inbox.</p>`;
+    form.querySelector('button[type="submit"]').textContent = 'Enquiry sent';
+    form.querySelector('button[type="submit"]').disabled = true;
+  });
+</script>
+</body>
+</html>

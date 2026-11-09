@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The mark. Comoto Club</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .sheet { display: grid; gap: 40px; padding: 56px 0 var(--s-2); }
+  .swatch { display: grid; gap: 24px; padding: 40px; border-radius: var(--radius); }
+  .swatch--dark { background: var(--bitumen); color: var(--bone, #EDE6D9); }
+  .swatch--dark .brand svg { color: var(--bronze); }
+  .swatch--light { background: var(--chalk); color: var(--bitumen); border: 1px solid var(--rule); }
+  .row { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-end; }
+  .stacked { display: grid; justify-items: center; gap: 12px; text-align: center; }
+  .stacked .wordmark { font-size: 2rem; }
+  .sizes { display: flex; gap: 40px; align-items: flex-end; flex-wrap: wrap; }
+  .sizes figure { display: grid; gap: 8px; justify-items: center; }
+  .sizes figcaption { font-size: 0.75rem; color: inherit; opacity: 0.7; }
+  .tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .tok { border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; font-size: 0.8125rem; }
+  .tok i { display: block; height: 56px; }
+  .tok span { display: block; padding: 8px 10px; }
+</style>
+</head>
+<body>
+<header id="site-header"></header>
+<main id="main">
+  <div class="wrap sheet">
+    <div class="page-head" style="padding:0">
+      <h1 class="h1">The mark, three lockups, six sizes</h1>
+      <p class="lede">One continuous stroke that reads as two Cs or as a chain link. No gradient, no bevel, no filter. Wings retired.</p>
+    </div>
+
+    <section class="swatch swatch--dark">
+      <div class="row">
+        <div class="brand" style="font-size:1.25rem" id="lock-h-dark"></div>
+        <div class="stacked" id="lock-s-dark"></div>
+      </div>
+      <div class="sizes" id="sizes-dark"></div>
+    </section>
+
+    <section class="swatch swatch--light">
+      <div class="row">
+        <div class="brand" id="lock-h-light"></div>
+        <div class="stacked" id="lock-s-light"></div>
+      </div>
+      <div class="sizes" id="sizes-light"></div>
+      <div>
+        <p class="small muted" style="margin-bottom:8px">One colour silhouette, as it would embroider or stamp</p>
+        <div class="sizes" id="silhouette"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="h3" style="margin-bottom:16px">Tokens</h2>
+      <div class="tokens" id="tokens"></div>
+    </section>
+  </div>
+</main>
+<footer id="site-footer"></footer>
+<script type="module">
+  import { mountChrome, MONOGRAM, wordmark } from './app.js';
+  mountChrome({ active: '' });
+  const mono = (px, extra = '') => MONOGRAM.replace('width="32" height="32"', `width="${px}" height="${px}" style="width:${px}px;height:${px}px;${extra}"`);
+  const horiz = `${MONOGRAM}${wordmark()}`;
+  const stacked = `${mono(64)}${wordmark()}`;
+  document.getElementById('lock-h-dark').innerHTML = horiz;
+  document.getElementById('lock-h-light').innerHTML = horiz;
+  document.getElementById('lock-s-dark').innerHTML = stacked;
+  document.getElementById('lock-s-light').innerHTML = stacked;
+  const sizes = [16, 24, 32, 64, 128, 512];
+  const sizesHtml = colour => sizes.map(s => `<figure>${mono(s, `color:${colour}`)}<figcaption>${s} px</figcaption></figure>`).join('');
+  document.getElementById('sizes-dark').innerHTML = sizesHtml('var(--bronze)');
+  document.getElementById('sizes-light').innerHTML = sizesHtml('var(--bitumen)');
+  document.getElementById('silhouette').innerHTML = [16, 24, 64, 128].map(s => `<figure>${mono(s, 'color:#000')}<figcaption>${s} px</figcaption></figure>`).join('');
+  document.getElementById('tokens').innerHTML = [['stone', '#E8E2D6'], ['chalk', '#FAF7F1'], ['bitumen', '#262626'], ['copper', '#805236'], ['sage', '#6E7A64'], ['signal', '#B8321F'], ['bronze, mark on dark', '#B08D57']].map(([n, h]) => `<div class="tok"><i style="background:${h}"></i><span>${n}<br>${h}</span></div>`).join('');
+</script>
+</body>
+</html>

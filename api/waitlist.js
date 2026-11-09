@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 async function sendConfirmationEmail(email, name) {
-  if (!process.env.RESEND_API_KEY) { console.error('RESEND_API_KEY not set — skipping email'); return; }
+  if (!process.env.RESEND_API_KEY) { console.error('RESEND_API_KEY not set: skipping email'); return; }
   const first = name ? name.trim().split(' ')[0] : 'there';
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#0C0D10;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
@@ -26,7 +26,7 @@ async function sendConfirmationEmail(email, name) {
     <p style="margin:0 0 16px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(237,232,223,0.3);">What to expect</p>
     <table cellpadding="0" cellspacing="0" width="100%">
       <tr><td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-        <p style="margin:0;font-size:13px;color:#EDE8DF;">Early access — before anyone else</p>
+        <p style="margin:0;font-size:13px;color:#EDE8DF;">Early access, before anyone else</p>
         <p style="margin:3px 0 0;font-size:11px;color:#72787F;">Before public launch · August 2026</p>
       </td></tr>
       <tr><td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
@@ -34,7 +34,7 @@ async function sendConfirmationEmail(email, name) {
         <p style="margin:3px 0 0;font-size:11px;color:#72787F;">Waitlist members only</p>
       </td></tr>
       <tr><td style="padding:10px 0;">
-        <p style="margin:0;font-size:13px;color:#EDE8DF;">Free shipping — waitlist members only</p>
+        <p style="margin:0;font-size:13px;color:#EDE8DF;">Free shipping for waitlist members</p>
         <p style="margin:3px 0 0;font-size:11px;color:#72787F;">No minimum order · Your exclusive perk</p>
       </td></tr>
     </table>
@@ -60,7 +60,7 @@ async function sendConfirmationEmail(email, name) {
       body: JSON.stringify({
         from: 'Altara <hello@altaradesign.com>',
         to: email,
-        subject: "You're on the list — Altara launches August 2026",
+        subject: "You're on the list. Altara launches August 2026",
         html,
       }),
     });

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comoto Club. Premium motorcycle hire</title>
+<meta name="description" content="Nine premium motorcycles, serviced every 5,000 km. Day rates, bond, excess and licence rules on the page, not behind a form.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+
+  <section class="hero hero--rides" id="hero" aria-labelledby="hero-h">
+    <div class="hero__media" id="hero-media" aria-hidden="true"></div>
+    <div class="wrap hero__top">
+      <div class="hero__copy" id="hero-copy" aria-live="polite">
+        <div class="enter hero__kicker"><span id="hero-mark" style="display:inline-flex;color:var(--bronze)"></span><span id="hero-kicker"></span></div>
+        <h1 class="display enter" id="hero-h"></h1>
+        <p class="hero__fact enter" id="hero-fact"></p>
+        <div class="enter hero__actions"><a class="btn btn--light" id="hero-cta" href="fleet.html"></a></div>
+      </div>
+      <div class="rides" role="tablist" aria-label="Choose a ride" id="rides"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <form class="book-bar" id="strip" action="fleet.html" method="get" aria-labelledby="book-h">
+      <div class="book-bar__fields">
+        <div class="field">
+          <label for="s-from">Pickup</label>
+          <input id="s-from" name="from" type="date" required>
+        </div>
+        <div class="field">
+          <label for="s-to">Return</label>
+          <input id="s-to" name="to" type="date" required>
+        </div>
+        <div class="field">
+          <label for="s-cls">Class</label>
+          <select id="s-cls" name="cls">
+            <option value="">Any class</option>
+            <option value="adventure">Adventure</option>
+            <option value="naked">Naked</option>
+            <option value="touring">Touring</option>
+            <option value="sport">Sport</option>
+            <option value="classic">Classic</option>
+          </select>
+        </div>
+        <div class="book-bar__go"><button class="btn btn--primary btn--wide" type="submit"><span id="book-h">Check availability</span></button></div>
+      </div>
+      <dl class="book-bar__facts" id="book-facts"></dl>
+    </form>
+  </div>
+
+  <section class="band grain" aria-label="The fleet in figures">
+    <div class="wrap" style="padding-block:56px">
+      <div class="figures" id="figures"></div>
+    </div>
+  </section>
+
+  <section class="section section--2" aria-labelledby="feat-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2" id="feat-h">Newest in the fleet</h2>
+        <p class="lede">The 2026 Honda CBR650R, with 1,000 km on the clock and its first service done. The easiest sport bike in the fleet to ride, and the one for the coast road.</p>
+      </div>
+      <div class="feature" id="feature"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fleet-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:end;max-width:none;gap:24px;flex-wrap:wrap">
+        <h2 class="h2" id="fleet-h">The fleet</h2>
+        <a class="btn btn--ghost" href="fleet.html">Filter the fleet</a>
+      </div>
+      <div class="scroller" id="home-fleet"></div>
+    </div>
+  </section>
+
+  <section class="band photo-band" aria-label="Statement" id="dusk-band">
+    <div class="wrap" style="padding-block:var(--s-3) var(--s-2)">
+      <hr class="hairline hairline--double">
+      <p class="statement" style="margin:48px 0;max-width:22ch">Not a rental counter. A small fleet, kept properly, for the ride you would not otherwise get to take.</p>
+      <div class="grid" style="row-gap:24px">
+        <p class="main muted measure statement__body">Most riders who can afford a good machine cannot justify owning one they use twelve times a year, and most hire fleets are old, heavy and tired. So the fleet here is small, new, and turned over before it is three years old. Nothing goes out to a dealer. Nothing lives outdoors.</p>
+        <p class="rail statement__cta"><a class="btn btn--light" href="about.html">About Comoto</a></p>
+      </div>
+      <hr class="hairline" style="margin-top:48px">
+    </div>
+  </section>
+
+  <section class="section section--2" aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2" id="how-h">How booking works</h2>
+        <p class="lede">Nothing is charged until you hold. Eligibility is checked at step two, not at the counter.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Hold your dates</h3><p>Pick a machine and dates. Held dates are yours for 24 hours while you finish the rest.</p></li>
+        <li><h3>Send your licence</h3><p>Front and back, uploaded once. A person checks it against the card at pickup, and the file is deleted 30 days after you return.</p></li>
+        <li><h3>Choose your cover</h3><p>Standard excess or reduced. Pillion, comms, delivery. The total updates as you go, GST included, no line hidden.</p></li>
+        <li><h3>Collect and ride</h3><p>The bike is fuelled, inspected against a 20 item checklist and waiting. Sign, photograph the odometer together, ride.</p></li>
+      </ol>
+      <p style="margin-top:40px"><a class="btn btn--primary" href="book.html">Start a booking</a></p>
+    </div>
+  </section>
+
+  <section class="band grain section section--2" aria-labelledby="garage-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="grid" style="padding-top:var(--s-2)">
+        <div class="main stack">
+          <h2 class="h2" id="garage-h">Maintenance</h2>
+          <p class="lede">One mechanic looks after all nine machines. Nothing is sent out to a dealer.</p>
+          <p>Every machine is serviced at 5,000 km or six months, whichever arrives first, by <span id="garage-mech"></span>, who also signs the pre-hire checklist before a key leaves the building. Tyres come off at 3 mm of centre tread, not at the legal 1.5 mm, because a hire bike gets ridden in weather the owner would have stayed home for. Brake pads are measured with a gauge at every return and the depth is written into the logbook you can read on each machine's page. Chains are cleaned and adjusted after every hire, not every service. Oil is changed on the interval regardless of how clean it looks.</p>
+          <p>The pre-hire inspection is the same 20 checks every time, signed and photographed. It takes about 40 minutes. You are welcome to watch.</p>
+        </div>
+        <aside class="rail">
+          <dl class="ledger" id="garage-ledger" style="margin-top:8px"></dl>
+        </aside>
+      </div>
+      <div class="filmstrip filmstrip--4" style="margin-top:64px" id="filmstrip"></div>
+      <div style="margin-top:64px">
+        <h3 class="h3" style="margin-bottom:8px">Before every hire</h3>
+        <p class="muted" style="margin-bottom:20px;max-width:60ch">Twenty checks, about 40 minutes, signed off before the key is handed over. The ones that matter most to you:</p>
+        <ul class="checklist checklist--short" id="checklist"></ul>
+        <details class="more" id="checklist-more"><summary>All 20 checks</summary><ol class="checklist" id="checklist-all"></ol></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--2" aria-labelledby="routes-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2" id="routes-h">Four roads</h2>
+        <p class="lede">Real New South Wales roads, measured as round trips from the Sydney CBD, with fuel stops, a coffee stop and notes on the season. Each has a GPX file.</p>
+      </div>
+      <div id="routes"></div>
+      <p style="margin-top:40px"><a class="btn btn--ghost" href="routes.html">Read the full route notes</a></p>
+    </div>
+  </section>
+
+  <section class="band grain" aria-labelledby="member-h">
+    <div class="wrap" style="padding-block:var(--s-2)">
+      <div class="member-band">
+        <div class="stack">
+          <h2 class="h2" id="member-h">Membership</h2>
+          <p class="statement" style="font-size:clamp(1.5rem,2.6vw,2.25rem)">Book any machine, any date, a year out. Bond waived.</p>
+          <p class="muted measure">Day hire needs no membership. Membership buys a longer booking window, included days, a smaller bond and, at the top tier, a key to the garage.</p>
+          <p><a class="btn btn--light" href="membership.html">Compare the tiers</a></p>
+        </div>
+        <div class="tiers-mini" id="tiers-mini"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="riders-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="main stack">
+          <h2 class="h2" id="riders-h">Reviews</h2>
+          <p class="measure">No reviews are published yet. When they are, each will carry the rider's name, the date, the machine hired and the road ridden, with a link to where it was posted. We do not run anonymous five star blocks and we do not write our own.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--2" aria-labelledby="cost-h" id="costs" style="padding-top:0">
+    <div class="wrap">
+      <hr class="rule rule--strong">
+      <div class="grid" style="margin-top:56px">
+        <div class="main stack-lg">
+          <div class="section-head" style="margin-bottom:0">
+            <h2 class="h2" id="cost-h">What it costs</h2>
+            <p class="lede">Every charge, on one table. Prices in AUD with GST included.</p>
+          </div>
+          <div id="price-table"></div>
+          <div>
+            <h3 class="h3" style="margin-bottom:16px">If you cancel</h3>
+            <div id="cancel-table"></div>
+          </div>
+        </div>
+        <aside class="rail rail--sticky">
+          <div class="panel panel--dark">
+            <h3 class="h3">Who can hire</h3>
+            <div id="elig-table"></div>
+            <p class="note">Insurance is underwritten by <span id="insurer"></span>. Cover, exclusions and excess are set out in plain English on the <a href="policies.html#insurance">policies page</a>.</p>
+            <a class="btn btn--primary btn--wide" href="book.html">Check availability</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, fleet, bySlug, machineTile, money, num, pricing, eligibility, business, routes, routeMapSvg, priceTable, cancellationTable, eligibilityList, tbc, esc, MONOGRAM, todayIso, iso, addDays, TODAY, photoFor, photoSrcset, photoAlt, classes, nextFree, fmtShort, imagery, pic } from './app.js';
+  import { checklist, tiers, rides } from './fixtures.js';
+
+  mountChrome({ active: '', dark: true, bar: true });
+
+  const hero = document.getElementById('hero');
+  document.getElementById('hero-mark').innerHTML = MONOGRAM.replace('width="32" height="32"', 'width="28" height="28"');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Three rides. One image each, crossfade on change, a slow drift while active.
+  const media = document.getElementById('hero-media');
+  media.innerHTML = rides.map((r, i) => `<div class="ride-img${i === 0 ? ' is-on' : ''}" data-ride="${r.key}">${pic(r.image, { sizes: '100vw', w: 2400, priority: i === 0, lazy: false })}</div><div class="hero__scrim"></div>`).join('');
+  const tabs = document.getElementById('rides');
+  tabs.innerHTML = rides.map((r, i) => `<button type="button" role="tab" id="tab-${r.key}" aria-selected="${i === 0}" aria-controls="hero-copy" data-i="${i}"><span class="rides__bar"><i></i></span><span class="rides__label">${r.label}</span><span class="rides__sub">${esc(bySlug(r.machine).make)} ${esc(bySlug(r.machine).model)}</span></button>`).join('');
+  let current = 0, timer = null;
+  const DWELL = 7000;
+  function showRide(i, { user = false } = {}) {
+    current = i; const r = rides[i]; const m = bySlug(r.machine);
+    media.querySelectorAll('.ride-img').forEach((el, j) => el.classList.toggle('is-on', j === i));
+    tabs.querySelectorAll('[role=tab]').forEach((t, j) => { t.setAttribute('aria-selected', String(j === i)); t.classList.toggle('is-on', j === i); if (j === i) { t.style.setProperty('--dwell', reduce ? '0ms' : DWELL + 'ms'); } });
+    const copy = document.getElementById('hero-copy');
+    copy.classList.remove('is-ready'); void copy.offsetWidth;
+    document.getElementById('hero-kicker').textContent = r.kicker;
+    document.getElementById('hero-h').textContent = r.headline;
+    document.getElementById('hero-fact').textContent = `${m.year} ${m.make} ${m.model}, from ${money(m.rate)} a day, GST included. Bond held, not charged.`;
+    const cta = document.getElementById('hero-cta'); cta.textContent = `Hold the ${m.model}`; cta.href = `machine.html?m=${m.slug}`;
+    document.getElementById('s-cls').value = r.cls;
+    requestAnimationFrame(() => copy.classList.add('is-ready'));
+    if (!reduce) { clearTimeout(timer); timer = setTimeout(() => showRide((current + 1) % rides.length), DWELL); }
+  }
+  tabs.addEventListener('click', e => { const t = e.target.closest('[role=tab]'); if (t) showRide(Number(t.dataset.i), { user: true }); });
+  tabs.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const n = (current + (e.key === 'ArrowRight' ? 1 : -1) + rides.length) % rides.length; showRide(n); tabs.querySelectorAll('[role=tab]')[n].focus(); } });
+  hero.addEventListener('pointerenter', () => clearTimeout(timer));
+  hero.addEventListener('pointerleave', () => { if (!reduce) { clearTimeout(timer); timer = setTimeout(() => showRide((current + 1) % rides.length), DWELL); } });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else if (!reduce) showRide(current); });
+  requestAnimationFrame(() => requestAnimationFrame(() => { hero.classList.add('is-ready'); showRide(0); }));
+
+  // Booking card
+  const sat = addDays(TODAY, (6 - TODAY.getDay() + 7) % 7 || 7);
+  const f = document.getElementById('s-from'), t = document.getElementById('s-to');
+  f.min = todayIso(); f.value = iso(sat); t.min = f.value; t.value = iso(addDays(sat, 1));
+  f.addEventListener('change', () => { t.min = f.value; if (t.value < f.value) t.value = f.value; });
+  document.getElementById('book-facts').innerHTML = [
+    ['Day rates', `${money(pricing.rateRange[0])} to ${money(pricing.rateRange[1])}, GST included`],
+    ['Bond', `${money(pricing.bond)}, held not charged`],
+    ['Excess', `${money(pricing.excessStandard)}, or ${money(pricing.excessReduced)} reduced`],
+    ['Included', `${num(pricing.kmPerDay)} km a day`],
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+
+  // Figures
+  document.getElementById('figures').innerHTML = [
+    [String(business.fleetCount), 'machines, none older than two years'],
+    [`${num(business.serviceIntervalKm)} km`, 'service interval, or six months'],
+    [`${business.tyreThresholdMm} mm`, 'tread depth at which tyres are replaced'],
+    ['20', 'checks signed off before every hire'],
+    ['300 km', 'included every day, then $0.55 a km'],
+  ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
+
+  // Featured machine
+  const fm = bySlug('cbr650r');
+  const nf = nextFree(fm);
+  document.getElementById('feature').innerHTML = `
+    <a class="photo photo--scrim" href="machine.html?m=${fm.slug}" aria-label="${fm.make} ${fm.model}">
+      ${pic(fm.environment || fm.photo, { sizes: '(min-width: 1024px) 58vw, 100vw', w: 1400 })}
+      <p class="cap"><span>${fm.year} ${fm.make} ${fm.model}${fm.colour ? `, ${fm.colour}` : ''}</span><span>${(fm.environment || fm.photo).where}</span></p>
+    </a>
+    <div class="stack-lg">
+      <h3 class="feature__name">${fm.make} ${fm.model}<small>${fm.year}. ${num(fm.cc)} cc inline four. ${fm.kw} kW. ${fm.nm} Nm. ${num(fm.kg)} kg. ${num(fm.seatMm)} mm seat.</small></h3>
+      <p class="measure">${esc(fm.fit)}</p>
+      <dl class="spec" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div><dt>Front end</dt><dd>${esc(fm.suspension || '')}</dd></div>
+        <div><dt>Brakes</dt><dd>${esc(fm.brakes || '')}</dd></div>
+        <div><dt>Rider aids</dt><dd>${esc(fm.abs)}</dd></div>
+        <div><dt>Dash</dt><dd>${esc(fm.dash || '')}</dd></div>
+      </dl>
+      <div class="feature__rate"><b>${money(fm.rate)}</b><span>a day, GST included. ${iso(nf) === iso(TODAY) ? 'Free from today.' : `Next free ${fmtShort(nf)}.`}</span></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--primary" href="machine.html?m=${fm.slug}">See the logbook and hold dates</a>
+        <a class="btn btn--ghost" href="fleet.html?cls=sport">Other sport machines</a>
+      </div>
+    </div>`;
+
+  document.getElementById('home-fleet').innerHTML = fleet.map(m => machineTile(m)).join('');
+
+  document.getElementById('garage-mech').innerHTML = tbc(business.headMechanic);
+  document.getElementById('garage-ledger').innerHTML = [
+    ['Service interval', `${num(business.serviceIntervalKm)} km`, 'or six months'],
+    ['Tyre change', `${business.tyreThresholdMm} mm`, 'legal minimum is 1.5 mm'],
+    ['Chain', 'every hire', 'cleaned and adjusted'],
+    ['Brake pads', 'every return', 'measured with a gauge'],
+    ['Signed by', tbc(business.headMechanic), 'on every checklist'],
+  ].map(([k, v, w]) => `<div><dt>${k}</dt><dd>${v}</dd><dd class="when">${w}</dd></div>`).join('');
+
+
+  const key = ['Tyre pressures set cold to the placard', `Tyre tread measured, minimum 3 mm across the centre`, 'Front brake pad depth measured and recorded', 'Chain tension and lubrication, or belt and final drive checked', 'Fuel tank full, odometer photographed', 'Cosmetic condition photographed against the last set'];
+  document.getElementById('checklist').innerHTML = key.map(c => `<li>${c}</li>`).join('');
+  document.getElementById('checklist-all').innerHTML = checklist.map(c => `<li>${c}</li>`).join('');
+  document.getElementById('filmstrip').innerHTML = imagery.details.map(d => `<figure class="photo photo--scrim">${pic({ ...d, w: 1600, h: 2000 }, { sizes: '(min-width: 768px) 25vw, 50vw', w: 800 })}<figcaption class="cap"><span>${d.cap}</span></figcaption></figure>`).join('');
+  document.getElementById('dusk-band').insertAdjacentHTML('afterbegin', `<div class="photo-band__media">${pic(imagery.dusk, { sizes: '100vw', w: 2400 })}</div>`);
+
+  document.getElementById('routes').innerHTML = routes.map(r => `
+    <article class="route-row" id="${r.slug}">
+      <a class="photo photo--scrim" href="routes.html#${r.slug}" aria-label="${r.name}">
+        ${pic({ ...r.photo, w: 2400, h: 1600 }, { sizes: '(min-width: 1024px) 40vw, 100vw', w: 1400 })}
+        <p class="cap"><span>${r.region}</span><span>${num(r.km)} km</span></p>
+      </a>
+      <div class="stack">
+        <h3 class="h3" style="font-size:1.75rem"><a href="routes.html#${r.slug}" style="text-decoration:none">${r.name}</a></h3>
+        <p class="muted">${esc(r.summary)}</p>
+        <p class="small muted">Coffee at ${esc(r.coffee)}. Fuel at ${r.fuel.join(' and ')}.</p>
+      </div>
+      <div>
+        <div class="map map--lg" aria-hidden="true">${routeMapSvg(r, { w: 300, h: 200, stroke: 1.8, labels: true })}</div>
+        <dl class="route-facts">
+          <dt>Distance</dt><dd>${num(r.km)} km</dd>
+          <dt>Ride time</dt><dd>${r.time}</dd>
+          <dt>Surface</dt><dd>${r.surface}</dd>
+          <dt>Difficulty</dt><dd>${r.difficulty}</dd>
+        </dl>
+      </div>
+    </article>`).join('');
+
+  document.getElementById('tiers-mini').innerHTML = tiers.map(t => `
+    <a href="membership.html#t-${t.slug}">
+      <span class="tname">${t.name}<small>${t.includedDays ? `${t.includedDays} included days. ` : ''}${t.priorityDays >= 365 ? 'Any date.' : `Book ${t.priorityDays} days ahead.`} ${t.bond ? `Bond ${money(t.bond)}.` : 'Bond waived.'}</small></span>
+      <span class="tfee">${t.annual ? `${money(t.annual)} a year` : 'No fee'}</span>
+    </a>`).join('');
+
+  document.getElementById('price-table').innerHTML = priceTable();
+  document.getElementById('cancel-table').innerHTML = cancellationTable();
+  document.getElementById('elig-table').innerHTML = eligibilityList();
+  document.getElementById('insurer').innerHTML = tbc(business.insurer);
+
+  const ld = {
+    '@context': 'https://schema.org', '@type': 'LocalBusiness', name: 'Comoto Club',
+    description: 'Premium motorcycle hire and garage membership.',
+    areaServed: business.regions, priceRange: `${money(pricing.rateRange[0])} to ${money(pricing.rateRange[1])} per day`,
+    email: business.email, currenciesAccepted: 'AUD', paymentAccepted: 'Credit card, debit card',
+  };
+  const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+</script>
+</body>
+</html>

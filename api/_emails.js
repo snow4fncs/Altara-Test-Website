@@ -63,13 +63,13 @@ export function reviewRequestEmailHtml({ first, ref }) {
     eyebrow: 'A small favour',
     heading: `How's it<br>holding up?`,
     blocks:
-      para(`Hi ${esc(first)} &mdash; your Altara cover should have had a few days in the car by now.`)
+      para(`Hi ${esc(first)}, your Altara cover should have had a few days in the car by now.`)
       + para(`We're a new brand, so an honest review genuinely matters more than you'd think. Critical ones are welcome too: we publish those as readily as the good ones, because a page of nothing but five stars helps nobody decide.`)
-      + para(`It takes about a minute, and only verified customers can write one &mdash; so yours carries weight. Add a photo of the fit and we'll email you a <strong style="color:#EDE8DF">$10 credit</strong> (code PHOTO10 at checkout) as a thank-you.`)
+      + para(`It takes about a minute, and only verified customers can write one, so yours carries weight. Add a photo of the fit and we'll email you a <strong style="color:#EDE8DF">$10 credit</strong> (code PHOTO10 at checkout) as a thank-you.`)
       + rule()
       + row('Your order', esc(ref)),
     cta: { href: `${SITE}/review.html`, label: 'Write your review',
-           note: 'Not feeling it? Reply and tell us what went wrong instead &mdash; that helps just as much.' },
+           note: 'Not feeling it? Reply and tell us what went wrong instead. That helps just as much.' },
   });
 }
 
@@ -79,7 +79,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency, preorderShips
     eyebrow: 'Still in your cart',
     heading: `You left<br>something.`,
     blocks:
-      para(`Your cart is still saved &mdash; picking up where you left off takes one click, no re-entering anything.`)
+      para(`Your cart is still saved. Picking up where you left off takes one click, no re-entering anything.`)
       + (preorderShips
         ? para(`Midnight Black is a pre-order from the batch landing <strong style="color:${CREAM}">${preorderShips}</strong>. Reserving now holds your set, we email tracking the day it ships, and you can have a full refund any time before it leaves.`)
         : para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`))
@@ -87,7 +87,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency, preorderShips
       + rule()
       + (amount ? row('Your cart', money(amount) + ' ' + String(currency || 'AUD').toUpperCase()) : ''),
     cta: { href: recoveryUrl, label: 'Return to checkout',
-           note: '60-day fit guarantee on Twin Sets. Secure checkout. If you changed your mind, no hard feelings &mdash; reply and tell us why and we\'ll take it on board.' },
+           note: '60-day fit guarantee on Twin Sets. Secure checkout. If you changed your mind, no hard feelings. Reply and tell us why and we\'ll take it on board.' },
   });
 }
 
@@ -97,9 +97,9 @@ export function repeatOfferEmailHtml({ first, code = '', discountLabel = '' }) {
     eyebrow: 'Round two',
     heading: `Ready for<br>a second pair?`,
     blocks:
-      para(`Hi ${esc(first)} &mdash; most people start with one pair and come back for another once they see how much mess it catches &mdash; a spare for wash day, or covers for the other car.`)
+      para(`Hi ${esc(first)}, most people start with one pair and come back for another once they see how much mess it catches: a spare for wash day, or covers for the other car.`)
       + para(`Any two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, mix or match: one Midnight Black and one Contrast White qualifies just the same.`)
-      + (code ? rule() + row('Your code', esc(code) + (discountLabel ? ' &mdash; ' + esc(discountLabel) : '')) : ''),
+      + (code ? rule() + row('Your code', esc(code) + (discountLabel ? ' (' + esc(discountLabel) + ')' : '')) : ''),
     cta: { href: `${SITE}/collection.html`, label: 'Shop the collection',
            note: 'Free shipping on orders over $80.' },
   });

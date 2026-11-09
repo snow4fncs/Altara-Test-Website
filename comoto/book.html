@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hold dates. Comoto Club</title>
+<meta name="description" content="Four steps: dates and machine, rider details, cover and extras, review and hold. The running total is visible throughout.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0,0;1,9..144,400..700,0,0&family=Archivo:wdth,wght@75..112,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head" style="padding-bottom:24px">
+      <h1 class="h1" id="step-title">Dates and machine</h1>
+      <ol class="progress" id="progress" aria-label="Booking steps">
+        <li aria-current="step"><span>Dates and machine</span></li>
+        <li><span>Rider details</span></li>
+        <li><span>Cover and extras</span></li>
+        <li><span>Review and hold</span></li>
+      </ol>
+    </div>
+
+    <div class="grid" style="padding-bottom:var(--s-2)">
+      <div class="main">
+        <div id="step-alert" hidden></div>
+        <form id="step" class="form-grid" novalidate style="margin-top:16px"></form>
+      </div>
+
+      <aside class="rail rail--sticky" aria-label="Your booking so far">
+        <div class="panel panel--dark">
+          <div id="rail-machine"></div>
+          <div>
+            <p class="muted small">Dates</p>
+            <p id="rail-dates" class="rail-dates"></p>
+          </div>
+          <div id="rail-quote" aria-live="polite" aria-atomic="true"></div>
+          <p class="note" id="rail-note"></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module">
+  import { mountChrome, fleet, bySlug, classes, photoFor, money, moneyCents, num, fmtDate, esc, quote, priceLinesHtml, mountCalendar, cancellationTable, qs, qsFrom, pricing, business, eligibility, tbc, addDays, TODAY, iso, rangeFree, daysBetween } from './app.js';
+  mountChrome({ active: '' });
+
+  const q = qs();
+  // All state lives here, in memory. Back navigation keeps it.
+  const S = {
+    step: 1,
+    m: q.m || '', from: q.from || '', to: q.to || '', pickupTime: '07:00', returnTime: '17:00', delivery: false, address: '',
+    name: '', email: '', phone: '', dob: '', licenceNo: '', licenceExpiry: '', yearsHeld: '', country: 'Australia', front: '', back: '',
+    er: q.er === '1', pillion: false, comms: false, extraKm: 0,
+    agree: false, card: '', cardName: '', cardExp: '', cardCvc: '',
+  };
+  const TITLES = ['Dates and machine', 'Rider details', 'Cover and extras', 'Review and hold'];
+  let stepEl = document.getElementById('step'); const alertEl = document.getElementById('step-alert');
+  let cal = null;
+
+  const machine = () => bySlug(S.m);
+  const getQuote = () => quote({ machine: machine(), from: S.from || iso(TODAY), to: S.to || S.from || iso(TODAY), excessReduction: S.er, delivery: S.delivery, pillion: S.pillion, comms: S.comms, extraKm: S.extraKm });
+
+  function renderRail() {
+    const m = machine();
+    document.getElementById('rail-machine').innerHTML = m
+      ? `<figure style="aspect-ratio:3/2;overflow:hidden;border-radius:var(--radius);margin-bottom:12px"><img src="${photoFor(m, 900, 600)}" width="900" height="600" alt="${esc(m.make + ' ' + m.model)}"></figure><p style="font-weight:500">${esc(m.make)} ${esc(m.model)}</p><p class="small muted">${m.year}. ${classes[m.cls]}. ${money(m.rate)} a day.</p>`
+      : `<p class="muted">No machine chosen yet.</p>`;
+    document.getElementById('rail-dates').textContent = S.from && S.to ? `${fmtDate(S.from)} ${S.pickupTime} to ${fmtDate(S.to)} ${S.returnTime}` : S.from ? `${fmtDate(S.from)}, pick a return day` : 'Not chosen yet';
+    document.getElementById('rail-quote').innerHTML = m && S.from ? priceLinesHtml(getQuote()) : `<p class="small muted">The total appears here as soon as a machine and dates are chosen. Day rates run ${money(pricing.rateRange[0])} to ${money(pricing.rateRange[1])}.</p>`;
+    document.getElementById('rail-note').textContent = `Nothing is charged until step four. The bond of ${money(pricing.bond)} is held on your card at pickup, not charged, and released within five business days of return.`;
+  }
+
+  function renderProgress() {
+    document.getElementById('step-title').textContent = TITLES[S.step - 1];
+    document.title = `${TITLES[S.step - 1]}. Comoto Club`;
+    document.querySelectorAll('#progress li').forEach((li, i) => {
+      li.classList.toggle('is-done', i + 1 < S.step);
+      if (i + 1 === S.step) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+    history.replaceState(null, '', `#step-${S.step}`);
+    alertEl.hidden = true;
+  }
+
+  const fld = (id, label, input, note = '') => `<div class="field field--boxed" data-f="${id}"><label for="${id}">${label}</label>${input}${note ? `<p class="small muted">${note}</p>` : ''}</div>`;
+  const inp = (id, type = 'text', extra = '') => `<input id="${id}" name="${id}" type="${type}" value="${esc(S[id] ?? '')}" ${extra}>`;
+
+  function renderStep() {
+    renderProgress();
+    let html = '';
+    if (S.step === 1) {
+      html = `
+        <fieldset>
+          <legend>Machine</legend>
+          <div class="chips" id="m-chips">
+            ${fleet.map(m => `<button type="button" class="chip" data-m="${m.slug}" aria-pressed="${S.m === m.slug}">${esc(m.make)} ${esc(m.model)}</button>`).join('')}
+          </div>
+          <p class="small muted" id="m-avail" style="margin-top:12px"></p>
+        </fieldset>
+        <fieldset>
+          <legend>Dates</legend>
+          <div id="calendar" style="max-width:520px"></div>
+        </fieldset>
+        <div class="form-grid form-grid--2">
+          ${fld('pickupTime', 'Pickup time', `<select id="pickupTime" name="pickupTime">${['07:00', '07:30', '08:00', '09:00', '10:00', '12:00', '15:00'].map(t => `<option ${S.pickupTime === t ? 'selected' : ''}>${t}</option>`).join('')}</select>`, 'Pickup hours are confirmed with your booking.')}
+          ${fld('returnTime', 'Return time', `<select id="returnTime" name="returnTime">${['12:00', '15:00', '16:00', '17:00', '18:00', '19:00'].map(t => `<option ${S.returnTime === t ? 'selected' : ''}>${t}</option>`).join('')}</select>`, '30 minute grace, then the late fee applies.')}
+        </div>
+        <fieldset>
+          <legend>Collection</legend>
+          <label class="check"><input type="radio" name="collect" value="garage" ${!S.delivery ? 'checked' : ''}><span>Collect from the pickup point, ${tbc(business.address)}<br><span class="small muted">Free. The inspection is done with you, under cover, in good light.</span></span><span class="check__price">$0</span></label>
+          <label class="check"><input type="radio" name="collect" value="delivery" ${S.delivery ? 'checked' : ''}><span>Deliver to me, within ${pricing.deliveryFee.radiusKm} km of the pickup point<br><span class="small muted">Between 07:00 and 09:00. Inspected with you at the kerb. Indicative fee, to be confirmed.</span></span><span class="check__price">${money(pricing.deliveryFee.value)}</span></label>
+          <div id="addr" ${S.delivery ? '' : 'hidden'} style="margin-top:16px">${fld('address', 'Delivery address', inp('address', 'text', 'autocomplete="street-address"'))}</div>
+        </fieldset>
+        <div class="step-actions">
+          <span class="small muted">Step 1 of 4</span>
+          <button class="btn btn--primary" type="submit">Continue to rider details</button>
+        </div>`;
+    }
+    if (S.step === 2) {
+      html = `
+        <p class="measure muted">Eligibility is checked here so that nobody finds out at the counter. Riders must be ${eligibility.minAge} or over with a full open licence held ${eligibility.yearsHeld} years or more. ${esc(eligibility.lams)}</p>
+        <div class="form-grid form-grid--2">
+          ${fld('name', 'Full name, as on your licence', inp('name', 'text', 'autocomplete="name" required'))}
+          ${fld('dob', 'Date of birth', inp('dob', 'date', 'required'))}
+          ${fld('email', 'Email', inp('email', 'email', 'autocomplete="email" required'), 'The confirmation goes here.')}
+          ${fld('phone', 'Mobile', inp('phone', 'tel', 'autocomplete="tel" required'), 'Used on the day of the hire only.')}
+        </div>
+        <fieldset>
+          <legend>Licence</legend>
+          <div class="form-grid form-grid--2">
+            ${fld('country', 'Country of issue', `<select id="country" name="country">${['Australia', 'New Zealand', 'United Kingdom', 'United States', 'Other, in English', 'Other, not in English'].map(c => `<option ${S.country === c ? 'selected' : ''}>${c}</option>`).join('')}</select>`, S.country === 'Other, not in English' ? 'Bring an International Driving Permit as well as the licence.' : '')}
+            ${fld('licenceNo', 'Licence number', inp('licenceNo', 'text', 'required'))}
+            ${fld('licenceExpiry', 'Expiry date', inp('licenceExpiry', 'date', 'required'), 'Must be after your return date.')}
+            ${fld('yearsHeld', 'Years held at full open class', inp('yearsHeld', 'number', 'min="0" max="70" inputmode="numeric" required'))}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Licence photographs</legend>
+          <p class="note" style="margin-bottom:12px">The two images are uploaded over an encrypted connection to our booking system, checked by a person against the card at pickup, and deleted 30 days after your return. They are not used for anything else and are never shared.</p>
+          <div class="form-grid form-grid--2">
+            <div class="upload field" data-f="front"><label for="front">Front of licence</label><input id="front" name="front" type="file" accept="image/*,.pdf" required><p class="small muted">${S.front ? `Chosen: ${esc(S.front)}` : 'JPG, PNG, HEIC or PDF up to 10 MB.'}</p></div>
+            <div class="upload field" data-f="back"><label for="back">Back of licence</label><input id="back" name="back" type="file" accept="image/*,.pdf" required><p class="small muted">${S.back ? `Chosen: ${esc(S.back)}` : 'JPG, PNG, HEIC or PDF up to 10 MB.'}</p></div>
+          </div>
+        </fieldset>
+        <div class="step-actions">
+          <button class="btn btn--ghost" type="button" data-back>Back to dates</button>
+          <button class="btn btn--primary" type="submit">Continue to cover</button>
+        </div>`;
+    }
+    if (S.step === 3) {
+      const days = getQuote().days;
+      const single = ['panigale-v2', 'speed-triple-1200-rs'].includes(S.m);
+      html = `
+        <fieldset>
+          <legend>Excess</legend>
+          <label class="check"><input type="radio" name="er" value="0" ${!S.er ? 'checked' : ''}><span>Standard excess of ${money(pricing.excessStandard)}<br><span class="small muted">The most you pay if the machine is damaged.</span></span><span class="check__price">$0</span></label>
+          <label class="check"><input type="radio" name="er" value="1" ${S.er ? 'checked' : ''}><span>Reduce the excess to ${money(pricing.excessReduced)}<br><span class="small muted">${money(pricing.excessReductionPerDay)} a day. Most riders take this.</span></span><span class="check__price">${money(pricing.excessReductionPerDay * days)}</span></label>
+        </fieldset>
+        <fieldset>
+          <legend>Extras</legend>
+          <label class="check"><input type="checkbox" name="pillion" ${S.pillion ? 'checked' : ''} ${single ? 'disabled' : ''}><span>Pillion<br><span class="small muted">${single ? 'This machine is single seat as fitted.' : 'Second helmet included. Pillion cover per day.'}</span></span><span class="check__price">${money(pricing.pillionPerDay * days)}</span></label>
+          <label class="check"><input type="checkbox" name="comms" ${S.comms ? 'checked' : ''}><span>Helmet comms<br><span class="small muted">Paired headset, per hire.</span></span><span class="check__price">${money(pricing.commsPerHire)}</span></label>
+          <label class="check"><input type="checkbox" name="luggage" checked disabled><span>Luggage as fitted<br><span class="small muted">${esc(machine()?.luggage || '')}</span></span><span class="check__price">Included</span></label>
+        </fieldset>
+        <fieldset>
+          <legend>Kilometres</legend>
+          <p class="small muted" style="margin-bottom:12px">${num(pricing.kmPerDay)} km a day is included, ${num(pricing.kmPerDay * days)} km for these dates. You can add more now at ${moneyCents(pricing.kmOverage)} a km, or settle it on return at the same rate. There is no penalty either way.</p>
+          ${fld('extraKm', 'Extra kilometres now', `<select id="extraKm" name="extraKm">${[0, 100, 200, 300, 500].map(k => `<option value="${k}" ${S.extraKm === k ? 'selected' : ''}>${k ? `${num(k)} km, ${money(Math.round(k * pricing.kmOverage))}` : 'None now'}</option>`).join('')}</select>`)}
+        </fieldset>
+        <div class="step-actions">
+          <button class="btn btn--ghost" type="button" data-back>Back to rider details</button>
+          <button class="btn btn--primary" type="submit">Continue to review</button>
+        </div>`;
+    }
+    if (S.step === 4) {
+      const m = machine(), qt = getQuote();
+      html = `
+        <section class="stack">
+          <h2 class="h3">Your booking</h2>
+          <table class="tbl tbl--tight">
+            <tbody>
+              <tr><th scope="row">Machine</th><td>${m.year} ${esc(m.make)} ${esc(m.model)}</td><td class="r"><button type="button" class="link" data-go="1">Change</button></td></tr>
+              <tr><th scope="row">Pickup</th><td>${fmtDate(S.from)} at ${S.pickupTime}, ${S.delivery ? `delivered to ${esc(S.address)}` : 'from the garage'}</td><td class="r"><button type="button" class="link" data-go="1">Change</button></td></tr>
+              <tr><th scope="row">Return</th><td>${fmtDate(S.to)} by ${S.returnTime}</td><td class="r"><button type="button" class="link" data-go="1">Change</button></td></tr>
+              <tr><th scope="row">Rider</th><td>${esc(S.name)}, licence ${esc(S.country)}, expires ${fmtDate(S.licenceExpiry)}</td><td class="r"><button type="button" class="link" data-go="2">Change</button></td></tr>
+              <tr><th scope="row">Cover</th><td>${S.er ? `Reduced excess, ${money(pricing.excessReduced)}` : `Standard excess, ${money(pricing.excessStandard)}`}${S.pillion ? '. Pillion' : ''}${S.comms ? '. Comms' : ''}${S.extraKm ? `. ${num(S.extraKm)} extra km` : ''}</td><td class="r"><button type="button" class="link" data-go="3">Change</button></td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="stack">
+          <h2 class="h3">Price</h2>
+          <table class="tbl tbl--tight">
+            <tbody>${qt.lines.map(l => `<tr><td>${esc(l.label)}</td><td class="r">${money(l.amount)}</td></tr>`).join('')}</tbody>
+            <tfoot><tr><td>Total, GST of ${moneyCents(qt.gst)} included</td><td class="r">${money(qt.total)}</td></tr></tfoot>
+          </table>
+          <p class="small muted">Plus a bond of ${money(qt.bond)}, held on your card at pickup, not charged, released within five business days of return. Your excess if the machine is damaged is ${money(qt.excess)}.</p>
+        </section>
+        <section class="stack">
+          <h2 class="h3">If you cancel</h2>
+          ${cancellationTable(S.from)}
+        </section>
+        <fieldset>
+          <legend>Card</legend>
+          <p class="note" style="margin-bottom:12px">Payment is processed by ${esc(business.paymentProcessor)}. Card details go to ${esc(business.paymentProcessor)} directly and never touch our systems. Holding these dates charges the total of ${money(qt.total)} now. The bond is authorised separately at pickup.</p>
+          <div class="form-grid form-grid--2">
+            ${fld('cardName', 'Name on card', inp('cardName', 'text', 'autocomplete="cc-name" required'))}
+            ${fld('card', 'Card number', inp('card', 'text', 'inputmode="numeric" autocomplete="cc-number" required placeholder="0000 0000 0000 0000"'))}
+            ${fld('cardExp', 'Expiry', inp('cardExp', 'text', 'inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" required'))}
+            ${fld('cardCvc', 'Security code', inp('cardCvc', 'text', 'inputmode="numeric" autocomplete="cc-csc" required'))}
+          </div>
+          <p class="small muted">Preview build: no card is charged. A number ending in 0000 shows the declined state.</p>
+        </fieldset>
+        <div class="field" data-f="agree">
+          <label class="check"><input type="checkbox" name="agree" ${S.agree ? 'checked' : ''} required><span>I have read the <a href="policies.html" target="_blank" rel="noopener">policies</a>, I am ${eligibility.minAge} or over, and I have held a full open licence for ${eligibility.yearsHeld} years or more.</span></label>
+        </div>
+        <div class="step-actions">
+          <button class="btn btn--ghost" type="button" data-back>Back to cover</button>
+          <button class="btn btn--primary" type="submit">Hold these dates</button>
+        </div>`;
+    }
+    const fresh = stepEl.cloneNode(false); stepEl.replaceWith(fresh); stepEl = fresh;
+    stepEl.innerHTML = html;
+    stepEl.addEventListener('submit', onSubmit);
+    bindStep();
+    renderRail();
+    window.scrollTo({ top: 0 });
+  }
+
+  function bindStep() {
+    if (S.step === 1) {
+      const chips = document.getElementById('m-chips');
+      chips.addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; S.m = b.dataset.m; chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === b))); mountCal(); renderRail(); });
+      document.getElementById('pickupTime').addEventListener('change', e => { S.pickupTime = e.target.value; renderRail(); });
+      document.getElementById('returnTime').addEventListener('change', e => { S.returnTime = e.target.value; renderRail(); });
+      stepEl.querySelectorAll('input[name="collect"]').forEach(r => r.addEventListener('change', e => { S.delivery = e.target.value === 'delivery'; document.getElementById('addr').hidden = !S.delivery; renderRail(); }));
+      stepEl.addEventListener('input', e => { if (e.target.id === 'address') S.address = e.target.value; });
+      mountCal();
+    }
+    if (S.step === 2) {
+      stepEl.addEventListener('input', e => { const k = e.target.name; if (k in S && e.target.type !== 'file') S[k] = e.target.value; if (k === 'country') renderStep(); });
+      stepEl.addEventListener('change', e => { if (e.target.type === 'file') { S[e.target.name] = e.target.files[0]?.name || ''; e.target.closest('.upload').querySelector('p').textContent = S[e.target.name] ? `Chosen: ${S[e.target.name]}` : 'JPG, PNG, HEIC or PDF up to 10 MB.'; } });
+    }
+    if (S.step === 3) {
+      stepEl.addEventListener('change', e => {
+        if (e.target.name === 'er') S.er = e.target.value === '1';
+        if (e.target.name === 'pillion') S.pillion = e.target.checked;
+        if (e.target.name === 'comms') S.comms = e.target.checked;
+        if (e.target.name === 'extraKm') S.extraKm = Number(e.target.value);
+        renderRail();
+      });
+    }
+    if (S.step === 4) {
+      stepEl.addEventListener('input', e => { const k = e.target.name; if (k in S && e.target.type !== 'checkbox') S[k] = e.target.value; });
+      stepEl.addEventListener('change', e => { if (e.target.name === 'agree') S.agree = e.target.checked; });
+      stepEl.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { S.step = Number(b.dataset.go); renderStep(); }));
+    }
+    stepEl.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => { S.step -= 1; renderStep(); }));
+  }
+
+  function mountCal() {
+    const el = document.getElementById('calendar'); if (!el) return;
+    const m = machine();
+    const avail = document.getElementById('m-avail');
+    avail.textContent = m ? `${m.make} ${m.model}. Booked dates are struck through. ${m.fit}` : 'Choose a machine to see its booked dates.';
+    // If existing dates clash with the new machine, drop them.
+    if (m && S.from && S.to && !rangeFree(m, S.from, S.to)) { S.from = ''; S.to = ''; }
+    el.innerHTML = '';
+    cal = mountCalendar(el, { machine: m, from: S.from || null, to: S.to || null, onChange: sel => { S.from = sel.from || ''; S.to = sel.to || ''; renderRail(); } });
+  }
+
+  function fail(msg, fields = []) {
+    alertEl.hidden = false; alertEl.className = 'alert'; alertEl.innerHTML = msg;
+    stepEl.querySelectorAll('.field').forEach(f => { f.classList.remove('is-invalid'); f.querySelector('.error')?.remove(); });
+    fields.forEach(([id, text]) => { const f = stepEl.querySelector(`[data-f="${id}"]`); if (!f) return; f.classList.add('is-invalid'); const p = document.createElement('p'); p.className = 'error'; p.textContent = text; f.appendChild(p); });
+    alertEl.scrollIntoView({ block: 'start' });
+    return false;
+  }
+
+  function validate() {
+    if (S.step === 1) {
+      if (!S.m) return fail('<p>Choose a machine first. Every one of the nine is listed above.</p>');
+      if (!S.from || !S.to) return fail('<p>Pick a pickup day and a return day in the calendar. A one day hire is the same day for both.</p>');
+      if (!rangeFree(machine(), S.from, S.to)) return fail('<p>Those dates cross a day this machine is already out. Choose different dates, or a different machine.</p>');
+      if (S.delivery && !S.address.trim()) return fail('<p>Delivery needs an address.</p>', [['address', 'Where should the machine come to?']]);
+      return true;
+    }
+    if (S.step === 2) {
+      const errs = [];
+      if (!S.name.trim()) errs.push(['name', 'As printed on the licence.']);
+      if (!S.dob) errs.push(['dob', 'Needed to confirm you are 25 or over.']);
+      else { const age = Math.floor(daysBetween(S.dob, S.from || iso(TODAY)) / 365.25); if (age < eligibility.minAge) errs.push(['dob', `Riders must be ${eligibility.minAge} or over on the pickup date. This shows ${age}.`]); }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.email)) errs.push(['email', 'That does not look like an email address.']);
+      if (!S.phone.trim()) errs.push(['phone', 'Needed on the day.']);
+      if (!S.licenceNo.trim()) errs.push(['licenceNo', 'As printed on the licence.']);
+      if (!S.licenceExpiry) errs.push(['licenceExpiry', 'Needed.']);
+      else if (S.licenceExpiry <= (S.to || iso(TODAY))) errs.push(['licenceExpiry', 'The licence must be valid past your return date.']);
+      if (S.yearsHeld === '' || Number(S.yearsHeld) < eligibility.yearsHeld) errs.push(['yearsHeld', `A full open licence held ${eligibility.yearsHeld} years or more is required to hire.`]);
+      if (!S.front) errs.push(['front', 'Needed.']);
+      if (!S.back) errs.push(['back', 'Needed.']);
+      if (errs.length) {
+        const inel = errs.find(e => /must be|required to hire/.test(e[1]));
+        return fail(inel ? `<p>On what you have entered you are not eligible to hire under our licence rules. The rule is ${eligibility.minAge} or over, full open licence held ${eligibility.yearsHeld} years or more. If that is wrong, correct it below. If it is right, we are sorry, and we would rather tell you now than at the garage.</p>` : '<p>Some details are missing or do not match. Each one is marked below.</p>', errs);
+      }
+      return true;
+    }
+    if (S.step === 3) return true;
+    if (S.step === 4) {
+      const errs = [];
+      if (!S.cardName.trim()) errs.push(['cardName', 'Needed.']);
+      if (S.card.replace(/\s/g, '').length < 12) errs.push(['card', 'Enter the full card number.']);
+      if (!S.cardExp.trim()) errs.push(['cardExp', 'Needed.']);
+      if (!S.cardCvc.trim()) errs.push(['cardCvc', 'Needed.']);
+      if (!S.agree) errs.push(['agree', 'Tick to confirm.']);
+      if (errs.length) return fail('<p>A few things are needed before the dates can be held. Each is marked below.</p>', errs);
+      if (S.card.replace(/\s/g, '').endsWith('0000')) {
+        return fail(`<p>That card was declined by your bank. Nothing has been charged and your dates are still held for you for 24 hours.</p><p>Try another card, or call us on ${tbc(business.phone)} and we will hold the booking while you sort it out with the bank.</p>`, [['card', 'Declined by the issuing bank.']]);
+      }
+      return true;
+    }
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    if (!validate()) return;
+    if (S.step < 4) { S.step += 1; renderStep(); return; }
+    // Hold. In production this is the processor call; here we mint a reference and move on.
+    const ref = 'CC-' + iso(S.from).replace(/-/g, '').slice(2) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    const btn = stepEl.querySelector('button[type="submit"]'); btn.textContent = 'Holding your dates'; btn.disabled = true;
+    location.href = 'confirmation.html?' + qsFrom({ ref, m: S.m, from: S.from, to: S.to, pt: S.pickupTime, rt: S.returnTime, er: S.er ? 1 : '', d: S.delivery ? 1 : '', p: S.pillion ? 1 : '', c: S.comms ? 1 : '', km: S.extraKm || '', name: S.name, email: S.email });
+  }
+
+  // Deep link from a machine page.
+  if (S.m && S.from && S.to && !q.step) { S.step = 1; }
+  renderStep();
+</script>
+</body>
+</html>
