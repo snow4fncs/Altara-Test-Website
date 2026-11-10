@@ -267,13 +267,15 @@
       });
     }
     function marks() {
+      if (!wide.matches) return;   // the clones belong to the desktop grid only; on phones the first thumbnail is 72px tall
       var area = $('.ph-image-area'), first = thumbs[0]; if (!area || !first || $('.pre-ribbon-wrap', first)) return;
       var rw = $('.pre-ribbon-wrap', area), bd = $('.pre-band', area); if (!rw) return;
       var c1 = rw.cloneNode(true); c1.removeAttribute('style'); first.appendChild(c1);
       if (bd) { var c2 = bd.cloneNode(true); c2.removeAttribute('style'); first.appendChild(c2); }
     }
     upgrade(); marks();
-    (wide.addEventListener ? wide.addEventListener('change', upgrade) : wide.addListener(upgrade));
+    var onWide = function () { upgrade(); marks(); };
+    (wide.addEventListener ? wide.addEventListener('change', onWide) : wide.addListener(onWide));
     var area = $('.ph-image-area'); if (area) new MutationObserver(marks).observe(area, { childList: true });
     // The grid is shorter than the buy column on laptops, so it rides along: once its last row reaches the bottom of
     // the window it stays there while the column keeps scrolling, and no blank space ever shows under the photos.

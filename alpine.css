@@ -723,3 +723,8 @@ body.alpine.ab-hidden .order-summary { top: 90px; }
   .alpine .ci-val { line-height: 1.6; }
   .alpine :is(.showcase-copy, .craft-copy) .qa-strip { margin-top: 32px; padding-top: 22px; }
 }
+
+/* Pre-order marks live on the large photo on phones and tablets; never on the thumbnail strip */
+@media (max-width: 1100px) {
+  .alpine .ph-thumb .pre-ribbon-wrap, .alpine .ph-thumb .pre-band { display: none !important; }
+}
