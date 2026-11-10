@@ -477,6 +477,17 @@ const server = http.createServer(async (req, res) => {
     }
     return send(res, 200, { days, payouts: [{ day: days[5].day, amount: 1200 }, { day: days[15].day, amount: 1900 }], total_payouts: 3100, ad_spend_available: true, window_days: 30 });
   }
+  if (rawPath === '/api/create-checkout' && req.method === 'POST') {
+    // Local preview only: the session comes from the production API, so Checkout lands on Stripe's own page
+    // here too instead of falling back to the cart page. (Live mode: a completed test payment is a real order.)
+    const raw = await new Promise(r => { let b = ''; req.on('data', c => { b += c; }); req.on('end', () => r(b)); });
+    try {
+      const up = await fetch('https://www.altaradesign.com/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: raw });
+      const text = await up.text();
+      res.writeHead(up.status, { 'Content-Type': up.headers.get('content-type') || 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(text);
+    } catch (e) { return send(res, 502, { error: 'Could not reach the checkout API: ' + e.message }); }
+  }
   if (rawPath === '/api/contact' && req.method === 'POST') {
     const body = await readBody(req);
     console.log('  [contact] enquiry from', body?.email, '-', String(body?.message || '').slice(0, 60));
