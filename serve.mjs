@@ -23,6 +23,9 @@ const MIME = {
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
   '.ttf': 'font/ttf',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.mov': 'video/quicktime',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -502,14 +505,29 @@ const server = http.createServer(async (req, res) => {
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME[ext] || 'application/octet-stream';
 
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
+  // Streams files and honours Range requests like the production host does, so <video> can seek locally.
+  fs.stat(filePath, (err, st) => {
+    if (err || !st.isFile()) {
       res.writeHead(404);
       res.end('Not found');
       return;
     }
-    res.writeHead(200, { 'Content-Type': contentType });
-    res.end(data);
+    const size = st.size;
+    const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+    if (range && (range[1] || range[2])) {
+      const start = range[1] ? +range[1] : Math.max(0, size - +range[2]);
+      const end = range[1] && range[2] ? Math.min(+range[2], size - 1) : size - 1;
+      if (start >= size || start > end) {
+        res.writeHead(416, { 'Content-Range': `bytes */${size}` });
+        res.end();
+        return;
+      }
+      res.writeHead(206, { 'Content-Type': contentType, 'Content-Length': end - start + 1, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Accept-Ranges': 'bytes' });
+      fs.createReadStream(filePath, { start, end }).pipe(res);
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': size, 'Accept-Ranges': 'bytes' });
+    fs.createReadStream(filePath).pipe(res);
   });
 });
 
