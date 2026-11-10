@@ -11,3 +11,7 @@ skills-lock.json
 .car-scan-profile/
 car-scan-seen.json
 car-scan-hits.log
+
+# White edition build output (the root pages are the site; these are regenerated copies)
+white-site/*.html
+white-site/transition.js

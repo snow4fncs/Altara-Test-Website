@@ -2,7 +2,7 @@
   // Use a solid overlay div — NOT html opacity.
   // opacity:0 on html makes the element transparent, exposing the browser's
   // white canvas behind it. A solid fixed div physically covers everything.
-  var OL_BG = '#0C0D10';
+  var OL_BG = '#FFFFFF';
   var ol = document.createElement('div');
   ol.style.cssText = 'position:fixed;inset:0;background:' + OL_BG + ';z-index:2147483647;pointer-events:none;';
   document.documentElement.appendChild(ol);

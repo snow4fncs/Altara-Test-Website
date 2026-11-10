@@ -511,6 +511,8 @@ const server = http.createServer(async (req, res) => {
 
   let urlPath = rawPath;
   if (urlPath === '/') urlPath = '/index.html';
+  // Clean URLs like production: /cart serves cart.html
+  if (!path.extname(urlPath) && fs.existsSync(path.join(__dirname, decodeURIComponent(urlPath) + '.html'))) urlPath += '.html';
 
   const filePath = path.join(__dirname, decodeURIComponent(urlPath));
   const ext = path.extname(filePath).toLowerCase();

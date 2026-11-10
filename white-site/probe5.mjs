@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer-core';
+const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', defaultViewport: { width: 1440, height: 800 } });
+const p = await b.newPage();
+p.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') console.log('[console:' + m.type() + ']', m.text().slice(0, 200)); });
+p.on('pageerror', e => console.log('[pageerror]', String(e).slice(0, 300)));
+await p.goto('http://localhost:3001/product-midnight-black', { waitUntil: 'networkidle0' });
+console.log(await p.evaluate(() => ({ openGallery: typeof window.openGallery, pgl: !!document.getElementById('pgl'), thumbs: document.querySelectorAll('.ph-thumb').length, wide: matchMedia('(min-width: 1101px)').matches, thumb2: (() => { const t = document.querySelector('.ph-thumb:nth-child(2)'); const r = t.getBoundingClientRect(); return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height), topmost: (() => { const e = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return e ? e.tagName + '.' + e.className : null; })() }; })() })));
+await p.evaluate(() => document.querySelector('.ph-thumb:nth-child(2)').click()); await new Promise(r => setTimeout(r, 400));
+console.log('after JS click: hidden =', await p.evaluate(() => document.getElementById('pgl').hidden));
+await p.evaluate(() => window.openGallery && window.openGallery(1)); await new Promise(r => setTimeout(r, 400));
+console.log('after openGallery(1): hidden =', await p.evaluate(() => document.getElementById('pgl').hidden), '| counter:', await p.evaluate(() => document.querySelector('.pgl-n').textContent));
+await b.close();
