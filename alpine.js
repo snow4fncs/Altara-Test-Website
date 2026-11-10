@@ -331,6 +331,51 @@
     if (main) { main.style.cursor = 'zoom-in'; main.addEventListener('click', function () { var act = thumbs.findIndex(function (t) { return t.classList.contains('active'); }); open(act < 0 ? 0 : act, main); }); }
   })();
 
+  /* ───────────── 6c. Phones: a deliberate left/right swipe on the large photo moves to the next one ─────────────
+     A swipe counts only when the finger travels a real distance mostly sideways (not a scroll, not a tap), so a
+     thumb brushing the photo while scrolling never flips it. Ends do not wrap: the thumbnail strip shows where you are. */
+  (function () {
+    var area = $('.ph-image-area'), main = $('.ph-main-img'), thumbs = $$('.ph-thumb');
+    if (!area || !main || thumbs.length < 2) return;
+    var MIN_X = 64, MAX_SLOPE = 0.6;
+    var sx = 0, sy = 0, mx = 0, my = 0, live = false, scrolling = false;
+    function active() { return Math.max(0, thumbs.findIndex(function (t) { return t.classList.contains('active'); })); }
+    function srcOf(k) { var t = thumbs[k]; return t && t.dataset && t.dataset.src ? t.dataset.src.replace('-wide.webp', '-1200.webp') : ''; }
+    function warm(k) { var s = srcOf(k); if (s) { var im = new Image(); im.src = s; } }
+    function go(d) {
+      var i = active(), k = i + d;
+      if (k < 0 || k >= thumbs.length) return;
+      thumbs[k].click();
+      var cls = d > 0 ? 'is-in-right' : 'is-in-left';
+      main.classList.remove('is-in-left', 'is-in-right');
+      var armed = false;
+      var arm = function () { if (armed) return; armed = true; void main.offsetWidth; main.classList.add(cls); };
+      main.addEventListener('load', arm, { once: true });
+      if (main.complete) arm();
+      warm(k - 1); warm(k + 1);
+    }
+    // the slide moves the photo, so anything pinned to its edges (pre-order marks) re-measures once it settles
+    main.addEventListener('animationend', function () { main.classList.remove('is-in-left', 'is-in-right'); window.dispatchEvent(new Event('resize')); });
+    area.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) { live = false; return; }
+      live = true; scrolling = false; sx = mx = e.touches[0].clientX; sy = my = e.touches[0].clientY;
+    }, { passive: true });
+    area.addEventListener('touchmove', function (e) {
+      if (!live || e.touches.length !== 1) { live = false; return; }
+      mx = e.touches[0].clientX; my = e.touches[0].clientY;
+      if (!scrolling && Math.abs(my - sy) > 24 && Math.abs(my - sy) > Math.abs(mx - sx)) scrolling = true;
+    }, { passive: true });
+    area.addEventListener('touchend', function (e) {
+      if (!live) return; live = false;
+      var t = e.changedTouches && e.changedTouches[0]; if (t) { mx = t.clientX; my = t.clientY; }
+      var dx = mx - sx, dy = my - sy;
+      if (scrolling || Math.abs(dx) < MIN_X || Math.abs(dy) > Math.abs(dx) * MAX_SLOPE) return;
+      go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+    area.addEventListener('touchcancel', function () { live = false; }, { passive: true });
+    warm(active() + 1);
+  })();
+
   /* ───────────── 7. Announcement bar leaves on scroll; the nav stays ───────────── */
   (function () {
     var on = false;
