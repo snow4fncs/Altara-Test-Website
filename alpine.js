@@ -376,6 +376,38 @@
     warm(active() + 1);
   })();
 
+  /* ───────────── 6d. Phones: one tap on the other colourway opens it ─────────────
+     iPhone Safari can spend a first tap on a link without opening it: a tap while the page still glides after a swipe
+     only stops the glide. The colourway tiles sit a screen below the photo, so the tap that reaches them usually comes
+     straight after a swipe, and shoppers had to tap twice. A clean tap on a tile (one finger, down and up on the same
+     tile, under 10px of travel and 600ms) now opens its page here, and the browser's own click is cancelled so the page
+     never opens twice. A drag that starts on a tile still scrolls, a long press still gets Safari's link preview, and
+     mouse, keyboard and VoiceOver use the plain link as before. white-site/probe-colourway-tap.mjs checks all of it. */
+  (function () {
+    $$('a.pi-var[href]').forEach(function (a) {
+      var x = 0, y = 0, t0 = 0, live = false;
+      a.addEventListener('touchstart', function (e) {
+        live = e.touches.length === 1;
+        if (live) { x = e.touches[0].clientX; y = e.touches[0].clientY; t0 = Date.now(); }
+      }, { passive: true });
+      a.addEventListener('touchmove', function (e) {
+        var p = e.touches[0];
+        if (live && (!p || Math.abs(p.clientX - x) > 10 || Math.abs(p.clientY - y) > 10)) live = false;
+      }, { passive: true });
+      a.addEventListener('touchcancel', function () { live = false; }, { passive: true });
+      a.addEventListener('touchend', function (e) {
+        if (!live) return;
+        live = false;
+        var p = e.changedTouches && e.changedTouches[0];
+        if (!p || e.touches.length || Date.now() - t0 > 600 || Math.abs(p.clientX - x) > 10 || Math.abs(p.clientY - y) > 10) return;
+        var r = a.getBoundingClientRect();
+        if (p.clientX < r.left || p.clientX > r.right || p.clientY < r.top || p.clientY > r.bottom) return;
+        if (e.cancelable) e.preventDefault();
+        a.click();
+      });
+    });
+  })();
+
   /* ───────────── 7. Announcement bar leaves on scroll; the nav stays ───────────── */
   (function () {
     var on = false;
