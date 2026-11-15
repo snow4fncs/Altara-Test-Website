@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-import { shippedEmailHtml, reviewRequestEmailHtml, repeatOfferEmailHtml, sendEmail } from './_emails.js';
+import { shippedEmailHtml, reviewRequestEmailHtml, repeatOfferEmailHtml, sendEmail, esc } from './_emails.js';
 import { orderRef } from './_ref.js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
@@ -125,6 +125,101 @@ async function sendDueReviewRequests({ limit }) {
   return { due: (data || []).length, sent, skipped_already_reviewed: skipped };
 }
 
+// ── pre-order notice: one email to every paid, unshipped pre-order ──
+// For updates the owner approves word for word (a delay, a confirmed ship date). The text comes in
+// the request; paragraphs may use {first}, {phrase} ("the Midnight Black Twin Set", "two Midnight
+// Black Twin Sets", "the Midnight Black cover") and {it} ("it" or "they"). dry: true returns who
+// would get it and sends nothing. One Resend batch call with an idempotency key, so a retry never
+// double-sends, plus a copy to the shop inbox as the record of exactly what customers received.
+function greetName(raw) {
+  let t = String(raw || '').trim().split(/\s+/)[0] || '';
+  if (t.includes('@')) t = t.split('@')[0].split(/[._-]/)[0];
+  t = t.replace(/[^A-Za-z'-]/g, '');
+  // Junk in the name field ("8", "MR", keyboard mash) gets a plain "there".
+  if (t.length < 2 || /^(mr|mrs|ms|miss|dr|mx)$/i.test(t) || !/[aeiouy]/i.test(t)) return 'there';
+  if (t === t.toUpperCase() || t === t.toLowerCase()) t = t[0].toUpperCase() + t.slice(1).toLowerCase();
+  return t;
+}
+function preorderPhrase(items) {
+  const pre = (items || []).filter(i => i.preorder);
+  const units = list => list.reduce((s, i) => s + (i.qty || 1), 0);
+  const twins = units(pre.filter(i => /twin/i.test(i.name || '')));
+  const fulls = units(pre.filter(i => /full\s*car/i.test(i.name || '')));
+  const singles = units(pre.filter(i => !/twin|full\s*car/i.test(i.name || '')));
+  if (twins === 1 && !singles && !fulls) return { phrase: 'the Midnight Black Twin Set', it: 'it' };
+  if (twins === 2 && !singles && !fulls) return { phrase: 'two Midnight Black Twin Sets', it: 'they' };
+  if (!twins && singles === 1 && !fulls) return { phrase: 'the Midnight Black cover', it: 'it' };
+  return { phrase: 'your Midnight Black order', it: 'it', unusual: true };
+}
+function noticeHtml(subject, preheader, paras) {
+  const body = paras.map((t, i) => `<p style="margin:0 0 ${i === paras.length - 2 ? 22 : 16}px;">${esc(t)}</p>`).join('\n');
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${esc(subject)}</title></head>
+<body style="margin:0;padding:0;background:#F4F1EA;">
+${preheader ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>` : ''}
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#F4F1EA;padding:40px 16px;">
+<tr><td align="center">
+<table width="540" cellpadding="0" cellspacing="0" role="presentation" style="max-width:540px;width:100%;background:#FFFFFF;border:1px solid #E6E1D6;">
+<tr><td style="padding:36px 40px 4px;font-family:Georgia,'Times New Roman',serif;font-size:13px;letter-spacing:0.32em;text-transform:uppercase;color:#151719;">Altara</td></tr>
+<tr><td style="padding:20px 40px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#151719;">
+${body}
+</td></tr>
+<tr><td style="padding:20px 40px 30px;border-top:1px solid #EFEBE3;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:#5E6873;">Altara &middot; <a href="https://www.altaradesign.com" style="color:#5E6873;">altaradesign.com</a> &middot; Questions? Reply to this email or write to hello@altaradesign.com</td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+}
+async function preorderNotice(b) {
+  const subject = String(b.subject || '').trim();
+  const paragraphs = Array.isArray(b.paragraphs) ? b.paragraphs.map(p => String(p || '').trim()).filter(Boolean) : [];
+  if (!subject || subject.length > 150 || !paragraphs.length || paragraphs.length > 12 || paragraphs.some(p => p.length > 1500)) {
+    return { status: 400, json: { error: 'subject and 1-12 paragraphs are required' } };
+  }
+  const { data, error } = await supabase.from('orders')
+    .select('id, created_at, customer_email, customer_name, items, shipped_at, tracking_number')
+    .eq('status', 'paid').is('shipped_at', null).order('created_at', { ascending: true }).limit(1000);
+  if (error) { console.error('preorder_notice query error:', error); return { status: 500, json: { error: 'Could not load orders' } }; }
+
+  const seen = new Set();
+  const list = [];
+  for (const o of data || []) {
+    if (o.tracking_number || !(o.items || []).some(i => i.preorder)) continue;
+    const to = String(o.customer_email || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to) || seen.has(to.toLowerCase())) continue;
+    seen.add(to.toLowerCase());
+    const first = greetName(o.customer_name);
+    const p = preorderPhrase(o.items);
+    const fill = s => s.replace(/\{first\}/g, first).replace(/\{phrase\}/g, p.phrase).replace(/\{it\}/g, p.it);
+    list.push({ to, first, phrase: p.phrase, unusual: !!p.unusual, paras: paragraphs.map(fill) });
+  }
+  const mask = e => e.slice(0, 2) + '***@' + e.split('@')[1];
+  const preheader = String(b.preheader || '').trim();
+  if (b.dry) {
+    return { status: 200, json: { success: true, dry: true, count: list.length,
+      recipients: list.map(r => ({ first: r.first, phrase: r.phrase, email: mask(r.to), unusual: r.unusual })),
+      sample_text: list[0] ? list[0].paras.join('\n\n') : '' } };
+  }
+  if (!process.env.RESEND_API_KEY) return { status: 500, json: { error: 'RESEND_API_KEY not set' } };
+
+  const from = 'Altara <hello@altaradesign.com>', reply_to = 'hello@altaradesign.com';
+  const msgs = list.map(r => ({ from, reply_to, to: [r.to], subject, html: noticeHtml(subject, preheader, r.paras), text: r.paras.join('\n\n') }));
+  const sample = paragraphs.map(s => s.replace(/\{first\}/g, 'there').replace(/\{phrase\}/g, 'the Midnight Black Twin Set').replace(/\{it\}/g, 'it'));
+  msgs.push({ from, reply_to, to: [String(b.copy_to || 'hello@altaradesign.com')], subject: `[Copy: sent to ${list.length} pre-order customers] ${subject}`,
+    html: noticeHtml(subject, preheader, sample), text: sample.join('\n\n') });
+
+  const ids = [], failures = [];
+  for (let i = 0; i < msgs.length; i += 100) {
+    const headers = { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' };
+    if (b.idempotency_key) headers['Idempotency-Key'] = `${String(b.idempotency_key).slice(0, 200)}-${i / 100}`;
+    const r = await fetch('https://api.resend.com/emails/batch', { method: 'POST', headers, body: JSON.stringify(msgs.slice(i, i + 100)) });
+    const t = await r.text();
+    if (!r.ok) { console.error('preorder_notice Resend', r.status, t); failures.push({ batch: i / 100, status: r.status, body: t.slice(0, 300) }); continue; }
+    try { for (const d of JSON.parse(t).data || []) ids.push(d.id); } catch { /* accepted, ids unreadable */ }
+  }
+  console.log(`preorder_notice: ${list.length} customers, Resend accepted ${ids.length}, ${failures.length} failed batches`);
+  return { status: failures.length ? 502 : 200, json: { success: !failures.length, customers: list.length, accepted: ids.length, failures } };
+}
+
 export default async function handler(req, res) {
   if (!isAdmin(req)) return res.status(401).json({ error: 'Admin token required' });
 
@@ -210,6 +305,12 @@ export default async function handler(req, res) {
     const reviews = await sendDueReviewRequests({ limit: 40 });
     const repeats = await sendRepeatOffers({ minDays: REPEAT_OFFER_DAYS, limit: 40 });
     return res.status(200).json({ success: true, reviews, repeats });
+  }
+
+  // -- one approved update to every paid, unshipped pre-order (see preorderNotice) --
+  if (action === 'preorder_notice') {
+    const r = await preorderNotice(req.body || {});
+    return res.status(r.status).json(r.json);
   }
 
   // -- mark a batch of orders as exported / postage bought --
