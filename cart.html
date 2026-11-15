@@ -1454,7 +1454,7 @@
           ? '<strong>+$' + delta + '</strong> &middot; ' + (fourCovers ? 'Full Car pricing, $' + Math.round(thenPay) + ' for four covers' : 'Twin Set pricing, $' + Math.round(thenPay) + ' for the pair')
           : '$89 &middot; free shipping';
         if (fourCovers && delta < offer.price) offer.label = 'Second set for the other car, or the back row';
-        var preNote = (offer.id.indexOf('midnight-black') === 0 && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder') ? ' <span class="xsell-pre">pre-order &middot; ships ' + (window.__stock['midnight-black'].ships || 'mid November') + '</span>' : '';
+        var preNote = (offer.id.indexOf('midnight-black') === 0 && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder') ? ' <span class="xsell-pre">pre-order &middot; ships ' + (window.__stock['midnight-black'].ships || 'in time for Christmas') + '</span>' : '';
         slot.innerHTML = '<div class="xsell">'
           + '<img src="' + offer.image + '" alt="">'
           + '<div class="xsell-info"><span class="xsell-k">' + offer.label + '</span>'
@@ -1545,7 +1545,7 @@
       var s = window.__stock && window.__stock[String(id).replace('-twin', '')];
       if (!s) return '';
       if (s.status === 'out') return '<p class="cart-item-meta cart-soldout">Sold out · remove to continue, or join the waitlist on the product page</p>';
-      if (s.status === 'preorder') return '<p class="cart-item-meta cart-preorder">Pre-order · ships ' + (s.ships || 'mid November') + '</p>';
+      if (s.status === 'preorder') return '<p class="cart-item-meta cart-preorder">Pre-order · ships ' + (s.ships || 'in time for Christmas') + '</p>';
       return '';
     }
     function cartHasPreorder() {
@@ -1744,7 +1744,7 @@
   if(!el) return;
   function render(){
     if(typeof cartHasPreorder==='function' && cartHasPreorder()){
-      var ps=getCart().items.map(function(i){ var s=window.__stock[String(i.id).replace('-twin','')]; return s&&s.ships; }).filter(Boolean)[0]||'mid November';
+      var ps=getCart().items.map(function(i){ var s=window.__stock[String(i.id).replace('-twin','')]; return s&&s.ships; }).filter(Boolean)[0]||'in time for Christmas';
       el.textContent='Pre-order in cart \u00b7 ships '+ps+' \u00b7 tracked with Australia Post'; return;
     }
     var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));

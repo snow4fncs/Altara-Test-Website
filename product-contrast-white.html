@@ -1494,7 +1494,7 @@
     if (blackOut && document.getElementById('pack-mixed')) { document.getElementById('pack-mixed').classList.add('is-soldout'); document.getElementById('pack-mixed').disabled = true; if (selectedPack === 'mixed') { selectedPack = 'twin'; } }
     if (me && me.status === 'preorder') {
       // this colour is a pre-order: buying works as normal, the ship date is said everywhere the eye lands
-      var ships = me.ships || 'mid November';
+      var ships = me.ships || 'in time for Christmas';
       window.__preorderShip = ships;
       document.body.classList.add('is-preorder');
       var pp = document.getElementById('pi-price-display');

@@ -365,7 +365,7 @@ export default async function handler(req, res) {
             recoveryUrl,
             amount: (session.amount_total || 0) / 100,
             currency: session.currency,
-            preorderShips: session.metadata?.preorder ? (session.metadata.preorder_ships || 'mid November') : '',
+            preorderShips: session.metadata?.preorder ? (session.metadata.preorder_ships || 'in time for Christmas') : '',
           }),
           tag: 'cart_recovery',
         });

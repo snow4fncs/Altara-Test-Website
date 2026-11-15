@@ -130,7 +130,7 @@
       items.innerHTML = c.items.map(function (i) {
         var p = PRODUCTS[i.id] || {}; var pre = isPreorder(p.colour || '');
         return '<div class="ald-item" data-id="' + esc(i.id) + '"><img src="' + esc(i.image || p.image || '') + '" alt="" width="64" height="64">' +
-          '<div class="ald-item-info"><p class="ald-item-name">' + esc(i.name) + '</p>' + (pre ? '<p class="ald-item-note">Pre-order · ships ' + esc(STOCK[p.colour].ships || 'mid November') + '</p>' : '<p class="ald-item-note">In stock · ships same day weekdays</p>') +
+          '<div class="ald-item-info"><p class="ald-item-name">' + esc(i.name) + '</p>' + (pre ? '<p class="ald-item-note">Pre-order · ships ' + esc(STOCK[p.colour].ships || 'in time for Christmas') + '</p>' : '<p class="ald-item-note">In stock · ships same day weekdays</p>') +
           '<div class="ald-qty"><button type="button" data-act="dec" aria-label="Decrease quantity">&minus;</button><span>' + i.qty + '</span><button type="button" data-act="inc" aria-label="Increase quantity">+</button><button type="button" class="ald-rm" data-act="rm">Remove</button></div></div>' +
           '<p class="ald-item-price">' + money(i.price * i.qty) + '</p></div>';
       }).join('');
