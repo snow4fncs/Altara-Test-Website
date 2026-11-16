@@ -169,6 +169,14 @@ export default async function handler(req, res) {
       },
     };
 
+    const shippingChoice = orderTotal >= FREE_SHIP_THRESHOLD ? freeShipping : standardShipping;
+    // A pre-order does not arrive 3-7 business days from today. Stripe prints the estimate right under
+    // the shipping line, where it reads as a delivery date, so a pre-order says when it ships instead.
+    if (preorder.length) {
+      shippingChoice.shipping_rate_data.display_name += ` · ships ${preorder[0].ships}`;
+      delete shippingChoice.shipping_rate_data.delivery_estimate;
+    }
+
     const params = {
       mode: 'payment',
       line_items,
@@ -177,7 +185,7 @@ export default async function handler(req, res) {
       // Phone doubles as a courier contact and one of Meta's strongest match
       // keys - it was the notable absence from the pixel's match quality score.
       phone_number_collection: { enabled: true },
-      shipping_options: [orderTotal >= FREE_SHIP_THRESHOLD ? freeShipping : standardShipping],
+      shipping_options: [shippingChoice],
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart.html`,
       metadata: {
