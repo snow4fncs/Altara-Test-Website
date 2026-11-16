@@ -160,7 +160,7 @@ ${preorderShips ? `
   <tr><td style="padding:18px 48px 0;">
     <div style="border:1px solid rgba(196,169,122,0.45);padding:16px 18px;">
       <p style="margin:0 0 6px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#C4A97A;">Pre-order</p>
-      <p style="margin:0;font-size:13px;line-height:1.6;color:#EDE8DF;">Your Midnight Black cover${items.filter(i => i.preorder).reduce((n, i) => n + (i.qty || 1), 0) > 1 || /twin/i.test(items.filter(i => i.preorder).map(i => i.name).join(' ')) ? 's are' : ' is'} part of the batch landing <strong style="color:#C4A97A;">${esc(preorderShips)}</strong>. Your whole order ships together the day it arrives, and we email you the tracking number then. Need it sooner? Reply to this email and we will swap you to Contrast White or refund you, no questions.</p>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:#EDE8DF;">Your Midnight Black cover${items.filter(i => i.preorder).reduce((n, i) => n + (i.qty || 1), 0) > 1 || /twin/i.test(items.filter(i => i.preorder).map(i => i.name).join(' ')) ? 's are' : ' is'} part of the batch landing ${/^end of/i.test(preorderShips) ? 'at the ' : ''}<strong style="color:#C4A97A;">${esc(preorderShips)}</strong>. Your whole order ships together the day it arrives, and we email you the tracking number then. Need it sooner? Reply to this email and we will swap you to Contrast White or refund you, no questions.</p>
     </div>
   </td></tr>` : ''}
 
@@ -365,7 +365,7 @@ export default async function handler(req, res) {
             recoveryUrl,
             amount: (session.amount_total || 0) / 100,
             currency: session.currency,
-            preorderShips: session.metadata?.preorder ? (session.metadata.preorder_ships || 'in time for Christmas') : '',
+            preorderShips: session.metadata?.preorder ? (session.metadata.preorder_ships || 'end of November') : '',
           }),
           tag: 'cart_recovery',
         });

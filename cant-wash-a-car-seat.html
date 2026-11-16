@@ -658,7 +658,7 @@
       <blockquote><p>I was worried they would slip around on my leather seats but they don’t at all.</p><cite>Peter · verified purchase</cite></blockquote>
       <blockquote><p>Once they’re on they’re on. Fit on my Hilux is good and the length is spot on.</p><cite>Ahmed · verified purchase</cite></blockquote>
     </div>
-    <p class="adv-rating">20 verified reviews, all 5 stars · 200+ orders across every Australian state · <a href="reviews.html">read them all</a></p>
+    <p class="adv-rating">5 stars from verified buyers · 250+ orders across every Australian state · <a href="reviews.html">read them all</a></p>
   </section>
 
   <section class="adv-block adv-faq">
@@ -666,7 +666,7 @@
     <details><summary>Does it fit my car?</summary><p>One size fits most seats, hatchback to ute. If yours is the exception you get every cent back within 60 days.</p></details>
     <details><summary>Can I really machine wash it?</summary><p>Yes. Cold, gentle cycle. The magnets are sewn in and wash with the cover. Hang dry.</p></details>
     <details><summary>Does it work with heated seats?</summary><p>It sits over the seat like a towel would, and heated seats warm through it.</p></details>
-    <details><summary>When does it arrive?</summary><p>Contrast White ships same day on weekdays from Sydney with Australia Post, tracked. Midnight Black is on pre-order for the batch landing in time for Christmas.</p></details>
+    <details><summary>When does it arrive?</summary><p>Contrast White ships same day on weekdays from Sydney with Australia Post, tracked. Midnight Black is on pre-order for the batch landing at the end of November.</p></details>
   </section>
 
   <div class="adv-final">
@@ -863,7 +863,7 @@
 <script>
   fetch('/api/stock-level').then(function (r) { return r.ok ? r.json() : {}; }).then(function (lv) {
     var mb = lv['midnight-black'] || {}, el = document.getElementById('adv-stock'), b = document.getElementById('adv-cta-mb');
-    if (mb.status === 'preorder') { if (b) b.textContent = 'Midnight Black · pre-order · ships ' + (mb.ships || 'in time for Christmas'); if (el) el.textContent = 'Contrast White ships today. Midnight Black is a pre-order for the batch landing ' + (mb.ships || 'in time for Christmas') + '.'; }
+    if (mb.status === 'preorder') { if (b) b.textContent = 'Midnight Black · pre-order · ships ' + (mb.ships || 'end of November'); if (el) el.textContent = 'Contrast White ships today. Midnight Black is a pre-order for the batch landing ' + (/^end of/i.test(mb.ships || 'end of November') ? 'at the ' : '') + (mb.ships || 'end of November') + '.'; }
     else if (mb.status === 'out') { if (b) b.textContent = 'Midnight Black · sold out · join the waitlist'; if (el) el.textContent = 'Contrast White ships today.'; }
   }).catch(function () {});
 </script>

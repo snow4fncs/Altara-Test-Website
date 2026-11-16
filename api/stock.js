@@ -49,11 +49,15 @@ export function summarise(orders, movements) {
 // Public, coarse stock signal for the product pages (served at /api/stock-level by a rewrite in
 // vercel.json, so it does not count as another serverless function). A band, never the exact count.
 const LOW_AT = 60;
-const RESTOCK = { 'midnight-black': 'in time for Christmas', 'contrast-white': 'soon' };  // edit when the supplier confirms
+const RESTOCK = { 'midnight-black': 'end of November', 'contrast-white': 'soon' };  // edit when the supplier confirms
 // Pre-orders: a sold-out colour keeps selling against the incoming batch, with the ship date said
 // plainly everywhere (page, cart, Stripe, email, console). `cap` is how many covers may be pre-sold
 // before the colour falls back to plain sold-out, so a late shipment never over-promises.
-export const PREORDER = { 'midnight-black': { on: true, ships: 'in time for Christmas', cap: 150 } };
+// The date reads as a label ("Ships end of November"); sentences add "at the" in front themselves.
+// cap 300 of the 400-cover batch (16 Nov 2026): 114 were pre-sold against the old cap of 150, which
+// would have flipped the page to sold out within days while pre-order ads were still running. Keep
+// it under the batch size, so there is always a margin for miscounts and seconds.
+export const PREORDER = { 'midnight-black': { on: true, ships: 'end of November', cap: 300 } };
 export function preorderFor(sku, remaining) {
   const p = PREORDER[sku];
   return p && p.on && remaining > -p.cap ? p : null;

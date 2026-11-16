@@ -2252,7 +2252,7 @@
         box.style.position = 'relative';
         if (pre) {
           var rw = document.createElement('div'); rw.className = 'pre-ribbon-wrap'; rw.innerHTML = '<span class="pre-ribbon">Pre-order</span>'; box.appendChild(rw);
-          var bd = document.createElement('div'); bd.className = 'pre-band'; bd.innerHTML = '<span>Ships <strong>' + (mb.ships || 'in time for Christmas') + '</strong></span>'; box.appendChild(bd);
+          var bd = document.createElement('div'); bd.className = 'pre-band'; bd.innerHTML = '<span>Ships <strong>' + (mb.ships || 'end of November') + '</strong></span>'; box.appendChild(bd);
         } else { var b = document.createElement('span'); b.className = 'tile-soldout'; b.textContent = 'Sold out · back ' + (mb.restock || 'soon'); box.appendChild(b); }
         var link = a.querySelector('.range-tile-link, .product-tile-explore'); if (link) link.textContent = pre ? 'Pre-order now' : 'Join the waitlist';
       });

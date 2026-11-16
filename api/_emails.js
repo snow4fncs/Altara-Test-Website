@@ -81,7 +81,7 @@ export function recoveryEmailHtml({ recoveryUrl, amount, currency, preorderShips
     blocks:
       para(`Your cart is still saved. Picking up where you left off takes one click, no re-entering anything.`)
       + (preorderShips
-        ? para(`Midnight Black is a pre-order from the batch landing <strong style="color:${CREAM}">${preorderShips}</strong>. Reserving now holds your set, we email tracking the day it ships, and you can have a full refund any time before it leaves.`)
+        ? para(`Midnight Black is a pre-order from the batch landing ${/^end of/i.test(preorderShips) ? 'at the ' : ''}<strong style="color:${CREAM}">${preorderShips}</strong>. Reserving now holds your set, we email tracking the day it ships, and you can have a full refund any time before it leaves.`)
         : para(`Two covers price as a Twin Set at <strong style="color:${CREAM}">$89</strong>, which is $49 off two singles and includes free shipping Australia-wide.`))
       + para(`Pay by card, Apple Pay, Google Pay, or in four instalments with Afterpay or Klarna. Zip is available too.`)
       + rule()

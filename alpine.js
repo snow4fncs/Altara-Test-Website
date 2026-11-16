@@ -15,7 +15,7 @@
       { t: 'Free tracked shipping on orders over $80', s: 'Free shipping over $80', h: 'shipping.html' },
       { t: '60-day fit guarantee. Wrong fit, full refund', s: '60-day fit guarantee', h: 'returns.html' },
       { t: 'Pay in 4 with Afterpay, Zip or Klarna', s: 'Pay in 4 with Afterpay or Zip', h: 'collection.html' },
-      { t: '200+ orders delivered across every state', s: '200+ orders, every state', h: 'reviews.html' }
+      { t: '250+ orders delivered across every state', s: '250+ orders, every state', h: 'reviews.html' }
     ];
     var narrow = window.matchMedia('(max-width: 768px)');
     var label = function (m) { return narrow.matches ? m.s : m.t; };
@@ -130,7 +130,7 @@
       items.innerHTML = c.items.map(function (i) {
         var p = PRODUCTS[i.id] || {}; var pre = isPreorder(p.colour || '');
         return '<div class="ald-item" data-id="' + esc(i.id) + '"><img src="' + esc(i.image || p.image || '') + '" alt="" width="64" height="64">' +
-          '<div class="ald-item-info"><p class="ald-item-name">' + esc(i.name) + '</p>' + (pre ? '<p class="ald-item-note">Pre-order · ships ' + esc(STOCK[p.colour].ships || 'in time for Christmas') + '</p>' : '<p class="ald-item-note">In stock · ships same day weekdays</p>') +
+          '<div class="ald-item-info"><p class="ald-item-name">' + esc(i.name) + '</p>' + (pre ? '<p class="ald-item-note">Pre-order · ships ' + esc(STOCK[p.colour].ships || 'end of November') + '</p>' : '<p class="ald-item-note">In stock · ships same day weekdays</p>') +
           '<div class="ald-qty"><button type="button" data-act="dec" aria-label="Decrease quantity">&minus;</button><span>' + i.qty + '</span><button type="button" data-act="inc" aria-label="Increase quantity">+</button><button type="button" class="ald-rm" data-act="rm">Remove</button></div></div>' +
           '<p class="ald-item-price">' + money(i.price * i.qty) + '</p></div>';
       }).join('');

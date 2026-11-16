@@ -1075,7 +1075,7 @@
     <p class="pi-price" id="pi-price-display"><s class="pack-was" style="font-size:0.7em">$138</s> $89 AUD</p>
     <div class="pi-rating" id="pi-rating" hidden></div>
     <p class="pi-bnpl" id="pi-bnpl">or 4 payments of <strong>$22.25</strong> with <span class="bnpl-ap">afterpay</span> or Klarna <span class="bnpl-or">· Zip also available</span></p>
-    <p class="pi-proof">Delivered to drivers in every Australian state. 200+ orders and counting.</p>
+    <p class="pi-proof">Delivered to drivers in every Australian state. 250+ orders and counting.</p>
     <ul class="pi-benefits">
       <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Waterproof Backing</span></li>
       <li><svg class="pi-bt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Universal Fit</span></li>
@@ -1494,7 +1494,7 @@
     if (blackOut && document.getElementById('pack-mixed')) { document.getElementById('pack-mixed').classList.add('is-soldout'); document.getElementById('pack-mixed').disabled = true; if (selectedPack === 'mixed') { selectedPack = 'twin'; } }
     if (me && me.status === 'preorder') {
       // this colour is a pre-order: buying works as normal, the ship date is said everywhere the eye lands
-      var ships = me.ships || 'in time for Christmas';
+      var ships = me.ships || 'end of November';
       window.__preorderShip = ships;
       document.body.classList.add('is-preorder');
       var pp = document.getElementById('pi-price-display');
@@ -1528,13 +1528,13 @@
     var price = document.getElementById('pi-price-display');
     if (price && !document.getElementById('pi-soldout-top')) {
       var top = document.createElement('p'); top.id = 'pi-soldout-top'; top.className = 'pi-soldout-top';
-      top.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span><strong>Sold out</strong><span>Next batch lands ' + (me.restock || 'soon') + '.</span><a href="#pi-wait">Notify me</a>';
+      top.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span><strong>Sold out</strong><span>Next batch lands ' + (/^end of/i.test(me.restock || '') ? 'at the ' : '') + (me.restock || 'soon') + '.</span><a href="#pi-wait">Notify me</a>';
       price.insertAdjacentElement('afterend', top);
       top.querySelector('a').addEventListener('click', function (e) { e.preventDefault(); wait.hidden = false; wait.scrollIntoView({ block: 'center', behavior: 'smooth' }); wait.querySelector('input').focus(); });
     }
     var area = document.querySelector('.ph-image-area');
     if (area && !area.querySelector('.ph-soldout')) { area.style.position = 'relative'; var b = document.createElement('span'); b.className = 'ph-soldout'; b.textContent = 'Sold out'; area.appendChild(b); }
-    if (el) { el.hidden = false; el.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span>Sold out<span class="pi-ls-note">Next batch lands ' + (me.restock || 'soon') + '</span>'; }
+    if (el) { el.hidden = false; el.innerHTML = '<span class="pi-ls-dot" aria-hidden="true"></span>Sold out<span class="pi-ls-note">Next batch lands ' + (/^end of/i.test(me.restock || '') ? 'at the ' : '') + (me.restock || 'soon') + '</span>'; }
     ['pack-single', 'pack-twin', 'pack-mixed', 'pack-fullcar'].forEach(function (id) { var b = document.getElementById(id); if (b) { b.classList.add('is-soldout'); b.disabled = true; } });
     // Swap the buy buttons for fresh nodes so the add-to-cart listeners are gone, then make them open the waitlist.
     var swap = function (id, label, scroll) { var b = document.getElementById(id); if (!b) return; var n = b.cloneNode(true); n.textContent = label; n.removeAttribute('onclick'); b.parentNode.replaceChild(n, b);

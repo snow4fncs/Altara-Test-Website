@@ -1057,7 +1057,7 @@
 
       <button class="btn-checkout" id="btn-checkout" onclick="startCheckout()"><svg class="btn-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Proceed to Checkout</button>
       <div class="assure">
-        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30-day fit guarantee &middot; full refund if it isn't right</span>
+        <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span id="cart-guarantee">30-day fit guarantee &middot; full refund if it isn't right</span></span>
         <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="cart-dispatch">Same-day dispatch weekdays &middot; Australia Post tracked</span></span>
         <span><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Adding a second pair? Any two covers price-match to $89 the pair, automatically</span>
       </div>
@@ -1454,7 +1454,7 @@
           ? '<strong>+$' + delta + '</strong> &middot; ' + (fourCovers ? 'Full Car pricing, $' + Math.round(thenPay) + ' for four covers' : 'Twin Set pricing, $' + Math.round(thenPay) + ' for the pair')
           : '$89 &middot; free shipping';
         if (fourCovers && delta < offer.price) offer.label = 'Second set for the other car, or the back row';
-        var preNote = (offer.id.indexOf('midnight-black') === 0 && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder') ? ' <span class="xsell-pre">pre-order &middot; ships ' + (window.__stock['midnight-black'].ships || 'in time for Christmas') + '</span>' : '';
+        var preNote = (offer.id.indexOf('midnight-black') === 0 && window.__stock && window.__stock['midnight-black'] && window.__stock['midnight-black'].status === 'preorder') ? ' <span class="xsell-pre">pre-order &middot; ships ' + (window.__stock['midnight-black'].ships || 'end of November') + '</span>' : '';
         slot.innerHTML = '<div class="xsell">'
           + '<img src="' + offer.image + '" alt="">'
           + '<div class="xsell-info"><span class="xsell-k">' + offer.label + '</span>'
@@ -1545,7 +1545,7 @@
       var s = window.__stock && window.__stock[String(id).replace('-twin', '')];
       if (!s) return '';
       if (s.status === 'out') return '<p class="cart-item-meta cart-soldout">Sold out · remove to continue, or join the waitlist on the product page</p>';
-      if (s.status === 'preorder') return '<p class="cart-item-meta cart-preorder">Pre-order · ships ' + (s.ships || 'in time for Christmas') + '</p>';
+      if (s.status === 'preorder') return '<p class="cart-item-meta cart-preorder">Pre-order · ships ' + (s.ships || 'end of November') + '</p>';
       return '';
     }
     function cartHasPreorder() {
@@ -1743,8 +1743,14 @@
   var el=document.getElementById('cart-dispatch');
   if(!el) return;
   function render(){
+    // The guarantee is 30 days on a single and 60 on a Twin Set (returns page). The product page says
+    // 60, so a Twin Set cart must not drop to "30-day" one step before payment. Any two covers count
+    // as a Twin Set, the same rule the pair pricing uses.
+    var g=document.getElementById('cart-guarantee');
+    if(g){ var covers=0; try{ getCart().items.forEach(function(i){ covers+=(/-twin$/.test(String(i.id))?2:1)*(i.qty||1); }); }catch(e){}
+      var gt=(covers>=2?'60':'30')+'-day fit guarantee · full refund if it isn’t right'; if(g.textContent!==gt) g.textContent=gt; }
     if(typeof cartHasPreorder==='function' && cartHasPreorder()){
-      var ps=getCart().items.map(function(i){ var s=window.__stock[String(i.id).replace('-twin','')]; return s&&s.ships; }).filter(Boolean)[0]||'in time for Christmas';
+      var ps=getCart().items.map(function(i){ var s=window.__stock[String(i.id).replace('-twin','')]; return s&&s.ships; }).filter(Boolean)[0]||'end of November';
       el.textContent='Pre-order in cart \u00b7 ships '+ps+' \u00b7 tracked with Australia Post'; return;
     }
     var n=new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Sydney'}));
