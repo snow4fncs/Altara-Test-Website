@@ -406,6 +406,9 @@
     document.body.appendChild(aEl); aEl.click(); aEl.remove();
     setTimeout(function(){ URL.revokeObjectURL(aEl.href); }, 1000);
   }
+  var AP_STATES = { 'NEW SOUTH WALES':'NSW', 'VICTORIA':'VIC', 'QUEENSLAND':'QLD', 'SOUTH AUSTRALIA':'SA', 'WESTERN AUSTRALIA':'WA',
+    'TASMANIA':'TAS', 'NORTHERN TERRITORY':'NT', 'AUSTRALIAN CAPITAL TERRITORY':'ACT' };
+  function apState(s){ var u = String(s || '').trim().toUpperCase().replace(/\./g, ''); return AP_STATES[u] || u; }
   function exportCsv(e){
     var sender = getSender(e && e.shiftKey);   // shift-click the button to edit sender details
     if (!sender) return;
@@ -431,11 +434,11 @@
         sender.state,
         trunc(sender.postcode, 4),
         trunc(o.customer_name || '', 35),
-        trunc(a.line1 || '', 40),
-        trunc(a.line2 || '', 40),
-        trunc(a.city || '', 40),
-        a.state || '',
-        trunc(a.postal_code || '', 4),
+        trunc(String(a.line1 || '').trim(), 40),
+        trunc(String(a.line2 || '').trim(), 40),
+        trunc(String(a.city || '').trim(), 40),
+        apState(a.state),                      // AusPost rejects "Qld" / "Queensland": needs QLD
+        trunc(String(a.postal_code || '').trim(), 4),
         trunc(o.customer_email || '', 50),
         'NO',                                  // tracking emails come from the store, not AusPost
         satchel,
