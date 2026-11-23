@@ -415,8 +415,56 @@
     window.addEventListener('scroll', tick, { passive: true }); tick();
   })();
 
+  /* ───────────── 8. "Ships from Sydney, Australia" with the flag, next to every buy and checkout button ───────────── */
+  // The flag is drawn once (official proportions, 2:1, viewBox scaled 1/84 from 10080 x 5040) and reused.
+  function injectOrigin() {
+    function star(cx, cy, r, n) {
+      var p = [], ri = r * 4 / 9;
+      for (var i = 0; i < n * 2; i++) {
+        var a = -Math.PI / 2 + i * Math.PI / n, rr = i % 2 ? ri : r;
+        p.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+      }
+      return '<polygon fill="#fff" points="' + p.join(' ') + '"/>';
+    }
+    if (!document.getElementById('alp-au-flag')) {
+      var sprite = document.createElement('div');
+      sprite.setAttribute('aria-hidden', 'true');
+      sprite.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+      sprite.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><defs>' +
+        '<clipPath id="alp-uj-s"><rect width="60" height="30"/></clipPath>' +
+        '<clipPath id="alp-uj-t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>' +
+        '<symbol id="alp-au-flag" viewBox="0 0 120 60">' +
+          '<rect width="120" height="60" fill="#012169"/>' +
+          '<g clip-path="url(#alp-uj-s)">' +
+            '<path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>' +
+            '<path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#alp-uj-t)" stroke="#C8102E" stroke-width="4"/>' +
+            '<path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>' +
+            '<path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>' +
+          '</g>' +
+          star(30, 45, 9, 7) +                                  // Commonwealth Star
+          star(90, 50, 4.29, 7) + star(75, 26.25, 4.29, 7) +    // Southern Cross: Alpha, Beta
+          star(90, 10, 4.29, 7) + star(103.33, 22.25, 4.29, 7) + // Gamma, Delta
+          star(96, 32.5, 2.5, 5) +                              // Epsilon
+        '</symbol></defs></svg>';
+      document.body.appendChild(sprite);
+    }
+    var html = '<span class="alp-flag" aria-hidden="true"><svg viewBox="0 0 120 60"><use href="#alp-au-flag"/></svg></span><span>Ships from Sydney, Australia</span>';
+    function put(anchor, where, extra) {
+      if (!anchor || anchor.parentNode.querySelector(':scope > .alp-origin')) return;
+      var p = document.createElement('p');
+      p.className = 'alp-origin' + (extra ? ' ' + extra : '');
+      p.innerHTML = html;
+      anchor.insertAdjacentElement(where, p);
+    }
+    put($('#add-to-cart-btn'), 'afterend', 'alp-origin-pdp');
+    put($('#cd-checkout'), 'beforebegin');
+    put($('#ald-checkout'), 'beforebegin');
+    put($('#btn-checkout'), 'beforebegin');
+  }
+
   /* ───────────── boot ───────────── */
   paintBadge();
+  injectOrigin();
   injectQuickAdd(); injectStickyBar(); injectFaqSearch();
   // product page pack cards: the saving and the free tracked shipping line carry the gold
   $$('.pack-opt-list li').forEach(function (li) { if (/^\s*Save \$|free Australia Post/i.test(li.textContent)) li.classList.add('is-save'); });
