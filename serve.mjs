@@ -454,8 +454,9 @@ const server = http.createServer(async (req, res) => {
   if (rawPath === '/api/fulfilment') return handleFulfilment(req, res);
   if (rawPath === '/api/stock') return handleStock(req, res);
   if (rawPath === '/api/stock-level') {
-    // Local stand-in for the public stock signal. Flip 'preorder' to 'out' to see the waitlist state.
-    return send(res, 200, { 'midnight-black': { status: 'preorder', ships: 'end of November', restock: 'end of November' }, 'contrast-white': { status: 'ok' } });
+    // Local stand-in for the public stock signal, matching live since the black batch landed on 25 Nov 2026.
+    // To see the other states: { status: 'preorder', ships: '<date>', restock: '<date>' } or { status: 'out' }.
+    return send(res, 200, { 'midnight-black': { status: 'ok' }, 'contrast-white': { status: 'ok' } });
   }
   if (rawPath === '/api/waitlist' && req.method === 'POST') {
     let b = ''; req.on('data', c => b += c); return req.on('end', () => { console.log('  [waitlist] ' + b); send(res, 200, { success: true }); });

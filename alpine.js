@@ -17,6 +17,9 @@
       { t: 'Pay in 4 with Afterpay, Zip or Klarna', s: 'Pay in 4 with Afterpay or Zip', h: 'collection.html' },
       { t: '250+ orders delivered across every state', s: '250+ orders, every state', h: 'reviews.html' }
     ];
+    // Black Friday weekend (26-30 Nov 2026): the ads say "2 covers $89, save $49", so the first thing on the
+    // site says it too. Everyday bundle prices, no markdown. Drops out by itself at midnight on 30 Nov (Sydney).
+    if (Date.now() < Date.parse('2026-12-01T00:00:00+11:00')) msgs.unshift({ t: 'Black Friday: 2 covers $89 (save $49) \u00b7 4 covers $159 (save $117) \u00b7 delivered free', s: 'Black Friday: 2 covers $89, save $49', h: 'collection.html' });
     var narrow = window.matchMedia('(max-width: 768px)');
     var label = function (m) { return narrow.matches ? m.s : m.t; };
     var chev = function (d) { return '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="' + (d < 0 ? '15 18 9 12 15 6' : '9 18 15 12 9 6') + '"/></svg>'; };
