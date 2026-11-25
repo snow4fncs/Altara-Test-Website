@@ -216,8 +216,18 @@
     return 'https://auspost.com.au/mypost/track/search?id='+e;
   }
 
+  // Live stock band per colour: once a batch is booked Received the colour reads ok/low, and its
+  // pre-orders stop being held (they move into To ship and the CSV). No reading = keep holding.
+  var liveStock = {};
+  function landed(item){
+    var n = String(item && item.name || ''), sku = /contrast/i.test(n) ? 'contrast-white' : /midnight/i.test(n) ? 'midnight-black' : null;
+    var st = sku && liveStock[sku] && liveStock[sku].status;
+    return st === 'ok' || st === 'low';
+  }
   function load(){
-    return fetch('/api/fulfilment', { headers:{ 'x-admin-token': token() } })
+    return fetch('/api/stock-level').then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; })
+      .then(function(lv){ liveStock = lv || {}; })
+      .then(function(){ return fetch('/api/fulfilment', { headers:{ 'x-admin-token': token() } }); })
       .then(function(r){
         if (r.status===401) throw new Error('That token was rejected. Check ADMIN_TOKEN on the server.');
         if (!r.ok) throw new Error('Could not load orders ('+r.status+').');
@@ -245,7 +255,7 @@
           var where = [addr.city, addr.state, addr.postal_code].filter(Boolean).join(' ');
           var items = (o.items||[]).map(function(i){ return esc(i.name)+' ×'+i.qty; }).join(', ');
           var shipped = !!o.shipped_at;
-          var preItems = (o.items||[]).filter(function(i){ return i.preorder; });
+          var preItems = (o.items||[]).filter(function(i){ return i.preorder && !landed(i); });
 
           var status = shipped
             ? '<span class="pill ship">Shipped</span>'
@@ -368,7 +378,7 @@
       + '<div class="sat">Satchels: '+sats.join('')+'</div>'
       + '</div>';
   }
-  function isPreorder(o){ return (o.items||[]).some(function(i){ return i.preorder; }); }
+  function isPreorder(o){ return (o.items||[]).some(function(i){ return i.preorder && !landed(i); }); }
   function coverCount(o){
     return (o.items||[]).reduce(function(n,i){
       var twin = /-twin$/.test(String(i.id||'')) || /twin/i.test(String(i.name||''));

@@ -13,11 +13,14 @@ const norm = s => String(s || '').normalize('NFKD').replace(/[^\x00-\x7f]/g, '')
 const r = await fetch(U + '/rest/v1/orders?select=id,created_at,customer_name,shipping_address,items,tracking_number,shipped_at&status=eq.paid&shipped_at=is.null&limit=1000', { headers: { apikey: K, Authorization: 'Bearer ' + K } });
 if (!r.ok) throw new Error('read failed ' + r.status);
 const orders = await r.json();
+// A pre-order line is held only while its colour has not landed (live stock band not ok/low).
+const lv = await fetch('https://www.altaradesign.com/api/stock-level').then(x => x.ok ? x.json() : {}).catch(() => ({}));
+const held = it => { if (!it.preorder) return false; const sku = /contrast/i.test(it.name) ? 'contrast-white' : /midnight/i.test(it.name) ? 'midnight-black' : null; const st = sku && lv[sku] && lv[sku].status; return !(st === 'ok' || st === 'low'); };
 
 const plan = [], skipped = [];
 for (const l of labels) {
   const hits = orders.filter(o => norm(o.customer_name) === norm(l.name) && String(o.shipping_address?.postal_code || '').trim() === l.postcode);
-  const preorder = hits.some(o => (o.items || []).some(it => it.preorder));
+  const preorder = hits.some(o => (o.items || []).some(held));
   if (hits.length !== 1) { skipped.push(l.name + ' ' + l.postcode + ': ' + hits.length + ' matching unshipped orders'); continue; }
   if (preorder) { skipped.push(l.name + ' ' + l.postcode + ': order still has a pre-order line'); continue; }
   const o = hits[0];
@@ -25,7 +28,7 @@ for (const l of labels) {
   console.log('MATCH ' + o.customer_name + ' | ' + (o.shipping_address?.city || '') + ' ' + o.shipping_address?.postal_code + ' | ' + (o.items || []).map(i => i.qty + 'x ' + i.name).join(', ') + ' | ' + o.id.slice(0, 8) + ' -> ' + l.tracking);
 }
 for (const s of skipped) console.log('SKIP  ' + s);
-const left = orders.filter(o => !plan.some(p => p.o.id === o.id) && !(o.items || []).some(it => it.preorder));
+const left = orders.filter(o => !plan.some(p => p.o.id === o.id) && !(o.items || []).some(held));
 console.log('in-stock orders still unshipped after this: ' + left.length + (left.length ? ' (' + left.map(o => o.customer_name + ' ' + o.shipping_address?.postal_code).join('; ') + ')' : ''));
 
 if (apply) for (const { o, l } of plan) {
