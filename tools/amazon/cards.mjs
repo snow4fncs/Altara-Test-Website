@@ -11,7 +11,7 @@ const SETS = {
   CW: { c: 'cw', steps: '/Product Photos/Altara Product Image 2.png', pos: '50% 20%',
         photos: [['02-in-car', 'Product Photos/Altara Product Image 2.png', 0.0], ['07-in-car-2', 'Product Photos/Altara Product Image 3.png', 0.1], ['08-magfit-clip', 'Product Photos/Altara Product Image 8.png', 0.1], ['09-non-slip-backing', 'Product Photos/Altara Product Image 6.png', 0.1]] },
 };
-const CARDS = [['03-features', 'features'], ['04-size', 'size'], ['05-fits-in-15-seconds', 'steps'], ['06-packs', 'packs']];
+const CARDS = [['03-features', 'features'], ['04-size', 'size'], ['05-fits-in-30-seconds', 'steps'], ['06-packs', 'packs']];
 const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
 const p = await b.newPage(); await p.setViewport({ width: 2000, height: 2000, deviceScaleFactor: 1 });
 for (const [k, s] of Object.entries(SETS)) {

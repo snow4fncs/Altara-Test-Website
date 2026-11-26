@@ -17,6 +17,10 @@
       { t: 'Pay in 4 with Afterpay, Zip or Klarna', s: 'Pay in 4 with Afterpay or Zip', h: 'collection.html' },
       { t: '300+ orders delivered across every state', s: '300+ orders, every state', h: 'reviews.html' }
     ];
+    // Christmas (to 15 Dec 2026): the order-by date the ads give, said on the site too. Australia Post's own
+    // Parcel Post cut-off is 21 Dec interstate, so 15 Dec leaves six days. Second behind the Black Friday line
+    // until 30 Nov, first from 1 Dec, gone by itself at midnight on 15 Dec (Sydney).
+    if (Date.now() < Date.parse('2026-12-16T00:00:00+11:00')) msgs.unshift({ t: 'Christmas gifts: order by 15 Dec \u00b7 2 covers $89 \u00b7 delivered free', s: 'Christmas: order by 15 Dec', h: 'collection.html' });
     // Black Friday weekend (26-30 Nov 2026): the ads say "2 covers $89, save $49", so the first thing on the
     // site says it too. Everyday bundle prices, no markdown. Drops out by itself at midnight on 30 Nov (Sydney).
     if (Date.now() < Date.parse('2026-12-01T00:00:00+11:00')) msgs.unshift({ t: 'Black Friday: 2 covers $89 (save $49) \u00b7 4 covers $159 (save $117) \u00b7 delivered free', s: 'Black Friday: 2 covers $89, save $49', h: 'collection.html' });

@@ -1,0 +1,82 @@
+<!doctype html><meta charset="utf-8">
+<!-- Amazon Premium A+ artwork in the Altara brand (Cormorant Garamond + Outfit, paper, ink, steel, gold).
+     ?type=hero    1464 x 600  both colourways side by side, the two real studio photographs
+     ?type=herom   600 x 450   the phone version of the hero (Amazon asks for both)
+     ?type=layers  800 x 600   towelling / waterproof layer / non-slip backing, pulled apart
+     Rendered at 2x by tools/amazon/aplus.mjs. Every claim is on the product page.
+     A+ rules: no prices, offers, guarantees, shipping, review claims or trade mark symbols. -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#F6F2EA;--ink:#1C1E21;--soft:#5B6067;--steel:#4D6272;--gold:#B0915C;--line:#DCD3C2}
+body{overflow:hidden;background:var(--paper);color:var(--ink);font-family:Outfit,sans-serif;position:relative}
+section{display:none;position:absolute;inset:0;overflow:hidden}
+body.hero{width:1464px;height:600px}body.hero #hero{display:block}
+body.layers{width:800px;height:600px}body.layers #layers{display:block}
+body.herom{width:600px;height:450px}body.herom #herom{display:block}
+
+/* phone hero: headline band on top, one cover per half below */
+#herom{background:#EFE7DC}
+#herom .half{position:absolute;top:0;width:300px;height:450px;overflow:hidden}
+#herom .half img{position:absolute;top:118px;width:619px;height:348px}
+#herom .l{left:0}#herom .l img{left:-157px}
+#herom .r{left:300px;border-left:1.5px solid rgba(255,255,255,.7)}#herom .r img{left:-179px}
+#herom .band{position:absolute;left:0;top:0;width:600px;height:150px;background:linear-gradient(180deg,#F3ECE2 0,#F3ECE2 118px,rgba(243,236,226,0) 146px)}
+#herom .brand{position:absolute;left:30px;top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:24px;color:var(--steel);line-height:1}
+#herom h1{position:absolute;left:30px;top:52px;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:41px;line-height:1;letter-spacing:-.022em;white-space:nowrap}
+
+/* hero: black studio photo runs full height, mirrored to the left for the text column; white photo sits in its own panel */
+#hero img{position:absolute;top:0;height:600px;width:1066px}
+#hero .mb{left:227px}
+#hero .mbm{left:-839px;transform:scaleX(-1)}
+#hero .cwp{position:absolute;left:992px;top:0;width:472px;height:600px;overflow:hidden;border-left:2px solid rgba(255,255,255,.7)}
+#hero .cwp img{left:-331px}
+#hero .wash{position:absolute;left:0;top:0;width:560px;height:600px;background:linear-gradient(90deg,rgba(246,242,234,.55),rgba(246,242,234,.38) 60%,rgba(246,242,234,0))}
+#hero .copy{position:absolute;left:64px;top:60px;width:470px}
+#hero .brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:42px;color:var(--steel);line-height:1}
+#hero h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:84px;line-height:.96;letter-spacing:-.022em;margin-top:58px}
+#hero p{font-size:24px;line-height:1.36;font-weight:400;color:#3a3d42;margin-top:30px}
+#hero .key{position:absolute;left:64px;bottom:50px;font-size:19px;font-weight:500;color:var(--steel);letter-spacing:.01em}
+
+/* layers */
+#layers{background:radial-gradient(120% 90% at 30% 20%,#FBF8F2,var(--paper) 55%,#EFE8DB)}
+#layers .stack{position:absolute;left:20px;top:0;width:420px;height:600px}
+#layers .sheet{position:absolute;left:66px;width:280px;height:280px;border-radius:24px;transform:rotateX(60deg) rotateZ(-38deg);transform-origin:50% 50%}
+#layers .s1{top:30px;background:#141516 url('/Product Photos/Altara Product Image 1.png') 30% 78%/1500px auto;box-shadow:-16px 22px 30px rgba(40,28,14,.30)}
+#layers .s1::after{content:'';position:absolute;inset:0;border-radius:24px;box-shadow:inset 0 0 0 5px #0d0e0f,inset 0 0 0 7px rgba(255,255,255,.10)}
+#layers .s2{top:160px;background:linear-gradient(135deg,#8FA5B3,#5C7383 48%,#4D6272);box-shadow:-16px 22px 30px rgba(40,28,14,.26)}
+#layers .s2::before{content:'';position:absolute;inset:0;border-radius:24px;background:linear-gradient(120deg,rgba(255,255,255,.34),rgba(255,255,255,0) 38%)}
+#layers .drop{position:absolute;border-radius:50%;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.95),rgba(255,255,255,.35) 26%,rgba(190,214,228,.55) 60%,rgba(60,84,100,.55));box-shadow:3px 5px 6px rgba(20,34,44,.35)}
+#layers .s3{top:290px;background-color:#17181a;background-image:radial-gradient(circle,#5d6166 0 3.2px,rgba(0,0,0,0) 4px);background-size:19px 19px;box-shadow:-18px 26px 34px rgba(40,28,14,.34)}
+#layers ol{list-style:none;position:absolute;left:458px;right:20px;top:0;height:600px}
+#layers li{position:absolute;left:0;right:0;padding-left:22px;border-left:3px solid var(--gold);white-space:nowrap}
+#layers li:nth-child(1){top:132px}#layers li:nth-child(2){top:262px}#layers li:nth-child(3){top:392px}
+#layers li b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:35px;line-height:1;letter-spacing:-.015em}
+#layers li span{display:block;font-size:18.5px;line-height:1.3;color:var(--soft);margin-top:9px;font-weight:400}
+</style>
+<section id="hero">
+  <img class="mbm" src="/Product Photos/Homepage image 2.png"><img class="mb" src="/Product Photos/Homepage image 2.png">
+  <div class="cwp"><img src="/Product Photos/Homepage image.png"></div>
+  <div class="wash"></div>
+  <div class="copy"><div class="brand">Altara</div><h1>The towel<br>that fits your<br>car seat.</h1></div>
+  <div class="key">Midnight Black, left. Contrast White, right.</div>
+</section>
+<section id="herom">
+  <div class="half l"><img src="/Product Photos/Homepage image 2.png"></div>
+  <div class="half r"><img src="/Product Photos/Homepage image.png"></div>
+  <div class="band"></div>
+  <div class="brand">Altara</div><h1>The towel that fits your car seat.</h1>
+</section>
+<section id="layers">
+  <div class="stack">
+    <div class="sheet s3"></div>
+    <div class="sheet s2"><i class="drop" style="left:60px;top:72px;width:27px;height:27px"></i><i class="drop" style="left:143px;top:50px;width:18px;height:18px"></i><i class="drop" style="left:182px;top:128px;width:31px;height:31px"></i><i class="drop" style="left:95px;top:167px;width:21px;height:21px"></i><i class="drop" style="left:211px;top:202px;width:16px;height:16px"></i><i class="drop" style="left:51px;top:212px;width:14px;height:14px"></i></div>
+    <div class="sheet s1"></div>
+  </div>
+  <ol>
+    <li><b>Microfibre towelling</b><span>Soaks up sweat, water and sand</span></li>
+    <li><b>Waterproof layer</b><span>Stops moisture reaching the seat</span></li>
+    <li><b>Non-slip backing</b><span>Holds the cover in place</span></li>
+  </ol>
+</section>
+<script>document.body.className=new URLSearchParams(location.search).get('type')||'hero';</script>
