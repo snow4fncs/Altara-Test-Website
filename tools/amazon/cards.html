@@ -1,0 +1,91 @@
+<!doctype html><meta charset="utf-8">
+<!-- Amazon secondary images, 2000 x 2000, Altara brand (Cormorant Garamond + Outfit, paper, ink, steel, gold).
+     ?type=features|size|steps|packs  &c=mb|cw  (&photo=<path> for steps).  Rendered by tools/amazon/cards.mjs.
+     Every claim here is on the product page: 145 x 70 cm, MagFit magnetic clips, waterproof layer, machine wash.
+     No prices, no offers, no review claims (Amazon image rules). -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#F6F2EA;--ink:#1C1E21;--soft:#5B6067;--steel:#4D6272;--gold:#B0915C;--line:#DCD3C2}
+body{width:2000px;height:2000px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Outfit,sans-serif;position:relative}
+.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:-.012em;line-height:1.02}
+.brand{position:absolute;left:112px;top:84px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:84px;color:var(--steel)}
+.cut{filter:drop-shadow(0 34px 38px rgba(60,42,22,.20))}
+section{display:none;position:absolute;inset:0}
+body.features #features,body.size #size,body.steps #steps,body.packs #packs{display:block}
+
+#features .cut{position:absolute;left:40px;top:230px;height:1640px;width:900px;object-fit:contain}
+#features .col{position:absolute;left:985px;right:90px;top:250px}
+#features h1{font-size:104px;white-space:nowrap}
+#features ul{list-style:none;margin-top:64px;border-top:3px solid var(--line)}
+#features li{padding:36px 0 34px;border-bottom:3px solid var(--line)}
+#features li b{display:block;font-weight:500;font-size:74px;letter-spacing:-.015em}
+#features li span{display:block;font-weight:400;font-size:52px;color:var(--soft);margin-top:8px}
+
+#size h1{position:absolute;left:110px;top:230px;font-size:190px}
+#size p{position:absolute;left:116px;top:470px;font-size:66px;font-weight:400;color:var(--soft);max-width:600px;line-height:1.28}
+#size .stage{position:absolute;right:120px;top:190px;width:940px;height:1500px}
+#size .cut{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+#size .v{position:absolute;left:-60px;top:30px;bottom:30px;width:4px;background:var(--steel)}
+#size .v::before,#size .v::after,#size .h::before,#size .h::after{content:'';position:absolute;background:var(--steel)}
+#size .v::before,#size .v::after{left:-22px;width:48px;height:4px}
+#size .v::before{top:0}#size .v::after{bottom:0}
+#size .vl{position:absolute;left:-330px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center;font-size:70px;font-weight:500;color:var(--steel);white-space:nowrap;width:460px;text-align:center}
+#size .h{position:absolute;left:120px;right:120px;bottom:-78px;height:4px;background:var(--steel)}
+#size .h::before,#size .h::after{top:-22px;width:4px;height:48px}
+#size .h::before{left:0}#size .h::after{right:0}
+#size .hl{position:absolute;left:0;right:0;bottom:-190px;text-align:center;font-size:70px;font-weight:500;color:var(--steel)}
+
+#steps .photo{position:absolute;left:0;top:0;width:2000px;height:1060px;object-fit:cover}
+#steps h1{position:absolute;left:110px;top:1130px;font-size:150px}
+#steps ol{list-style:none;position:absolute;left:110px;right:110px;top:1360px;display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:60px}
+#steps li{border-top:3px solid var(--line);padding-top:30px}
+#steps li i{font-family:'Cormorant Garamond',serif;font-style:normal;font-size:150px;line-height:.9;color:var(--gold);display:block}
+#steps li span{display:block;font-size:68px;line-height:1.16;margin-top:18px;font-weight:400;letter-spacing:-.01em}
+
+#packs h1{position:absolute;left:110px;top:230px;font-size:180px}
+#packs p{position:absolute;left:116px;top:450px;font-size:60px;font-weight:400;color:var(--soft)}
+#packs .row{position:absolute;left:90px;right:90px;top:620px;height:1000px;display:grid;grid-template-columns:.78fr 1.1fr 1.1fr;gap:50px;align-items:end}
+#packs .row div{display:flex;align-items:flex-end;justify-content:center;height:100%}
+#packs .row img{max-width:100%;max-height:100%;object-fit:contain}
+#packs .lab{position:absolute;left:90px;right:90px;top:1670px;display:grid;grid-template-columns:.78fr 1.1fr 1.1fr;gap:50px;text-align:center}
+#packs .lab b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:112px;line-height:1}
+#packs .lab span{display:block;font-size:60px;color:var(--soft);font-weight:400;margin-top:8px}
+</style>
+<div class="brand">Altara</div>
+<section id="features">
+  <img class="cut" id="f-cut">
+  <div class="col"><h1 class="serif">Keeps the seat clean.<br>Goes in the wash.</h1>
+  <ul>
+    <li><b>Microfibre towelling</b><span>Absorbs sweat, sand and spills</span></li>
+    <li><b>Waterproof layer</b><span>Moisture stops at the cover</span></li>
+    <li><b>MagFit magnetic clips</b><span>No tools, no straps</span></li>
+    <li><b>Non-slip backing</b><span>Stays put while you drive</span></li>
+    <li><b>Machine washable</b><span>Cold, gentle cycle. Hang to dry</span></li>
+  </ul></div>
+</section>
+<section id="size">
+  <h1 class="serif">One size.</h1>
+  <p>145 × 70 cm. Fits most standard front seats, from hatchbacks to utes.</p>
+  <div class="stage"><img class="cut" id="s-cut"><div class="v"></div><div class="vl">Length 145 cm</div><div class="h"></div><div class="hl">Width 70 cm</div></div>
+</section>
+<section id="steps">
+  <img class="photo" id="st-photo">
+  <h1 class="serif">On in under 15 seconds.</h1>
+  <ol><li><i>1</i><span>Drop it over the headrest</span></li><li><i>2</i><span>Smooth the base</span></li><li><i>3</i><span>Clip the MagFit magnets behind the seat back</span></li></ol>
+</section>
+<section id="packs">
+  <h1 class="serif">Choose your pack.</h1>
+  <p id="p-colour"></p>
+  <div class="row"><div><img class="cut" id="p1"></div><div><img class="cut" id="p2"></div><div><img class="cut" id="p4"></div></div>
+  <div class="lab"><div><b>Single</b><span>1 cover</span></div><div><b>Twin Set</b><span>2 covers</span></div><div><b>Full Car</b><span>4 covers</span></div></div>
+</section>
+<script>
+const q=new URLSearchParams(location.search),type=q.get('type')||'features',c=q.get('c')||'mb',C='/Product Photos/amazon/cutouts/'+c+'-';
+document.body.className=type;
+document.getElementById('f-cut').src=C+'single.png';document.getElementById('s-cut').src=C+'single.png';
+document.getElementById('p1').src=C+'single.png';document.getElementById('p2').src=C+'twin.png';document.getElementById('p4').src=C+'four.png';
+document.getElementById('p-colour').textContent='Shown in '+(c==='mb'?'Midnight Black':'Contrast White')+'.';
+if(q.get('photo')){const p=document.getElementById('st-photo');p.src=q.get('photo');p.style.objectPosition=q.get('pos')||'50% 30%';}
+if(type==='steps'||type==='size'||type==='packs')document.querySelector('.brand').style.display=type==='steps'?'none':'block';
+</script>
