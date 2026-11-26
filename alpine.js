@@ -15,7 +15,7 @@
       { t: 'Free tracked shipping on orders over $80', s: 'Free shipping over $80', h: 'shipping.html' },
       { t: '60-day fit guarantee. Wrong fit, full refund', s: '60-day fit guarantee', h: 'returns.html' },
       { t: 'Pay in 4 with Afterpay, Zip or Klarna', s: 'Pay in 4 with Afterpay or Zip', h: 'collection.html' },
-      { t: '250+ orders delivered across every state', s: '250+ orders, every state', h: 'reviews.html' }
+      { t: '300+ orders delivered across every state', s: '300+ orders, every state', h: 'reviews.html' }
     ];
     // Black Friday weekend (26-30 Nov 2026): the ads say "2 covers $89, save $49", so the first thing on the
     // site says it too. Everyday bundle prices, no markdown. Drops out by itself at midnight on 30 Nov (Sydney).
