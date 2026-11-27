@@ -64,6 +64,31 @@
     window.__abGo = go; window.__abIndex = function () { return cur; };
   })();
 
+  /* ───────────── 1b. Black Friday offer panel (to 30 Nov 2026) ─────────────
+     The ads say "Black Friday · 2 covers $89 · save $49", so the page a shopper lands on says the same thing in
+     the same words, next to the price: home hero, collection header and both product pages. These are the
+     everyday bundle prices, so there is no countdown and no "ends" line. It removes itself at midnight on
+     30 Nov (Sydney), together with the announcement line above. */
+  (function () {
+    if (Date.now() >= Date.parse('2026-12-01T00:00:00+11:00')) return;
+    var html = '<p class="bf-h">Black Friday</p>' +
+      '<ul class="bf-rows">' +
+        '<li class="bf-row"><span>2 covers</span><b>$89</b><i>save $49</i></li>' +
+        '<li class="bf-row"><span>4 covers</span><b>$159</b><i>save $117</i></li>' +
+      '</ul>' +
+      '<p class="bf-foot">Delivered free with Australia Post</p>';
+    function put(anchor, extra) {
+      if (!anchor || $('.bf')) return;
+      var el = document.createElement('aside');
+      el.className = 'bf ' + extra; el.setAttribute('aria-label', 'Black Friday offer');
+      el.innerHTML = html;
+      anchor.insertAdjacentElement('afterend', el);
+    }
+    put($('.hero .hero-sub'), 'bf-home');
+    put($('.collection-header .collection-desc'), 'bf-coll');
+    put($('#pi-price-display'), 'bf-pdp');
+  })();
+
   /* ───────────── 2. Cart: storage, pricing, badge ───────────── */
   var CART_KEY = 'altara-cart', EMAIL_KEY = 'altara-email';
   var PAIR_SAVE = 49, TWINPAIR_SAVE = 19;                 // same rule as cart.html: two singles price as a Twin Set, two Twin Sets as a Full Car

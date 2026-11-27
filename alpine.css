@@ -741,3 +741,22 @@ body.alpine.ab-hidden .order-summary { top: 90px; }
 .alp-flag { position: relative; display: inline-block; flex: none; width: 24px; height: 12px; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 2px rgba(1, 33, 105, 0.16), 0 3px 8px -4px rgba(1, 33, 105, 0.22); }
 .alp-flag svg { display: block; width: 100%; height: 100%; }
 .alp-flag::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 0.5px rgba(21, 23, 25, 0.22); pointer-events: none; }
+
+/* ── Black Friday offer panel (script-injected by alpine.js section 1b until midnight on 30 Nov 2026) ──
+   A graphite card in the site's own voice: the italic display face for the name, tabular figures for the
+   bundle maths, a hairline above the delivery line. Static information, so it has no hover state. */
+.alpine .bf { position: relative; box-sizing: border-box; width: 100%; max-width: 420px; margin: 26px 0 0; padding: 18px 20px 15px; background: var(--alp-graphite); color: var(--alp-white);
+  box-shadow: 0 1px 2px rgba(52, 44, 34, 0.10), 0 24px 44px -28px rgba(21, 23, 25, 0.6); }
+.alpine .bf .bf-h { margin: 0 0 12px; font-family: var(--f-display); font-style: italic; font-weight: 500; font-size: 25px; line-height: 1; letter-spacing: -0.012em; color: var(--alp-white); }
+.alpine .bf .bf-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.alpine .bf .bf-row { display: grid; grid-template-columns: 1fr auto 86px; column-gap: 12px; align-items: baseline; margin: 0; padding: 0; font-family: var(--f-text); font-size: 14px; line-height: 1.25; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.86); font-variant-numeric: tabular-nums lining-nums; }
+.alpine .bf .bf-row::before { content: none; }
+.alpine .bf .bf-row b { font-weight: 500; font-size: 17px; color: var(--alp-white); letter-spacing: 0; }
+.alpine .bf .bf-row i { font-style: normal; text-align: right; font-size: 12.5px; letter-spacing: 0.05em; color: var(--alp-taupe); }
+.alpine .bf .bf-foot { margin: 13px 0 0; padding-top: 11px; border-top: 1px solid rgba(255, 255, 255, 0.16); font-family: var(--f-text); font-size: 10.5px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; line-height: 1.5; color: rgba(255, 255, 255, 0.74); }
+.alpine .bf.bf-pdp { max-width: none; margin: 16px 0 4px; }
+.alpine .bf.bf-coll { margin-top: 22px; }
+@media (max-width: 768px) {
+  .alpine .bf { max-width: none; margin-top: 22px; padding: 16px 18px 14px; }
+  .alpine .bf.bf-pdp { margin: 14px 0 2px; }
+}
